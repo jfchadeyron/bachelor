@@ -1,0 +1,2812 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kubernetes sur Ubuntu Server 24.04 LTS — Cours Complet</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@300;400;600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --accent: #2f81f7;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --accent5: #ffa657;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #c9d1d9;
+    --warn: #f0883e;
+    --info: #58a6ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    padding-bottom: 40px;
+  }
+
+  .sidebar-logo {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo .k8s-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+  }
+
+  .sidebar-logo .k8s-badge svg {
+    width: 32px; height: 32px;
+  }
+
+  .sidebar-logo p {
+    font-size: 0.72rem;
+    color: var(--text2);
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .sidebar nav { padding: 12px 0; }
+
+  .nav-section-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text2);
+    padding: 12px 20px 4px;
+  }
+
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 20px;
+    font-size: 0.82rem;
+    color: var(--text3);
+    text-decoration: none;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .sidebar nav a:hover {
+    color: var(--text);
+    background: var(--bg3);
+    border-left-color: var(--accent);
+  }
+
+  .sidebar nav a .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 280px;
+    max-width: 900px;
+    padding: 48px 56px 120px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 64px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent2);
+    background: rgba(63,185,80,0.1);
+    border: 1px solid rgba(63,185,80,0.3);
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--text2);
+    max-width: 600px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .hero-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--text2);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+
+  .hero-pill svg { width: 14px; height: 14px; }
+
+  /* ── SECTIONS ── */
+  .chapter {
+    margin-bottom: 80px;
+    padding-top: 20px;
+  }
+
+  .chapter-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .chapter-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: rgba(47,129,247,0.1);
+    border: 1px solid rgba(47,129,247,0.25);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .chapter h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 36px 0 14px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  h3::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 24px 0 10px;
+    color: var(--accent4);
+  }
+
+  p { margin-bottom: 14px; color: var(--text3); }
+
+  strong { color: var(--text); font-weight: 600; }
+
+  em { color: var(--accent5); font-style: normal; font-weight: 500; }
+
+  ul, ol {
+    margin: 10px 0 18px 20px;
+    color: var(--text3);
+  }
+
+  li { margin-bottom: 6px; }
+
+  /* ── CODE ── */
+  pre {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 18px 0;
+    position: relative;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    border-radius: 8px 8px 0 0;
+  }
+
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .code-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .code-dots span {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .code-dots .r { background: #ff5f57; }
+  .code-dots .y { background: #febc2e; }
+  .code-dots .g { background: #28c840; }
+
+  pre code {
+    display: block;
+    padding: 18px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: #e6edf3;
+    white-space: pre;
+  }
+
+  code:not(pre code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82em;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--accent3);
+  }
+
+  /* Syntax coloring */
+  .c-cmd { color: #79c0ff; }
+  .c-flag { color: #ffa657; }
+  .c-val { color: #a5d6ff; }
+  .c-str { color: #a8ff78; }
+  .c-comment { color: #6e7681; font-style: italic; }
+  .c-key { color: #ff7b72; }
+  .c-yaml-key { color: #79c0ff; }
+  .c-yaml-val { color: #a5d6ff; }
+  .c-prompt { color: var(--text2); user-select: none; }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-left: 3px solid;
+    display: flex;
+    gap: 12px;
+  }
+
+  .callout-icon { font-size: 1.1rem; flex-shrink: 0; }
+  .callout-body { flex: 1; font-size: 0.9rem; }
+  .callout-body strong { display: block; margin-bottom: 4px; font-size: 0.85rem; }
+
+  .callout.info {
+    background: rgba(88,166,255,0.07);
+    border-color: var(--info);
+  }
+  .callout.info .callout-icon { color: var(--info); }
+  .callout.info .callout-body strong { color: var(--info); }
+
+  .callout.warn {
+    background: rgba(240,136,62,0.07);
+    border-color: var(--warn);
+  }
+  .callout.warn .callout-icon { color: var(--warn); }
+  .callout.warn .callout-body strong { color: var(--warn); }
+
+  .callout.tip {
+    background: rgba(63,185,80,0.07);
+    border-color: var(--accent2);
+  }
+  .callout.tip .callout-icon { color: var(--accent2); }
+  .callout.tip .callout-body strong { color: var(--accent2); }
+
+  .callout.danger {
+    background: rgba(247,129,102,0.08);
+    border-color: var(--accent3);
+  }
+  .callout.danger .callout-icon { color: var(--accent3); }
+  .callout.danger .callout-body strong { color: var(--accent3); }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.88rem;
+  }
+
+  .compare-table th {
+    background: var(--bg3);
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border);
+  }
+
+  .compare-table td {
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    vertical-align: top;
+  }
+
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── CONCEPT CARDS ── */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .concept-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    transition: border-color 0.2s;
+  }
+
+  .concept-card:hover { border-color: var(--accent); }
+
+  .concept-card .icon {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .concept-card h4 {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  .concept-card p {
+    font-size: 0.82rem;
+    color: var(--text2);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* ── ARCHITECTURE DIAGRAM ── */
+  .arch-diagram {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    margin: 24px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text3);
+    overflow-x: auto;
+  }
+
+  .arch-diagram .title {
+    text-align: center;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+  }
+
+  /* ── CMD EXPLAIN ── */
+  .cmd-explain {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 20px 0;
+    overflow: hidden;
+  }
+
+  .cmd-explain-header {
+    background: var(--bg3);
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cmd-explain-header code {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 0.9rem;
+    padding: 0;
+  }
+
+  .cmd-explain-body { padding: 16px 18px; }
+
+  .cmd-explain-body p {
+    font-size: 0.88rem;
+    margin-bottom: 10px;
+  }
+
+  .arg-table { width: 100%; font-size: 0.82rem; }
+
+  .arg-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+    vertical-align: top;
+  }
+
+  .arg-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent5);
+    width: 170px;
+    white-space: nowrap;
+  }
+
+  .arg-table td:last-child { color: var(--text2); }
+
+  /* ── PROGRESS INDICATOR ── */
+  .progress-bar-container {
+    background: var(--bg3);
+    height: 3px;
+    border-radius: 2px;
+    margin: 8px 0 0;
+    overflow: hidden;
+  }
+
+  /* ── STEP FLOW ── */
+  .step-flow { margin: 24px 0; }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 36px;
+    width: 2px;
+    height: calc(100% - 12px);
+    background: var(--border);
+  }
+
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-content { flex: 1; }
+  .step-content h4 { margin: 6px 0 8px; font-size: 0.95rem; color: var(--text); }
+  .step-content p { font-size: 0.87rem; }
+
+  /* ── YAML HIGHLIGHT ── */
+  .yaml-line-key { color: #79c0ff; }
+  .yaml-line-val { color: #a5d6ff; }
+  .yaml-line-str { color: #a8ff78; }
+  .yaml-line-num { color: #ffa657; }
+  .yaml-line-com { color: #6e7681; font-style: italic; }
+  .yaml-line-anchor { color: #d2a8ff; }
+
+  /* ── FOOTER ── */
+  .course-footer {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text2);
+    font-size: 0.82rem;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 24px 20px 80px; }
+    .hero h1 { font-size: 1.9rem; }
+    .concept-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── BADGE ── */
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge.new { background: rgba(63,185,80,0.15); color: var(--accent2); border: 1px solid rgba(63,185,80,0.3); }
+  .badge.imp { background: rgba(247,129,102,0.12); color: var(--accent3); border: 1px solid rgba(247,129,102,0.3); }
+  .badge.tip { background: rgba(210,168,255,0.12); color: var(--accent4); border: 1px solid rgba(210,168,255,0.3); }
+
+  /* Section divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 48px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="k8s-badge">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="16" r="15" stroke="currentColor" stroke-width="1.5" fill="rgba(47,129,247,0.08)"/>
+        <path d="M16 6l2 4h-4l2-4zm0 20l-2-4h4l-2 4zM6 16l4-2v4l-4-2zm20 0l-4 2v-4l4 2z" fill="currentColor" opacity="0.7"/>
+        <circle cx="16" cy="16" r="3" fill="currentColor"/>
+        <line x1="16" y1="9" x2="16" y2="13" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="16" y1="19" x2="16" y2="23" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="9" y1="16" x2="13" y2="16" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="19" y1="16" x2="23" y2="16" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="11" y1="11" x2="13.8" y2="13.8" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="18.2" y1="18.2" x2="21" y2="21" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="21" y1="11" x2="18.2" y2="13.8" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="13.8" y1="18.2" x2="11" y2="21" stroke="currentColor" stroke-width="1.2"/>
+      </svg>
+      Kubernetes k8s
+    </div>
+    <p>Ubuntu Server 24.04 LTS</p>
+  </div>
+  <nav>
+    <div class="nav-section-title">Introduction</div>
+    <a href="#intro"><span class="dot"></span>Qu'est-ce que Kubernetes ?</a>
+    <a href="#docker-vs-k8s"><span class="dot"></span>Docker vs Kubernetes</a>
+    <a href="#architecture"><span class="dot"></span>Architecture</a>
+
+    <div class="nav-section-title">Installation</div>
+    <a href="#prerequis"><span class="dot"></span>Prérequis système</a>
+    <a href="#install-tools"><span class="dot"></span>Outils : kubeadm, kubectl</a>
+    <a href="#init-cluster"><span class="dot"></span>Initialiser le cluster</a>
+    <a href="#worker-nodes"><span class="dot"></span>Ajouter des Workers</a>
+
+    <div class="nav-section-title">Objets fondamentaux</div>
+    <a href="#kubectl"><span class="dot"></span>kubectl — La CLI</a>
+    <a href="#pods"><span class="dot"></span>Pods</a>
+    <a href="#deployments"><span class="dot"></span>Deployments</a>
+    <a href="#services"><span class="dot"></span>Services</a>
+    <a href="#namespaces"><span class="dot"></span>Namespaces</a>
+
+    <div class="nav-section-title">Configuration</div>
+    <a href="#configmaps"><span class="dot"></span>ConfigMaps</a>
+    <a href="#secrets"><span class="dot"></span>Secrets</a>
+    <a href="#volumes"><span class="dot"></span>Volumes & PV/PVC</a>
+    <a href="#ingress"><span class="dot"></span>Ingress</a>
+
+    <div class="nav-section-title">Projets pratiques</div>
+    <a href="#projet1"><span class="dot"></span>Projet 1 — App Web Nginx</a>
+    <a href="#projet2"><span class="dot"></span>Projet 2 — WordPress + MySQL</a>
+    <a href="#projet3"><span class="dot"></span>Projet 3 — Microservices</a>
+
+    <div class="nav-section-title">Référence</div>
+    <a href="#cheatsheet"><span class="dot"></span>Cheat Sheet kubectl</a>
+  </nav>
+</aside>
+
+<!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero" id="intro">
+    <div class="hero-tag">✦ Cours Complet Débutant</div>
+    <h1>Maîtriser <span>Kubernetes</span><br>sur Ubuntu Server</h1>
+    <p>
+      De zéro à un cluster fonctionnel. Ce cours s'adresse à toute personne connaissant Docker 
+      et souhaitant orchestrer ses conteneurs avec Kubernetes sur Ubuntu Server 24.04 LTS.
+    </p>
+    <div class="hero-meta">
+      <span class="hero-pill">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 12.93V11H7v1.93C4.27 12.47 2 10.22 2 7.5 2 4.46 4.46 2 7.5 2S13 4.46 13 7.5c0 2.72-2.27 4.97-5 5.43z"/></svg>
+        ~6–8 heures de lecture
+      </span>
+      <span class="hero-pill">🐳 Prérequis : Docker</span>
+      <span class="hero-pill">🐧 Ubuntu Server 24.04 LTS</span>
+      <span class="hero-pill">⚙️ Kubernetes 1.29+</span>
+    </div>
+  </div>
+
+  <!-- ═══ CHAPITRE 1 : Concepts ═══ -->
+  <section class="chapter" id="docker-vs-k8s">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 01</span>
+      <h2>Pourquoi Kubernetes ? Docker ne suffit-il pas ?</h2>
+    </div>
+
+    <p>
+      Tu connais Docker : tu crées une image, tu lances un conteneur, et ton application tourne.
+      Mais que se passe-t-il quand tu as <strong>50 conteneurs sur 10 machines</strong> ? Quand un conteneur plante à 3h du matin ?
+      Quand tu dois mettre à jour ton application sans interruption de service ? C'est là qu'intervient <strong>Kubernetes</strong>.
+    </p>
+
+    <div class="callout info">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>Analogie simple</strong>
+        Docker, c'est un camion de livraison. Kubernetes, c'est la compagnie de transport qui gère 
+        toute la flotte : qui conduit quoi, sur quel itinéraire, comment se dérouter si un camion tombe en panne.
+      </div>
+    </div>
+
+    <h3>Ce que Docker fait bien</h3>
+    <p>Docker excelle à :</p>
+    <ul>
+      <li>Créer et empaqueter des images de conteneurs</li>
+      <li>Lancer un ou quelques conteneurs sur <strong>une seule machine</strong></li>
+      <li>Développement local et tests</li>
+      <li>Docker Compose pour des environnements multi-conteneurs simples</li>
+    </ul>
+
+    <h3>Les limites de Docker seul en production</h3>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Problème</th>
+          <th>Avec Docker seul</th>
+          <th>Avec Kubernetes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Un conteneur plante</td>
+          <td>Il reste mort jusqu'à intervention manuelle</td>
+          <td>Kubernetes le redémarre automatiquement</td>
+        </tr>
+        <tr>
+          <td>Beaucoup de trafic</td>
+          <td>Tu dois créer des conteneurs manuellement</td>
+          <td>Auto-scaling : K8s crée des copies automatiquement</td>
+        </tr>
+        <tr>
+          <td>Mise à jour de l'app</td>
+          <td>Temps d'arrêt inévitable</td>
+          <td>Rolling update : zéro downtime</td>
+        </tr>
+        <tr>
+          <td>Répartition de charge</td>
+          <td>Nécessite un outil externe</td>
+          <td>Load balancing intégré</td>
+        </tr>
+        <tr>
+          <td>Plusieurs serveurs</td>
+          <td>Gestion manuelle et complexe</td>
+          <td>Kubernetes gère un cluster multi-serveurs</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Kubernetes en une phrase</h3>
+    <p>
+      <strong>Kubernetes</strong> (souvent abrégé <em>K8s</em>, car il y a 8 lettres entre le K et le s) 
+      est un <strong>orchestrateur de conteneurs open source</strong> créé par Google en 2014, 
+      aujourd'hui maintenu par la Cloud Native Computing Foundation (CNCF). 
+      Il automatise le déploiement, la mise à l'échelle et la gestion des applications conteneurisées.
+    </p>
+
+    <div class="callout tip">
+      <div class="callout-icon">🎯</div>
+      <div class="callout-body">
+        <strong>Bonne nouvelle pour toi</strong>
+        Kubernetes utilise les mêmes images Docker que tu connais déjà. Rien à réapprendre de ce côté-là.
+        Ce sont uniquement les concepts d'orchestration qui sont nouveaux.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CHAPITRE 2 : Architecture ═══ -->
+  <section class="chapter" id="architecture">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 02</span>
+      <h2>Architecture d'un Cluster Kubernetes</h2>
+    </div>
+
+    <p>
+      Un cluster Kubernetes est composé de <strong>nœuds (nodes)</strong> : des machines (physiques ou virtuelles)
+      qui exécutent tes applications. Il y a deux types de nœuds : le <em>Control Plane</em> (cerveau) 
+      et les <em>Workers</em> (muscles).
+    </p>
+
+    <div class="arch-diagram">
+      <div class="title">── CLUSTER KUBERNETES ──</div>
+<pre style="background:none; border:none; padding:0; margin:0; font-size:0.78rem; color:var(--text3);">
+┌─────────────────────────────────────────────────────────────────┐
+│                      CONTROL PLANE (Master)                     │
+│                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌──────────┐  ┌─────────┐  │
+│  │ API Server  │  │  Scheduler  │  │Controller│  │  etcd   │  │
+│  │(kube-apiserv│  │(kube-schedul│  │ Manager  │  │(base de │  │
+│  │     er)     │  │    er)      │  │          │  │données) │  │
+│  └──────┬──────┘  └──────┬──────┘  └────┬─────┘  └─────────┘  │
+│         │                │               │                      │
+└─────────┼────────────────┼───────────────┼──────────────────────┘
+          │  (communication via kubectl ou API)
+          ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    WORKER NODE 1                                 │
+│                                                                 │
+│  ┌──────────┐  ┌──────────┐  ┌────────────────────────────────┐ │
+│  │ kubelet  │  │kube-proxy│  │         Container Runtime      │ │
+│  │          │  │          │  │  (containerd / Docker)         │ │
+│  └──────────┘  └──────────┘  └────────────────────────────────┘ │
+│                                                                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │    Pod 1     │  │    Pod 2     │  │    Pod 3     │          │
+│  │ [Container]  │  │ [Container]  │  │ [Container]  │          │
+│  └──────────────┘  └──────────────┘  └──────────────┘          │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                    WORKER NODE 2                                 │
+│  ┌──────────────┐  ┌──────────────┐                             │
+│  │    Pod 4     │  │    Pod 5     │                             │
+│  │ [Container]  │  │ [Container]  │                             │
+│  └──────────────┘  └──────────────┘                             │
+└─────────────────────────────────────────────────────────────────┘
+</pre>
+    </div>
+
+    <h3>Les composants du Control Plane</h3>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="icon">🧠</div>
+        <h4>API Server</h4>
+        <p>
+          Le point d'entrée de tout. Chaque commande <code>kubectl</code> passe par lui. 
+          C'est le cerveau qui reçoit et valide toutes les requêtes du cluster.
+        </p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">📋</div>
+        <h4>Scheduler</h4>
+        <p>
+          Décide <strong>sur quel worker</strong> un nouveau Pod va être lancé, 
+          en fonction des ressources disponibles (CPU, RAM).
+        </p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">🔄</div>
+        <h4>Controller Manager</h4>
+        <p>
+          Surveille l'état du cluster. Si tu demandes 3 réplicas d'un Pod et qu'un plante, 
+          il en recrée un autre automatiquement.
+        </p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">🗄️</div>
+        <h4>etcd</h4>
+        <p>
+          La base de données du cluster. Stocke <strong>toute la configuration</strong> 
+          et l'état de Kubernetes. C'est le composant le plus critique à sauvegarder.
+        </p>
+      </div>
+    </div>
+
+    <h3>Les composants d'un Worker Node</h3>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="icon">🤖</div>
+        <h4>kubelet</h4>
+        <p>
+          L'agent Kubernetes qui tourne sur chaque worker. 
+          Il communique avec l'API Server et s'assure que les conteneurs tournent comme demandé.
+        </p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">🌐</div>
+        <h4>kube-proxy</h4>
+        <p>
+          Gère le réseau du node. Il s'occupe des règles de routage pour que 
+          les services soient accessibles depuis l'intérieur et l'extérieur du cluster.
+        </p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">🐋</div>
+        <h4>Container Runtime</h4>
+        <p>
+          Le moteur qui lance réellement les conteneurs. 
+          Par défaut avec Kubernetes 1.20+ : <code>containerd</code> (pas Docker directement).
+        </p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">📦</div>
+        <h4>Pod</h4>
+        <p>
+          La plus petite unité déployable dans K8s. Un Pod contient 
+          un ou plusieurs conteneurs qui partagent le même réseau et stockage.
+        </p>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-icon">📌</div>
+      <div class="callout-body">
+        <strong>Pod vs Conteneur : la différence clé</strong>
+        En Docker tu travailles directement avec des conteneurs. En Kubernetes, tu travailles avec des <strong>Pods</strong>.
+        Un Pod est une enveloppe autour d'un ou plusieurs conteneurs. Dans 95% des cas, un Pod = un conteneur.
+        Les pods partagent le même espace réseau (même IP) et peuvent partager des volumes.
+      </div>
+    </div>
+
+    <h3>Les objets principaux de Kubernetes</h3>
+    <p>Kubernetes fonctionne avec des <strong>objets YAML</strong> qui décrivent l'état désiré de ton système :</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Objet</th><th>Équivalent Docker</th><th>Rôle</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Pod</code></td><td><code>docker run</code></td><td>Lance un ou plusieurs conteneurs</td></tr>
+        <tr><td><code>Deployment</code></td><td>N/A (Docker Compose service)</td><td>Gère N réplicas d'un Pod, rolling updates</td></tr>
+        <tr><td><code>Service</code></td><td>ports dans docker-compose</td><td>Expose les Pods en réseau</td></tr>
+        <tr><td><code>ConfigMap</code></td><td>Variables d'env dans .env</td><td>Configuration non sensible</td></tr>
+        <tr><td><code>Secret</code></td><td>Variables d'env secrets</td><td>Données sensibles (mots de passe)</td></tr>
+        <tr><td><code>PersistentVolume</code></td><td>Volume Docker</td><td>Stockage persistant</td></tr>
+        <tr><td><code>Namespace</code></td><td>Projets Docker Compose</td><td>Isolation logique des ressources</td></tr>
+        <tr><td><code>Ingress</code></td><td>Nginx reverse proxy</td><td>Routing HTTP vers les services</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══ CHAPITRE 3 : Installation ═══ -->
+  <section class="chapter" id="prerequis">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 03</span>
+      <h2>Installation sur Ubuntu Server 24.04 LTS</h2>
+    </div>
+
+    <p>
+      Nous allons installer un cluster Kubernetes avec <strong>kubeadm</strong>, 
+      l'outil officiel de bootstrapping. Pour ce cours, tu peux utiliser 
+      une ou plusieurs machines virtuelles (VMs) ou physiques sous Ubuntu Server 24.04 LTS.
+    </p>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>Pour les tests mono-machine</strong>
+        Si tu n'as qu'un seul PC/serveur, tu peux utiliser <strong>Minikube</strong> ou <strong>K3s</strong>
+        qui sont plus simples à installer. Ce chapitre couvre kubeadm pour un vrai cluster de production.
+        La section "Alternative avec Minikube" plus bas est recommandée pour débuter.
+      </div>
+    </div>
+
+    <h3 id="install-tools">Prérequis système</h3>
+    <p>Chaque machine du cluster (master et workers) doit respecter :</p>
+    <ul>
+      <li>Ubuntu Server 24.04 LTS (noble)</li>
+      <li>Minimum <strong>2 CPU</strong> et <strong>2 Go de RAM</strong> par machine</li>
+      <li>Minimum 20 Go d'espace disque</li>
+      <li>Connexion réseau entre toutes les machines</li>
+      <li>Swap désactivé (obligatoire pour Kubernetes)</li>
+      <li>Accès root ou sudo</li>
+    </ul>
+
+    <div class="callout tip">
+      <div class="callout-icon">🚀</div>
+      <div class="callout-body">
+        <strong>Recommandé pour débuter : Minikube sur une seule machine</strong>
+        Minikube crée un cluster Kubernetes complet dans une seule VM ou directement sur ton Ubuntu.
+        C'est parfait pour apprendre sans avoir plusieurs serveurs.
+      </div>
+    </div>
+
+    <h3>Option A — Installation avec Minikube (recommandée pour apprendre)</h3>
+
+    <div class="step-flow">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Installer kubectl (le client de ligne de commande)</h4>
+          <div class="cmd-explain">
+            <div class="cmd-explain-header"><code>Installation de kubectl</code></div>
+            <div class="cmd-explain-body">
+              <p><code>kubectl</code> est l'outil en ligne de commande qui te permet de communiquer avec ton cluster Kubernetes. C'est comme le client Docker (<code>docker</code>) mais pour Kubernetes.</p>
+            </div>
+          </div>
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          </div>
+          <pre><code><span class="c-comment"># Télécharger la dernière version stable de kubectl</span>
+<span class="c-prompt">$ </span><span class="c-cmd">curl</span> <span class="c-flag">-LO</span> <span class="c-str">"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"</span>
+
+<span class="c-comment"># Rendre le binaire exécutable</span>
+<span class="c-prompt">$ </span><span class="c-cmd">chmod</span> <span class="c-flag">+x</span> kubectl
+
+<span class="c-comment"># Déplacer dans /usr/local/bin pour qu'il soit disponible partout</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> <span class="c-cmd">mv</span> kubectl /usr/local/bin/
+
+<span class="c-comment"># Vérifier que kubectl est installé correctement</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> version <span class="c-flag">--client</span>
+<span class="c-comment"># Output : Client Version: v1.29.x</span></code></pre>
+
+          <div class="cmd-explain">
+            <div class="cmd-explain-header"><code>Explication des commandes</code></div>
+            <div class="cmd-explain-body">
+              <table class="arg-table">
+                <tr><td>curl -LO</td><td><code>-L</code> suit les redirections HTTP, <code>-O</code> sauvegarde sous le nom original</td></tr>
+                <tr><td>$(curl ...)</td><td>Substitution de commande : exécute la commande interne et insère le résultat (la version stable actuelle)</td></tr>
+                <tr><td>chmod +x</td><td>Ajoute le droit d'exécution sur le fichier téléchargé</td></tr>
+                <tr><td>sudo mv ... /usr/local/bin/</td><td>Déplace dans le PATH système pour que tous les utilisateurs puissent l'utiliser</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Installer Minikube</h4>
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          </div>
+          <pre><code><span class="c-comment"># Télécharger Minikube</span>
+<span class="c-prompt">$ </span><span class="c-cmd">curl</span> <span class="c-flag">-LO</span> https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+<span class="c-comment"># Installer Minikube dans /usr/local/bin</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo install</span> <span class="c-flag">-o root -g root -m 0755</span> minikube-linux-amd64 /usr/local/bin/minikube
+
+<span class="c-comment"># Vérifier l'installation</span>
+<span class="c-prompt">$ </span><span class="c-cmd">minikube</span> version</code></pre>
+
+          <div class="cmd-explain">
+            <div class="cmd-explain-header"><code>Explication : sudo install</code></div>
+            <div class="cmd-explain-body">
+              <table class="arg-table">
+                <tr><td>-o root</td><td>Propriétaire du fichier installé = root</td></tr>
+                <tr><td>-g root</td><td>Groupe du fichier installé = root</td></tr>
+                <tr><td>-m 0755</td><td>Permissions en octal : lecture+exécution pour tous, écriture seulement root</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Installer Docker (driver recommandé pour Minikube)</h4>
+          <div class="cmd-explain">
+            <div class="cmd-explain-header"><code>Pourquoi Docker ?</code></div>
+            <div class="cmd-explain-body">
+              <p>Minikube peut utiliser plusieurs drivers (VirtualBox, KVM, Docker…). Le driver <strong>Docker</strong> est le plus simple sur Ubuntu Desktop/Server : il ne nécessite pas de virtualisation matérielle et tourne directement via les conteneurs.</p>
+            </div>
+          </div>
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          </div>
+          <pre><code><span class="c-comment"># 1. Mettre à jour les paquets et installer les dépendances</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo apt-get</span> update
+<span class="c-prompt">$ </span><span class="c-cmd">sudo apt-get install</span> <span class="c-flag">-y</span> ca-certificates curl gnupg
+
+<span class="c-comment"># 2. Ajouter la clé GPG officielle de Docker</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo install</span> <span class="c-flag">-m 0755 -d</span> /etc/apt/keyrings
+<span class="c-prompt">$ </span><span class="c-cmd">curl</span> <span class="c-flag">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="c-flag">|</span> <span class="c-cmd">sudo gpg</span> <span class="c-flag">--dearmor -o</span> /etc/apt/keyrings/docker.gpg
+<span class="c-prompt">$ </span><span class="c-cmd">sudo chmod</span> <span class="c-flag">a+r</span> /etc/apt/keyrings/docker.gpg
+
+<span class="c-comment"># 3. Ajouter le dépôt Docker (Ubuntu 24.04 noble)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">echo</span> <span class="c-str">"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release &amp;&amp; echo "$VERSION_CODENAME") stable"</span> <span class="c-flag">|</span> <span class="c-cmd">sudo tee</span> /etc/apt/sources.list.d/docker.list &gt; /dev/null
+
+<span class="c-comment"># 4. Installer Docker Engine</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo apt-get</span> update
+<span class="c-prompt">$ </span><span class="c-cmd">sudo apt-get install</span> <span class="c-flag">-y</span> docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+<span class="c-comment"># 5. Ajouter ton utilisateur au groupe docker (sans sudo)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo usermod</span> <span class="c-flag">-aG</span> docker $USER
+
+<span class="c-comment"># 6. Appliquer le changement de groupe sans se déconnecter</span>
+<span class="c-prompt">$ </span><span class="c-cmd">newgrp</span> docker
+
+<span class="c-comment"># 7. Vérifier que Docker fonctionne</span>
+<span class="c-prompt">$ </span><span class="c-cmd">docker</span> run hello-world
+<span class="c-comment"># Output attendu : "Hello from Docker!"</span></code></pre>
+
+          <div class="cmd-explain">
+            <div class="cmd-explain-header"><code>Explication des étapes clés</code></div>
+            <div class="cmd-explain-body">
+              <table class="arg-table">
+                <tr><td>keyrings/docker.gpg</td><td>Clé cryptographique pour vérifier l'authenticité des paquets Docker</td></tr>
+                <tr><td>$(dpkg --print-architecture)</td><td>Détecte automatiquement l'architecture : <code>amd64</code>, <code>arm64</code>…</td></tr>
+                <tr><td>$VERSION_CODENAME</td><td>Variable du fichier <code>/etc/os-release</code> : vaut <code>noble</code> sur Ubuntu 24.04</td></tr>
+                <tr><td>usermod -aG docker</td><td>Ajoute l'utilisateur au groupe <code>docker</code> pour lancer Docker sans <code>sudo</code></td></tr>
+                <tr><td>newgrp docker</td><td>Applique le nouveau groupe dans la session courante sans se déconnecter</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="callout warn">
+            <div class="callout-icon">⚠️</div>
+            <div class="callout-body">
+              <strong>Groupe docker appliqué</strong>
+              Si tu ne lances pas <code>newgrp docker</code>, tu devras te déconnecter/reconnecter pour que Minikube puisse utiliser Docker sans erreur de permission.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Démarrer Minikube avec Docker</h4>
+          <p>Puisque tu connais déjà Docker, Minikube peut l'utiliser comme driver (moteur de virtualisation) :</p>
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          </div>
+          <pre><code><span class="c-comment"># Démarrer Minikube avec le driver Docker</span>
+<span class="c-prompt">$ </span><span class="c-cmd">minikube</span> start <span class="c-flag">--driver=docker</span>
+
+<span class="c-comment"># Si Docker n'est pas installé, utiliser le driver "none" (bare metal)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">minikube</span> start <span class="c-flag">--driver=none</span>   <span class="c-comment"># Nécessite d'être root</span>
+
+<span class="c-comment"># Vérifier que le cluster est lancé</span>
+<span class="c-prompt">$ </span><span class="c-cmd">minikube</span> status
+
+<span class="c-comment"># Output attendu :</span>
+<span class="c-comment"># minikube</span>
+<span class="c-comment"># type: Control Plane</span>
+<span class="c-comment"># host: Running</span>
+<span class="c-comment"># kubelet: Running</span>
+<span class="c-comment"># apiserver: Running</span>
+<span class="c-comment"># kubeconfig: Configured</span></code></pre>
+
+          <div class="cmd-explain">
+            <div class="cmd-explain-header"><code>Explication : minikube start</code></div>
+            <div class="cmd-explain-body">
+              <table class="arg-table">
+                <tr><td>--driver=docker</td><td>Utilise Docker comme hyperviseur pour créer le node Kubernetes</td></tr>
+                <tr><td>--cpus=2</td><td>Optionnel : nombre de CPUs alloués (défaut : 2)</td></tr>
+                <tr><td>--memory=4g</td><td>Optionnel : RAM allouée (défaut : 2g)</td></tr>
+                <tr><td>--kubernetes-version</td><td>Optionnel : version K8s spécifique, ex: <code>v1.29.0</code></td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>Vérifier le cluster</h4>
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          </div>
+          <pre><code><span class="c-comment"># Afficher les informations du cluster</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> cluster-info
+
+<span class="c-comment"># Lister les nœuds du cluster</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get nodes
+
+<span class="c-comment"># Output attendu :</span>
+<span class="c-comment"># NAME       STATUS   ROLES           AGE   VERSION</span>
+<span class="c-comment"># minikube   Ready    control-plane   1m    v1.29.x</span>
+
+<span class="c-comment"># Voir les namespaces par défaut</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get namespaces</code></pre>
+
+          <div class="callout tip">
+            <div class="callout-icon">🎉</div>
+            <div class="callout-body">
+              <strong>Félicitations !</strong>
+              Ton cluster Kubernetes est opérationnel. Le node affiche <code>Ready</code> = il est prêt à recevoir des Pods.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h3 id="init-cluster">Option B — Installation avec kubeadm (cluster multi-nodes)</h3>
+    <p>Pour un vrai cluster avec plusieurs machines, voici les étapes complètes. Ces commandes sont à exécuter <strong>sur toutes les machines</strong> sauf indication contraire.</p>
+
+    <h4>Étape 1 — Préparation du système (sur toutes les machines)</h4>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># ─── 1. Désactiver le swap (Kubernetes l'exige) ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> swapoff <span class="c-flag">-a</span>
+
+<span class="c-comment"># Désactiver le swap de façon permanente (commenter la ligne swap)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> sed <span class="c-flag">-i</span> <span class="c-str">'s/^.*swap.*$/#&/'</span> /etc/fstab
+
+<span class="c-comment"># ─── 2. Charger les modules kernel nécessaires ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">cat</span> <span class="c-flag">&lt;&lt;EOF</span> | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> modprobe overlay       <span class="c-comment"># Module pour containerd</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> modprobe br_netfilter  <span class="c-comment"># Module pour le réseau des Pods</span>
+
+<span class="c-comment"># ─── 3. Configurer les paramètres réseau du kernel ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">cat</span> <span class="c-flag">&lt;&lt;EOF</span> | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+
+<span class="c-comment"># Appliquer les paramètres sans redémarrer</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> sysctl <span class="c-flag">--system</span></code></pre>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>Pourquoi ces configurations ?</code></div>
+      <div class="cmd-explain-body">
+        <table class="arg-table">
+          <tr><td>swapoff -a</td><td>Kubernetes a besoin de contrôler précisément la mémoire des Pods. Le swap perturbe ces calculs.</td></tr>
+          <tr><td>overlay</td><td>Module du système de fichiers utilisé par containerd pour les couches des images.</td></tr>
+          <tr><td>br_netfilter</td><td>Permet à iptables de voir le trafic réseau des bridges (nécessaire pour le réseau Kubernetes).</td></tr>
+          <tr><td>ip_forward = 1</td><td>Permet au nœud de faire passer des paquets réseau entre les interfaces (routage pour les Pods).</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h4>Étape 2 — Installer containerd (sur toutes les machines)</h4>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Installer containerd via les dépôts Docker officiels</span>
+
+<span class="c-comment"># Installer containerd</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> apt-get update
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> apt-get install <span class="c-flag">-y</span> containerd.io
+
+<span class="c-comment"># Générer la configuration par défaut de containerd</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> mkdir <span class="c-flag">-p</span> /etc/containerd
+<span class="c-prompt">$ </span><span class="c-cmd">containerd</span> config default | sudo tee /etc/containerd/config.toml
+
+<span class="c-comment"># Activer SystemdCgroup (nécessaire pour K8s)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> sed <span class="c-flag">-i</span> <span class="c-str">'s/SystemdCgroup = false/SystemdCgroup = true/'</span> /etc/containerd/config.toml
+
+<span class="c-comment"># Redémarrer et activer containerd</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> systemctl restart containerd
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> systemctl enable containerd
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> systemctl status containerd   <span class="c-comment"># Doit afficher "active (running)"</span></code></pre>
+
+    <h4>Étape 3 — Installer kubeadm, kubelet, kubectl (sur toutes les machines)</h4>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Ajouter la clé GPG de Kubernetes</span>
+<span class="c-prompt">$ </span><span class="c-cmd">curl</span> <span class="c-flag">-fsSL</span> https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+<span class="c-comment"># Ajouter le dépôt Kubernetes</span>
+<span class="c-prompt">$ </span>echo <span class="c-str">'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /'</span> | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+<span class="c-comment"># Mettre à jour et installer les trois outils</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> apt-get update
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> apt-get install <span class="c-flag">-y</span> kubelet kubeadm kubectl
+
+<span class="c-comment"># Empêcher les mises à jour automatiques (stabilité)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> apt-mark hold kubelet kubeadm kubectl</code></pre>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>kubeadm vs kubelet vs kubectl — les différences</code></div>
+      <div class="cmd-explain-body">
+        <table class="arg-table">
+          <tr><td>kubeadm</td><td>Outil d'installation et d'initialisation du cluster. Utilisé une seule fois pour bootstrapper. Comme un "installateur".</td></tr>
+          <tr><td>kubelet</td><td>Service système qui tourne en permanence sur chaque node. Il exécute les ordres du Control Plane et gère les Pods locaux.</td></tr>
+          <tr><td>kubectl</td><td>Client CLI que TU utilises pour envoyer des commandes au cluster. C'est ton interface de travail quotidien.</td></tr>
+          <tr><td>apt-mark hold</td><td>Bloque les mises à jour automatiques de ces paquets pour éviter une version incompatible lors d'un <code>apt upgrade</code>.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h4 id="init-cluster">Étape 4 — Initialiser le Control Plane (sur le master UNIQUEMENT)</h4>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Initialiser le cluster (remplace 192.168.1.100 par l'IP de ton master)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> kubeadm init \
+    <span class="c-flag">--apiserver-advertise-address=</span><span class="c-val">192.168.1.100</span> \
+    <span class="c-flag">--pod-network-cidr=</span><span class="c-val">10.244.0.0/16</span>
+
+<b>À la fin de l'init, vous avez un retour du type : "kubeadm join 192.168.3.145:6443 <br>--token tcekc8.ufhw7n92xj8psxbg<br>      --discovery-token-ca-cert-hash<br>sha256:2f199069f92bef6a7b08e7cdd0563039a7b8fae310c963617ed2623ab520843f"
+        Noter le token généré ainsi que les chiffres apres sha256 ! </b>
+<span class="c-prompt">$ </span><span class="c-cmd">mkdir</span> <span class="c-flag">-p</span> $HOME/.kube
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> cp <span class="c-flag">-i</span> /etc/kubernetes/admin.conf $HOME/.kube/config
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> chown <span class="c-flag">$(id -u):$(id -g)</span> $HOME/.kube/config</code></pre>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>Explication : kubeadm init</code></div>
+      <div class="cmd-explain-body">
+        <table class="arg-table">
+          <tr><td>--apiserver-advertise-address</td><td>L'IP sur laquelle l'API Server écoute. Les workers se connecteront à cette adresse. Utilise l'IP de ta machine master sur le réseau local.</td></tr>
+          <tr><td>--pod-network-cidr=10.244.0.0/16</td><td>La plage d'adresses IP réservée pour les Pods. 10.244.0.0/16 est requis pour le plugin réseau Flannel (le plus simple).</td></tr>
+          <tr><td>mkdir ~/.kube &amp;&amp; cp admin.conf</td><td>Le kubeconfig est le fichier de configuration qui permet à kubectl de s'authentifier auprès du cluster. Sans cette étape, kubectl ne peut pas communiquer.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h4>Étape 5 — Installer le plugin réseau Flannel (sur le master)</h4>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Flannel gère le réseau entre les Pods sur différents nodes</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+
+<span class="c-comment"># Vérifier que les pods système démarrent</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-n</span> kube-system
+<span class="c-comment"># Attendre que tous les pods soient "Running"</span></code></pre>
+
+    <h4 id="worker-nodes">Étape 6 — Rejoindre les Workers (sur chaque worker)</h4>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># La commande join a été affichée à la fin de "kubeadm init"</span>
+<span class="c-comment"># Elle ressemble à :</span>
+<span class="c-prompt">$ </span><span class="c-cmd">sudo</span> kubeadm join 192.168.1.100:6443 \
+    <span class="c-flag">--token</span> <span class="c-val">abcdef.1234567890abcdef</span> \
+    <span class="c-flag">--discovery-token-ca-cert-hash</span> sha256:xxxxxxxxxxxxxxxxxxxxxxxx
+
+<span class="c-comment"># Si tu n'as plus le token, regénère-le depuis le master :</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubeadm</span> token create <span class="c-flag">--print-join-command</span>
+
+<span class="c-comment"># Vérifier que le worker a rejoint (depuis le master) :</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get nodes
+<span class="c-comment"># NAME       STATUS   ROLES           AGE</span>
+<span class="c-comment"># master     Ready    control-plane   10m</span>
+<span class="c-comment"># worker1    Ready    &lt;none&gt;          2m</span></code></pre>
+  </section>
+
+  <!-- ═══ CHAPITRE 4 : kubectl ═══ -->
+  <section class="chapter" id="kubectl">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 04</span>
+      <h2>kubectl — Maîtriser la CLI Kubernetes</h2>
+    </div>
+
+    <p>
+      <code>kubectl</code> est ton outil principal. Apprendre Kubernetes, 
+      c'est d'abord apprendre <code>kubectl</code>. La syntaxe générale est :
+    </p>
+
+    <div class="code-header">
+      <span class="code-lang">syntaxe</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-cmd">kubectl</span> [action] [ressource] [nom] [options]
+
+<span class="c-comment"># Exemples :</span>
+<span class="c-cmd">kubectl</span> <span class="c-flag">get</span>     pods                    <span class="c-comment"># Lister tous les pods</span>
+<span class="c-cmd">kubectl</span> <span class="c-flag">get</span>     pods mon-pod             <span class="c-comment"># Voir un pod spécifique</span>
+<span class="c-cmd">kubectl</span> <span class="c-flag">describe</span> pod mon-pod             <span class="c-comment"># Détails complets</span>
+<span class="c-cmd">kubectl</span> <span class="c-flag">delete</span>  pod mon-pod             <span class="c-comment"># Supprimer</span>
+<span class="c-cmd">kubectl</span> <span class="c-flag">apply</span>   <span class="c-flag">-f</span> mon-fichier.yaml    <span class="c-comment"># Créer/mettre à jour depuis fichier</span></code></pre>
+
+    <h3>Commandes kubectl essentielles</h3>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>kubectl get</code> — Lister les ressources</div>
+      <div class="cmd-explain-body">
+        <p>La commande la plus utilisée. Affiche les ressources du cluster.</p>
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        </div>
+        <pre><code><span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods                          <span class="c-comment"># Pods du namespace courant</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-A</span>                       <span class="c-comment"># Pods de TOUS les namespaces</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-o wide</span>                 <span class="c-comment"># + colonnes IP et NODE</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-o yaml</span>                 <span class="c-comment"># Format YAML complet</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-w</span>                       <span class="c-comment"># Mode watch (mise à jour temps réel)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-n</span> kube-system           <span class="c-comment"># Dans le namespace kube-system</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get all                           <span class="c-comment"># Pods + Services + Deployments</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get nodes                         <span class="c-comment"># Lister les nodes</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get services                      <span class="c-comment"># Lister les services</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get deployments                   <span class="c-comment"># Lister les deployments</span></code></pre>
+        <table class="arg-table">
+          <tr><td>-A / --all-namespaces</td><td>Affiche les ressources dans tous les namespaces</td></tr>
+          <tr><td>-o wide</td><td>Affiche des colonnes supplémentaires (IP, Node...)</td></tr>
+          <tr><td>-o yaml</td><td>Sortie en format YAML (utile pour voir la configuration complète)</td></tr>
+          <tr><td>-o json</td><td>Sortie en format JSON (utile pour scripts)</td></tr>
+          <tr><td>-w / --watch</td><td>Mode surveillance : rafraîchit l'affichage automatiquement</td></tr>
+          <tr><td>-n / --namespace</td><td>Spécifie le namespace cible</td></tr>
+          <tr><td>-l app=nginx</td><td>Filtre par label (ex: tous les pods avec le label app=nginx)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>kubectl describe</code> — Détails d'une ressource</div>
+      <div class="cmd-explain-body">
+        <p>Affiche les informations détaillées d'une ressource : configuration, événements, erreurs. C'est la commande à utiliser quand quelque chose ne va pas.</p>
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        </div>
+        <pre><code><span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> describe pod mon-pod
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> describe node mon-node
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> describe deployment mon-deploy
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> describe service mon-service
+
+<span class="c-comment"># La section "Events" en bas est précieuse pour débugger !</span></code></pre>
+      </div>
+    </div>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>kubectl apply</code> — Créer ou mettre à jour depuis un fichier YAML</div>
+      <div class="cmd-explain-body">
+        <p>C'est la façon "déclarative" de travailler avec Kubernetes. Tu écris ce que tu veux dans un YAML, et K8s s'occupe de le réaliser.</p>
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        </div>
+        <pre><code><span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> pod.yaml              <span class="c-comment"># Créer/mettre à jour depuis un fichier</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> ./dossier/            <span class="c-comment"># Tous les YAML d'un dossier</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> https://url/file.yaml  <span class="c-comment"># Depuis une URL</span></code></pre>
+        <table class="arg-table">
+          <tr><td>-f / --filename</td><td>Chemin vers le fichier YAML (ou dossier, ou URL)</td></tr>
+          <tr><td>--dry-run=client</td><td>Simule l'application sans rien créer réellement (vérification syntaxique)</td></tr>
+          <tr><td>--record</td><td>Enregistre la commande dans l'historique de la ressource</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>kubectl logs</code> — Voir les logs d'un conteneur</div>
+      <div class="cmd-explain-body">
+        <p>Équivalent de <code>docker logs</code>. Indispensable pour débugger.</p>
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        </div>
+        <pre><code><span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> logs mon-pod                    <span class="c-comment"># Logs du pod</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> logs mon-pod <span class="c-flag">-f</span>                 <span class="c-comment"># Suivre les logs en temps réel (follow)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> logs mon-pod <span class="c-flag">--tail=50</span>          <span class="c-comment"># Les 50 dernières lignes</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> logs mon-pod <span class="c-flag">--since=1h</span>        <span class="c-comment"># Logs depuis 1 heure</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> logs mon-pod <span class="c-flag">-c</span> mon-container   <span class="c-comment"># Si le pod a plusieurs conteneurs</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> logs <span class="c-flag">-l app=nginx</span>              <span class="c-comment"># Logs de tous les pods avec ce label</span></code></pre>
+        <table class="arg-table">
+          <tr><td>-f / --follow</td><td>Mode streaming : affiche les nouvelles lignes au fur et à mesure</td></tr>
+          <tr><td>--tail=N</td><td>N dernières lignes seulement</td></tr>
+          <tr><td>--since=duration</td><td>Logs depuis une durée (1h, 30m, 5s...)</td></tr>
+          <tr><td>-c container</td><td>Spécifie le conteneur si le Pod en contient plusieurs</td></tr>
+          <tr><td>--previous</td><td>Logs du précédent conteneur (utile si le pod a crashé)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>kubectl exec</code> — Exécuter une commande dans un conteneur</div>
+      <div class="cmd-explain-body">
+        <p>Équivalent de <code>docker exec</code>. Permet d'entrer dans un conteneur ou d'y exécuter des commandes.</p>
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        </div>
+        <pre><code><span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> exec <span class="c-flag">-it</span> mon-pod <span class="c-flag">--</span> /bin/bash   <span class="c-comment"># Shell interactif</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> exec <span class="c-flag">-it</span> mon-pod <span class="c-flag">--</span> /bin/sh    <span class="c-comment"># Si bash n'est pas dispo</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> exec mon-pod <span class="c-flag">--</span> ls /app         <span class="c-comment"># Commande sans mode interactif</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> exec <span class="c-flag">-it</span> mon-pod <span class="c-flag">-c mon-container</span> <span class="c-flag">--</span> bash  <span class="c-comment"># Conteneur spécifique</span></code></pre>
+        <table class="arg-table">
+          <tr><td>-it</td><td><code>-i</code> = mode interactif (stdin ouvert), <code>-t</code> = alloue un pseudo-TTY (terminal). Toujours mettre ensemble pour un shell.</td></tr>
+          <tr><td>--</td><td>Séparateur entre les options kubectl et la commande à exécuter dans le conteneur. Important pour éviter les ambiguïtés.</td></tr>
+          <tr><td>-c container</td><td>Cible un conteneur spécifique dans un Pod multi-conteneurs</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>kubectl delete</code> — Supprimer des ressources</div>
+      <div class="cmd-explain-body">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        </div>
+        <pre><code><span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> delete pod mon-pod              <span class="c-comment"># Supprimer un pod</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> delete <span class="c-flag">-f</span> pod.yaml              <span class="c-comment"># Supprimer ce qui est défini dans le YAML</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> delete pod <span class="c-flag">--all</span>               <span class="c-comment"># Supprimer TOUS les pods</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> delete deployment mon-deploy    <span class="c-comment"># Supprimer un deployment</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> delete <span class="c-flag">-l</span> app=nginx             <span class="c-comment"># Supprimer par label</span></code></pre>
+        <div class="callout warn">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-body">
+            Si tu supprimes un Pod qui appartient à un Deployment, Kubernetes le <strong>recrée automatiquement</strong>.
+            Pour vraiment supprimer, il faut supprimer le Deployment.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CHAPITRE 5 : Pods ═══ -->
+  <section class="chapter" id="pods">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 05</span>
+      <h2>Les Pods — L'unité de base</h2>
+    </div>
+
+    <p>
+      Le Pod est l'objet le plus fondamental de Kubernetes. C'est un wrapper autour d'un 
+      ou plusieurs conteneurs. En pratique, on ne crée presque jamais des Pods directement 
+      (on utilise des Deployments), mais comprendre les Pods est indispensable.
+    </p>
+
+    <h3>Créer un Pod en ligne de commande (méthode impérative)</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Lancer un pod Nginx (comme "docker run nginx")</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> run mon-nginx <span class="c-flag">--image=nginx</span>
+
+<span class="c-comment"># Vérifier que le pod est lancé</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods
+<span class="c-comment"># NAME        READY   STATUS    RESTARTS   AGE</span>
+<span class="c-comment"># mon-nginx   1/1     Running   0          30s</span>
+
+<span class="c-comment"># Voir les détails du pod</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> describe pod mon-nginx</code></pre>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>Explication : kubectl run</code></div>
+      <div class="cmd-explain-body">
+        <table class="arg-table">
+          <tr><td>mon-nginx</td><td>Nom du Pod. Doit être unique dans le namespace.</td></tr>
+          <tr><td>--image=nginx</td><td>Image Docker à utiliser (depuis Docker Hub par défaut)</td></tr>
+          <tr><td>--port=80</td><td>Optionnel : documente le port exposé (n'ouvre pas vraiment le port)</td></tr>
+          <tr><td>--env="VAR=valeur"</td><td>Définir une variable d'environnement</td></tr>
+          <tr><td>--labels="app=web"</td><td>Ajouter des labels au Pod</td></tr>
+          <tr><td>--restart=Never</td><td>Crée un Pod simple (sans ReplicaSet). Par défaut crée un Deployment.</td></tr>
+          <tr><td>--rm</td><td>Supprime le Pod quand il termine (utile pour des pods de test)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h3>Créer un Pod avec un fichier YAML (méthode déclarative)</h3>
+    <p>
+      La méthode recommandée est toujours d'écrire un fichier YAML. Cela permet de versionner 
+      ta configuration, de la partager, et de la reproduire facilement.
+    </p>
+
+    <div class="code-header">
+      <span class="code-lang">yaml — mon-pod.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>                    <span class="c-comment"># Version de l'API Kubernetes pour cet objet</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Pod</span>                          <span class="c-comment"># Type de ressource</span>
+<span class="yaml-line-key">metadata</span>:                           <span class="c-comment"># Métadonnées de l'objet</span>
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mon-pod-nginx</span>               <span class="c-comment"># Nom unique dans le namespace</span>
+  <span class="yaml-line-key">labels</span>:                           <span class="c-comment"># Labels : étiquettes clé=valeur</span>
+    <span class="yaml-line-key">app</span>: <span class="yaml-line-val">web</span>                        <span class="c-comment"># Utilisé pour sélectionner ce pod</span>
+    <span class="yaml-line-key">env</span>: <span class="yaml-line-val">production</span>
+<span class="yaml-line-key">spec</span>:                               <span class="c-comment"># Spécification : ce qu'on veut</span>
+  <span class="yaml-line-key">containers</span>:                       <span class="c-comment"># Liste des conteneurs du Pod</span>
+    - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">nginx</span>                   <span class="c-comment"># Nom du conteneur dans le Pod</span>
+      <span class="yaml-line-key">image</span>: <span class="yaml-line-val">nginx:1.25</span>             <span class="c-comment"># Image Docker (toujours spécifier la version !)</span>
+      <span class="yaml-line-key">ports</span>:                        <span class="c-comment"># Ports exposés (documentation uniquement)</span>
+        - <span class="yaml-line-key">containerPort</span>: <span class="yaml-line-num">80</span>
+      <span class="yaml-line-key">resources</span>:                    <span class="c-comment"># Limites de ressources</span>
+        <span class="yaml-line-key">requests</span>:                   <span class="c-comment"># Minimum garanti</span>
+          <span class="yaml-line-key">memory</span>: <span class="yaml-line-str">"64Mi"</span>
+          <span class="yaml-line-key">cpu</span>: <span class="yaml-line-str">"100m"</span>             <span class="c-comment"># 100 millicores = 0.1 CPU</span>
+        <span class="yaml-line-key">limits</span>:                     <span class="c-comment"># Maximum autorisé</span>
+          <span class="yaml-line-key">memory</span>: <span class="yaml-line-str">"128Mi"</span>
+          <span class="yaml-line-key">cpu</span>: <span class="yaml-line-str">"500m"</span>             <span class="c-comment"># 500 millicores = 0.5 CPU</span>
+      <span class="yaml-line-key">env</span>:                          <span class="c-comment"># Variables d'environnement</span>
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">NGINX_PORT</span>
+          <span class="yaml-line-key">value</span>: <span class="yaml-line-str">"80"</span></code></pre>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>Anatomie d'un YAML Kubernetes</code></div>
+      <div class="cmd-explain-body">
+        <table class="arg-table">
+          <tr><td>apiVersion</td><td>Version de l'API K8s pour ce type d'objet. Les Pods = <code>v1</code>. Les Deployments = <code>apps/v1</code>.</td></tr>
+          <tr><td>kind</td><td>Type d'objet K8s : Pod, Deployment, Service, ConfigMap...</td></tr>
+          <tr><td>metadata.name</td><td>Nom unique de la ressource dans son namespace.</td></tr>
+          <tr><td>metadata.labels</td><td>Paires clé-valeur libres. Permettent de sélectionner et filtrer les ressources.</td></tr>
+          <tr><td>spec</td><td>La spécification : ce que tu veux que Kubernetes crée/gère.</td></tr>
+          <tr><td>resources.requests</td><td>Ressources minimales garanties. Le Scheduler utilise ça pour choisir le Node.</td></tr>
+          <tr><td>resources.limits</td><td>Maximum autorisé. Si le conteneur dépasse, il est tué (OOMKilled pour la RAM).</td></tr>
+          <tr><td>cpu: "100m"</td><td>Millicores CPU. 1000m = 1 CPU. 100m = 10% d'un CPU.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Appliquer le fichier YAML</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> mon-pod.yaml
+
+<span class="c-comment"># Vérifier le pod</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-o wide</span>
+
+<span class="c-comment"># Voir les logs</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> logs mon-pod-nginx
+
+<span class="c-comment"># Entrer dans le pod</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> exec <span class="c-flag">-it</span> mon-pod-nginx <span class="c-flag">--</span> /bin/bash
+
+<span class="c-comment"># Supprimer le pod</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> delete pod mon-pod-nginx
+<span class="c-comment"># ou</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> delete <span class="c-flag">-f</span> mon-pod.yaml</code></pre>
+
+    <h3>Comprendre les statuts d'un Pod</h3>
+    <table class="compare-table">
+      <thead><tr><th>Statut</th><th>Signification</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><code>Pending</code></td><td>En attente de planification sur un Node</td><td>Normal si bref, vérifier les ressources si long</td></tr>
+        <tr><td><code>ContainerCreating</code></td><td>Image en cours de téléchargement</td><td>Normal, attendre</td></tr>
+        <tr><td><code>Running</code></td><td>Pod en cours d'exécution ✅</td><td>Tout va bien</td></tr>
+        <tr><td><code>Completed</code></td><td>Pod terminé normalement</td><td>Normal pour les jobs</td></tr>
+        <tr><td><code>CrashLoopBackOff</code></td><td>Le conteneur plante en boucle</td><td><code>kubectl logs --previous</code> pour voir l'erreur</td></tr>
+        <tr><td><code>ImagePullBackOff</code></td><td>Impossible de télécharger l'image</td><td>Vérifier le nom de l'image et les credentials</td></tr>
+        <tr><td><code>OOMKilled</code></td><td>Tué car dépassement mémoire</td><td>Augmenter les limits mémoire</td></tr>
+        <tr><td><code>Terminating</code></td><td>En cours de suppression</td><td>Normal</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══ CHAPITRE 6 : Deployments ═══ -->
+  <section class="chapter" id="deployments">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 06</span>
+      <h2>Les Deployments — Gérer des applications en production</h2>
+    </div>
+
+    <p>
+      En production, on n'utilise <strong>jamais</strong> des Pods nus. On utilise des <strong>Deployments</strong>.
+      Un Deployment te permet de :
+    </p>
+    <ul>
+      <li>Lancer <strong>N réplicas</strong> (copies) de ton Pod</li>
+      <li>Gérer les mises à jour sans interruption (<strong>Rolling Updates</strong>)</li>
+      <li>Revenir en arrière (<strong>Rollback</strong>) si une mise à jour pose problème</li>
+      <li>Avoir une <strong>auto-réparation</strong> : si un Pod plante, K8s en recrée un</li>
+    </ul>
+
+    <div class="callout info">
+      <div class="callout-icon">🔗</div>
+      <div class="callout-body">
+        <strong>Chaîne de dépendances</strong>
+        Deployment → ReplicaSet → Pods. Tu crées un Deployment, qui crée un ReplicaSet, 
+        qui crée et maintient les Pods. Tu n'interagis qu'avec le Deployment dans la pratique.
+      </div>
+    </div>
+
+    <h3>Créer un Deployment YAML</h3>
+    <div class="code-header">
+      <span class="code-lang">yaml — deployment-nginx.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">apps/v1</span>              <span class="c-comment"># Les Deployments sont dans le groupe "apps"</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Deployment</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">nginx-deployment</span>
+  <span class="yaml-line-key">labels</span>:
+    <span class="yaml-line-key">app</span>: <span class="yaml-line-val">nginx</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">replicas</span>: <span class="yaml-line-num">3</span>                    <span class="c-comment"># Nombre de copies du Pod à maintenir</span>
+  <span class="yaml-line-key">selector</span>:                      <span class="c-comment"># Comment le Deployment identifie "ses" Pods</span>
+    <span class="yaml-line-key">matchLabels</span>:
+      <span class="yaml-line-key">app</span>: <span class="yaml-line-val">nginx</span>                 <span class="c-comment"># Gère les Pods avec ce label</span>
+  <span class="yaml-line-key">strategy</span>:                      <span class="c-comment"># Stratégie de mise à jour</span>
+    <span class="yaml-line-key">type</span>: <span class="yaml-line-val">RollingUpdate</span>
+    <span class="yaml-line-key">rollingUpdate</span>:
+      <span class="yaml-line-key">maxSurge</span>: <span class="yaml-line-num">1</span>               <span class="c-comment"># Max pods supplémentaires pendant la MAJ</span>
+      <span class="yaml-line-key">maxUnavailable</span>: <span class="yaml-line-num">0</span>          <span class="c-comment"># Zéro pod indisponible (zéro downtime)</span>
+  <span class="yaml-line-key">template</span>:                      <span class="c-comment"># Template du Pod à créer</span>
+    <span class="yaml-line-key">metadata</span>:
+      <span class="yaml-line-key">labels</span>:
+        <span class="yaml-line-key">app</span>: <span class="yaml-line-val">nginx</span>               <span class="c-comment"># DOIT correspondre au selector.matchLabels</span>
+    <span class="yaml-line-key">spec</span>:
+      <span class="yaml-line-key">containers</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">nginx</span>
+          <span class="yaml-line-key">image</span>: <span class="yaml-line-val">nginx:1.25</span>
+          <span class="yaml-line-key">ports</span>:
+            - <span class="yaml-line-key">containerPort</span>: <span class="yaml-line-num">80</span>
+          <span class="yaml-line-key">resources</span>:
+            <span class="yaml-line-key">requests</span>:
+              <span class="yaml-line-key">cpu</span>: <span class="yaml-line-str">"100m"</span>
+              <span class="yaml-line-key">memory</span>: <span class="yaml-line-str">"128Mi"</span>
+            <span class="yaml-line-key">limits</span>:
+              <span class="yaml-line-key">cpu</span>: <span class="yaml-line-str">"500m"</span>
+              <span class="yaml-line-key">memory</span>: <span class="yaml-line-str">"256Mi"</span>
+          <span class="yaml-line-key">readinessProbe</span>:             <span class="c-comment"># Vérifie si le pod est prêt à recevoir du trafic</span>
+            <span class="yaml-line-key">httpGet</span>:
+              <span class="yaml-line-key">path</span>: <span class="yaml-line-val">/</span>
+              <span class="yaml-line-key">port</span>: <span class="yaml-line-num">80</span>
+            <span class="yaml-line-key">initialDelaySeconds</span>: <span class="yaml-line-num">5</span>
+            <span class="yaml-line-key">periodSeconds</span>: <span class="yaml-line-num">10</span></code></pre>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>Champs importants du Deployment</code></div>
+      <div class="cmd-explain-body">
+        <table class="arg-table">
+          <tr><td>replicas: 3</td><td>Kubernetes va toujours maintenir 3 Pods en vie. Si un plante, il en recrée un autre.</td></tr>
+          <tr><td>selector.matchLabels</td><td>Le Deployment cherche des Pods avec ce label pour les gérer. Doit correspondre exactement aux labels du template.</td></tr>
+          <tr><td>strategy.RollingUpdate</td><td>Mise à jour progressive : crée de nouveaux Pods avant de supprimer les anciens.</td></tr>
+          <tr><td>maxSurge: 1</td><td>Pendant une MAJ, K8s peut créer 1 Pod en plus (4 au lieu de 3) temporairement.</td></tr>
+          <tr><td>maxUnavailable: 0</td><td>Zéro Pod indisponible pendant la MAJ = zero downtime.</td></tr>
+          <tr><td>readinessProbe</td><td>K8s sonde le pod régulièrement. Si non prêt, aucun trafic ne lui est envoyé.</td></tr>
+          <tr><td>template</td><td>Le modèle de Pod que le Deployment va créer et répliquer.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h3>Opérations sur un Deployment</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># ─── Créer le deployment ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> deployment-nginx.yaml
+
+<span class="c-comment"># ─── Suivre le déploiement en temps réel ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> rollout status deployment/nginx-deployment
+<span class="c-comment"># Waiting for deployment "nginx-deployment" rollout to finish: 2 of 3 new replicas updated...</span>
+<span class="c-comment"># deployment "nginx-deployment" successfully rolled out</span>
+
+<span class="c-comment"># ─── Voir le deployment ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get deployment nginx-deployment
+<span class="c-comment"># NAME               READY   UP-TO-DATE   AVAILABLE   AGE</span>
+<span class="c-comment"># nginx-deployment   3/3     3            3           1m</span>
+
+<span class="c-comment"># ─── Scaler : changer le nombre de réplicas ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> scale deployment nginx-deployment <span class="c-flag">--replicas=5</span>
+
+<span class="c-comment"># ─── Mettre à jour l'image (rolling update) ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> set image deployment/nginx-deployment nginx=nginx:1.26
+<span class="c-comment"># Les anciens pods sont remplacés progressivement par les nouveaux</span>
+
+<span class="c-comment"># ─── Voir l'historique des déploiements ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> rollout history deployment/nginx-deployment
+
+<span class="c-comment"># ─── Rollback : revenir à la version précédente ───</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> rollout undo deployment/nginx-deployment
+
+<span class="c-comment"># Revenir à une version spécifique</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> rollout undo deployment/nginx-deployment <span class="c-flag">--to-revision=2</span></code></pre>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>Commandes rollout expliquées</code></div>
+      <div class="cmd-explain-body">
+        <table class="arg-table">
+          <tr><td>rollout status</td><td>Affiche la progression d'un déploiement en cours. Bloque tant que le rollout n'est pas terminé.</td></tr>
+          <tr><td>rollout history</td><td>Liste les révisions du deployment. Chaque <code>apply</code> ou <code>set image</code> crée une révision.</td></tr>
+          <tr><td>rollout undo</td><td>Revient à la révision précédente. Utile si une mise à jour cause des problèmes.</td></tr>
+          <tr><td>scale --replicas=N</td><td>Change le nombre de réplicas immédiatement. K8s crée ou supprime des Pods pour atteindre N.</td></tr>
+          <tr><td>set image</td><td>Change l'image d'un conteneur dans un deployment et déclenche un rolling update.</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CHAPITRE 7 : Services ═══ -->
+  <section class="chapter" id="services">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 07</span>
+      <h2>Les Services — Exposer les applications</h2>
+    </div>
+
+    <p>
+      Les Pods ont des adresses IP qui changent à chaque redémarrage. Un <strong>Service</strong> 
+      crée une adresse IP stable et un DNS stable pour accéder à un groupe de Pods.
+      Il joue aussi le rôle de <strong>load balancer</strong> entre les réplicas.
+    </p>
+
+    <div class="callout info">
+      <div class="callout-icon">🌐</div>
+      <div class="callout-body">
+        <strong>Sans Service</strong> : Pod A connaît l'IP 10.244.1.5 de Pod B. Pod B redémarre, nouvelle IP 10.244.1.9. Pod A ne peut plus communiquer.
+        <br><br>
+        <strong>Avec Service</strong> : Pod A contacte le Service "backend" sur une IP stable. Le Service redirige vers le bon Pod, peu importe son IP.
+      </div>
+    </div>
+
+    <h3>Les 4 types de Services</h3>
+
+    <table class="compare-table">
+      <thead><tr><th>Type</th><th>Accessible depuis</th><th>Usage typique</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>ClusterIP</code></td>
+          <td>Intérieur du cluster uniquement</td>
+          <td>Communication entre microservices internes</td>
+        </tr>
+        <tr>
+          <td><code>NodePort</code></td>
+          <td>IP du Node + port fixe (30000–32767)</td>
+          <td>Développement, tests, accès direct</td>
+        </tr>
+        <tr>
+          <td><code>LoadBalancer</code></td>
+          <td>IP publique fournie par le cloud</td>
+          <td>Production sur AWS/GCP/Azure</td>
+        </tr>
+        <tr>
+          <td><code>ExternalName</code></td>
+          <td>N/A (DNS alias)</td>
+          <td>Pointer vers un service externe via DNS</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Service ClusterIP (par défaut)</h3>
+    <div class="code-header">
+      <span class="code-lang">yaml — service-clusterip.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Service</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">nginx-service</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">selector</span>:                    <span class="c-comment"># Sélectionne les pods avec ce label</span>
+    <span class="yaml-line-key">app</span>: <span class="yaml-line-val">nginx</span>
+  <span class="yaml-line-key">ports</span>:
+    - <span class="yaml-line-key">protocol</span>: <span class="yaml-line-val">TCP</span>
+      <span class="yaml-line-key">port</span>: <span class="yaml-line-num">80</span>               <span class="c-comment"># Port du Service (visible côté client)</span>
+      <span class="yaml-line-key">targetPort</span>: <span class="yaml-line-num">80</span>         <span class="c-comment"># Port du conteneur dans le Pod</span>
+  <span class="yaml-line-key">type</span>: <span class="yaml-line-val">ClusterIP</span>             <span class="c-comment"># Par défaut si omis</span></code></pre>
+
+    <h3>Service NodePort (accès depuis l'extérieur)</h3>
+    <div class="code-header">
+      <span class="code-lang">yaml — service-nodeport.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Service</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">nginx-nodeport</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">selector</span>:
+    <span class="yaml-line-key">app</span>: <span class="yaml-line-val">nginx</span>
+  <span class="yaml-line-key">ports</span>:
+    - <span class="yaml-line-key">protocol</span>: <span class="yaml-line-val">TCP</span>
+      <span class="yaml-line-key">port</span>: <span class="yaml-line-num">80</span>               <span class="c-comment"># Port interne au cluster</span>
+      <span class="yaml-line-key">targetPort</span>: <span class="yaml-line-num">80</span>         <span class="c-comment"># Port du conteneur</span>
+      <span class="yaml-line-key">nodePort</span>: <span class="yaml-line-num">30080</span>        <span class="c-comment"># Port sur chaque Node (30000-32767)</span>
+  <span class="yaml-line-key">type</span>: <span class="yaml-line-val">NodePort</span></code></pre>
+
+    <div class="callout tip">
+      <div class="callout-icon">💻</div>
+      <div class="callout-body">
+        <strong>Avec Minikube : accéder au NodePort</strong>
+        <code>minikube service nginx-nodeport --url</code> — donne l'URL complète pour accéder au service depuis ton navigateur.
+      </div>
+    </div>
+
+    <h3>Commandes Service</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Créer le service</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> service-nodeport.yaml
+
+<span class="c-comment"># Lister les services</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get services
+<span class="c-comment"># NAME             TYPE       CLUSTER-IP    EXTERNAL-IP  PORT(S)       AGE</span>
+<span class="c-comment"># nginx-nodeport   NodePort   10.96.45.11   &lt;none&gt;       80:30080/TCP  1m</span>
+
+<span class="c-comment"># Accéder au service avec Minikube</span>
+<span class="c-prompt">$ </span><span class="c-cmd">minikube</span> service nginx-nodeport <span class="c-flag">--url</span>
+
+<span class="c-comment"># Forwarder un port localement (pour tester rapidement)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> port-forward service/nginx-nodeport 8080:80
+<span class="c-comment"># Maintenant accessible sur http://localhost:8080</span></code></pre>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>kubectl port-forward</code></div>
+      <div class="cmd-explain-body">
+        <p>Crée un tunnel entre ton poste local et un Service ou Pod dans le cluster. Très utile pour tester sans exposer publiquement.</p>
+        <table class="arg-table">
+          <tr><td>service/nginx-nodeport</td><td>Forwarder vers le Service (peut aussi faire <code>pod/mon-pod</code>)</td></tr>
+          <tr><td>8080:80</td><td>Port local 8080 → Port du Service 80</td></tr>
+          <tr><td>--address=0.0.0.0</td><td>Écoute sur toutes les interfaces (pas seulement localhost)</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CHAPITRE 8 : Namespaces ═══ -->
+  <section class="chapter" id="namespaces">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 08</span>
+      <h2>Les Namespaces — Isolation logique</h2>
+    </div>
+
+    <p>
+      Les Namespaces permettent de <strong>diviser un cluster</strong> en environnements logiques isolés.
+      C'est comme avoir plusieurs "projets" Docker Compose sur la même machine, mais avec un niveau 
+      d'isolation réseau et de permissions configurables.
+    </p>
+
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Lister les namespaces existants</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get namespaces
+<span class="c-comment"># NAME              STATUS   AGE</span>
+<span class="c-comment"># default           Active   1d    &lt;-- namespace par défaut</span>
+<span class="c-comment"># kube-system       Active   1d    &lt;-- composants Kubernetes internes</span>
+<span class="c-comment"># kube-public       Active   1d    &lt;-- ressources publiques</span>
+<span class="c-comment"># kube-node-lease   Active   1d    &lt;-- gestion des heartbeats des nodes</span>
+
+<span class="c-comment"># Créer un namespace</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> create namespace production
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> create namespace staging
+
+<span class="c-comment"># Lancer un pod dans un namespace spécifique</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> deployment.yaml <span class="c-flag">-n</span> production
+
+<span class="c-comment"># Voir les pods d'un namespace</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-n</span> production
+
+<span class="c-comment"># Changer le namespace par défaut de kubectl</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> config set-context <span class="c-flag">--current</span> <span class="c-flag">--namespace=production</span>
+
+<span class="c-comment"># Voir dans quel contexte/namespace on est</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> config current-context</code></pre>
+
+    <div class="code-header">
+      <span class="code-lang">yaml — namespace.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Namespace</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">production</span>
+  <span class="yaml-line-key">labels</span>:
+    <span class="yaml-line-key">env</span>: <span class="yaml-line-val">prod</span></code></pre>
+  </section>
+
+  <!-- ═══ CHAPITRE 9 : ConfigMaps ═══ -->
+  <section class="chapter" id="configmaps">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 09</span>
+      <h2>ConfigMaps — Configuration externe</h2>
+    </div>
+
+    <p>
+      Un <strong>ConfigMap</strong> stocke des données de configuration non sensibles 
+      (URLs, noms de base de données, paramètres d'application) séparément du code.
+      L'idée : ne pas hardcoder la configuration dans les images Docker.
+    </p>
+
+    <div class="code-header">
+      <span class="code-lang">yaml — configmap.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">ConfigMap</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">app-config</span>
+<span class="yaml-line-key">data</span>:
+  <span class="c-comment"># Clés simples (variables d'environnement)</span>
+  <span class="yaml-line-key">DATABASE_HOST</span>: <span class="yaml-line-str">"mysql-service"</span>
+  <span class="yaml-line-key">DATABASE_PORT</span>: <span class="yaml-line-str">"3306"</span>
+  <span class="yaml-line-key">APP_ENV</span>: <span class="yaml-line-str">"production"</span>
+  <span class="yaml-line-key">LOG_LEVEL</span>: <span class="yaml-line-str">"info"</span>
+  <span class="c-comment"># Fichier de configuration entier</span>
+  <span class="yaml-line-key">nginx.conf</span>: <span class="yaml-line-val">|</span>
+    server {
+        listen 80;
+        server_name localhost;
+        location / {
+            root /usr/share/nginx/html;
+        }
+    }</code></pre>
+
+    <h3>Utiliser un ConfigMap dans un Pod</h3>
+    <div class="code-header">
+      <span class="code-lang">yaml — pod-with-configmap.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">containers</span>:
+    - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mon-app</span>
+      <span class="yaml-line-key">image</span>: <span class="yaml-line-val">mon-image:1.0</span>
+      <span class="yaml-line-key">env</span>:
+        <span class="c-comment"># Méthode 1 : une valeur spécifique</span>
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">DATABASE_HOST</span>
+          <span class="yaml-line-key">valueFrom</span>:
+            <span class="yaml-line-key">configMapKeyRef</span>:
+              <span class="yaml-line-key">name</span>: <span class="yaml-line-val">app-config</span>    <span class="c-comment"># Nom du ConfigMap</span>
+              <span class="yaml-line-key">key</span>: <span class="yaml-line-val">DATABASE_HOST</span>   <span class="c-comment"># Clé dans le ConfigMap</span>
+      <span class="yaml-line-key">envFrom</span>:
+        <span class="c-comment"># Méthode 2 : toutes les clés du ConfigMap en variables d'env</span>
+        - <span class="yaml-line-key">configMapRef</span>:
+            <span class="yaml-line-key">name</span>: <span class="yaml-line-val">app-config</span>
+      <span class="yaml-line-key">volumeMounts</span>:
+        <span class="c-comment"># Méthode 3 : monter comme fichier</span>
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">config-volume</span>
+          <span class="yaml-line-key">mountPath</span>: <span class="yaml-line-val">/etc/nginx/conf.d</span>
+  <span class="yaml-line-key">volumes</span>:
+    - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">config-volume</span>
+      <span class="yaml-line-key">configMap</span>:
+        <span class="yaml-line-key">name</span>: <span class="yaml-line-val">app-config</span></code></pre>
+  </section>
+
+  <!-- ═══ CHAPITRE 10 : Secrets ═══ -->
+  <section class="chapter" id="secrets">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 10</span>
+      <h2>Secrets — Données sensibles</h2>
+    </div>
+
+    <p>
+      Les <strong>Secrets</strong> sont comme des ConfigMaps, mais pour les données sensibles 
+      (mots de passe, tokens, clés API). Ils sont encodés en <em>Base64</em> dans K8s.
+    </p>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>Base64 ≠ Chiffrement !</strong>
+        Les Secrets Kubernetes sont encodés en Base64, pas chiffrés. Ils sont plus sécurisés que ConfigMaps 
+        (accès RBAC distinct, pas affichés par défaut), mais pour une vraie sécurité en production, 
+        utilise <strong>Sealed Secrets</strong> ou <strong>HashiCorp Vault</strong>.
+      </div>
+    </div>
+
+    <h3>Créer un Secret</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Méthode 1 : en ligne de commande (K8s encode automatiquement)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> create secret generic db-secret \
+    <span class="c-flag">--from-literal=</span><span class="c-val">username=admin</span> \
+    <span class="c-flag">--from-literal=</span><span class="c-val">password=MonMotDePasse123</span>
+
+<span class="c-comment"># Méthode 2 : depuis des fichiers</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> create secret generic tls-secret \
+    <span class="c-flag">--from-file=</span><span class="c-val">tls.crt=./cert.crt</span> \
+    <span class="c-flag">--from-file=</span><span class="c-val">tls.key=./cert.key</span>
+
+<span class="c-comment"># Encoder manuellement en base64 pour un YAML</span>
+<span class="c-prompt">$ </span>echo <span class="c-flag">-n</span> <span class="c-str">"MonMotDePasse123"</span> | base64
+<span class="c-comment"># TW9uTW90RGVQYXNzZTEyMw==</span></code></pre>
+
+    <div class="code-header">
+      <span class="code-lang">yaml — secret.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Secret</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">db-secret</span>
+<span class="yaml-line-key">type</span>: <span class="yaml-line-val">Opaque</span>          <span class="c-comment"># Type générique (autres types: kubernetes.io/tls, etc.)</span>
+<span class="yaml-line-key">data</span>:
+  <span class="c-comment"># Valeurs encodées en base64 !</span>
+  <span class="yaml-line-key">username</span>: <span class="yaml-line-val">YWRtaW4=</span>                      <span class="c-comment"># echo -n "admin" | base64</span>
+  <span class="yaml-line-key">password</span>: <span class="yaml-line-val">TW9uTW90RGVQYXNzZTEyMw==</span>      <span class="c-comment"># echo -n "MonMotDePasse123" | base64</span></code></pre>
+
+    <h3>Utiliser un Secret dans un Pod</h3>
+    <div class="code-header">
+      <span class="code-lang">yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">containers</span>:
+    - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mon-app</span>
+      <span class="yaml-line-key">env</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">DB_USERNAME</span>
+          <span class="yaml-line-key">valueFrom</span>:
+            <span class="yaml-line-key">secretKeyRef</span>:            <span class="c-comment"># secretKeyRef (pas configMapKeyRef)</span>
+              <span class="yaml-line-key">name</span>: <span class="yaml-line-val">db-secret</span>
+              <span class="yaml-line-key">key</span>: <span class="yaml-line-val">username</span>
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">DB_PASSWORD</span>
+          <span class="yaml-line-key">valueFrom</span>:
+            <span class="yaml-line-key">secretKeyRef</span>:
+              <span class="yaml-line-key">name</span>: <span class="yaml-line-val">db-secret</span>
+              <span class="yaml-line-key">key</span>: <span class="yaml-line-val">password</span></code></pre>
+  </section>
+
+  <!-- ═══ CHAPITRE 11 : Volumes ═══ -->
+  <section class="chapter" id="volumes">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 11</span>
+      <h2>Volumes — Persistance des données</h2>
+    </div>
+
+    <p>
+      Par défaut, les données d'un Pod sont <strong>éphémères</strong> : si le Pod est supprimé, 
+      tout est perdu. Pour persister les données (base de données, fichiers uploadés...), 
+      on utilise des Volumes.
+    </p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="icon">💾</div>
+        <h4>PersistentVolume (PV)</h4>
+        <p>Espace de stockage provisionné dans le cluster par l'admin. Comme un disque dur disponible.</p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">📋</div>
+        <h4>PersistentVolumeClaim (PVC)</h4>
+        <p>Demande de stockage faite par un Pod. "J'ai besoin de 5 Go". K8s trouve le PV correspondant.</p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">⚡</div>
+        <h4>StorageClass</h4>
+        <p>Définit comment les PV sont créés dynamiquement. Ex: SSD, HDD, NFS...</p>
+      </div>
+    </div>
+
+    <h3>Exemple complet : PV + PVC + Pod</h3>
+    <div class="code-header">
+      <span class="code-lang">yaml — volumes.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># ─── 1. PersistentVolume (créé par l'admin) ───</span>
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">PersistentVolume</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-pv</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">capacity</span>:
+    <span class="yaml-line-key">storage</span>: <span class="yaml-line-str">5Gi</span>             <span class="c-comment"># 5 gigaoctets disponibles</span>
+  <span class="yaml-line-key">accessModes</span>:
+    - <span class="yaml-line-val">ReadWriteOnce</span>          <span class="c-comment"># Lecture/écriture par UN seul node à la fois</span>
+  <span class="yaml-line-key">persistentVolumeReclaimPolicy</span>: <span class="yaml-line-val">Retain</span>  <span class="c-comment"># Garder les données après suppression du PVC</span>
+  <span class="yaml-line-key">hostPath</span>:
+    <span class="yaml-line-key">path</span>: <span class="yaml-line-str">"/data/mysql"</span>      <span class="c-comment"># Dossier sur le node (pour tests, pas prod)</span>
+---
+<span class="c-comment"># ─── 2. PersistentVolumeClaim (demande du développeur) ───</span>
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">PersistentVolumeClaim</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-pvc</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">accessModes</span>:
+    - <span class="yaml-line-val">ReadWriteOnce</span>
+  <span class="yaml-line-key">resources</span>:
+    <span class="yaml-line-key">requests</span>:
+      <span class="yaml-line-key">storage</span>: <span class="yaml-line-str">3Gi</span>           <span class="c-comment"># Je demande 3 Go (K8s trouvera un PV >= 3Gi)</span>
+---
+<span class="c-comment"># ─── 3. Pod qui utilise le PVC ───</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">containers</span>:
+    - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql</span>
+      <span class="yaml-line-key">image</span>: <span class="yaml-line-val">mysql:8.0</span>
+      <span class="yaml-line-key">volumeMounts</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-storage</span>
+          <span class="yaml-line-key">mountPath</span>: <span class="yaml-line-str">/var/lib/mysql</span>   <span class="c-comment"># Où monter dans le conteneur</span>
+  <span class="yaml-line-key">volumes</span>:
+    - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-storage</span>
+      <span class="yaml-line-key">persistentVolumeClaim</span>:
+        <span class="yaml-line-key">claimName</span>: <span class="yaml-line-val">mysql-pvc</span>         <span class="c-comment"># Référence au PVC créé ci-dessus</span></code></pre>
+
+    <div class="cmd-explain">
+      <div class="cmd-explain-header"><code>AccessModes — Modes d'accès</code></div>
+      <div class="cmd-explain-body">
+        <table class="arg-table">
+          <tr><td>ReadWriteOnce (RWO)</td><td>Montable en lecture/écriture par UN seul node. Pour les bases de données.</td></tr>
+          <tr><td>ReadOnlyMany (ROX)</td><td>Montable en lecture seule par plusieurs nodes simultanément.</td></tr>
+          <tr><td>ReadWriteMany (RWX)</td><td>Montable en lecture/écriture par plusieurs nodes. Nécessite NFS ou stockage distribué.</td></tr>
+          <tr><td>Retain</td><td>Les données restent après suppression du PVC. L'admin doit libérer manuellement.</td></tr>
+          <tr><td>Delete</td><td>Le volume physique est supprimé automatiquement quand le PVC est supprimé.</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CHAPITRE 12 : Ingress ═══ -->
+  <section class="chapter" id="ingress">
+    <div class="chapter-header">
+      <span class="chapter-number">Chapitre 12</span>
+      <h2>Ingress — Routage HTTP intelligent</h2>
+    </div>
+
+    <p>
+      Un <strong>Ingress</strong> est un reverse proxy géré par Kubernetes qui route le trafic HTTP/HTTPS 
+      vers les bons Services selon l'URL, le chemin ou le domaine.
+      C'est l'équivalent d'un Nginx reverse proxy, mais déclaré en YAML.
+    </p>
+
+    <div class="callout info">
+      <div class="callout-icon">🔄</div>
+      <div class="callout-body">
+        <strong>Ingress Controller requis</strong>
+        L'objet Ingress est une règle. Pour qu'elle fonctionne, tu dois avoir un <strong>Ingress Controller</strong> installé.
+        Le plus populaire est <strong>nginx-ingress</strong>. Avec Minikube : <code>minikube addons enable ingress</code>.
+      </div>
+    </div>
+
+    <div class="code-header">
+      <span class="code-lang">bash — Activer Ingress avec Minikube</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Activer l'addon ingress de Minikube</span>
+<span class="c-prompt">$ </span><span class="c-cmd">minikube</span> addons enable ingress
+
+<span class="c-comment"># Vérifier que le controller est lancé</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-n</span> ingress-nginx</code></pre>
+
+    <div class="code-header">
+      <span class="code-lang">yaml — ingress.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">networking.k8s.io/v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Ingress</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mon-ingress</span>
+  <span class="yaml-line-key">annotations</span>:
+    <span class="yaml-line-key">nginx.ingress.kubernetes.io/rewrite-target</span>: <span class="yaml-line-val">/</span>   <span class="c-comment"># Réécriture d'URL</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">ingressClassName</span>: <span class="yaml-line-val">nginx</span>
+  <span class="yaml-line-key">rules</span>:
+    - <span class="yaml-line-key">host</span>: <span class="yaml-line-str">monapp.example.com</span>        <span class="c-comment"># Domaine</span>
+      <span class="yaml-line-key">http</span>:
+        <span class="yaml-line-key">paths</span>:
+          - <span class="yaml-line-key">path</span>: <span class="yaml-line-str">/</span>
+            <span class="yaml-line-key">pathType</span>: <span class="yaml-line-val">Prefix</span>
+            <span class="yaml-line-key">backend</span>:
+              <span class="yaml-line-key">service</span>:
+                <span class="yaml-line-key">name</span>: <span class="yaml-line-val">frontend-service</span>      <span class="c-comment"># Service cible</span>
+                <span class="yaml-line-key">port</span>:
+                  <span class="yaml-line-key">number</span>: <span class="yaml-line-num">80</span>
+          - <span class="yaml-line-key">path</span>: <span class="yaml-line-str">/api</span>
+            <span class="yaml-line-key">pathType</span>: <span class="yaml-line-val">Prefix</span>
+            <span class="yaml-line-key">backend</span>:
+              <span class="yaml-line-key">service</span>:
+                <span class="yaml-line-key">name</span>: <span class="yaml-line-val">api-service</span>
+                <span class="yaml-line-key">port</span>:
+                  <span class="yaml-line-key">number</span>: <span class="yaml-line-num">3000</span></code></pre>
+  </section>
+
+  <!-- ═══ PROJETS PRATIQUES ═══ -->
+  <section class="chapter" id="projet1">
+    <div class="chapter-header">
+      <span class="chapter-number">Projet 01</span>
+      <h2>Application Web Nginx avec Scaling</h2>
+    </div>
+
+    <p>
+      Dans ce premier projet, tu vas déployer une application Nginx avec 3 réplicas, 
+      l'exposer via un Service NodePort, et tester le scaling automatique.
+    </p>
+
+    <div class="step-flow">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Créer le fichier de déploiement complet</h4>
+          <div class="code-header">
+            <span class="code-lang">yaml — projet1.yaml</span>
+            <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          </div>
+          <pre><code><span class="c-comment"># ─────────────────────────────────────────────</span>
+<span class="c-comment"># PROJET 1 : Nginx avec Scaling</span>
+<span class="c-comment"># ─────────────────────────────────────────────</span>
+
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">apps/v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Deployment</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">nginx-web</span>
+  <span class="yaml-line-key">labels</span>:
+    <span class="yaml-line-key">app</span>: <span class="yaml-line-val">nginx-web</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">replicas</span>: <span class="yaml-line-num">3</span>
+  <span class="yaml-line-key">selector</span>:
+    <span class="yaml-line-key">matchLabels</span>:
+      <span class="yaml-line-key">app</span>: <span class="yaml-line-val">nginx-web</span>
+  <span class="yaml-line-key">template</span>:
+    <span class="yaml-line-key">metadata</span>:
+      <span class="yaml-line-key">labels</span>:
+        <span class="yaml-line-key">app</span>: <span class="yaml-line-val">nginx-web</span>
+    <span class="yaml-line-key">spec</span>:
+      <span class="yaml-line-key">containers</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">nginx</span>
+          <span class="yaml-line-key">image</span>: <span class="yaml-line-val">nginx:1.25-alpine</span>
+          <span class="yaml-line-key">ports</span>:
+            - <span class="yaml-line-key">containerPort</span>: <span class="yaml-line-num">80</span>
+          <span class="yaml-line-key">resources</span>:
+            <span class="yaml-line-key">requests</span>: { <span class="yaml-line-key">cpu</span>: <span class="yaml-line-str">"50m"</span>, <span class="yaml-line-key">memory</span>: <span class="yaml-line-str">"64Mi"</span> }
+            <span class="yaml-line-key">limits</span>:   { <span class="yaml-line-key">cpu</span>: <span class="yaml-line-str">"200m"</span>, <span class="yaml-line-key">memory</span>: <span class="yaml-line-str">"128Mi"</span> }
+---
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Service</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">nginx-web-service</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">selector</span>:
+    <span class="yaml-line-key">app</span>: <span class="yaml-line-val">nginx-web</span>
+  <span class="yaml-line-key">type</span>: <span class="yaml-line-val">NodePort</span>
+  <span class="yaml-line-key">ports</span>:
+    - <span class="yaml-line-key">port</span>: <span class="yaml-line-num">80</span>
+      <span class="yaml-line-key">targetPort</span>: <span class="yaml-line-num">80</span>
+      <span class="yaml-line-key">nodePort</span>: <span class="yaml-line-num">30080</span></code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Déployer et vérifier</h4>
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          </div>
+          <pre><code><span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> projet1.yaml
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-w</span>          <span class="c-comment"># Suivre le démarrage</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get all               <span class="c-comment"># Voir tout ce qui a été créé</span>
+<span class="c-prompt">$ </span><span class="c-cmd">minikube</span> service nginx-web-service <span class="c-flag">--url</span>
+<span class="c-comment"># Ouvrir l'URL dans un navigateur → Page Nginx</span></code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Tester le self-healing</h4>
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          </div>
+          <pre><code><span class="c-comment"># Supprimer un pod à la main</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> delete pod nginx-web-xxxxx-yyyyy
+
+<span class="c-comment"># Observer Kubernetes recréer le pod automatiquement !</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-w</span>
+<span class="c-comment"># nginx-web-xxxxx-yyyyy   0/1   Terminating   ...</span>
+<span class="c-comment"># nginx-web-zzzzz-wwwww   0/1   ContainerCreating   ...</span>
+<span class="c-comment"># nginx-web-zzzzz-wwwww   1/1   Running   ...</span></code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Tester le scaling</h4>
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          </div>
+          <pre><code><span class="c-comment"># Augmenter à 5 réplicas</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> scale deployment nginx-web <span class="c-flag">--replicas=5</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods
+
+<span class="c-comment"># Réduire à 1</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> scale deployment nginx-web <span class="c-flag">--replicas=1</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PROJET 2 : WordPress + MySQL ═══ -->
+  <section class="chapter" id="projet2">
+    <div class="chapter-header">
+      <span class="chapter-number">Projet 02</span>
+      <h2>WordPress + MySQL avec Volumes et Secrets</h2>
+    </div>
+
+    <p>
+      Ce projet reproduit une stack WordPress + MySQL complète avec des Secrets pour les mots de passe 
+      et des PersistentVolumes pour la persistance des données.
+    </p>
+
+    <div class="code-header">
+      <span class="code-lang">bash — Créer les fichiers</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Créer les fichiers YAML dans un dossier dédié</span>
+<span class="c-prompt">$ </span><span class="c-cmd">mkdir</span> wordpress-k8s && cd wordpress-k8s</code></pre>
+
+    <div class="code-header">
+      <span class="code-lang">yaml — 1-secret.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Secret</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-secret</span>
+<span class="yaml-line-key">type</span>: <span class="yaml-line-val">Opaque</span>
+<span class="yaml-line-key">stringData</span>:               <span class="c-comment"># stringData encode automatiquement en base64</span>
+  <span class="yaml-line-key">MYSQL_ROOT_PASSWORD</span>: <span class="yaml-line-str">"rootpass123"</span>
+  <span class="yaml-line-key">MYSQL_DATABASE</span>: <span class="yaml-line-str">"wordpress"</span>
+  <span class="yaml-line-key">MYSQL_USER</span>: <span class="yaml-line-str">"wpuser"</span>
+  <span class="yaml-line-key">MYSQL_PASSWORD</span>: <span class="yaml-line-str">"wppass456"</span></code></pre>
+
+    <div class="code-header">
+      <span class="code-lang">yaml — 2-mysql.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">PersistentVolumeClaim</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-pvc</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">accessModes</span>: [<span class="yaml-line-val">ReadWriteOnce</span>]
+  <span class="yaml-line-key">resources</span>:
+    <span class="yaml-line-key">requests</span>:
+      <span class="yaml-line-key">storage</span>: <span class="yaml-line-str">1Gi</span>
+---
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">apps/v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Deployment</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">replicas</span>: <span class="yaml-line-num">1</span>
+  <span class="yaml-line-key">selector</span>:
+    <span class="yaml-line-key">matchLabels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">mysql</span> }
+  <span class="yaml-line-key">template</span>:
+    <span class="yaml-line-key">metadata</span>:
+      <span class="yaml-line-key">labels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">mysql</span> }
+    <span class="yaml-line-key">spec</span>:
+      <span class="yaml-line-key">containers</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql</span>
+          <span class="yaml-line-key">image</span>: <span class="yaml-line-val">mysql:8.0</span>
+          <span class="yaml-line-key">envFrom</span>:
+            - <span class="yaml-line-key">secretRef</span>:
+                <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-secret</span>
+          <span class="yaml-line-key">ports</span>:
+            - <span class="yaml-line-key">containerPort</span>: <span class="yaml-line-num">3306</span>
+          <span class="yaml-line-key">volumeMounts</span>:
+            - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-data</span>
+              <span class="yaml-line-key">mountPath</span>: <span class="yaml-line-str">/var/lib/mysql</span>
+      <span class="yaml-line-key">volumes</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-data</span>
+          <span class="yaml-line-key">persistentVolumeClaim</span>:
+            <span class="yaml-line-key">claimName</span>: <span class="yaml-line-val">mysql-pvc</span>
+---
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Service</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-service</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">selector</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">mysql</span> }
+  <span class="yaml-line-key">ports</span>:
+    - <span class="yaml-line-key">port</span>: <span class="yaml-line-num">3306</span>
+      <span class="yaml-line-key">targetPort</span>: <span class="yaml-line-num">3306</span>
+  <span class="yaml-line-key">type</span>: <span class="yaml-line-val">ClusterIP</span>    <span class="c-comment"># MySQL : interne au cluster seulement</span></code></pre>
+
+    <div class="code-header">
+      <span class="code-lang">yaml — 3-wordpress.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">PersistentVolumeClaim</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">wordpress-pvc</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">accessModes</span>: [<span class="yaml-line-val">ReadWriteOnce</span>]
+  <span class="yaml-line-key">resources</span>:
+    <span class="yaml-line-key">requests</span>:
+      <span class="yaml-line-key">storage</span>: <span class="yaml-line-str">1Gi</span>
+---
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">apps/v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Deployment</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">wordpress</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">replicas</span>: <span class="yaml-line-num">1</span>
+  <span class="yaml-line-key">selector</span>:
+    <span class="yaml-line-key">matchLabels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">wordpress</span> }
+  <span class="yaml-line-key">template</span>:
+    <span class="yaml-line-key">metadata</span>:
+      <span class="yaml-line-key">labels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">wordpress</span> }
+    <span class="yaml-line-key">spec</span>:
+      <span class="yaml-line-key">containers</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">wordpress</span>
+          <span class="yaml-line-key">image</span>: <span class="yaml-line-val">wordpress:6.4-apache</span>
+          <span class="yaml-line-key">env</span>:
+            - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">WORDPRESS_DB_HOST</span>
+              <span class="yaml-line-key">value</span>: <span class="yaml-line-str">"mysql-service:3306"</span>   <span class="c-comment"># Nom DNS du Service MySQL</span>
+            - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">WORDPRESS_DB_NAME</span>
+              <span class="yaml-line-key">valueFrom</span>:
+                <span class="yaml-line-key">secretKeyRef</span>:
+                  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-secret</span>
+                  <span class="yaml-line-key">key</span>: <span class="yaml-line-val">MYSQL_DATABASE</span>
+            - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">WORDPRESS_DB_USER</span>
+              <span class="yaml-line-key">valueFrom</span>:
+                <span class="yaml-line-key">secretKeyRef</span>:
+                  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-secret</span>
+                  <span class="yaml-line-key">key</span>: <span class="yaml-line-val">MYSQL_USER</span>
+            - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">WORDPRESS_DB_PASSWORD</span>
+              <span class="yaml-line-key">valueFrom</span>:
+                <span class="yaml-line-key">secretKeyRef</span>:
+                  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">mysql-secret</span>
+                  <span class="yaml-line-key">key</span>: <span class="yaml-line-val">MYSQL_PASSWORD</span>
+          <span class="yaml-line-key">ports</span>:
+            - <span class="yaml-line-key">containerPort</span>: <span class="yaml-line-num">80</span>
+          <span class="yaml-line-key">volumeMounts</span>:
+            - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">wp-data</span>
+              <span class="yaml-line-key">mountPath</span>: <span class="yaml-line-str">/var/www/html</span>
+      <span class="yaml-line-key">volumes</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">wp-data</span>
+          <span class="yaml-line-key">persistentVolumeClaim</span>:
+            <span class="yaml-line-key">claimName</span>: <span class="yaml-line-val">wordpress-pvc</span>
+---
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Service</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">wordpress-service</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">selector</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">wordpress</span> }
+  <span class="yaml-line-key">type</span>: <span class="yaml-line-val">NodePort</span>
+  <span class="yaml-line-key">ports</span>:
+    - <span class="yaml-line-key">port</span>: <span class="yaml-line-num">80</span>
+      <span class="yaml-line-key">targetPort</span>: <span class="yaml-line-num">80</span>
+      <span class="yaml-line-key">nodePort</span>: <span class="yaml-line-num">30090</span></code></pre>
+
+    <div class="code-header">
+      <span class="code-lang">bash — Déployer WordPress</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># Déployer tous les fichiers du dossier dans l'ordre</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> ./wordpress-k8s/
+
+<span class="c-comment"># Suivre le démarrage (MySQL doit démarrer avant WordPress)</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> get pods <span class="c-flag">-w</span>
+
+<span class="c-comment"># Accéder à WordPress</span>
+<span class="c-prompt">$ </span><span class="c-cmd">minikube</span> service wordpress-service <span class="c-flag">--url</span>
+
+<span class="c-comment"># Si WordPress ne se connecte pas à MySQL, vérifier :</span>
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> logs deployment/wordpress
+<span class="c-prompt">$ </span><span class="c-cmd">kubectl</span> describe pod -l app=wordpress</code></pre>
+  </section>
+
+  <!-- ═══ PROJET 3 : Microservices ═══ -->
+  <section class="chapter" id="projet3">
+    <div class="chapter-header">
+      <span class="chapter-number">Projet 03</span>
+      <h2>Architecture Microservices — Frontend + API + Redis</h2>
+    </div>
+
+    <p>
+      Ce projet déploie une architecture à 3 services : un frontend (Nginx), une API (Node.js) 
+      et un cache Redis. Il illustre la communication inter-services via les Services ClusterIP 
+      et l'exposition via Ingress.
+    </p>
+
+    <div class="code-header">
+      <span class="code-lang">yaml — microservices.yaml</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-comment"># ─── REDIS ───────────────────────────────────────────</span>
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">apps/v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Deployment</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">redis</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">replicas</span>: <span class="yaml-line-num">1</span>
+  <span class="yaml-line-key">selector</span>:
+    <span class="yaml-line-key">matchLabels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">redis</span> }
+  <span class="yaml-line-key">template</span>:
+    <span class="yaml-line-key">metadata</span>:
+      <span class="yaml-line-key">labels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">redis</span> }
+    <span class="yaml-line-key">spec</span>:
+      <span class="yaml-line-key">containers</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">redis</span>
+          <span class="yaml-line-key">image</span>: <span class="yaml-line-val">redis:7-alpine</span>
+          <span class="yaml-line-key">ports</span>: [{ <span class="yaml-line-key">containerPort</span>: <span class="yaml-line-num">6379</span> }]
+---
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Service</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">redis-service</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">selector</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">redis</span> }
+  <span class="yaml-line-key">ports</span>: [{ <span class="yaml-line-key">port</span>: <span class="yaml-line-num">6379</span>, <span class="yaml-line-key">targetPort</span>: <span class="yaml-line-num">6379</span> }]
+---
+<span class="c-comment"># ─── API BACKEND ─────────────────────────────────────</span>
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">apps/v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Deployment</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">api</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">replicas</span>: <span class="yaml-line-num">2</span>
+  <span class="yaml-line-key">selector</span>:
+    <span class="yaml-line-key">matchLabels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">api</span> }
+  <span class="yaml-line-key">template</span>:
+    <span class="yaml-line-key">metadata</span>:
+      <span class="yaml-line-key">labels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">api</span> }
+    <span class="yaml-line-key">spec</span>:
+      <span class="yaml-line-key">containers</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">api</span>
+          <span class="yaml-line-key">image</span>: <span class="yaml-line-val">node:20-alpine</span>
+          <span class="yaml-line-key">env</span>:
+            - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">REDIS_HOST</span>
+              <span class="yaml-line-key">value</span>: <span class="yaml-line-str">"redis-service"</span>    <span class="c-comment"># DNS interne du Service Redis</span>
+            - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">PORT</span>
+              <span class="yaml-line-key">value</span>: <span class="yaml-line-str">"3000"</span>
+          <span class="yaml-line-key">ports</span>: [{ <span class="yaml-line-key">containerPort</span>: <span class="yaml-line-num">3000</span> }]
+---
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Service</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">api-service</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">selector</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">api</span> }
+  <span class="yaml-line-key">ports</span>: [{ <span class="yaml-line-key">port</span>: <span class="yaml-line-num">3000</span>, <span class="yaml-line-key">targetPort</span>: <span class="yaml-line-num">3000</span> }]
+---
+<span class="c-comment"># ─── FRONTEND ────────────────────────────────────────</span>
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">apps/v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Deployment</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">frontend</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">replicas</span>: <span class="yaml-line-num">2</span>
+  <span class="yaml-line-key">selector</span>:
+    <span class="yaml-line-key">matchLabels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">frontend</span> }
+  <span class="yaml-line-key">template</span>:
+    <span class="yaml-line-key">metadata</span>:
+      <span class="yaml-line-key">labels</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">frontend</span> }
+    <span class="yaml-line-key">spec</span>:
+      <span class="yaml-line-key">containers</span>:
+        - <span class="yaml-line-key">name</span>: <span class="yaml-line-val">frontend</span>
+          <span class="yaml-line-key">image</span>: <span class="yaml-line-val">nginx:1.25-alpine</span>
+          <span class="yaml-line-key">ports</span>: [{ <span class="yaml-line-key">containerPort</span>: <span class="yaml-line-num">80</span> }]
+---
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Service</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">frontend-service</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">selector</span>: { <span class="yaml-line-key">app</span>: <span class="yaml-line-val">frontend</span> }
+  <span class="yaml-line-key">ports</span>: [{ <span class="yaml-line-key">port</span>: <span class="yaml-line-num">80</span>, <span class="yaml-line-key">targetPort</span>: <span class="yaml-line-num">80</span> }]
+---
+<span class="c-comment"># ─── INGRESS : routing /api → api-service, / → frontend ─</span>
+<span class="yaml-line-key">apiVersion</span>: <span class="yaml-line-val">networking.k8s.io/v1</span>
+<span class="yaml-line-key">kind</span>: <span class="yaml-line-val">Ingress</span>
+<span class="yaml-line-key">metadata</span>:
+  <span class="yaml-line-key">name</span>: <span class="yaml-line-val">app-ingress</span>
+  <span class="yaml-line-key">annotations</span>:
+    <span class="yaml-line-key">nginx.ingress.kubernetes.io/rewrite-target</span>: <span class="yaml-line-val">/$2</span>
+<span class="yaml-line-key">spec</span>:
+  <span class="yaml-line-key">ingressClassName</span>: <span class="yaml-line-val">nginx</span>
+  <span class="yaml-line-key">rules</span>:
+    - <span class="yaml-line-key">http</span>:
+        <span class="yaml-line-key">paths</span>:
+          - <span class="yaml-line-key">path</span>: <span class="yaml-line-str">/api(/|$)(.*)</span>
+            <span class="yaml-line-key">pathType</span>: <span class="yaml-line-val">ImplementationSpecific</span>
+            <span class="yaml-line-key">backend</span>:
+              <span class="yaml-line-key">service</span>:
+                <span class="yaml-line-key">name</span>: <span class="yaml-line-val">api-service</span>
+                <span class="yaml-line-key">port</span>: { <span class="yaml-line-key">number</span>: <span class="yaml-line-num">3000</span> }
+          - <span class="yaml-line-key">path</span>: <span class="yaml-line-str">/(/|$)(.*)</span>
+            <span class="yaml-line-key">pathType</span>: <span class="yaml-line-val">ImplementationSpecific</span>
+            <span class="yaml-line-key">backend</span>:
+              <span class="yaml-line-key">service</span>:
+                <span class="yaml-line-key">name</span>: <span class="yaml-line-val">frontend-service</span>
+                <span class="yaml-line-key">port</span>: { <span class="yaml-line-key">number</span>: <span class="yaml-line-num">80</span> }</code></pre>
+
+    <div class="callout tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>DNS interne Kubernetes</strong>
+        Dans un cluster K8s, chaque Service est accessible par son nom depuis n'importe quel Pod 
+        du même namespace. <code>redis-service</code>, <code>api-service</code> sont des noms DNS valides 
+        à l'intérieur du cluster. C'est Kubernetes qui gère la résolution DNS automatiquement.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CHEAT SHEET ═══ -->
+  <section class="chapter" id="cheatsheet">
+    <div class="chapter-header">
+      <span class="chapter-number">Référence</span>
+      <h2>Cheat Sheet kubectl — Commandes essentielles</h2>
+    </div>
+
+    <h3>Cluster & Nodes</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-cmd">kubectl</span> cluster-info                    <span class="c-comment"># Infos du cluster</span>
+<span class="c-cmd">kubectl</span> get nodes                        <span class="c-comment"># Lister les nodes</span>
+<span class="c-cmd">kubectl</span> get nodes <span class="c-flag">-o wide</span>               <span class="c-comment"># Nodes + IPs</span>
+<span class="c-cmd">kubectl</span> describe node &lt;nom&gt;             <span class="c-comment"># Détails d'un node</span>
+<span class="c-cmd">kubectl</span> top nodes                        <span class="c-comment"># Utilisation CPU/RAM des nodes</span></code></pre>
+
+    <h3>Pods</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-cmd">kubectl</span> get pods                         <span class="c-comment"># Lister pods (namespace courant)</span>
+<span class="c-cmd">kubectl</span> get pods <span class="c-flag">-A</span>                      <span class="c-comment"># Tous les namespaces</span>
+<span class="c-cmd">kubectl</span> get pods <span class="c-flag">-o wide</span>                <span class="c-comment"># + IP et Node</span>
+<span class="c-cmd">kubectl</span> describe pod &lt;nom&gt;              <span class="c-comment"># Détails complets</span>
+<span class="c-cmd">kubectl</span> logs &lt;pod&gt; <span class="c-flag">-f</span>                  <span class="c-comment"># Logs en continu</span>
+<span class="c-cmd">kubectl</span> exec <span class="c-flag">-it</span> &lt;pod&gt; <span class="c-flag">--</span> bash         <span class="c-comment"># Shell interactif</span>
+<span class="c-cmd">kubectl</span> delete pod &lt;nom&gt;               <span class="c-comment"># Supprimer</span>
+<span class="c-cmd">kubectl</span> top pods                         <span class="c-comment"># Utilisation ressources</span></code></pre>
+
+    <h3>Deployments</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-cmd">kubectl</span> get deployments                  <span class="c-comment"># Lister</span>
+<span class="c-cmd">kubectl</span> scale deployment &lt;nom&gt; <span class="c-flag">--replicas=</span>N   <span class="c-comment"># Scaler</span>
+<span class="c-cmd">kubectl</span> set image deployment/&lt;nom&gt; &lt;container&gt;=&lt;image:tag&gt;  <span class="c-comment"># MAJ image</span>
+<span class="c-cmd">kubectl</span> rollout status deployment/&lt;nom&gt; <span class="c-comment"># Statut MAJ</span>
+<span class="c-cmd">kubectl</span> rollout undo deployment/&lt;nom&gt;   <span class="c-comment"># Rollback</span>
+<span class="c-cmd">kubectl</span> rollout history deployment/&lt;nom&gt; <span class="c-comment"># Historique</span></code></pre>
+
+    <h3>Services</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-cmd">kubectl</span> get services                     <span class="c-comment"># Lister</span>
+<span class="c-cmd">kubectl</span> describe service &lt;nom&gt;          <span class="c-comment"># Détails</span>
+<span class="c-cmd">kubectl</span> port-forward service/&lt;nom&gt; 8080:80  <span class="c-comment"># Forward de port local</span>
+<span class="c-cmd">minikube</span> service &lt;nom&gt; <span class="c-flag">--url</span>           <span class="c-comment"># URL d'accès Minikube</span></code></pre>
+
+    <h3>Fichiers YAML</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> fichier.yaml           <span class="c-comment"># Créer/mettre à jour</span>
+<span class="c-cmd">kubectl</span> apply <span class="c-flag">-f</span> ./dossier/             <span class="c-comment"># Tous les YAML du dossier</span>
+<span class="c-cmd">kubectl</span> delete <span class="c-flag">-f</span> fichier.yaml          <span class="c-comment"># Supprimer</span>
+<span class="c-cmd">kubectl</span> apply <span class="c-flag">--dry-run=client -f</span> fich.yaml  <span class="c-comment"># Test sans appliquer</span>
+<span class="c-cmd">kubectl</span> get deployment &lt;nom&gt; <span class="c-flag">-o yaml</span>   <span class="c-comment"># Exporter en YAML</span></code></pre>
+
+    <h3>Namespaces</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-cmd">kubectl</span> get namespaces                   <span class="c-comment"># Lister</span>
+<span class="c-cmd">kubectl</span> create namespace &lt;nom&gt;          <span class="c-comment"># Créer</span>
+<span class="c-cmd">kubectl</span> get pods <span class="c-flag">-n</span> &lt;namespace&gt;        <span class="c-comment"># Pods d'un namespace</span>
+<span class="c-cmd">kubectl</span> config set-context <span class="c-flag">--current --namespace=</span>&lt;ns&gt;  <span class="c-comment"># Changer namespace par défaut</span></code></pre>
+
+    <h3>Debugging</h3>
+    <div class="code-header">
+      <span class="code-lang">bash</span>
+      <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+    <pre><code><span class="c-cmd">kubectl</span> describe pod &lt;nom&gt;              <span class="c-comment"># Voir les Events (erreurs)</span>
+<span class="c-cmd">kubectl</span> logs &lt;pod&gt; <span class="c-flag">--previous</span>          <span class="c-comment"># Logs du crash précédent</span>
+<span class="c-cmd">kubectl</span> get events <span class="c-flag">--sort-by=.lastTimestamp</span>  <span class="c-comment"># Événements triés</span>
+<span class="c-cmd">kubectl</span> run debug <span class="c-flag">--image=busybox --rm -it --</span> sh  <span class="c-comment"># Pod de debug temporaire</span>
+<span class="c-cmd">kubectl</span> exec <span class="c-flag">-it</span> &lt;pod&gt; <span class="c-flag">--</span> nslookup mysql-service  <span class="c-comment"># Test DNS interne</span></code></pre>
+
+    <div class="callout tip">
+      <div class="callout-icon">⭐</div>
+      <div class="callout-body">
+        <strong>Astuce : Autocomplétion kubectl</strong>
+        <br>Ajoute <code>source &lt;(kubectl completion bash)</code> dans ton <code>~/.bashrc</code> 
+        pour activer l'autocomplétion. Tu peux aussi créer l'alias <code>alias k=kubectl</code> 
+        et ajouter <code>complete -o default -F __start_kubectl k</code> pour que l'alias bénéficie aussi de la complétion.
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-icon">🗺️</div>
+      <div class="callout-body">
+        <strong>Prochaines étapes recommandées</strong>
+        <br>
+        Une fois à l'aise avec ces bases, explore : <strong>HorizontalPodAutoscaler (HPA)</strong> pour le scaling automatique basé sur la charge CPU, 
+        <strong>Helm</strong> le gestionnaire de paquets Kubernetes, 
+        <strong>RBAC</strong> pour les permissions et la sécurité, 
+        <strong>NetworkPolicies</strong> pour le firewall entre Pods, 
+        et les <strong>StatefulSets</strong> pour les applications avec état (bases de données en cluster).
+      </div>
+    </div>
+  </section>
+
+  <div class="course-footer">
+    <p>Cours Kubernetes pour Ubuntu Server 24.04 LTS</p>
+    <p style="margin-top:6px; font-size:0.75rem; opacity:0.5;">
+      Kubernetes® est une marque déposée de la Cloud Native Computing Foundation.
+    </p>
+  </div>
+
+</main>
+
+<script>
+  // Highlight active nav link
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.sidebar nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = '';
+          link.style.borderLeftColor = '';
+        });
+        const active = document.querySelector(`.sidebar nav a[href="#${entry.target.id}"]`);
+        if (active) {
+          active.style.color = 'var(--text)';
+          active.style.borderLeftColor = 'var(--accent)';
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
