@@ -935,7 +935,7 @@ echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join
         <pre><code><span class="c"># Initialiser avec l'IP du réseau host-only (enp0s8)</span>
 <span class="p">$ </span><span class="k">sudo</span> kubeadm init \
     --apiserver-advertise-address=<span class="v">172.16.25.60</span> \
-    --pod-network-cidr=<span class="v">10.244.0.0/16</span> \
+    --pod-network-cidr=<span class="v">172.16.25.60/24</span> \
     --node-name=k8s-master
 
 <span class="c"># Configurer kubectl pour l'utilisateur courant</span>
