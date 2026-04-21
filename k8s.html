@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -732,7 +732,7 @@ footer{
               <div class="code-topbar"><span class="code-label">bash — k8s-master</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
               <pre><code><span class="c"># Lister les interfaces réseau</span>
 <span class="p">$ </span><span class="k">ip</span> link show
-<span class="c"># enp0s8 = Bridge (cluster)</span>
+<span class="c"># eth0 = Bridge (cluster)</span>
 
 <span class="c"># Éditer la configuration netplan</span>
 <span class="p">$ </span><span class="k">sudo</span> nano /etc/netplan/00-installer-config.yaml</code></pre>
@@ -742,7 +742,7 @@ footer{
               <pre><code><span class="yk">network</span>:
   <span class="yk">version</span>: <span class="yn">2</span>
   <span class="yk">ethernets</span>:
-    <span class="yk">enp0s8</span>:                      <span class="yc"># Adaptateur Bridge (cluster)</span>
+    <span class="yk">eth0</span>:                      <span class="yc"># Adaptateur Bridge (cluster)</span>
       <span class="yk">dhcp4</span>: <span class="yv">false</span>
       <span class="yk">addresses</span>:
         - <span class="ys">172.16.25.60/24</span>      <span class="yc"># IP statique du master</span></code></pre>
@@ -751,7 +751,7 @@ footer{
               <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
               <pre><code><span class="c"># Appliquer la config réseau</span>
 <span class="p">$ </span><span class="k">sudo</span> netplan apply
-<span class="p">$ </span><span class="k">ip</span> addr show enp0s8
+<span class="p">$ </span><span class="k">ip</span> addr show eth0
 <span class="c"># Doit afficher : 172.16.25.60/24</span>
 
 <span class="c"># Définir le hostname</span>
@@ -923,7 +923,7 @@ echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join
       <h4>Initialiser le Control Plane (sur k8s-master uniquement)</h4>
       <div class="code-block">
         <div class="code-topbar"><span class="code-label">bash — SSH sur k8s-master</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-        <pre><code><span class="c"># Initialiser avec l'IP du réseau host-only (enp0s8)</span>
+        <pre><code><span class="c"># Initialiser avec l'IP du réseau host-only (eth0)</span>
 <span class="p">$ </span><span class="k">sudo</span> kubeadm init \
     --apiserver-advertise-address=<span class="v">172.16.25.60</span> \
     --pod-network-cidr=<span class="v">172.16.25.60/24</span> \
