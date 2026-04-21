@@ -830,16 +830,16 @@ footer{
 
       <h4>Script d'installation — À exécuter sur les 3 machines</h4>
       <p>Crée ce script sur chaque VM et exécute-le. C'est plus rapide que de taper chaque commande.</p>
-
+      <div class="verify">
+        <div class="verify-title">✅ Vérification</div>
+        <div class="code-block">
+          <div class="code-topbar"><span class="code-label">bash — Depuis ton PC</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+       <pre><code><span class="c">Création du script d'installation de k2s'</span>
+<span class="p">$ </span><span class="k">nano install-k8s-base.sh  <span class="c"></span>
       <div class="code-block">
-        <div class="code-topbar"><span class="code-label">bash — install-k8s-base.sh (à lancer sur les 3 VMs)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-        <pre><code><span class="c">#!/bin/bash</span>
-<span class="c"># =========================================================</span>
-<span class="c"># Script d'installation Kubernetes pour Ubuntu Server 24.04</span>
-<span class="c"># Exécuter avec : sudo bash install-k8s-base.sh</span>
-<span class="c"># =========================================================</span>
+        <div class="code-topbar"><span class="code-label">contenu du fichier install-k8s-base.sh (à lancer sur les 3 VMs)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
 
-
+        <pre>
 echo <span class="s">"=== 1/3 Installation containerd ==="</span>
 <span class="k">apt-get</span> update -qq
 <span class="k">apt-get</span> install -y -qq ca-certificates curl gnupg
@@ -870,16 +870,10 @@ echo <span class="s">"=== 3/3 Activation kubelet ==="</span>
 <span class="k">systemctl</span> enable kubelet
 
 echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join"</span></code></pre>
-      </div>
+<span class="p">$ </span><span class="k">chmod +x install-k8s-base.sh  <span class="c"></span>
+<span class="p">$ </span><span class="k">sudo ./install-k8s-base.sh  <span class="c"></span>
 
-      <div class="code-block">
-        <div class="code-topbar"><span class="code-label">bash — Exécution sur les 3 VMs</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-        <pre><code><span class="c"># Sur ton PC, copier le script sur les 3 VMs et l'exécuter</span>
-<span class="p">$ </span><span class="k">for</span> ip in 172.16.25.60 172.16.25.61 172.16.25.62; do
-    <span class="k">scp</span> install-k8s-base.sh root@$ip:~/ <span class="c"># Copier le script</span>
-    <span class="k">ssh</span> root@$ip <span class="s">"sudo bash ~/install-k8s-base.sh"</span>
-    echo <span class="ok">"✅ $ip installé"</span>
-  done</code></pre>
+      </div>
       </div>
 
       <h4>Initialiser le Control Plane (sur k8s-master uniquement)</h4>
