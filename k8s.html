@@ -1,0 +1,3008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kubernetes Avancé — Travaux Pratiques VirtualBox</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0a0e14;
+  --bg2:       #111827;
+  --bg3:       #1a2234;
+  --bg4:       #222d42;
+  --border:    #2a3655;
+  --accent:    #00d4aa;
+  --accent2:   #7c6aff;
+  --accent3:   #ff6b6b;
+  --accent4:   #ffc93c;
+  --accent5:   #4fc3f7;
+  --text:      #e8f0fe;
+  --text2:     #8fa3c3;
+  --text3:     #b8cce8;
+  --green:     #00d4aa;
+  --purple:    #7c6aff;
+  --red:       #ff6b6b;
+  --yellow:    #ffc93c;
+  --blue:      #4fc3f7;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Space Grotesk',sans-serif;
+  font-size:16px;
+  line-height:1.75;
+}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;left:0;top:0;
+  width:272px;height:100vh;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  overflow-y:auto;z-index:100;
+  padding-bottom:48px;
+}
+.sidebar-brand{
+  padding:22px 20px 18px;
+  border-bottom:1px solid var(--border);
+}
+.brand-title{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Space Mono',monospace;
+  font-size:0.95rem;font-weight:700;
+  color:var(--accent);
+  letter-spacing:-0.02em;
+}
+.brand-sub{font-size:0.68rem;color:var(--text2);margin-top:3px;font-family:'IBM Plex Mono',monospace;}
+.part-badge{
+  display:inline-block;margin-top:8px;
+  font-size:0.65rem;font-weight:700;
+  padding:2px 9px;border-radius:3px;
+  background:rgba(124,106,255,0.15);
+  border:1px solid rgba(124,106,255,0.3);
+  color:var(--accent2);
+  font-family:'IBM Plex Mono',monospace;
+  text-transform:uppercase;letter-spacing:0.08em;
+}
+.nav-section{
+  padding:14px 0 4px;
+}
+.nav-section-label{
+  font-size:0.6rem;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text2);padding:6px 20px;opacity:0.7;
+}
+.sidebar nav a{
+  display:flex;align-items:center;gap:9px;
+  padding:6px 20px;
+  font-size:0.8rem;color:var(--text3);
+  text-decoration:none;
+  border-left:2px solid transparent;
+  transition:all 0.15s;
+}
+.sidebar nav a:hover,.sidebar nav a.active{
+  color:var(--text);
+  background:rgba(0,212,170,0.05);
+  border-left-color:var(--accent);
+}
+.sidebar nav a .num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.6rem;color:var(--border);
+  flex-shrink:0;width:24px;
+  transition:color 0.15s;
+}
+.sidebar nav a:hover .num{color:var(--accent);}
+.sidebar nav a .lab-tag{
+  margin-left:auto;
+  font-size:0.55rem;font-weight:700;
+  padding:1px 5px;border-radius:2px;
+  background:rgba(0,212,170,0.12);
+  color:var(--accent);
+  font-family:'IBM Plex Mono',monospace;
+  text-transform:uppercase;
+  flex-shrink:0;
+}
+
+/* ── MAIN ── */
+.main{
+  margin-left:272px;
+  max-width:940px;
+  padding:0 56px 120px;
+}
+
+/* ── HERO ── */
+.hero{
+  padding:56px 0 44px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:72px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;top:-60px;right:-40px;
+  width:400px;height:400px;
+  background:radial-gradient(circle, rgba(124,106,255,0.08) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.7rem;font-weight:600;
+  color:var(--accent);
+  background:rgba(0,212,170,0.08);
+  border:1px solid rgba(0,212,170,0.2);
+  padding:4px 12px;border-radius:4px;
+  margin-bottom:18px;
+  letter-spacing:0.04em;
+}
+.hero h1{
+  font-size:2.6rem;font-weight:700;
+  line-height:1.12;margin-bottom:16px;
+}
+.hero h1 em{color:var(--accent);font-style:normal;}
+.hero h1 span{color:var(--accent2);}
+.hero-desc{
+  font-size:1rem;color:var(--text2);
+  max-width:580px;line-height:1.85;margin-bottom:28px;
+}
+.hero-stats{
+  display:flex;gap:24px;flex-wrap:wrap;
+}
+.stat{
+  display:flex;flex-direction:column;
+  padding:12px 18px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;min-width:110px;
+}
+.stat-val{
+  font-family:'Space Mono',monospace;
+  font-size:1.4rem;font-weight:700;
+  color:var(--accent);line-height:1;
+}
+.stat-label{font-size:0.72rem;color:var(--text2);margin-top:4px;}
+
+/* ── MODULES ── */
+.module{margin-bottom:88px;padding-top:12px;}
+
+.module-header{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:32px;padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.module-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.68rem;font-weight:600;
+  color:var(--bg);
+  background:var(--accent);
+  padding:3px 9px;border-radius:3px;
+  letter-spacing:0.04em;
+}
+.module-num.purple{background:var(--accent2);}
+.module-num.red{background:var(--accent3);}
+.module-num.yellow{background:var(--accent4);color:var(--bg);}
+.module-num.blue{background:var(--accent5);color:var(--bg);}
+
+.module h2{font-size:1.7rem;font-weight:700;}
+
+h3{
+  font-size:1.15rem;font-weight:600;
+  margin:38px 0 14px;color:var(--text);
+  display:flex;align-items:center;gap:10px;
+}
+h3::before{
+  content:'';display:inline-block;
+  width:2px;height:1em;
+  background:linear-gradient(to bottom,var(--accent),var(--accent2));
+  border-radius:1px;
+}
+h4{
+  font-size:0.95rem;font-weight:600;
+  color:var(--accent4);margin:22px 0 8px;
+}
+p{margin-bottom:14px;color:var(--text3);}
+strong{color:var(--text);font-weight:600;}
+em{color:var(--accent4);font-style:normal;font-weight:500;}
+ul,ol{margin:8px 0 16px 22px;color:var(--text3);}
+li{margin-bottom:6px;}
+
+/* ── LAB BLOCK ── */
+.lab{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin:28px 0;
+  overflow:hidden;
+}
+.lab-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;
+  background:linear-gradient(135deg,rgba(0,212,170,0.08),rgba(124,106,255,0.06));
+  border-bottom:1px solid var(--border);
+}
+.lab-title{
+  display:flex;align-items:center;gap:10px;
+  font-weight:700;font-size:0.95rem;
+}
+.lab-title .lab-icon{font-size:1.1rem;}
+.lab-badges{display:flex;gap:6px;}
+.badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.62rem;font-weight:600;
+  padding:2px 7px;border-radius:3px;
+  text-transform:uppercase;letter-spacing:0.06em;
+}
+.badge.vbox{background:rgba(79,195,247,0.12);color:var(--blue);border:1px solid rgba(79,195,247,0.25);}
+.badge.diff-easy{background:rgba(0,212,170,0.12);color:var(--green);border:1px solid rgba(0,212,170,0.25);}
+.badge.diff-med{background:rgba(255,201,60,0.12);color:var(--yellow);border:1px solid rgba(255,201,60,0.25);}
+.badge.diff-hard{background:rgba(255,107,107,0.12);color:var(--red);border:1px solid rgba(255,107,107,0.25);}
+.badge.time{background:rgba(139,163,195,0.1);color:var(--text2);border:1px solid rgba(139,163,195,0.2);}
+
+.lab-body{padding:20px 22px;}
+.lab-objective{
+  font-size:0.88rem;color:var(--text2);
+  background:rgba(0,212,170,0.04);
+  border-left:3px solid var(--accent);
+  padding:10px 14px;border-radius:0 6px 6px 0;
+  margin-bottom:18px;
+}
+.lab-objective strong{color:var(--accent);display:block;margin-bottom:3px;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;}
+
+/* ── CODE BLOCKS ── */
+.code-block{
+  background:#060d1a;
+  border:1px solid var(--border);
+  border-radius:8px;
+  margin:14px 0;
+  overflow:hidden;
+}
+.code-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px;
+  background:var(--bg3);border-bottom:1px solid var(--border);
+}
+.code-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.65rem;font-weight:600;
+  color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;
+}
+.code-dots{display:flex;gap:5px;}
+.code-dots span{width:9px;height:9px;border-radius:50%;}
+.dot-r{background:#ff5f57;}
+.dot-y{background:#febc2e;}
+.dot-g{background:#28c840;}
+pre{
+  background:none;border:none;
+  padding:16px 18px;margin:0;
+  overflow-x:auto;
+}
+pre code{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.8rem;line-height:1.75;
+  color:#c8d6ef;white-space:pre;
+  display:block;
+}
+code:not(pre code){
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.82em;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  padding:1px 6px;border-radius:3px;
+  color:#ff9f7e;
+}
+
+/* Syntax */
+.p{color:#7ec8e3;}   /* prompt */
+.c{color:#4a5770;font-style:italic;} /* comment */
+.k{color:#ff9f7e;}   /* keyword/cmd */
+.f{color:#ffc93c;}   /* flag */
+.v{color:#a8d8a8;}   /* value */
+.s{color:#98d8c8;}   /* string */
+.yk{color:#7ec8e3;}  /* yaml key */
+.yv{color:#a8d8a8;}  /* yaml val */
+.ys{color:#98d8c8;}  /* yaml string */
+.yn{color:#ffc93c;}  /* yaml num */
+.yc{color:#4a5770;font-style:italic;} /* yaml comment */
+.err{color:#ff6b6b;} /* error */
+.ok{color:#00d4aa;}  /* success */
+
+/* ── CALLOUTS ── */
+.callout{
+  border-radius:8px;padding:14px 18px;
+  margin:18px 0;border-left:3px solid;
+  display:flex;gap:12px;
+}
+.callout .ci{font-size:1rem;flex-shrink:0;margin-top:2px;}
+.callout .cb{flex:1;font-size:0.87rem;}
+.callout .cb strong{display:block;margin-bottom:3px;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;}
+.callout.info{background:rgba(79,195,247,0.06);border-color:var(--blue);}
+.callout.info .ci,.callout.info .cb strong{color:var(--blue);}
+.callout.warn{background:rgba(255,201,60,0.06);border-color:var(--yellow);}
+.callout.warn .ci,.callout.warn .cb strong{color:var(--yellow);}
+.callout.tip{background:rgba(0,212,170,0.06);border-color:var(--green);}
+.callout.tip .ci,.callout.tip .cb strong{color:var(--green);}
+.callout.danger{background:rgba(255,107,107,0.06);border-color:var(--red);}
+.callout.danger .ci,.callout.danger .cb strong{color:var(--red);}
+.callout.vbox{background:rgba(124,106,255,0.06);border-color:var(--purple);}
+.callout.vbox .ci,.callout.vbox .cb strong{color:var(--purple);}
+
+/* ── STEPS ── */
+.steps{margin:20px 0;}
+.step{display:flex;gap:16px;margin-bottom:22px;position:relative;}
+.step:not(:last-child)::after{
+  content:'';position:absolute;
+  left:16px;top:34px;
+  width:1px;height:calc(100% + 4px);
+  background:linear-gradient(var(--accent),var(--border));
+}
+.step-n{
+  width:33px;height:33px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:var(--bg);display:flex;align-items:center;
+  justify-content:center;font-weight:700;font-size:0.8rem;
+  flex-shrink:0;position:relative;z-index:1;
+}
+.step-c{flex:1;}
+.step-c h4{margin:4px 0 8px;font-size:0.92rem;color:var(--text);}
+.step-c p{font-size:0.86rem;}
+
+/* ── TABLE ── */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:0.85rem;}
+th{
+  background:var(--bg3);padding:9px 14px;
+  text-align:left;font-size:0.75rem;font-weight:700;
+  color:var(--text2);text-transform:uppercase;
+  letter-spacing:0.07em;border:1px solid var(--border);
+}
+td{
+  padding:9px 14px;border:1px solid var(--border);
+  color:var(--text3);vertical-align:top;
+}
+tr:hover td{background:rgba(255,255,255,0.015);}
+
+/* ── VERIFICATION BOX ── */
+.verify{
+  background:rgba(0,212,170,0.04);
+  border:1px solid rgba(0,212,170,0.2);
+  border-radius:8px;padding:14px 18px;margin:16px 0;
+}
+.verify-title{
+  font-size:0.72rem;font-weight:700;color:var(--accent);
+  text-transform:uppercase;letter-spacing:0.08em;
+  margin-bottom:8px;display:flex;align-items:center;gap:6px;
+}
+.verify pre{padding:10px 14px;}
+
+/* ── ARCH DIAGRAM ── */
+.diagram{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:24px;margin:20px 0;
+  overflow-x:auto;
+}
+.diagram .dtitle{
+  text-align:center;color:var(--accent);
+  font-family:'Space Mono',monospace;
+  font-size:0.78rem;font-weight:700;
+  margin-bottom:14px;letter-spacing:0.08em;
+}
+.diagram pre{
+  padding:0;color:var(--text3);
+  font-size:0.75rem;
+}
+
+/* ── CONCEPT GRID ── */
+.concept-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:14px;margin:20px 0;
+}
+.concept-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:16px;
+  transition:border-color 0.2s,transform 0.2s;
+}
+.concept-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.concept-card .cc-icon{font-size:1.4rem;margin-bottom:8px;}
+.concept-card h4{color:var(--text);font-size:0.88rem;margin:0 0 5px;}
+.concept-card p{font-size:0.78rem;color:var(--text2);margin:0;line-height:1.55;}
+
+/* ── ANSWER BOX ── */
+.answer{
+  background:var(--bg3);border:1px dashed var(--border);
+  border-radius:8px;padding:14px 18px;margin:14px 0;
+}
+.answer-title{
+  font-size:0.7rem;font-weight:700;color:var(--text2);
+  text-transform:uppercase;letter-spacing:0.08em;
+  margin-bottom:8px;
+}
+
+/* ── NETWORK MAP ── */
+.netmap{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;padding:22px;margin:20px 0;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.75rem;color:var(--text3);
+  overflow-x:auto;
+  line-height:1.9;
+}
+
+/* ── SCORE / PROGRESS ── */
+.score-bar{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;padding:20px;margin:24px 0;
+}
+.score-title{font-weight:700;margin-bottom:14px;color:var(--accent);}
+.score-item{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:10px;font-size:0.85rem;
+}
+.score-item .si-label{width:180px;color:var(--text3);flex-shrink:0;}
+.score-progress{
+  flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;
+}
+.score-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(to right,var(--accent),var(--accent2));
+}
+
+/* ── DIVIDER ── */
+.divider{
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+  margin:52px 0;
+}
+
+/* ── FOOTER ── */
+footer{
+  margin-top:80px;padding-top:36px;
+  border-top:1px solid var(--border);
+  text-align:center;font-size:0.8rem;color:var(--text2);
+  padding-bottom:20px;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .sidebar{display:none;}
+  .main{margin-left:0;padding:20px 18px 80px;}
+  .hero h1{font-size:1.8rem;}
+}
+
+/* ── VBOX SETUP SPECIFIC ── */
+.vm-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:18px;margin:10px 0;
+  display:flex;gap:14px;
+}
+.vm-card .vm-icon{font-size:2rem;flex-shrink:0;}
+.vm-card h4{color:var(--accent4);margin:0 0 4px;font-size:0.9rem;}
+.vm-card p{font-size:0.82rem;color:var(--text2);margin:0;}
+.vm-card code{font-size:0.78em;}
+
+.vm-spec-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;margin:16px 0;
+}
+.vm-spec{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:14px;text-align:center;
+}
+.vm-spec .vs-val{
+  font-family:'Space Mono',monospace;
+  font-size:1.1rem;font-weight:700;color:var(--accent4);
+  margin-bottom:3px;
+}
+.vm-spec .vs-label{font-size:0.72rem;color:var(--text2);}
+</style>
+</head>
+<body>
+
+<!-- ════ SIDEBAR ════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-title">
+      <span>⚙</span> K8s Avancé
+    </div>
+    <div class="brand-sub">Travaux Pratiques VirtualBox</div>
+    <span class="part-badge">Partie 2 / 2</span>
+  </div>
+  <nav>
+    <div class="nav-section">
+      <div class="nav-section-label">Environnement</div>
+      <a href="#vbox-setup"><span class="num">00</span>VirtualBox — Cluster Lab<span class="lab-tag">lab</span></a>
+      <a href="#vbox-reseau"><span class="num">01</span>Réseau VirtualBox K8s<span class="lab-tag">lab</span></a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Objets Avancés</div>
+      <a href="#statefulsets"><span class="num">02</span>StatefulSets</a>
+      <a href="#lab-stateful"><span class="num">  </span>↳ TP : MySQL StatefulSet<span class="lab-tag">lab</span></a>
+      <a href="#daemonsets"><span class="num">03</span>DaemonSets</a>
+      <a href="#lab-daemon"><span class="num">  </span>↳ TP : Log Collector<span class="lab-tag">lab</span></a>
+      <a href="#jobs"><span class="num">04</span>Jobs & CronJobs</a>
+      <a href="#lab-jobs"><span class="num">  </span>↳ TP : Backup automatique<span class="lab-tag">lab</span></a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Scaling & Disponibilité</div>
+      <a href="#hpa"><span class="num">05</span>Horizontal Pod Autoscaler</a>
+      <a href="#lab-hpa"><span class="num">  </span>↳ TP : Stress test + HPA<span class="lab-tag">lab</span></a>
+      <a href="#probes"><span class="num">06</span>Probes — Health Checks</a>
+      <a href="#lab-probes"><span class="num">  </span>↳ TP : App avec Probes<span class="lab-tag">lab</span></a>
+      <a href="#disruption"><span class="num">07</span>PodDisruptionBudget</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Réseau Avancé</div>
+      <a href="#network-policies"><span class="num">08</span>NetworkPolicies</a>
+      <a href="#lab-netpol"><span class="num">  </span>↳ TP : Firewall entre Pods<span class="lab-tag">lab</span></a>
+      <a href="#ingress-tls"><span class="num">09</span>Ingress + TLS/HTTPS</a>
+      <a href="#lab-tls"><span class="num">  </span>↳ TP : HTTPS avec cert-manager<span class="lab-tag">lab</span></a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Helm</div>
+      <a href="#helm"><span class="num">10</span>Helm — Gestionnaire de paquets</a>
+      <a href="#lab-helm"><span class="num">  </span>↳ TP : Déployer avec Helm<span class="lab-tag">lab</span></a>
+      <a href="#helm-chart"><span class="num">  </span>↳ TP : Créer un Chart<span class="lab-tag">lab</span></a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Monitoring</div>
+      <a href="#monitoring"><span class="num">11</span>Metrics-server + kubectl top</a>
+      <a href="#prometheus"><span class="num">12</span>Prometheus + Grafana</a>
+      <a href="#lab-monitoring"><span class="num">  </span>↳ TP : Dashboard complet<span class="lab-tag">lab</span></a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Sécurité</div>
+      <a href="#rbac"><span class="num">13</span>RBAC — Permissions</a>
+      <a href="#lab-rbac"><span class="num">  </span>↳ TP : Utilisateur limité<span class="lab-tag">lab</span></a>
+      <a href="#security-context"><span class="num">14</span>SecurityContext</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Projets Finaux</div>
+      <a href="#projet-vote"><span class="num">P1</span>App de Vote complète<span class="lab-tag">lab</span></a>
+      <a href="#projet-cicd"><span class="num">P2</span>CI/CD + GitLab<span class="lab-tag">lab</span></a>
+      <a href="#projet-monitor"><span class="num">P3</span>Stack complète monitorée<span class="lab-tag">lab</span></a>
+    </div>
+  </nav>
+</aside>
+
+<!-- ════ MAIN ════ -->
+<main class="main">
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-eyebrow">⚡ Partie 2 — Cours Avancé + Travaux Pratiques</div>
+  <h1>Kubernetes <em>Avancé</em><br><span>sur VirtualBox</span></h1>
+  <p class="hero-desc">
+    Suite du cours d'initiation. Chaque concept est accompagné d'un travail pratique
+    complet à réaliser sur un cluster de VMs VirtualBox. Configuration pas-à-pas depuis zéro.
+  </p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-val">15+</div><div class="stat-label">Travaux pratiques</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">VMs VirtualBox</div></div>
+    <div class="stat"><div class="stat-val">8h+</div><div class="stat-label">de pratique</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">Projets complets</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     MODULE 0 : SETUP VIRTUALBOX
+════════════════════════════════════════════ -->
+<section class="module" id="vbox-setup">
+  <div class="module-header">
+    <span class="module-num blue">Module 00</span>
+    <h2>Construire son lab VirtualBox</h2>
+  </div>
+
+  <p>
+    Avant tout, il faut un vrai cluster. Nous allons créer <strong>3 machines virtuelles VirtualBox</strong> :
+    un master et deux workers. C'est la configuration minimale pour reproduire un environnement de production réaliste.
+  </p>
+
+  <h3>Architecture du lab</h3>
+
+  <div class="diagram">
+    <div class="dtitle">─── ARCHITECTURE DU LAB VIRTUALBOX ───</div>
+    <pre><code>  Ton PC (Host)
+  ├─ VirtualBox Host-Only Network : 192.168.56.0/24
+  │
+  ├─ VM1 : k8s-master   → 192.168.56.10  (4 vCPU / 4 Go RAM)
+  │        rôle : Control Plane
+  │        composants : API Server, Scheduler, etcd, Controller
+  │
+  ├─ VM2 : k8s-worker1  → 192.168.56.11  (2 vCPU / 2 Go RAM)
+  │        rôle : Worker Node
+  │
+  └─ VM3 : k8s-worker2  → 192.168.56.12  (2 vCPU / 2 Go RAM)
+           rôle : Worker Node
+
+  Accès depuis le host :
+  kubectl → 192.168.56.10:6443 (API Server)
+  Services NodePort → 192.168.56.1X:3XXXX</code></pre>
+  </div>
+
+  <h3>Configuration matérielle recommandée</h3>
+
+  <div class="vm-spec-grid">
+    <div class="vm-spec">
+      <div class="vs-val">8 Go+</div>
+      <div class="vs-label">RAM totale du host</div>
+    </div>
+    <div class="vm-spec">
+      <div class="vs-val">4+ cœurs</div>
+      <div class="vs-label">CPU du host</div>
+    </div>
+    <div class="vm-spec">
+      <div class="vs-val">40 Go+</div>
+      <div class="vs-label">Espace disque libre</div>
+    </div>
+  </div>
+
+  <div class="callout vbox">
+    <div class="ci">📦</div>
+    <div class="cb">
+      <strong>VirtualBox requis</strong>
+      Télécharge VirtualBox 7.x depuis <code>virtualbox.org</code>.
+      La procédure fonctionne aussi avec VMware Workstation Player (gratuit) — les captures d'écran diffèrent mais les commandes Linux sont identiques.
+    </div>
+  </div>
+
+  <!-- LAB 0.1 : Création VMs -->
+  <div class="lab" id="vbox-lab1">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">🔧</span>
+        TP 0.1 — Créer les 3 VMs VirtualBox
+      </div>
+      <div class="lab-badges">
+        <span class="badge vbox">VirtualBox</span>
+        <span class="badge diff-easy">Facile</span>
+        <span class="badge time">⏱ 30 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Créer 3 VMs Ubuntu Server 24.04 configurées correctement pour Kubernetes, avec les bons réseaux.
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div class="step-c">
+            <h4>Télécharger Ubuntu Server 24.04 LTS</h4>
+            <p>Va sur <code>ubuntu.com/download/server</code> et télécharge l'ISO <strong>Ubuntu Server 24.04 LTS</strong> (environ 2,5 Go). Tu utiliseras le même ISO pour les 3 VMs.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">2</div>
+          <div class="step-c">
+            <h4>Créer le réseau Host-Only dans VirtualBox</h4>
+            <p>Dans VirtualBox : <strong>Fichier → Gestionnaire de réseau hôte → Créer</strong></p>
+            <ul>
+              <li>Nom : <code>vboxnet0</code></li>
+              <li>Adresse IPv4 : <code>192.168.56.1</code></li>
+              <li>Masque : <code>255.255.255.0</code></li>
+              <li>Désactiver le DHCP (on assignera les IPs manuellement)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">3</div>
+          <div class="step-c">
+            <h4>Créer la VM Master (k8s-master)</h4>
+            <p>Clic droit → Nouvelle dans VirtualBox :</p>
+            <ul>
+              <li><strong>Nom</strong> : <code>k8s-master</code></li>
+              <li><strong>Type</strong> : Linux / Ubuntu (64-bit)</li>
+              <li><strong>RAM</strong> : 4096 Mo (4 Go) — minimum pour le master</li>
+              <li><strong>CPU</strong> : 2 vCPUs (onglet Système → Processeur)</li>
+              <li><strong>Disque dur</strong> : VDI dynamique, 20 Go</li>
+            </ul>
+            <p><strong>Configuration réseau :</strong></p>
+            <ul>
+              <li>Adaptateur 1 : <strong>NAT</strong> (accès Internet pour télécharger les paquets)</li>
+              <li>Adaptateur 2 : <strong>Réseau hôte uniquement</strong> → <code>vboxnet0</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">4</div>
+          <div class="step-c">
+            <h4>Installer Ubuntu Server sur k8s-master</h4>
+            <p>Lance la VM, sélectionne l'ISO. Lors de l'installation :</p>
+            <ul>
+              <li>Langue : Français ou English</li>
+              <li>Nom de la machine : <code>k8s-master</code></li>
+              <li>Utilisateur : <code>k8sadmin</code> (ou ton prénom)</li>
+              <li><strong>Cocher : Install OpenSSH server</strong> ✅</li>
+              <li>Ne pas installer d'autres snaps</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">5</div>
+          <div class="step-c">
+            <h4>Configurer l'IP statique sur k8s-master</h4>
+            <p>Après reboot, connecte-toi et configure l'IP statique via Netplan :</p>
+            <div class="code-block">
+              <div class="code-topbar"><span class="code-label">bash — k8s-master</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+              <pre><code><span class="c"># Lister les interfaces réseau</span>
+<span class="p">$ </span><span class="k">ip</span> link show
+<span class="c"># enp0s3 = NAT (Internet), enp0s8 = Host-Only (cluster)</span>
+
+<span class="c"># Éditer la configuration netplan</span>
+<span class="p">$ </span><span class="k">sudo</span> nano /etc/netplan/00-installer-config.yaml</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-topbar"><span class="code-label">yaml — /etc/netplan/00-installer-config.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+              <pre><code><span class="yk">network</span>:
+  <span class="yk">version</span>: <span class="yn">2</span>
+  <span class="yk">ethernets</span>:
+    <span class="yk">enp0s3</span>:                      <span class="yc"># Adaptateur NAT (Internet)</span>
+      <span class="yk">dhcp4</span>: <span class="yv">true</span>
+    <span class="yk">enp0s8</span>:                      <span class="yc"># Adaptateur Host-Only (cluster)</span>
+      <span class="yk">dhcp4</span>: <span class="yv">false</span>
+      <span class="yk">addresses</span>:
+        - <span class="ys">192.168.56.10/24</span>      <span class="yc"># IP statique du master</span></code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+              <pre><code><span class="c"># Appliquer la config réseau</span>
+<span class="p">$ </span><span class="k">sudo</span> netplan apply
+<span class="p">$ </span><span class="k">ip</span> addr show enp0s8
+<span class="c"># Doit afficher : 192.168.56.10/24</span>
+
+<span class="c"># Définir le hostname</span>
+<span class="p">$ </span><span class="k">sudo</span> hostnamectl set-hostname k8s-master
+<span class="p">$ </span><span class="k">sudo</span> bash -c <span class="s">'echo "192.168.56.10 k8s-master
+192.168.56.11 k8s-worker1
+192.168.56.12 k8s-worker2" >> /etc/hosts'</span></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">6</div>
+          <div class="step-c">
+            <h4>Cloner pour créer les Workers</h4>
+            <p>Dans VirtualBox, <strong>cloner</strong> la VM k8s-master (clic droit → Cloner) :</p>
+            <ul>
+              <li>Nom clone 1 : <code>k8s-worker1</code> — RAM : 2 Go</li>
+              <li>Nom clone 2 : <code>k8s-worker2</code> — RAM : 2 Go</li>
+              <li>Choisir : <strong>Clone complet</strong></li>
+              <li>Réinitialiser les adresses MAC des cartes réseau ✅</li>
+            </ul>
+            <p>Sur chaque worker, changer l'IP et le hostname :</p>
+            <div class="code-block">
+              <div class="code-topbar"><span class="code-label">bash — Sur k8s-worker1</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+              <pre><code><span class="p">$ </span><span class="k">sudo</span> hostnamectl set-hostname k8s-worker1
+<span class="c"># Modifier l'IP dans /etc/netplan/00-installer-config.yaml</span>
+<span class="c"># Changer 192.168.56.10 → 192.168.56.11</span>
+<span class="p">$ </span><span class="k">sudo</span> nano /etc/netplan/00-installer-config.yaml
+<span class="p">$ </span><span class="k">sudo</span> netplan apply</code></pre>
+            </div>
+            <p>Répéter sur k8s-worker2 avec l'IP <code>192.168.56.12</code>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">7</div>
+          <div class="step-c">
+            <h4>Configurer SSH sans mot de passe (confort de travail)</h4>
+            <p>Sur ton PC host, génère une clé SSH et copie-la sur les VMs pour te connecter sans taper de mot de passe :</p>
+            <div class="code-block">
+              <div class="code-topbar"><span class="code-label">bash — Sur ton PC Host</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+              <pre><code><span class="c"># Générer une clé SSH (si pas encore fait)</span>
+<span class="p">$ </span><span class="k">ssh-keygen</span> -t ed25519 -C <span class="s">"k8s-lab"</span>
+
+<span class="c"># Copier la clé sur chaque VM</span>
+<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@192.168.56.10
+<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@192.168.56.11
+<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@192.168.56.12
+
+<span class="c"># Tester la connexion</span>
+<span class="p">$ </span><span class="k">ssh</span> k8sadmin@192.168.56.10
+<span class="c"># Doit se connecter sans mot de passe</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="verify">
+        <div class="verify-title">✅ Vérification</div>
+        <div class="code-block">
+          <div class="code-topbar"><span class="code-label">bash — Depuis ton PC</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="c"># Les 3 VMs doivent répondre au ping</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 192.168.56.10  <span class="c"># master</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 192.168.56.11  <span class="c"># worker1</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 192.168.56.12  <span class="c"># worker2</span>
+
+<span class="c"># Les VMs doivent se voir entre elles (depuis master)</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 k8s-worker1
+<span class="p">$ </span><span class="k">ping</span> -c 2 k8s-worker2</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAB 0.2 : Install Kubernetes -->
+  <div class="lab" id="vbox-reseau">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">⚙️</span>
+        TP 0.2 — Installer Kubernetes sur les 3 VMs
+      </div>
+      <div class="lab-badges">
+        <span class="badge vbox">VirtualBox</span>
+        <span class="badge diff-med">Intermédiaire</span>
+        <span class="badge time">⏱ 45 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Installer containerd, kubeadm, kubelet et kubectl sur les 3 VMs, puis bootstrapper le cluster.
+      </div>
+
+      <h4>Script d'installation — À exécuter sur les 3 machines</h4>
+      <p>Crée ce script sur chaque VM et exécute-le. C'est plus rapide que de taper chaque commande.</p>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — install-k8s-base.sh (à lancer sur les 3 VMs)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c">#!/bin/bash</span>
+<span class="c"># =========================================================</span>
+<span class="c"># Script d'installation Kubernetes pour Ubuntu Server 24.04</span>
+<span class="c"># Exécuter avec : sudo bash install-k8s-base.sh</span>
+<span class="c"># =========================================================</span>
+<span class="k">set</span> -e   <span class="c"># Arrêter si une commande échoue</span>
+
+echo <span class="s">"=== 1/6 Désactivation du swap ==="</span>
+<span class="k">swapoff</span> -a
+<span class="k">sed</span> -i <span class="s">'s/^.*swap.*$/#&/'</span> /etc/fstab
+
+echo <span class="s">"=== 2/6 Chargement modules kernel ==="</span>
+<span class="k">cat</span> &lt;&lt;EOF | <span class="k">tee</span> /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+<span class="k">modprobe</span> overlay
+<span class="k">modprobe</span> br_netfilter
+
+echo <span class="s">"=== 3/6 Paramètres sysctl ==="</span>
+<span class="k">cat</span> &lt;&lt;EOF | <span class="k">tee</span> /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+<span class="k">sysctl</span> --system
+
+echo <span class="s">"=== 4/6 Installation containerd ==="</span>
+<span class="k">apt-get</span> update -qq
+<span class="k">apt-get</span> install -y -qq ca-certificates curl gnupg
+<span class="k">install</span> -m 0755 -d /etc/apt/keyrings
+<span class="k">curl</span> -fsSL https://download.docker.com/linux/ubuntu/gpg | <span class="k">gpg</span> --dearmor -o /etc/apt/keyrings/docker.gpg
+echo <span class="s">"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable"</span> | \
+  <span class="k">tee</span> /etc/apt/sources.list.d/docker.list
+<span class="k">apt-get</span> update -qq
+<span class="k">apt-get</span> install -y -qq containerd.io
+<span class="k">mkdir</span> -p /etc/containerd
+<span class="k">containerd</span> config default | <span class="k">tee</span> /etc/containerd/config.toml
+<span class="k">sed</span> -i <span class="s">'s/SystemdCgroup = false/SystemdCgroup = true/'</span> /etc/containerd/config.toml
+<span class="k">systemctl</span> restart containerd
+<span class="k">systemctl</span> enable containerd
+
+echo <span class="s">"=== 5/6 Installation kubeadm + kubelet + kubectl ==="</span>
+<span class="k">curl</span> -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
+  <span class="k">gpg</span> --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo <span class="s">'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+  https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /'</span> | \
+  <span class="k">tee</span> /etc/apt/sources.list.d/kubernetes.list
+<span class="k">apt-get</span> update -qq
+<span class="k">apt-get</span> install -y -qq kubelet kubeadm kubectl
+<span class="k">apt-mark</span> hold kubelet kubeadm kubectl
+
+echo <span class="s">"=== 6/6 Activation kubelet ==="</span>
+<span class="k">systemctl</span> enable kubelet
+
+echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join"</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Exécution sur les 3 VMs</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Sur ton PC, copier le script sur les 3 VMs et l'exécuter</span>
+<span class="p">$ </span><span class="k">for</span> ip in 192.168.56.10 192.168.56.11 192.168.56.12; do
+    <span class="k">scp</span> install-k8s-base.sh k8sadmin@$ip:~/ <span class="c"># Copier le script</span>
+    <span class="k">ssh</span> k8sadmin@$ip <span class="s">"sudo bash ~/install-k8s-base.sh"</span>
+    echo <span class="ok">"✅ $ip installé"</span>
+  done</code></pre>
+      </div>
+
+      <h4>Initialiser le Control Plane (sur k8s-master uniquement)</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — SSH sur k8s-master</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Initialiser avec l'IP du réseau host-only (enp0s8)</span>
+<span class="p">$ </span><span class="k">sudo</span> kubeadm init \
+    --apiserver-advertise-address=<span class="v">192.168.56.10</span> \
+    --pod-network-cidr=<span class="v">10.244.0.0/16</span> \
+    --node-name=k8s-master
+
+<span class="c"># Configurer kubectl pour l'utilisateur courant</span>
+<span class="p">$ </span><span class="k">mkdir</span> -p $HOME/.kube
+<span class="p">$ </span><span class="k">sudo</span> cp /etc/kubernetes/admin.conf $HOME/.kube/config
+<span class="p">$ </span><span class="k">sudo</span> chown $(id -u):$(id -g) $HOME/.kube/config
+
+<span class="c"># Installer le CNI Flannel (réseau des pods)</span>
+<span class="p">$ </span><span class="k">kubectl</span> apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+
+<span class="c"># Récupérer la commande join pour les workers</span>
+<span class="c"># (affichée à la fin de kubeadm init, mais tu peux la regénérer)</span>
+<span class="p">$ </span><span class="k">kubeadm</span> token create --print-join-command</code></pre>
+      </div>
+
+      <h4>Joindre les Workers au cluster</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — SSH sur k8s-worker1 ET k8s-worker2</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Coller la commande join générée par kubeadm</span>
+<span class="c"># (remplacer le token et le hash par les valeurs réelles)</span>
+<span class="p">$ </span><span class="k">sudo</span> kubeadm join 192.168.56.10:6443 \
+    --token <span class="v">abcdef.0123456789abcdef</span> \
+    --discovery-token-ca-cert-hash sha256:<span class="v">xxxxxxxx...</span> \
+    --node-name=k8s-worker1   <span class="c"># (ou k8s-worker2)</span></code></pre>
+      </div>
+
+      <h4>Accéder au cluster depuis ton PC Host</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Sur ton PC (Linux/Mac)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Copier le kubeconfig depuis le master</span>
+<span class="p">$ </span><span class="k">scp</span> k8sadmin@192.168.56.10:~/.kube/config ~/.kube/config-vbox
+
+<span class="c"># Utiliser ce contexte</span>
+<span class="p">$ </span><span class="k">export</span> KUBECONFIG=~/.kube/config-vbox
+
+<span class="c"># Ou fusionner avec ton config existant</span>
+<span class="p">$ </span><span class="k">export</span> KUBECONFIG=~/.kube/config:~/.kube/config-vbox
+<span class="p">$ </span><span class="k">kubectl</span> config view --merge --flatten > /tmp/merged.yaml
+<span class="p">$ </span><span class="k">mv</span> /tmp/merged.yaml ~/.kube/config</code></pre>
+      </div>
+
+      <div class="verify">
+        <div class="verify-title">✅ Vérification finale du cluster</div>
+        <div class="code-block">
+          <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="p">$ </span><span class="k">kubectl</span> get nodes -o wide
+<span class="c"># NAME           STATUS   ROLES           AGE   VERSION   INTERNAL-IP</span>
+<span class="ok"># k8s-master     Ready    control-plane   5m    v1.29.x   192.168.56.10</span>
+<span class="ok"># k8s-worker1    Ready    &lt;none&gt;          3m    v1.29.x   192.168.56.11</span>
+<span class="ok"># k8s-worker2    Ready    &lt;none&gt;          3m    v1.29.x   192.168.56.12</span>
+
+<span class="p">$ </span><span class="k">kubectl</span> get pods -A
+<span class="c"># Tous les pods système doivent être Running</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MODULE 1 : STATEFULSETS
+════════════════════════════════════════════ -->
+<section class="module" id="statefulsets">
+  <div class="module-header">
+    <span class="module-num">Module 02</span>
+    <h2>StatefulSets — Applications avec état</h2>
+  </div>
+
+  <p>
+    Un <strong>StatefulSet</strong> est comme un Deployment, mais pour les applications qui ont besoin
+    d'une <strong>identité stable et persistante</strong> : bases de données, systèmes de messagerie, Elasticsearch.
+  </p>
+
+  <h3>Deployment vs StatefulSet</h3>
+
+  <table>
+    <thead><tr><th>Critère</th><th>Deployment</th><th>StatefulSet</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Noms des Pods</td>
+        <td><code>app-7d9f-xk2p1</code> (aléatoire)</td>
+        <td><code>mysql-0</code>, <code>mysql-1</code> (ordonné, stable)</td>
+      </tr>
+      <tr>
+        <td>Ordre de démarrage</td>
+        <td>Simultané, aléatoire</td>
+        <td>Séquentiel : 0, puis 1, puis 2...</td>
+      </tr>
+      <tr>
+        <td>Stockage</td>
+        <td>Partagé entre tous les Pods</td>
+        <td>Volume dédié par Pod (PVC unique)</td>
+      </tr>
+      <tr>
+        <td>Réseau</td>
+        <td>IP aléatoire à chaque redémarrage</td>
+        <td>Headless Service + DNS stable : <code>mysql-0.mysql-svc</code></td>
+      </tr>
+      <tr>
+        <td>Usage</td>
+        <td>Applis sans état (Nginx, API REST)</td>
+        <td>MySQL, PostgreSQL, Kafka, Elasticsearch</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout info">
+    <div class="ci">🌐</div>
+    <div class="cb">
+      <strong>DNS stable avec StatefulSet</strong>
+      Chaque Pod d'un StatefulSet a un nom DNS prévisible :
+      <code>pod-name.service-name.namespace.svc.cluster.local</code>
+      <br>Ex: <code>mysql-0.mysql-headless.default.svc.cluster.local</code>
+    </div>
+  </div>
+</section>
+
+<!-- TP : StatefulSet MySQL -->
+<div class="lab" id="lab-stateful">
+  <div class="lab-header">
+    <div class="lab-title">
+      <span class="lab-icon">🗄️</span>
+      TP 2.1 — MySQL en StatefulSet avec volume dédié par réplica
+    </div>
+    <div class="lab-badges">
+      <span class="badge diff-med">Intermédiaire</span>
+      <span class="badge time">⏱ 40 min</span>
+    </div>
+  </div>
+  <div class="lab-body">
+    <div class="lab-objective">
+      <strong>Objectif</strong>
+      Déployer MySQL avec un StatefulSet. Vérifier que chaque pod a son propre volume persistant,
+      et que le DNS interne permet de les adresser individuellement.
+    </div>
+
+    <h4>Étape 1 — Créer le fichier mysql-statefulset.yaml</h4>
+    <div class="code-block">
+      <div class="code-topbar"><span class="code-label">yaml — mysql-statefulset.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+      <pre><code><span class="c"># ─── Headless Service (pas d'IP fixe, pour le DNS uniquement) ───</span>
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Service</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">mysql-headless</span>
+<span class="yk">spec</span>:
+  <span class="yk">clusterIP</span>: <span class="yv">None</span>            <span class="yc"># "None" = Headless Service</span>
+  <span class="yk">selector</span>:
+    <span class="yk">app</span>: <span class="yv">mysql</span>
+  <span class="yk">ports</span>:
+    - <span class="yk">port</span>: <span class="yn">3306</span>
+      <span class="yk">targetPort</span>: <span class="yn">3306</span>
+---
+<span class="c"># ─── Service ClusterIP pour les clients ───</span>
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Service</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">mysql</span>
+<span class="yk">spec</span>:
+  <span class="yk">selector</span>:
+    <span class="yk">app</span>: <span class="yv">mysql</span>
+  <span class="yk">ports</span>:
+    - <span class="yk">port</span>: <span class="yn">3306</span>
+---
+<span class="c"># ─── StatefulSet MySQL ───</span>
+<span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">StatefulSet</span>          <span class="yc"># Type StatefulSet, pas Deployment</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">mysql</span>
+<span class="yk">spec</span>:
+  <span class="yk">serviceName</span>: <span class="ys">"mysql-headless"</span>  <span class="yc"># Lié au Headless Service</span>
+  <span class="yk">replicas</span>: <span class="yn">2</span>
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>:
+      <span class="yk">app</span>: <span class="yv">mysql</span>
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>:
+        <span class="yk">app</span>: <span class="yv">mysql</span>
+    <span class="yk">spec</span>:
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">mysql</span>
+          <span class="yk">image</span>: <span class="yv">mysql:8.0</span>
+          <span class="yk">env</span>:
+            - <span class="yk">name</span>: <span class="yv">MYSQL_ROOT_PASSWORD</span>
+              <span class="yk">value</span>: <span class="ys">"TP_K8s_2024"</span>
+          <span class="yk">ports</span>:
+            - <span class="yk">containerPort</span>: <span class="yn">3306</span>
+              <span class="yk">name</span>: <span class="yv">mysql</span>
+          <span class="yk">volumeMounts</span>:
+            - <span class="yk">name</span>: <span class="yv">mysql-data</span>
+              <span class="yk">mountPath</span>: <span class="ys">/var/lib/mysql</span>
+  <span class="yk">volumeClaimTemplates</span>:          <span class="yc"># Template PVC : 1 PVC créé par Pod !</span>
+    - <span class="yk">metadata</span>:
+        <span class="yk">name</span>: <span class="yv">mysql-data</span>
+      <span class="yk">spec</span>:
+        <span class="yk">accessModes</span>: [<span class="yv">ReadWriteOnce</span>]
+        <span class="yk">resources</span>:
+          <span class="yk">requests</span>:
+            <span class="yk">storage</span>: <span class="ys">500Mi</span></code></pre>
+    </div>
+
+    <h4>Étape 2 — Déployer et observer</h4>
+    <div class="code-block">
+      <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+      <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f mysql-statefulset.yaml
+
+<span class="c"># Observer l'ordre de création : mysql-0 PUIS mysql-1</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pods -w
+<span class="c"># NAME      READY   STATUS              AGE</span>
+<span class="c"># mysql-0   0/1     ContainerCreating   5s</span>
+<span class="c"># mysql-0   1/1     Running             30s</span>
+<span class="c"># mysql-1   0/1     ContainerCreating   31s  ← démarre après mysql-0</span>
+<span class="c"># mysql-1   1/1     Running             60s</span>
+
+<span class="c"># Voir les PVCs créés automatiquement (1 par pod)</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pvc
+<span class="c"># NAME               STATUS   VOLUME         CAPACITY</span>
+<span class="c"># mysql-data-mysql-0 Bound    pvc-xxx-0      500Mi</span>
+<span class="c"># mysql-data-mysql-1 Bound    pvc-xxx-1      500Mi</span></code></pre>
+    </div>
+
+    <h4>Étape 3 — Tester le DNS stable</h4>
+    <div class="code-block">
+      <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+      <pre><code><span class="c"># Lancer un pod de test pour tester le DNS</span>
+<span class="p">$ </span><span class="k">kubectl</span> run -it dns-test --image=busybox --rm -- sh
+
+<span class="c"># Dans le pod busybox :</span>
+/ # nslookup mysql-0.mysql-headless
+<span class="ok"># Server:    10.96.0.10</span>
+<span class="ok"># Address 1: 10.244.1.5 mysql-0.mysql-headless.default.svc.cluster.local</span>
+
+/ # nslookup mysql-1.mysql-headless
+<span class="ok"># Address 1: 10.244.2.3 mysql-1.mysql-headless.default.svc.cluster.local</span>
+<span class="c"># Chaque pod a une adresse DNS unique et stable !</span>
+
+/ # exit</code></pre>
+    </div>
+
+    <h4>Étape 4 — Tester la persistance des données</h4>
+    <div class="code-block">
+      <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+      <pre><code><span class="c"># Se connecter à mysql-0 et créer une base de données</span>
+<span class="p">$ </span><span class="k">kubectl</span> exec -it mysql-0 -- mysql -u root -pTP_K8s_2024
+
+mysql> CREATE DATABASE ma_base_de_test;
+mysql> SHOW DATABASES;
+<span class="ok"># +--------------------+</span>
+<span class="ok"># | Database           |</span>
+<span class="ok"># | ma_base_de_test    |  ← notre base</span>
+<span class="ok"># +--------------------+</span>
+mysql> exit
+
+<span class="c"># Supprimer mysql-0 et vérifier que les données sont toujours là</span>
+<span class="p">$ </span><span class="k">kubectl</span> delete pod mysql-0
+<span class="c"># mysql-0 sera recréé automatiquement par le StatefulSet</span>
+
+<span class="p">$ </span><span class="k">kubectl</span> wait --for=condition=Ready pod/mysql-0 --timeout=120s
+
+<span class="p">$ </span><span class="k">kubectl</span> exec -it mysql-0 -- mysql -u root -pTP_K8s_2024 -e "SHOW DATABASES;"
+<span class="c"># ma_base_de_test est TOUJOURS là ! Le PVC a conservé les données.</span></code></pre>
+    </div>
+
+    <div class="verify">
+      <div class="verify-title">✅ Questions de compréhension</div>
+      <ol style="font-size:0.87rem;color:var(--text3);">
+        <li>Pourquoi <code>mysql-0.mysql-headless</code> fonctionne comme adresse, mais pas <code>mysql.mysql-headless</code> ?</li>
+        <li>Que se passe-t-il si tu supprimes le PVC <code>mysql-data-mysql-0</code> avant de supprimer le Pod ?</li>
+        <li>Pourquoi le StatefulSet crée les Pods dans l'ordre (0, puis 1) et pas simultanément ?</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     MODULE 2 : DAEMONSETS
+════════════════════════════════════════════ -->
+<section class="module" id="daemonsets">
+  <div class="module-header">
+    <span class="module-num purple">Module 03</span>
+    <h2>DaemonSets — Un Pod par Node</h2>
+  </div>
+
+  <p>
+    Un <strong>DaemonSet</strong> garantit qu'<strong>un Pod tourne sur chaque Node</strong> du cluster.
+    Quand un nouveau Node rejoint le cluster, le DaemonSet y déploie automatiquement son Pod.
+    Idéal pour les agents de monitoring, de logs ou de sécurité.
+  </p>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="cc-icon">📊</div>
+      <h4>Monitoring</h4>
+      <p>Node Exporter (Prometheus), Datadog Agent, New Relic</p>
+    </div>
+    <div class="concept-card">
+      <div class="cc-icon">📝</div>
+      <h4>Logging</h4>
+      <p>Fluentd, Filebeat, Fluent Bit — collecte les logs de chaque node</p>
+    </div>
+    <div class="concept-card">
+      <div class="cc-icon">🔒</div>
+      <h4>Sécurité</h4>
+      <p>Falco (détection intrusion), scanners de vulnérabilités</p>
+    </div>
+    <div class="concept-card">
+      <div class="cc-icon">🌐</div>
+      <h4>Réseau</h4>
+      <p>CNI plugins (Flannel, Calico), kube-proxy lui-même est un DaemonSet</p>
+    </div>
+  </div>
+
+  <div class="lab" id="lab-daemon">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">📝</span>
+        TP 3.1 — Collecteur de logs avec DaemonSet
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-med">Intermédiaire</span>
+        <span class="badge time">⏱ 25 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Déployer un agent Fluent Bit en DaemonSet pour collecter les logs de chaque node du cluster.
+        Vérifier qu'il tourne bien sur les 2 workers ET le master.
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — daemonset-fluentbit.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">DaemonSet</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">log-collector</span>
+  <span class="yk">namespace</span>: <span class="yv">kube-system</span>    <span class="yc"># Les agents tournent dans kube-system</span>
+<span class="yk">spec</span>:
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>:
+      <span class="yk">name</span>: <span class="yv">log-collector</span>
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>:
+        <span class="yk">name</span>: <span class="yv">log-collector</span>
+    <span class="yk">spec</span>:
+      <span class="yk">tolerations</span>:             <span class="yc"># Permettre de tourner sur le master</span>
+        - <span class="yk">key</span>: <span class="yv">node-role.kubernetes.io/control-plane</span>
+          <span class="yk">operator</span>: <span class="yv">Exists</span>
+          <span class="yk">effect</span>: <span class="yv">NoSchedule</span>
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">fluent-bit</span>
+          <span class="yk">image</span>: <span class="yv">fluent/fluent-bit:2.2</span>
+          <span class="yk">resources</span>:
+            <span class="yk">limits</span>:   { <span class="yk">memory</span>: <span class="ys">"100Mi"</span>, <span class="yk">cpu</span>: <span class="ys">"100m"</span> }
+            <span class="yk">requests</span>: { <span class="yk">memory</span>: <span class="ys">"50Mi"</span>,  <span class="yk">cpu</span>: <span class="ys">"50m"</span>  }
+          <span class="yk">volumeMounts</span>:
+            - <span class="yk">name</span>: <span class="yv">varlog</span>
+              <span class="yk">mountPath</span>: <span class="ys">/var/log</span>
+              <span class="yk">readOnly</span>: <span class="yv">true</span>
+            - <span class="yk">name</span>: <span class="yv">varlibdockercontainers</span>
+              <span class="yk">mountPath</span>: <span class="ys">/var/lib/docker/containers</span>
+              <span class="yk">readOnly</span>: <span class="yv">true</span>
+      <span class="yk">volumes</span>:
+        - <span class="yk">name</span>: <span class="yv">varlog</span>
+          <span class="yk">hostPath</span>:
+            <span class="yk">path</span>: <span class="ys">/var/log</span>         <span class="yc"># Monter le dossier RÉEL du node</span>
+        - <span class="yk">name</span>: <span class="yv">varlibdockercontainers</span>
+          <span class="yk">hostPath</span>:
+            <span class="yk">path</span>: <span class="ys">/var/lib/docker/containers</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f daemonset-fluentbit.yaml
+
+<span class="c"># Vérifier : 1 pod par node (3 nodes = 3 pods)</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pods -n kube-system -l name=log-collector -o wide
+<span class="c"># NAME                 READY  STATUS   NODE</span>
+<span class="ok"># log-collector-abc1   1/1    Running  k8s-master</span>
+<span class="ok"># log-collector-def2   1/1    Running  k8s-worker1</span>
+<span class="ok"># log-collector-ghi3   1/1    Running  k8s-worker2</span>
+
+<span class="c"># Ajouter un nouveau node → un nouveau pod apparaît automatiquement !</span>
+<span class="c"># Tester : noter les pods, puis relancer un worker et réobserver</span>
+
+<span class="c"># Voir les tolérances (pourquoi le pod tourne sur le master)</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pods -n kube-system log-collector-abc1 -o yaml | grep -A5 tolerations</code></pre>
+      </div>
+
+      <div class="callout info">
+        <div class="ci">📌</div>
+        <div class="cb">
+          <strong>Pourquoi les Tolerations ?</strong>
+          Par défaut, le master a une <em>taint</em> (contamination) <code>NoSchedule</code> qui empêche les Pods normaux d'y tourner.
+          Les Tolerations permettent d'ignorer cette restriction. Utile pour les agents système qui doivent tourner partout.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MODULE 3 : JOBS & CRONJOBS
+════════════════════════════════════════════ -->
+<section class="module" id="jobs">
+  <div class="module-header">
+    <span class="module-num red">Module 04</span>
+    <h2>Jobs & CronJobs — Tâches programmées</h2>
+  </div>
+
+  <p>
+    Un <strong>Job</strong> lance un Pod qui doit s'exécuter et se terminer avec succès.
+    Un <strong>CronJob</strong> lance des Jobs selon un planning (comme cron sous Linux).
+    Parfaits pour les sauvegardes, les rapports, le nettoyage de données.
+  </p>
+
+  <table>
+    <thead><tr><th>Type</th><th>Comportement</th><th>Cas d'usage</th></tr></thead>
+    <tbody>
+      <tr><td><code>Job</code></td><td>Lance 1 ou N Pods, attend qu'ils terminent avec succès</td><td>Migration de BDD, envoi de mails en masse, traitement batch</td></tr>
+      <tr><td><code>CronJob</code></td><td>Crée un Job selon un planning CRON</td><td>Sauvegardes nocturnes, rapports hebdo, nettoyage</td></tr>
+    </tbody>
+  </table>
+
+  <div class="lab" id="lab-jobs">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">⏰</span>
+        TP 4.1 — Backup automatique avec CronJob
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-easy">Facile</span>
+        <span class="badge time">⏱ 30 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Créer un Job de simulation de sauvegarde, puis un CronJob qui l'exécute toutes les minutes (pour les tests).
+        Observer la gestion de l'historique des Jobs.
+      </div>
+
+      <h4>Étape 1 — Job simple (exécution unique)</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — job-backup.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">batch/v1</span>
+<span class="yk">kind</span>: <span class="yv">Job</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">db-backup-manuel</span>
+<span class="yk">spec</span>:
+  <span class="yk">completions</span>: <span class="yn">1</span>          <span class="yc"># Nombre d'exécutions à succès requises</span>
+  <span class="yk">parallelism</span>: <span class="yn">1</span>          <span class="yc"># Pods parallèles maximum</span>
+  <span class="yk">backoffLimit</span>: <span class="yn">3</span>         <span class="yc"># Nombre de tentatives en cas d'échec</span>
+  <span class="yk">activeDeadlineSeconds</span>: <span class="yn">120</span>  <span class="yc"># Timeout global en secondes</span>
+  <span class="yk">template</span>:
+    <span class="yk">spec</span>:
+      <span class="yk">restartPolicy</span>: <span class="yv">OnFailure</span>  <span class="yc"># Never ou OnFailure (jamais Always pour un Job)</span>
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">backup</span>
+          <span class="yk">image</span>: <span class="yv">ubuntu:22.04</span>
+          <span class="yk">command</span>:
+            - <span class="ys">/bin/bash</span>
+            - <span class="ys">-c</span>
+            - |
+              echo "=== Démarrage sauvegarde $(date) ==="
+              echo "Simulation : compresse la base de données..."
+              sleep 10
+              echo "Simulation : upload vers /backups/dump-$(date +%Y%m%d).sql"
+              echo "=== Sauvegarde terminée avec succès ! ==="</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f job-backup.yaml
+
+<span class="c"># Suivre le job</span>
+<span class="p">$ </span><span class="k">kubectl</span> get jobs -w
+<span class="c"># NAME               COMPLETIONS   DURATION   AGE</span>
+<span class="c"># db-backup-manuel   0/1           5s         5s</span>
+<span class="ok"># db-backup-manuel   1/1           15s        15s  ← complété</span>
+
+<span class="c"># Voir les logs du Job (le pod s'appelle comme le job avec un suffix)</span>
+<span class="p">$ </span><span class="k">kubectl</span> logs -l job-name=db-backup-manuel
+<span class="c"># === Démarrage sauvegarde Thu Jan 18 10:30:00 UTC 2024 ===</span>
+<span class="c"># Simulation : compresse la base de données...</span>
+<span class="ok"># === Sauvegarde terminée avec succès ! ===</span></code></pre>
+      </div>
+
+      <h4>Étape 2 — CronJob (exécution planifiée)</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — cronjob-backup.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">batch/v1</span>
+<span class="yk">kind</span>: <span class="yv">CronJob</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">backup-nuit</span>
+<span class="yk">spec</span>:
+  <span class="yk">schedule</span>: <span class="ys">"*/2 * * * *"</span>        <span class="yc"># Toutes les 2 min (pour tester)</span>
+  <span class="c">  # Format : minute heure jour-du-mois mois jour-de-semaine</span>
+  <span class="c">  # Exemples :</span>
+  <span class="c">  # "0 2 * * *"     = tous les jours à 2h00</span>
+  <span class="c">  # "0 2 * * 0"     = tous les dimanches à 2h00</span>
+  <span class="c">  # "*/5 * * * *"   = toutes les 5 minutes</span>
+  <span class="yk">successfulJobsHistoryLimit</span>: <span class="yn">3</span>  <span class="yc"># Garder les 3 derniers jobs réussis</span>
+  <span class="yk">failedJobsHistoryLimit</span>: <span class="yn">1</span>      <span class="yc"># Garder le dernier job échoué</span>
+  <span class="yk">concurrencyPolicy</span>: <span class="yv">Forbid</span>     <span class="yc"># Ne pas lancer si le précédent tourne encore</span>
+  <span class="yk">jobTemplate</span>:
+    <span class="yk">spec</span>:
+      <span class="yk">template</span>:
+        <span class="yk">spec</span>:
+          <span class="yk">restartPolicy</span>: <span class="yv">OnFailure</span>
+          <span class="yk">containers</span>:
+            - <span class="yk">name</span>: <span class="yv">backup</span>
+              <span class="yk">image</span>: <span class="yv">ubuntu:22.04</span>
+              <span class="yk">command</span>:
+                - <span class="ys">/bin/bash</span>
+                - <span class="ys">-c</span>
+                - <span class="ys">"echo Backup $(date) terminé >> /tmp/backup.log && cat /tmp/backup.log"</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f cronjob-backup.yaml
+
+<span class="c"># Lister les CronJobs</span>
+<span class="p">$ </span><span class="k">kubectl</span> get cronjobs
+<span class="c"># NAME           SCHEDULE      SUSPEND  ACTIVE  LAST SCHEDULE</span>
+<span class="c"># backup-nuit    */2 * * * *   False    0       &lt;none&gt;</span>
+
+<span class="c"># Attendre 2-3 minutes et observer les Jobs créés automatiquement</span>
+<span class="p">$ </span><span class="k">kubectl</span> get jobs
+<span class="c"># NAME                    COMPLETIONS</span>
+<span class="ok"># backup-nuit-28435220    1/1</span>
+<span class="ok"># backup-nuit-28435222    1/1</span>
+<span class="ok"># backup-nuit-28435224    1/1  ← max 3 gardés</span>
+
+<span class="c"># Forcer l'exécution immédiate (sans attendre le prochain cron)</span>
+<span class="p">$ </span><span class="k">kubectl</span> create job backup-force --from=cronjob/backup-nuit
+
+<span class="c"># Suspendre le CronJob (pause)</span>
+<span class="p">$ </span><span class="k">kubectl</span> patch cronjob backup-nuit -p <span class="s">'{"spec":{"suspend":true}}'</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MODULE 4 : HPA
+════════════════════════════════════════════ -->
+<section class="module" id="hpa">
+  <div class="module-header">
+    <span class="module-num yellow">Module 05</span>
+    <h2>Horizontal Pod Autoscaler (HPA)</h2>
+  </div>
+
+  <p>
+    Le <strong>HPA</strong> observe les métriques de tes Pods (CPU, RAM, métriques custom)
+    et <strong>ajuste automatiquement le nombre de réplicas</strong> pour absorber la charge.
+    Quand la charge diminue, il réduit le nombre de Pods pour économiser les ressources.
+  </p>
+
+  <div class="diagram">
+    <div class="dtitle">─── FONCTIONNEMENT DU HPA ───</div>
+    <pre><code>   Charge faible                    Pic de trafic
+   CPU : 10%                        CPU : 85%
+   replicas : 2                     replicas : 2
+        │                                │
+        │          HPA surveille         │
+        ▼                                ▼
+   [Pod 1][Pod 2]             [Pod 1][Pod 2]
+                                        │
+                              HPA : CPU > 70% → scale up !
+                                        │
+                                        ▼
+                         [Pod 1][Pod 2][Pod 3][Pod 4][Pod 5]
+
+   Plus tard, charge baisse...
+   HPA : CPU &lt; 50% pendant 5min → scale down
+        ▼
+   [Pod 1][Pod 2][Pod 3]</code></pre>
+  </div>
+
+  <div class="callout warn">
+    <div class="ci">⚠️</div>
+    <div class="cb">
+      <strong>Prérequis : metrics-server</strong>
+      Le HPA a besoin du <code>metrics-server</code> pour lire le CPU/RAM des Pods.
+      Sans lui, <code>kubectl top pods</code> ne fonctionne pas et le HPA reste inactif.
+    </div>
+  </div>
+
+  <div class="lab" id="lab-hpa">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">📈</span>
+        TP 5.1 — Stress test et HPA en action
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-hard">Avancé</span>
+        <span class="badge time">⏱ 50 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Installer metrics-server, déployer une application, configurer le HPA avec un seuil CPU,
+        puis générer de la charge artificielle pour observer le scaling automatique en temps réel.
+      </div>
+
+      <h4>Étape 1 — Installer metrics-server</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Télécharger et installer metrics-server</span>
+<span class="p">$ </span><span class="k">kubectl</span> apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+<span class="c"># IMPORTANT pour VirtualBox : ajouter --kubelet-insecure-tls</span>
+<span class="c"># car les certificats des VMs ne sont pas signés pour leur IP</span>
+<span class="p">$ </span><span class="k">kubectl</span> patch deployment metrics-server -n kube-system \
+  --type=json \
+  -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+
+<span class="c"># Attendre que metrics-server soit prêt</span>
+<span class="p">$ </span><span class="k">kubectl</span> rollout status deployment/metrics-server -n kube-system
+
+<span class="c"># Vérifier que ça fonctionne</span>
+<span class="p">$ </span><span class="k">kubectl</span> top nodes
+<span class="c"># NAME           CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%</span>
+<span class="ok"># k8s-master     220m         11%    1024Mi          51%</span>
+<span class="ok"># k8s-worker1    85m          4%     512Mi           26%</span></code></pre>
+      </div>
+
+      <h4>Étape 2 — App PHP de test (calcul CPU intensif)</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — hpa-demo.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">Deployment</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">php-apache</span>
+<span class="yk">spec</span>:
+  <span class="yk">replicas</span>: <span class="yn">1</span>
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>: { <span class="yk">app</span>: <span class="yv">php-apache</span> }
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">php-apache</span> }
+    <span class="yk">spec</span>:
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">php-apache</span>
+          <span class="yk">image</span>: <span class="yv">registry.k8s.io/hpa-example</span>   <span class="yc"># Image officielle de test HPA</span>
+          <span class="yk">ports</span>: [{ <span class="yk">containerPort</span>: <span class="yn">80</span> }]
+          <span class="yk">resources</span>:
+            <span class="yk">requests</span>:
+              <span class="yk">cpu</span>: <span class="ys">"200m"</span>    <span class="yc"># Base : 200 millicores</span>
+            <span class="yk">limits</span>:
+              <span class="yk">cpu</span>: <span class="ys">"500m"</span>
+---
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Service</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">php-apache</span>
+<span class="yk">spec</span>:
+  <span class="yk">selector</span>: { <span class="yk">app</span>: <span class="yv">php-apache</span> }
+  <span class="yk">ports</span>: [{ <span class="yk">port</span>: <span class="yn">80</span> }]</code></pre>
+      </div>
+
+      <h4>Étape 3 — Créer le HPA</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — hpa.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">autoscaling/v2</span>
+<span class="yk">kind</span>: <span class="yv">HorizontalPodAutoscaler</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">php-apache-hpa</span>
+<span class="yk">spec</span>:
+  <span class="yk">scaleTargetRef</span>:
+    <span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+    <span class="yk">kind</span>: <span class="yv">Deployment</span>
+    <span class="yk">name</span>: <span class="yv">php-apache</span>         <span class="yc"># Le Deployment à scaler</span>
+  <span class="yk">minReplicas</span>: <span class="yn">1</span>             <span class="yc"># Jamais en dessous de 1</span>
+  <span class="yk">maxReplicas</span>: <span class="yn">8</span>             <span class="yc"># Jamais au-dessus de 8</span>
+  <span class="yk">metrics</span>:
+    - <span class="yk">type</span>: <span class="yv">Resource</span>
+      <span class="yk">resource</span>:
+        <span class="yk">name</span>: <span class="yv">cpu</span>
+        <span class="yk">target</span>:
+          <span class="yk">type</span>: <span class="yv">Utilization</span>
+          <span class="yk">averageUtilization</span>: <span class="yn">50</span>  <span class="yc"># Scaler si CPU > 50% de la request</span></code></pre>
+      </div>
+
+      <h4>Étape 4 — Générer de la charge et observer</h4>
+      <p>Ouvre <strong>deux terminaux simultanément</strong> :</p>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Terminal 1 : Observer le HPA</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f hpa-demo.yaml
+<span class="p">$ </span><span class="k">kubectl</span> apply -f hpa.yaml
+
+<span class="c"># Surveiller le HPA (rafraîchit toutes les 5s)</span>
+<span class="p">$ </span><span class="k">watch</span> kubectl get hpa php-apache-hpa
+<span class="c"># NAME             REFERENCE         TARGETS   MINPODS  MAXPODS  REPLICAS</span>
+<span class="c"># php-apache-hpa   Deployment/php    0%/50%    1        8        1</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Terminal 2 : Générer la charge</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Lancer une boucle infinie de requêtes HTTP</span>
+<span class="p">$ </span><span class="k">kubectl</span> run -it load-gen --image=busybox --rm -- \
+    /bin/sh -c "while true; do wget -q -O- http://php-apache; done"
+
+<span class="c"># Dans le terminal 1, tu verras :</span>
+<span class="c"># TARGETS : 0%/50% → 75%/50% → 125%/50%</span>
+<span class="c"># REPLICAS : 1 → 2 → 4 → 6 (scaling UP automatique !)</span>
+
+<span class="c"># Arrêter la charge (Ctrl+C dans le terminal 2)</span>
+<span class="c"># Après quelques minutes :</span>
+<span class="c"># REPLICAS : 6 → 3 → 1 (scaling DOWN automatique !)</span></code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="ci">📊</div>
+        <div class="cb">
+          <strong>Comprendre le calcul du HPA</strong>
+          <br>Formule : <code>replicas_désiré = ceil(replicas_actuel × (CPU_actuel / CPU_cible))</code>
+          <br>Exemple : 2 pods, CPU à 150%, cible 50% → <code>ceil(2 × 150/50) = 6 pods</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MODULE 5 : PROBES
+════════════════════════════════════════════ -->
+<section class="module" id="probes">
+  <div class="module-header">
+    <span class="module-num">Module 06</span>
+    <h2>Health Checks — Liveness, Readiness & Startup Probes</h2>
+  </div>
+
+  <p>
+    Les Probes sont des mécanismes de vérification de santé que Kubernetes effectue régulièrement.
+    Elles permettent à K8s de savoir si ton application est vivante, prête à recevoir du trafic, et si elle a correctement démarré.
+  </p>
+
+  <table>
+    <thead><tr><th>Probe</th><th>Question posée</th><th>Action si échec</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>livenessProbe</strong></td>
+        <td>L'application est-elle encore vivante ?</td>
+        <td>Redémarre le conteneur (<code>CrashLoopBackOff</code>)</td>
+      </tr>
+      <tr>
+        <td><strong>readinessProbe</strong></td>
+        <td>L'application est-elle prête à recevoir du trafic ?</td>
+        <td>Retire le Pod du Service (plus de trafic vers lui)</td>
+      </tr>
+      <tr>
+        <td><strong>startupProbe</strong></td>
+        <td>L'application a-t-elle fini son démarrage ?</td>
+        <td>Désactive les autres probes tant que pas prête</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="lab" id="lab-probes">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">❤️</span>
+        TP 6.1 — Implémenter les 3 types de Probes
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-med">Intermédiaire</span>
+        <span class="badge time">⏱ 35 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Déployer une application avec les 3 types de probes configurées. Simuler une panne
+        et observer comment Kubernetes réagit différemment selon la probe qui échoue.
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — app-with-probes.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">Deployment</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">app-probes</span>
+<span class="yk">spec</span>:
+  <span class="yk">replicas</span>: <span class="yn">2</span>
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>: { <span class="yk">app</span>: <span class="yv">app-probes</span> }
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">app-probes</span> }
+    <span class="yk">spec</span>:
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">nginx</span>
+          <span class="yk">image</span>: <span class="yv">nginx:1.25</span>
+          <span class="yk">ports</span>: [{ <span class="yk">containerPort</span>: <span class="yn">80</span> }]
+
+          <span class="yc"># ── Startup Probe : délai de démarrage ──</span>
+          <span class="yk">startupProbe</span>:
+            <span class="yk">httpGet</span>:
+              <span class="yk">path</span>: <span class="ys">/</span>
+              <span class="yk">port</span>: <span class="yn">80</span>
+            <span class="yk">failureThreshold</span>: <span class="yn">30</span>    <span class="yc"># 30 essais max (30 × 10s = 5min de délai)</span>
+            <span class="yk">periodSeconds</span>: <span class="yn">10</span>
+
+          <span class="yc"># ── Liveness Probe : est-il encore vivant ? ──</span>
+          <span class="yk">livenessProbe</span>:
+            <span class="yk">httpGet</span>:
+              <span class="yk">path</span>: <span class="ys">/</span>         <span class="yc"># Vérification HTTP GET sur /</span>
+              <span class="yk">port</span>: <span class="yn">80</span>
+            <span class="yk">initialDelaySeconds</span>: <span class="yn">15</span>  <span class="yc"># Attendre 15s avant de commencer</span>
+            <span class="yk">periodSeconds</span>: <span class="yn">10</span>        <span class="yc"># Vérifier toutes les 10s</span>
+            <span class="yk">failureThreshold</span>: <span class="yn">3</span>       <span class="yc"># Redémarrer après 3 échecs consécutifs</span>
+            <span class="yk">timeoutSeconds</span>: <span class="yn">5</span>        <span class="yc"># Timeout de 5s par sonde</span>
+
+          <span class="yc"># ── Readiness Probe : est-il prêt pour le trafic ? ──</span>
+          <span class="yk">readinessProbe</span>:
+            <span class="yk">httpGet</span>:
+              <span class="yk">path</span>: <span class="ys">/ready</span>      <span class="yc"># Endpoint dédié (ici 404 = pas prêt)</span>
+              <span class="yk">port</span>: <span class="yn">80</span>
+            <span class="yk">initialDelaySeconds</span>: <span class="yn">5</span>
+            <span class="yk">periodSeconds</span>: <span class="yn">5</span>
+            <span class="yk">failureThreshold</span>: <span class="yn">3</span></code></pre>
+      </div>
+
+      <h4>Simuler des pannes pour observer les comportements</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Scénario 1 : Liveness Probe échoue</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f app-with-probes.yaml
+
+<span class="c"># Obtenir le nom d'un pod</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pods
+<span class="c"># app-probes-7dc9f-xxxxx</span>
+
+<span class="c"># Entrer dans le pod et supprimer le fichier index.html</span>
+<span class="c"># → La liveness probe va échouer → Kubernetes redémarre le conteneur</span>
+<span class="p">$ </span><span class="k">kubectl</span> exec -it app-probes-7dc9f-xxxxx -- rm /usr/share/nginx/html/index.html
+
+<span class="c"># Observer les RESTARTs augmenter</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pods -w
+<span class="c"># NAME                  READY  RESTARTS</span>
+<span class="c"># app-probes-7dc9f-xxx  1/1    0</span>
+<span class="c"># app-probes-7dc9f-xxx  0/1    0   ← probe échoue</span>
+<span class="ok"># app-probes-7dc9f-xxx  1/1    1   ← redémarré !</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Scénario 2 : Readiness Probe échoue</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Voir l'état READY (0/1 = pas de trafic mais pod vivant)</span>
+<span class="p">$ </span><span class="k">kubectl</span> describe pod app-probes-7dc9f-xxxxx | grep -A10 Conditions
+<span class="c"># Ready       False  → Pod retiré des endpoints du Service</span>
+<span class="c"># Initialized True</span>
+
+<span class="c"># Vérifier les endpoints du Service</span>
+<span class="p">$ </span><span class="k">kubectl</span> get endpoints
+<span class="c"># NAME         ENDPOINTS</span>
+<span class="c"># app-probes   10.244.1.5:80  ← seulement le pod prêt apparaît</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MODULE 6 : NETWORK POLICIES
+════════════════════════════════════════════ -->
+<section class="module" id="network-policies">
+  <div class="module-header">
+    <span class="module-num purple">Module 08</span>
+    <h2>NetworkPolicies — Firewall entre Pods</h2>
+  </div>
+
+  <p>
+    Par défaut, dans un cluster Kubernetes, <strong>tous les Pods peuvent communiquer avec tous les Pods</strong>,
+    quel que soit le namespace. Les <strong>NetworkPolicies</strong> ajoutent des règles de filtrage réseau,
+    comme un firewall iptables entre tes microservices.
+  </p>
+
+  <div class="callout warn">
+    <div class="ci">⚠️</div>
+    <div class="cb">
+      <strong>Prérequis : CNI compatible NetworkPolicy</strong>
+      Flannel (utilisé dans ce cours) ne supporte pas les NetworkPolicies nativement.
+      Pour ce TP, installe <strong>Calico</strong> (à la place de Flannel) ou ajoute le plugin <strong>Canal</strong>.
+      <br><br>
+      Remplacer Flannel par Calico :<br>
+      <code>kubectl delete -f kube-flannel.yml</code><br>
+      <code>kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml</code>
+    </div>
+  </div>
+
+  <div class="lab" id="lab-netpol">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">🔒</span>
+        TP 8.1 — Isoler les namespaces avec NetworkPolicy
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-hard">Avancé</span>
+        <span class="badge time">⏱ 45 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Créer une architecture à 3 tiers (frontend, backend, database) avec des règles réseau :
+        le frontend ne peut parler qu'au backend, le backend ne peut parler qu'à la base de données.
+        Vérifier que le frontend ne peut pas accéder directement à la DB.
+      </div>
+
+      <div class="netmap">
+┌──────────────────────────────────────────────────────────┐
+│                     RÈGLES RÉSEAU                        │
+│                                                          │
+│  [Frontend Pod]  →  [Backend Pod]  →  [DB Pod]           │
+│       ✅ autorisé      ✅ autorisé                        │
+│                                                          │
+│  [Frontend Pod]  →──────────────────→  [DB Pod]          │
+│       ❌ BLOQUÉ par NetworkPolicy                        │
+│                                                          │
+│  Internet  →  [Frontend Pod]                             │
+│       ✅ autorisé                                        │
+└──────────────────────────────────────────────────────────┘
+      </div>
+
+      <h4>Étape 1 — Créer les namespaces et les pods de test</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — ns-setup.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Namespace frontend</span>
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Namespace</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">frontend</span>
+  <span class="yk">labels</span>: { <span class="yk">tier</span>: <span class="yv">frontend</span> }
+---
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Namespace</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">backend</span>
+  <span class="yk">labels</span>: { <span class="yk">tier</span>: <span class="yv">backend</span> }
+---
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Namespace</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">database</span>
+  <span class="yk">labels</span>: { <span class="yk">tier</span>: <span class="yv">database</span> }
+---
+<span class="c"># Pods de simulation (nginx simple)</span>
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Pod</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">frontend-pod</span>
+  <span class="yk">namespace</span>: <span class="yv">frontend</span>
+  <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">frontend</span> }
+<span class="yk">spec</span>:
+  <span class="yk">containers</span>: [{ <span class="yk">name</span>: <span class="yv">nginx</span>, <span class="yk">image</span>: <span class="yv">nginx</span> }]
+---
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Pod</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">backend-pod</span>
+  <span class="yk">namespace</span>: <span class="yv">backend</span>
+  <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">backend</span> }
+<span class="yk">spec</span>:
+  <span class="yk">containers</span>: [{ <span class="yk">name</span>: <span class="yv">nginx</span>, <span class="yk">image</span>: <span class="yv">nginx</span> }]
+---
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Pod</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">db-pod</span>
+  <span class="yk">namespace</span>: <span class="yv">database</span>
+  <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">db</span> }
+<span class="yk">spec</span>:
+  <span class="yk">containers</span>: [{ <span class="yk">name</span>: <span class="yv">nginx</span>, <span class="yk">image</span>: <span class="yv">nginx</span> }]</code></pre>
+      </div>
+
+      <h4>Étape 2 — Tester la communication AVANT les NetworkPolicies</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f ns-setup.yaml
+
+<span class="c"># Obtenir les IPs des pods</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pods -A -o wide
+<span class="c"># frontend-pod  10.244.1.10</span>
+<span class="c"># backend-pod   10.244.2.10</span>
+<span class="c"># db-pod        10.244.1.11</span>
+
+<span class="c"># Tester depuis frontend vers DB (doit marcher SANS policies)</span>
+<span class="p">$ </span><span class="k">kubectl</span> exec -n frontend frontend-pod -- curl -s http://10.244.1.11 | head -3
+<span class="ok"># &lt;!DOCTYPE html&gt;  ← ça marche ! (normal, pas encore de policy)</span></code></pre>
+      </div>
+
+      <h4>Étape 3 — Appliquer les NetworkPolicies</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — netpol-database.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Politique : la DB n'accepte que le trafic du backend</span>
+<span class="yk">apiVersion</span>: <span class="yv">networking.k8s.io/v1</span>
+<span class="yk">kind</span>: <span class="yv">NetworkPolicy</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">db-only-from-backend</span>
+  <span class="yk">namespace</span>: <span class="yv">database</span>
+<span class="yk">spec</span>:
+  <span class="yk">podSelector</span>:                   <span class="yc"># S'applique aux pods avec app=db</span>
+    <span class="yk">matchLabels</span>: { <span class="yk">app</span>: <span class="yv">db</span> }
+  <span class="yk">policyTypes</span>: [<span class="yv">Ingress</span>]         <span class="yc"># Règle sur le trafic entrant</span>
+  <span class="yk">ingress</span>:
+    - <span class="yk">from</span>:
+        - <span class="yk">namespaceSelector</span>:      <span class="yc"># Seulement depuis le namespace backend</span>
+            <span class="yk">matchLabels</span>:
+              <span class="yk">tier</span>: <span class="yv">backend</span>
+          <span class="yk">podSelector</span>:            <span class="yc"># ET seulement les pods app=backend</span>
+            <span class="yk">matchLabels</span>:
+              <span class="yk">app</span>: <span class="yv">backend</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Tester APRÈS les NetworkPolicies</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f netpol-database.yaml
+
+<span class="c"># Test 1 : Frontend → DB (doit être BLOQUÉ)</span>
+<span class="p">$ </span><span class="k">kubectl</span> exec -n frontend frontend-pod -- curl -s --max-time 3 http://10.244.1.11
+<span class="err"># curl: (28) Operation timed out ← BLOQUÉ ! ✅</span>
+
+<span class="c"># Test 2 : Backend → DB (doit fonctionner)</span>
+<span class="p">$ </span><span class="k">kubectl</span> exec -n backend backend-pod -- curl -s http://10.244.1.11 | head -3
+<span class="ok"># &lt;!DOCTYPE html&gt; ← autorisé ✅</span>
+
+<span class="c"># Voir les policies actives</span>
+<span class="p">$ </span><span class="k">kubectl</span> get networkpolicies -A</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MODULE 7 : HELM
+════════════════════════════════════════════ -->
+<section class="module" id="helm">
+  <div class="module-header">
+    <span class="module-num yellow">Module 10</span>
+    <h2>Helm — Le gestionnaire de paquets Kubernetes</h2>
+  </div>
+
+  <p>
+    <strong>Helm</strong> est à Kubernetes ce qu'APT est à Ubuntu.
+    Il permet de packager, distribuer et installer des applications Kubernetes complexes
+    en une seule commande. Un <em>Chart Helm</em> est un ensemble de fichiers YAML
+    avec des variables, des conditions et des boucles.
+  </p>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="cc-icon">📦</div>
+      <h4>Chart</h4>
+      <p>Package Helm. Contient tous les YAML de l'application + un fichier de valeurs.</p>
+    </div>
+    <div class="concept-card">
+      <div class="cc-icon">🚀</div>
+      <h4>Release</h4>
+      <p>Une instance installée d'un Chart. Tu peux installer le même Chart plusieurs fois (prod, staging).</p>
+    </div>
+    <div class="concept-card">
+      <div class="cc-icon">🗂️</div>
+      <h4>Repository</h4>
+      <p>Dépôt de Charts. Comme Docker Hub pour les images. ArtifactHub.io est le principal.</p>
+    </div>
+    <div class="concept-card">
+      <div class="cc-icon">⚙️</div>
+      <h4>Values</h4>
+      <p>Variables de configuration du Chart. Tu les surcharges pour personnaliser le déploiement.</p>
+    </div>
+  </div>
+
+  <div class="lab" id="lab-helm">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">🎩</span>
+        TP 10.1 — Installer Helm et déployer des applications
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-easy">Facile</span>
+        <span class="badge time">⏱ 40 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Installer Helm, déployer Nginx et une stack de monitoring via des Charts publics,
+        puis personnaliser les déploiements avec un fichier de valeurs.
+      </div>
+
+      <h4>Étape 1 — Installer Helm</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Script d'installation officiel</span>
+<span class="p">$ </span><span class="k">curl</span> https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+<span class="c"># Vérifier l'installation</span>
+<span class="p">$ </span><span class="k">helm</span> version
+<span class="ok"># version.BuildInfo{Version:"v3.14.x", ...}</span>
+
+<span class="c"># Autocomplétion (facultatif mais pratique)</span>
+<span class="p">$ </span>echo <span class="s">'source &lt;(helm completion bash)'</span> >> ~/.bashrc && source ~/.bashrc</code></pre>
+      </div>
+
+      <h4>Étape 2 — Ajouter des dépôts et explorer</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Ajouter le dépôt Bitnami (très populaire)</span>
+<span class="p">$ </span><span class="k">helm</span> repo add bitnami https://charts.bitnami.com/bitnami
+<span class="p">$ </span><span class="k">helm</span> repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+<span class="p">$ </span><span class="k">helm</span> repo update     <span class="c"># Mettre à jour les index</span>
+
+<span class="c"># Rechercher un chart</span>
+<span class="p">$ </span><span class="k">helm</span> search repo bitnami/wordpress
+<span class="p">$ </span><span class="k">helm</span> search repo bitnami/mysql
+
+<span class="c"># Voir toutes les valeurs configurables d'un chart</span>
+<span class="p">$ </span><span class="k">helm</span> show values bitnami/nginx | head -50</code></pre>
+      </div>
+
+      <h4>Étape 3 — Installer Nginx avec Helm</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Installation simple</span>
+<span class="p">$ </span><span class="k">helm</span> install mon-nginx bitnami/nginx
+
+<span class="c"># Installation avec valeurs personnalisées (inline)</span>
+<span class="p">$ </span><span class="k">helm</span> install mon-nginx bitnami/nginx \
+    --set replicaCount=3 \
+    --set service.type=NodePort \
+    --set service.nodePorts.http=30081 \
+    --namespace nginx-demo \
+    --create-namespace
+
+<span class="c"># Lister les releases installées</span>
+<span class="p">$ </span><span class="k">helm</span> list -A
+<span class="c"># NAME        NAMESPACE   REVISION  STATUS    CHART</span>
+<span class="ok"># mon-nginx   nginx-demo  1         deployed  nginx-13.x.x</span>
+
+<span class="c"># Voir ce que Helm a créé</span>
+<span class="p">$ </span><span class="k">kubectl</span> get all -n nginx-demo</code></pre>
+      </div>
+
+      <h4>Étape 4 — Fichier de valeurs (bonne pratique)</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — nginx-values.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yc"># Surcharger les valeurs par défaut du chart bitnami/nginx</span>
+<span class="yk">replicaCount</span>: <span class="yn">2</span>
+
+<span class="yk">image</span>:
+  <span class="yk">tag</span>: <span class="ys">"1.25"</span>
+
+<span class="yk">service</span>:
+  <span class="yk">type</span>: <span class="yv">NodePort</span>
+  <span class="yk">nodePorts</span>:
+    <span class="yk">http</span>: <span class="yn">30082</span>
+
+<span class="yk">resources</span>:
+  <span class="yk">requests</span>:
+    <span class="yk">cpu</span>: <span class="ys">"50m"</span>
+    <span class="yk">memory</span>: <span class="ys">"64Mi"</span>
+  <span class="yk">limits</span>:
+    <span class="yk">cpu</span>: <span class="ys">"200m"</span>
+    <span class="yk">memory</span>: <span class="ys">"128Mi"</span>
+
+<span class="yk">autoscaling</span>:
+  <span class="yk">enabled</span>: <span class="yv">true</span>
+  <span class="yk">minReplicas</span>: <span class="yn">1</span>
+  <span class="yk">maxReplicas</span>: <span class="yn">5</span>
+  <span class="yk">targetCPUUtilizationPercentage</span>: <span class="yn">70</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Installer avec le fichier de valeurs</span>
+<span class="p">$ </span><span class="k">helm</span> install nginx-prod bitnami/nginx -f nginx-values.yaml
+
+<span class="c"># Mettre à jour une release existante</span>
+<span class="p">$ </span><span class="k">helm</span> upgrade mon-nginx bitnami/nginx -f nginx-values.yaml
+
+<span class="c"># Rollback vers la version précédente</span>
+<span class="p">$ </span><span class="k">helm</span> rollback mon-nginx 1   <span class="c"># Revenir à la révision 1</span>
+
+<span class="c"># Désinstaller</span>
+<span class="p">$ </span><span class="k">helm</span> uninstall mon-nginx</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="lab" id="helm-chart">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">🛠️</span>
+        TP 10.2 — Créer son propre Chart Helm
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-hard">Avancé</span>
+        <span class="badge time">⏱ 60 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Créer un Chart Helm pour packager ton application web, avec des valeurs configurables
+        pour le nombre de réplicas, l'image Docker, et le port exposé.
+      </div>
+
+      <h4>Structure d'un Chart Helm</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Créer la structure</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Helm génère la structure complète automatiquement</span>
+<span class="p">$ </span><span class="k">helm</span> create mon-app
+
+<span class="c"># Structure créée :</span>
+<span class="c"># mon-app/</span>
+<span class="c"># ├── Chart.yaml          ← Métadonnées du Chart</span>
+<span class="c"># ├── values.yaml         ← Valeurs par défaut</span>
+<span class="c"># ├── templates/          ← Templates YAML (Go templating)</span>
+<span class="c"># │   ├── deployment.yaml</span>
+<span class="c"># │   ├── service.yaml</span>
+<span class="c"># │   ├── ingress.yaml</span>
+<span class="c"># │   └── _helpers.tpl    ← Fonctions réutilisables</span>
+<span class="c"># └── charts/             ← Dépendances (sous-charts)</span></code></pre>
+      </div>
+
+      <h4>Personnaliser Chart.yaml</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — mon-app/Chart.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">v2</span>
+<span class="yk">name</span>: <span class="yv">mon-app</span>
+<span class="yk">description</span>: <span class="ys">Mon application web Kubernetes</span>
+<span class="yk">type</span>: <span class="yv">application</span>
+<span class="yk">version</span>: <span class="ys">0.1.0</span>           <span class="yc"># Version du Chart lui-même</span>
+<span class="yk">appVersion</span>: <span class="ys">"1.0.0"</span>      <span class="yc"># Version de l'application emballée</span></code></pre>
+      </div>
+
+      <h4>Configurer values.yaml</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — mon-app/values.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yc"># ── Valeurs par défaut de mon chart ──</span>
+<span class="yk">replicaCount</span>: <span class="yn">2</span>
+
+<span class="yk">image</span>:
+  <span class="yk">repository</span>: <span class="yv">nginx</span>
+  <span class="yk">tag</span>: <span class="ys">"1.25"</span>
+  <span class="yk">pullPolicy</span>: <span class="yv">IfNotPresent</span>
+
+<span class="yk">service</span>:
+  <span class="yk">type</span>: <span class="yv">NodePort</span>
+  <span class="yk">port</span>: <span class="yn">80</span>
+  <span class="yk">nodePort</span>: <span class="yn">30083</span>
+
+<span class="yk">env</span>:
+  <span class="yk">APP_ENV</span>: <span class="ys">production</span>
+  <span class="yk">LOG_LEVEL</span>: <span class="ys">info</span>
+
+<span class="yk">resources</span>:
+  <span class="yk">requests</span>: { <span class="yk">cpu</span>: <span class="ys">"100m"</span>, <span class="yk">memory</span>: <span class="ys">"128Mi"</span> }
+  <span class="yk">limits</span>:   { <span class="yk">cpu</span>: <span class="ys">"500m"</span>, <span class="yk">memory</span>: <span class="ys">"256Mi"</span> }
+
+<span class="yk">autoscaling</span>:
+  <span class="yk">enabled</span>: <span class="yv">false</span>
+  <span class="yk">minReplicas</span>: <span class="yn">1</span>
+  <span class="yk">maxReplicas</span>: <span class="yn">10</span></code></pre>
+      </div>
+
+      <h4>Template du Deployment avec Go templating</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — mon-app/templates/deployment.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">Deployment</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: {{ <span class="yv">.Release.Name</span> }}-app   <span class="yc"># Nom de la release Helm</span>
+  <span class="yk">labels</span>:
+    <span class="yk">app</span>: {{ <span class="yv">.Release.Name</span> }}
+    <span class="yk">chart</span>: {{ <span class="yv">.Chart.Name</span> }}-{{ <span class="yv">.Chart.Version</span> }}
+<span class="yk">spec</span>:
+  <span class="yk">replicas</span>: {{ <span class="yv">.Values.replicaCount</span> }}    <span class="yc"># Valeur depuis values.yaml</span>
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>:
+      <span class="yk">app</span>: {{ <span class="yv">.Release.Name</span> }}
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>:
+        <span class="yk">app</span>: {{ <span class="yv">.Release.Name</span> }}
+    <span class="yk">spec</span>:
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">app</span>
+          <span class="yk">image</span>: <span class="ys">"{{ .Values.image.repository }}:{{ .Values.image.tag }}"</span>
+          <span class="yk">imagePullPolicy</span>: {{ <span class="yv">.Values.image.pullPolicy</span> }}
+          <span class="yk">ports</span>:
+            - <span class="yk">containerPort</span>: {{ <span class="yv">.Values.service.port</span> }}
+          <span class="yk">env</span>:
+          {{- range $key, $value := .Values.env }}
+            - <span class="yk">name</span>: {{ <span class="yv">$key</span> }}
+              <span class="yk">value</span>: {{ <span class="yv">$value | quote</span> }}
+          {{- end }}
+          <span class="yk">resources</span>:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.autoscaling.enabled }}
+          <span class="c"># HPA géré séparément si activé</span>
+          {{- end }}</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Tester et installer le Chart</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Vérifier la syntaxe du chart</span>
+<span class="p">$ </span><span class="k">helm</span> lint mon-app/
+<span class="ok"># ==> Linting mon-app/</span>
+<span class="ok"># [INFO] Chart.yaml: icon is recommended</span>
+<span class="ok"># 1 chart(s) linted, 0 chart(s) failed</span>
+
+<span class="c"># Voir le YAML qui sera généré (sans installer)</span>
+<span class="p">$ </span><span class="k">helm</span> template test-release mon-app/ --set replicaCount=4
+
+<span class="c"># Installer en prod avec des valeurs overridées</span>
+<span class="p">$ </span><span class="k">helm</span> install prod-release mon-app/ \
+    --set replicaCount=3 \
+    --set image.repository=apache \
+    --set image.tag=latest \
+    -n production --create-namespace
+
+<span class="c"># Installer en staging avec moins de réplicas</span>
+<span class="p">$ </span><span class="k">helm</span> install staging-release mon-app/ \
+    --set replicaCount=1 \
+    -n staging --create-namespace</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MODULE 8 : RBAC
+════════════════════════════════════════════ -->
+<section class="module" id="rbac">
+  <div class="module-header">
+    <span class="module-num red">Module 13</span>
+    <h2>RBAC — Contrôle d'accès basé sur les rôles</h2>
+  </div>
+
+  <p>
+    <strong>RBAC</strong> (Role-Based Access Control) permet de définir précisément 
+    <em>qui</em> peut faire <em>quoi</em> sur <em>quelles ressources</em> du cluster.
+    Indispensable pour les équipes multi-développeurs et la sécurité en production.
+  </p>
+
+  <table>
+    <thead><tr><th>Objet</th><th>Portée</th><th>Rôle</th></tr></thead>
+    <tbody>
+      <tr><td><code>Role</code></td><td>Namespace spécifique</td><td>Définit des permissions dans un namespace</td></tr>
+      <tr><td><code>ClusterRole</code></td><td>Cluster entier</td><td>Permissions sur toutes les ressources ou non-namespacées (Nodes)</td></tr>
+      <tr><td><code>RoleBinding</code></td><td>Namespace spécifique</td><td>Assigne un Role à un utilisateur/groupe</td></tr>
+      <tr><td><code>ClusterRoleBinding</code></td><td>Cluster entier</td><td>Assigne un ClusterRole globalement</td></tr>
+    </tbody>
+  </table>
+
+  <div class="lab" id="lab-rbac">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">🛡️</span>
+        TP 13.1 — Créer un utilisateur avec permissions limitées
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-hard">Avancé</span>
+        <span class="badge time">⏱ 50 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Créer un utilisateur <code>alice</code> qui peut lire et créer des Pods dans le namespace
+        <code>staging</code>, mais ne peut rien supprimer et n'a aucun accès aux autres namespaces.
+      </div>
+
+      <h4>Étape 1 — Créer le certificat utilisateur</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Générer une clé privée pour Alice</span>
+<span class="p">$ </span><span class="k">openssl</span> genrsa -out alice.key 2048
+
+<span class="c"># Créer une demande de signature de certificat (CSR)</span>
+<span class="p">$ </span><span class="k">openssl</span> req -new -key alice.key \
+    -out alice.csr \
+    -subj <span class="s">"/CN=alice/O=developers"</span>
+<span class="c"># CN = Common Name (nom utilisateur dans K8s)</span>
+<span class="c"># O = Organisation (groupe dans K8s)</span>
+
+<span class="c"># Encoder le CSR en base64</span>
+<span class="p">$ </span>CSR=$(cat alice.csr | base64 | tr -d '\n')</code></pre>
+      </div>
+
+      <h4>Étape 2 — Soumettre le CSR à Kubernetes</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — alice-csr.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">certificates.k8s.io/v1</span>
+<span class="yk">kind</span>: <span class="yv">CertificateSigningRequest</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">alice-csr</span>
+<span class="yk">spec</span>:
+  <span class="yk">request</span>: <span class="yv">LS0tLS1CRUdJTi...</span>   <span class="yc"># Remplacer par la valeur de $CSR</span>
+  <span class="yk">signerName</span>: <span class="yv">kubernetes.io/kube-apiserver-client</span>
+  <span class="yk">expirationSeconds</span>: <span class="yn">86400</span>   <span class="yc"># 24 heures</span>
+  <span class="yk">usages</span>:
+    - <span class="yv">client auth</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Injecter le CSR dans le YAML et appliquer</span>
+<span class="p">$ </span><span class="k">cat</span> &lt;&lt;EOF | kubectl apply -f -
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: alice-csr
+spec:
+  request: $CSR
+  signerName: kubernetes.io/kube-apiserver-client
+  expirationSeconds: 86400
+  usages: [client auth]
+EOF
+
+<span class="c"># Approuver le CSR (en tant qu'admin)</span>
+<span class="p">$ </span><span class="k">kubectl</span> certificate approve alice-csr
+
+<span class="c"># Récupérer le certificat signé</span>
+<span class="p">$ </span><span class="k">kubectl</span> get csr alice-csr -o jsonpath='{.status.certificate}' | base64 -d > alice.crt</code></pre>
+      </div>
+
+      <h4>Étape 3 — Créer le Role et le RoleBinding</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — alice-rbac.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Namespace staging pour Alice</span>
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Namespace</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">staging</span>
+---
+<span class="c"># Role : permissions dans staging seulement</span>
+<span class="yk">apiVersion</span>: <span class="yv">rbac.authorization.k8s.io/v1</span>
+<span class="yk">kind</span>: <span class="yv">Role</span>
+<span class="yk">metadata</span>:
+  <span class="yk">namespace</span>: <span class="yv">staging</span>
+  <span class="yk">name</span>: <span class="yv">pod-manager</span>
+<span class="yk">rules</span>:
+  - <span class="yk">apiGroups</span>: [<span class="ys">""</span>]                  <span class="yc"># "" = core API group</span>
+    <span class="yk">resources</span>: [<span class="ys">"pods"</span>, <span class="ys">"pods/log"</span>]  <span class="yc"># Ressources autorisées</span>
+    <span class="yk">verbs</span>: [<span class="ys">"get"</span>, <span class="ys">"list"</span>, <span class="ys">"watch"</span>, <span class="ys">"create"</span>]  <span class="yc"># PAS delete !</span>
+  - <span class="yk">apiGroups</span>: [<span class="ys">"apps"</span>]
+    <span class="yk">resources</span>: [<span class="ys">"deployments"</span>]
+    <span class="yk">verbs</span>: [<span class="ys">"get"</span>, <span class="ys">"list"</span>]            <span class="yc"># Lecture seule sur les deployments</span>
+---
+<span class="c"># RoleBinding : assigne le Role à Alice</span>
+<span class="yk">apiVersion</span>: <span class="yv">rbac.authorization.k8s.io/v1</span>
+<span class="yk">kind</span>: <span class="yv">RoleBinding</span>
+<span class="yk">metadata</span>:
+  <span class="yk">namespace</span>: <span class="yv">staging</span>
+  <span class="yk">name</span>: <span class="yv">alice-pod-manager</span>
+<span class="yk">subjects</span>:
+  - <span class="yk">kind</span>: <span class="yv">User</span>
+    <span class="yk">name</span>: <span class="yv">alice</span>              <span class="yc"># Correspond au CN du certificat</span>
+    <span class="yk">apiGroup</span>: <span class="yv">rbac.authorization.k8s.io</span>
+<span class="yk">roleRef</span>:
+  <span class="yk">kind</span>: <span class="yv">Role</span>
+  <span class="yk">name</span>: <span class="yv">pod-manager</span>
+  <span class="yk">apiGroup</span>: <span class="yv">rbac.authorization.k8s.io</span></code></pre>
+      </div>
+
+      <h4>Étape 4 — Configurer kubectl pour Alice</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f alice-rbac.yaml
+
+<span class="c"># Ajouter les credentials d'Alice dans kubectl</span>
+<span class="p">$ </span><span class="k">kubectl</span> config set-credentials alice \
+    --client-certificate=alice.crt \
+    --client-key=alice.key
+
+<span class="c"># Créer un contexte pour Alice</span>
+<span class="p">$ </span><span class="k">kubectl</span> config set-context alice-staging \
+    --cluster=kubernetes \
+    --namespace=staging \
+    --user=alice
+
+<span class="c"># Changer de contexte → utiliser les droits d'Alice</span>
+<span class="p">$ </span><span class="k">kubectl</span> config use-context alice-staging
+
+<span class="c"># Tester les permissions</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pods              <span class="ok"># ✅ Autorisé</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pods -n default   <span class="err"># ❌ Forbidden (mauvais namespace)</span>
+<span class="p">$ </span><span class="k">kubectl</span> delete pod mon-pod    <span class="err"># ❌ Forbidden (pas le droit delete)</span>
+<span class="p">$ </span><span class="k">kubectl</span> run test --image=nginx <span class="ok"># ✅ Autorisé (create)</span>
+
+<span class="c"># Revenir au contexte admin</span>
+<span class="p">$ </span><span class="k">kubectl</span> config use-context kubernetes-admin@kubernetes
+
+<span class="c"># Vérifier les droits d'Alice (depuis le compte admin)</span>
+<span class="p">$ </span><span class="k">kubectl</span> auth can-i delete pods --namespace=staging --as=alice
+<span class="c"># no</span>
+<span class="p">$ </span><span class="k">kubectl</span> auth can-i create pods --namespace=staging --as=alice
+<span class="ok"># yes</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MODULE 9 : MONITORING
+════════════════════════════════════════════ -->
+<section class="module" id="monitoring">
+  <div class="module-header">
+    <span class="module-num blue">Module 11</span>
+    <h2>Monitoring — Prometheus + Grafana</h2>
+  </div>
+
+  <p>
+    Pour surveiller un cluster en production, la stack standard est <strong>Prometheus</strong> (collecte des métriques)
+    + <strong>Grafana</strong> (dashboards). Il existe un Chart Helm officiel <code>kube-prometheus-stack</code>
+    qui installe tout en une commande.
+  </p>
+
+  <div class="lab" id="lab-monitoring">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">📊</span>
+        TP 11.1 — Stack Prometheus + Grafana complète
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-med">Intermédiaire</span>
+        <span class="badge time">⏱ 45 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Installer Prometheus et Grafana via Helm, accéder au dashboard Grafana depuis ton PC,
+        et explorer les dashboards Kubernetes pré-configurés.
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Installation</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Ajouter le dépôt prometheus-community</span>
+<span class="p">$ </span><span class="k">helm</span> repo add prometheus-community https://prometheus-community.github.io/helm-charts
+<span class="p">$ </span><span class="k">helm</span> repo update
+
+<span class="c"># Créer le namespace monitoring</span>
+<span class="p">$ </span><span class="k">kubectl</span> create namespace monitoring
+
+<span class="c"># Installer kube-prometheus-stack</span>
+<span class="p">$ </span><span class="k">helm</span> install prometheus prometheus-community/kube-prometheus-stack \
+    --namespace monitoring \
+    --set grafana.service.type=NodePort \
+    --set grafana.service.nodePort=30030 \
+    --set prometheus.service.type=NodePort \
+    --set prometheus.service.nodePort=30090
+
+<span class="c"># Attendre que tout soit prêt (environ 3-5 minutes)</span>
+<span class="p">$ </span><span class="k">kubectl</span> rollout status deployment/prometheus-grafana -n monitoring
+
+<span class="c"># Lister ce qui a été installé</span>
+<span class="p">$ </span><span class="k">kubectl</span> get all -n monitoring</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Accéder à Grafana</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Obtenir l'URL Grafana</span>
+<span class="c"># Ouvrir dans le navigateur : http://192.168.56.11:30030</span>
+<span class="c"># (IP d'un worker Node)</span>
+
+<span class="c"># Récupérer le mot de passe admin de Grafana</span>
+<span class="p">$ </span><span class="k">kubectl</span> get secret prometheus-grafana -n monitoring \
+    -o jsonpath='{.data.admin-password}' | base64 --decode
+<span class="c"># Exemple : prom-operator (ou autre)</span>
+
+<span class="c"># Identifiants par défaut :</span>
+<span class="c"># Utilisateur : admin</span>
+<span class="c"># Mot de passe : (commande ci-dessus)</span>
+
+<span class="c"># Accéder à Prometheus directement</span>
+<span class="c"># http://192.168.56.11:30090</span></code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="ci">🎯</div>
+        <div class="cb">
+          <strong>Dashboards Grafana à explorer</strong>
+          <br>Dans Grafana → Dashboards, tu trouveras des dashboards pré-installés :
+          <br>• <strong>Kubernetes / Cluster</strong> — Vue globale CPU/RAM du cluster
+          <br>• <strong>Kubernetes / Nodes</strong> — Métriques par Node
+          <br>• <strong>Kubernetes / Pods</strong> — Métriques par Pod
+          <br>• <strong>Kubernetes / Namespaces</strong> — Vue par namespace
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     PROJETS FINAUX
+════════════════════════════════════════════ -->
+<section class="module" id="projet-vote">
+  <div class="module-header">
+    <span class="module-num">Projet Final 01</span>
+    <h2>Application de Vote — Architecture complète</h2>
+  </div>
+
+  <p>
+    Ce projet final te fait déployer l'application de vote officielle de Docker (utilisée dans leurs formations).
+    Elle comprend 5 composants : frontend (Python), file de message (Redis), worker (.NET), base de données (PostgreSQL), et interface de résultats (Node.js).
+  </p>
+
+  <div class="diagram">
+    <div class="dtitle">─── ARCHITECTURE : VOTING APP ───</div>
+    <pre><code>  Navigateur
+  ├──── http://worker1:30000 ────→ [vote-app]     (Python Flask)
+  │                                     │
+  │                               enqueue votes
+  │                                     ↓
+  │                               [redis]         (Cache)
+  │                                     │
+  │                               worker consumes
+  │                                     ↓
+  │                               [worker]        (.NET)
+  │                                     │
+  │                               write results
+  │                                     ↓
+  └──── http://worker1:30001 ────→ [result-app]   (Node.js)
+                                        │
+                                  reads from
+                                        ↓
+                                  [postgresql]    (DB)</code></pre>
+  </div>
+
+  <div class="lab">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">🗳️</span>
+        Déployer la Voting App complète
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-hard">Avancé</span>
+        <span class="badge time">⏱ 90 min</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif</strong>
+        Déployer les 5 services en autonomie. Utiliser des Secrets pour les credentials PostgreSQL,
+        un PVC pour la persistence, et tester le scaling du composant vote-app sous charge.
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Créer la structure des fichiers</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="p">$ </span><span class="k">mkdir</span> -p voting-app && cd voting-app
+<span class="c"># Tu vas créer ces 6 fichiers :</span>
+<span class="c"># 1-namespace.yaml</span>
+<span class="c"># 2-secrets.yaml</span>
+<span class="c"># 3-redis.yaml</span>
+<span class="c"># 4-postgres.yaml</span>
+<span class="c"># 5-vote-worker.yaml</span>
+<span class="c"># 6-result.yaml</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — 1-namespace.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Namespace</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">vote</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — 2-secrets.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Secret</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">postgres-secret</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">stringData</span>:
+  <span class="yk">POSTGRES_USER</span>: <span class="ys">"postgres"</span>
+  <span class="yk">POSTGRES_PASSWORD</span>: <span class="ys">"vote_secret_2024"</span>
+  <span class="yk">POSTGRES_DB</span>: <span class="ys">"votes"</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — 3-redis.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">Deployment</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">redis</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">replicas</span>: <span class="yn">1</span>
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>: { <span class="yk">app</span>: <span class="yv">redis</span> }
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">redis</span> }
+    <span class="yk">spec</span>:
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">redis</span>
+          <span class="yk">image</span>: <span class="yv">redis:alpine</span>
+          <span class="yk">ports</span>: [{ <span class="yk">containerPort</span>: <span class="yn">6379</span>, <span class="yk">name</span>: <span class="yv">redis</span> }]
+---
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Service</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">redis</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">selector</span>: { <span class="yk">app</span>: <span class="yv">redis</span> }
+  <span class="yk">ports</span>: [{ <span class="yk">port</span>: <span class="yn">6379</span>, <span class="yk">targetPort</span>: <span class="yn">6379</span> }]</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — 4-postgres.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">PersistentVolumeClaim</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">postgres-pvc</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">accessModes</span>: [<span class="yv">ReadWriteOnce</span>]
+  <span class="yk">resources</span>:
+    <span class="yk">requests</span>:
+      <span class="yk">storage</span>: <span class="ys">500Mi</span>
+---
+<span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">Deployment</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">postgres</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">replicas</span>: <span class="yn">1</span>
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>: { <span class="yk">app</span>: <span class="yv">postgres</span> }
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">postgres</span> }
+    <span class="yk">spec</span>:
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">postgres</span>
+          <span class="yk">image</span>: <span class="yv">postgres:15-alpine</span>
+          <span class="yk">envFrom</span>:
+            - <span class="yk">secretRef</span>: { <span class="yk">name</span>: <span class="yv">postgres-secret</span> }
+          <span class="yk">ports</span>: [{ <span class="yk">containerPort</span>: <span class="yn">5432</span> }]
+          <span class="yk">volumeMounts</span>:
+            - <span class="yk">name</span>: <span class="yv">pgdata</span>
+              <span class="yk">mountPath</span>: <span class="ys">/var/lib/postgresql/data</span>
+      <span class="yk">volumes</span>:
+        - <span class="yk">name</span>: <span class="yv">pgdata</span>
+          <span class="yk">persistentVolumeClaim</span>:
+            <span class="yk">claimName</span>: <span class="yv">postgres-pvc</span>
+---
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Service</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">db</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">selector</span>: { <span class="yk">app</span>: <span class="yv">postgres</span> }
+  <span class="yk">ports</span>: [{ <span class="yk">port</span>: <span class="yn">5432</span>, <span class="yk">targetPort</span>: <span class="yn">5432</span> }]</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — 5-vote-worker.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># ─── Application de vote (frontend) ───</span>
+<span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">Deployment</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">vote</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">replicas</span>: <span class="yn">2</span>
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>: { <span class="yk">app</span>: <span class="yv">vote</span> }
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">vote</span> }
+    <span class="yk">spec</span>:
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">vote</span>
+          <span class="yk">image</span>: <span class="yv">dockersamples/examplevotingapp_vote</span>
+          <span class="yk">ports</span>: [{ <span class="yk">containerPort</span>: <span class="yn">80</span> }]
+          <span class="yk">resources</span>:
+            <span class="yk">requests</span>: { <span class="yk">cpu</span>: <span class="ys">"100m"</span>, <span class="yk">memory</span>: <span class="ys">"128Mi"</span> }
+            <span class="yk">limits</span>:   { <span class="yk">cpu</span>: <span class="ys">"500m"</span>, <span class="yk">memory</span>: <span class="ys">"256Mi"</span> }
+---
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Service</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">vote</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">selector</span>: { <span class="yk">app</span>: <span class="yv">vote</span> }
+  <span class="yk">type</span>: <span class="yv">NodePort</span>
+  <span class="yk">ports</span>: [{ <span class="yk">port</span>: <span class="yn">80</span>, <span class="yk">targetPort</span>: <span class="yn">80</span>, <span class="yk">nodePort</span>: <span class="yn">30000</span> }]
+---
+<span class="c"># ─── Worker (consomme Redis → écrit dans Postgres) ───</span>
+<span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">Deployment</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">worker</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">replicas</span>: <span class="yn">1</span>
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>: { <span class="yk">app</span>: <span class="yv">worker</span> }
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">worker</span> }
+    <span class="yk">spec</span>:
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">worker</span>
+          <span class="yk">image</span>: <span class="yv">dockersamples/examplevotingapp_worker</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">yaml — 6-result.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="yk">apiVersion</span>: <span class="yv">apps/v1</span>
+<span class="yk">kind</span>: <span class="yv">Deployment</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">result</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">replicas</span>: <span class="yn">1</span>
+  <span class="yk">selector</span>:
+    <span class="yk">matchLabels</span>: { <span class="yk">app</span>: <span class="yv">result</span> }
+  <span class="yk">template</span>:
+    <span class="yk">metadata</span>:
+      <span class="yk">labels</span>: { <span class="yk">app</span>: <span class="yv">result</span> }
+    <span class="yk">spec</span>:
+      <span class="yk">containers</span>:
+        - <span class="yk">name</span>: <span class="yv">result</span>
+          <span class="yk">image</span>: <span class="yv">dockersamples/examplevotingapp_result</span>
+          <span class="yk">ports</span>: [{ <span class="yk">containerPort</span>: <span class="yn">80</span> }]
+---
+<span class="yk">apiVersion</span>: <span class="yv">v1</span>
+<span class="yk">kind</span>: <span class="yv">Service</span>
+<span class="yk">metadata</span>:
+  <span class="yk">name</span>: <span class="yv">result</span>
+  <span class="yk">namespace</span>: <span class="yv">vote</span>
+<span class="yk">spec</span>:
+  <span class="yk">selector</span>: { <span class="yk">app</span>: <span class="yv">result</span> }
+  <span class="yk">type</span>: <span class="yv">NodePort</span>
+  <span class="yk">ports</span>: [{ <span class="yk">port</span>: <span class="yn">80</span>, <span class="yk">targetPort</span>: <span class="yn">80</span>, <span class="yk">nodePort</span>: <span class="yn">30001</span> }]</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Déploiement et test</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Déployer tout dans l'ordre</span>
+<span class="p">$ </span><span class="k">kubectl</span> apply -f ./voting-app/
+
+<span class="c"># Suivre le démarrage</span>
+<span class="p">$ </span><span class="k">kubectl</span> get pods -n vote -w
+
+<span class="c"># Une fois tous en Running :</span>
+<span class="c"># Interface de vote  : http://192.168.56.11:30000</span>
+<span class="c"># Interface résultats: http://192.168.56.11:30001</span>
+
+<span class="c"># Scaler le vote-app à 5 réplicas</span>
+<span class="p">$ </span><span class="k">kubectl</span> scale deployment vote -n vote --replicas=5
+
+<span class="c"># Tester le self-healing : supprimer redis</span>
+<span class="p">$ </span><span class="k">kubectl</span> delete pod -l app=redis -n vote
+<span class="c"># Le worker redemarre, redis est recréé par le Deployment</span>
+
+<span class="c"># Vérifier que les votes persistent après redémarrage postgres</span>
+<span class="p">$ </span><span class="k">kubectl</span> delete pod -l app=postgres -n vote
+<span class="c"># Les résultats sur l'interface doivent être préservés (PVC)</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     PROJET FINAL 3 : Stack monitorée
+════════════════════════════════════════════ -->
+<section class="module" id="projet-monitor">
+  <div class="module-header">
+    <span class="module-num purple">Projet Final 03</span>
+    <h2>Stack complète de production monitorée</h2>
+  </div>
+
+  <p>
+    Ce projet de fin de cours te fait assembler tout ce que tu as appris en une seule architecture :
+    une application web, sa base de données, le monitoring, la sécurité RBAC et le scaling automatique.
+  </p>
+
+  <div class="diagram">
+    <div class="dtitle">─── ARCHITECTURE PROJET FINAL ───</div>
+    <pre><code>  namespace: app-prod
+  ┌────────────────────────────────────────────────────────────┐
+  │  Ingress (HTTPS)                                           │
+  │      ├── / → frontend-service (Nginx, 3 replicas + HPA)   │
+  │      └── /api → api-service (Node.js, 2 replicas + HPA)   │
+  │                      │                                     │
+  │              mysql-service (StatefulSet, PVC)              │
+  └────────────────────────────────────────────────────────────┘
+
+  namespace: monitoring
+  ┌────────────────────────────────────────────────────────────┐
+  │  Prometheus (collecte métriques) + Grafana (dashboard)     │
+  │  AlertManager (alertes si pods crashent)                   │
+  └────────────────────────────────────────────────────────────┘
+
+  namespace: kube-system
+  ┌────────────────────────────────────────────────────────────┐
+  │  Fluent Bit DaemonSet (collecte logs tous les nodes)       │
+  │  Metrics-server (CPU/RAM pour HPA)                         │
+  └────────────────────────────────────────────────────────────┘
+
+  RBAC :
+  - admin@prod    → tous droits sur app-prod
+  - dev@equipe    → lecture seule sur app-prod
+  - aucun accès   → namespace monitoring</code></pre>
+  </div>
+
+  <div class="lab" id="projet-cicd">
+    <div class="lab-header">
+      <div class="lab-title">
+        <span class="lab-icon">🏗️</span>
+        Exercice de synthèse — Assembler l'architecture complète
+      </div>
+      <div class="lab-badges">
+        <span class="badge diff-hard">Expert</span>
+        <span class="badge time">⏱ 3-4 heures</span>
+      </div>
+    </div>
+    <div class="lab-body">
+      <div class="lab-objective">
+        <strong>Objectif final</strong>
+        En utilisant tous les concepts du cours, déployer l'architecture complète ci-dessus de manière autonome.
+        Voici les critères de réussite à valider un par un.
+      </div>
+
+      <div class="score-bar">
+        <div class="score-title">📋 Liste de validation</div>
+        <div class="score-item"><span class="si-label">Namespace app-prod créé</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get ns</span></div>
+        <div class="score-item"><span class="si-label">Secret DB créé</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get secrets -n app-prod</span></div>
+        <div class="score-item"><span class="si-label">MySQL en StatefulSet</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get sts -n app-prod</span></div>
+        <div class="score-item"><span class="si-label">Frontend Deployment (3 replicas)</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get deploy -n app-prod</span></div>
+        <div class="score-item"><span class="si-label">HPA sur frontend actif</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get hpa -n app-prod</span></div>
+        <div class="score-item"><span class="si-label">Liveness + Readiness Probes</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl describe pod</span></div>
+        <div class="score-item"><span class="si-label">Ingress accessible</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">curl http://192.168.56.11</span></div>
+        <div class="score-item"><span class="si-label">Monitoring Prometheus actif</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get pods -n monitoring</span></div>
+        <div class="score-item"><span class="si-label">Grafana accessible (NodePort)</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">http://NODE_IP:30030</span></div>
+        <div class="score-item"><span class="si-label">DaemonSet logs sur 3 nodes</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get ds -n kube-system</span></div>
+        <div class="score-item"><span class="si-label">RBAC : utilisateur limité</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl auth can-i</span></div>
+        <div class="score-item"><span class="si-label">NetworkPolicy DB isolée</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get netpol -n app-prod</span></div>
+      </div>
+
+      <div class="callout tip">
+        <div class="ci">🎓</div>
+        <div class="cb">
+          <strong>Félicitations !</strong>
+          Si tu as complété ce projet, tu maîtrises les fondamentaux de Kubernetes en production :
+          déploiements, scaling, sécurité, persistance, monitoring et réseau.
+          Les prochaines étapes naturelles sont <strong>CKA</strong> (Certified Kubernetes Administrator)
+          ou <strong>CKAD</strong> (Certified Kubernetes Application Developer).
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ CHEAT SHEET AVANCÉE ════ -->
+<section class="module" id="cheatsheet-avance">
+  <div class="module-header">
+    <span class="module-num blue">Référence</span>
+    <h2>Cheat Sheet Avancée</h2>
+  </div>
+
+  <h3>Helm</h3>
+  <div class="code-block">
+    <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="k">helm</span> repo add &lt;name&gt; &lt;url&gt;          <span class="c"># Ajouter un dépôt</span>
+<span class="k">helm</span> search repo &lt;keyword&gt;          <span class="c"># Chercher un chart</span>
+<span class="k">helm</span> install &lt;release&gt; &lt;chart&gt;      <span class="c"># Installer</span>
+<span class="k">helm</span> install &lt;release&gt; &lt;chart&gt; -f vals.yaml  <span class="c"># Avec valeurs custom</span>
+<span class="k">helm</span> upgrade &lt;release&gt; &lt;chart&gt;      <span class="c"># Mettre à jour</span>
+<span class="k">helm</span> rollback &lt;release&gt; &lt;revision&gt;  <span class="c"># Revenir en arrière</span>
+<span class="k">helm</span> uninstall &lt;release&gt;            <span class="c"># Désinstaller</span>
+<span class="k">helm</span> list -A                        <span class="c"># Toutes les releases</span>
+<span class="k">helm</span> show values &lt;chart&gt;            <span class="c"># Voir les valeurs par défaut</span>
+<span class="k">helm</span> template &lt;release&gt; &lt;chart&gt;     <span class="c"># Voir le YAML généré</span>
+<span class="k">helm</span> lint &lt;chart-dir&gt;               <span class="c"># Vérifier un chart</span></code></pre>
+  </div>
+
+  <h3>StatefulSets, DaemonSets, Jobs</h3>
+  <div class="code-block">
+    <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="k">kubectl</span> get statefulsets               <span class="c"># Lister StatefulSets</span>
+<span class="k">kubectl</span> get daemonsets -A              <span class="c"># Lister DaemonSets (tous NS)</span>
+<span class="k">kubectl</span> get jobs                       <span class="c"># Lister Jobs</span>
+<span class="k">kubectl</span> get cronjobs                   <span class="c"># Lister CronJobs</span>
+<span class="k">kubectl</span> create job test --from=cronjob/&lt;name&gt;  <span class="c"># Forcer CronJob</span>
+<span class="k">kubectl</span> patch cronjob &lt;name&gt; -p '{"spec":{"suspend":true}}'  <span class="c"># Suspendre</span></code></pre>
+  </div>
+
+  <h3>Scaling & Autoscaling</h3>
+  <div class="code-block">
+    <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="k">kubectl</span> scale deploy &lt;name&gt; --replicas=N   <span class="c"># Scaling manuel</span>
+<span class="k">kubectl</span> get hpa                            <span class="c"># Voir les HPA</span>
+<span class="k">kubectl</span> describe hpa &lt;name&gt;               <span class="c"># Détails et événements HPA</span>
+<span class="k">kubectl</span> top pods                           <span class="c"># CPU/RAM des pods</span>
+<span class="k">kubectl</span> top nodes                          <span class="c"># CPU/RAM des nodes</span></code></pre>
+  </div>
+
+  <h3>RBAC</h3>
+  <div class="code-block">
+    <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="k">kubectl</span> get roles,rolebindings -A          <span class="c"># Tous les rôles</span>
+<span class="k">kubectl</span> auth can-i &lt;verb&gt; &lt;resource&gt;      <span class="c"># Tester ses droits</span>
+<span class="k">kubectl</span> auth can-i get pods --as=alice     <span class="c"># Tester les droits d'un user</span>
+<span class="k">kubectl</span> auth can-i --list                  <span class="c"># Lister toutes ses permissions</span></code></pre>
+  </div>
+
+  <h3>Debugging avancé</h3>
+  <div class="code-block">
+    <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="k">kubectl</span> get events --sort-by=.lastTimestamp -A  <span class="c"># Événements récents</span>
+<span class="k">kubectl</span> debug pod/&lt;name&gt; -it --image=busybox    <span class="c"># Debug sidecar</span>
+<span class="k">kubectl</span> describe node &lt;name&gt; | grep -A5 Events  <span class="c"># Problèmes node</span>
+<span class="k">kubectl</span> get pods --field-selector status.phase=Failed  <span class="c"># Pods en échec</span>
+<span class="k">kubectl</span> logs &lt;pod&gt; --previous                  <span class="c"># Logs avant crash</span>
+<span class="k">kubectl</span> cp &lt;pod&gt;:/path/file ./local-file        <span class="c"># Copier depuis un pod</span>
+<span class="k">kubectl</span> cp ./local-file &lt;pod&gt;:/path/file        <span class="c"># Copier vers un pod</span></code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="ci">⭐</div>
+    <div class="cb">
+      <strong>Aller plus loin — Certifications officielles</strong>
+      <br>• <strong>CKAD</strong> — Certified Kubernetes Application Developer (pour développeurs)
+      <br>• <strong>CKA</strong> — Certified Kubernetes Administrator (pour ops/DevOps)
+      <br>• <strong>CKS</strong> — Certified Kubernetes Security Specialist (sécurité avancée)
+      <br>Pratique le sur <code>killer.sh</code> (simulateur officiel d'examen).
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Kubernetes Avancé — Travaux Pratiques VirtualBox</p>
+  <p style="margin-top:6px;opacity:0.4;font-size:0.72rem;">Kubernetes® est une marque de la Cloud Native Computing Foundation (CNCF)</p>
+</footer>
+
+</main>
+
+<script>
+const navLinks = document.querySelectorAll('.sidebar nav a[href^="#"]');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.sidebar nav a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -75% 0px' });
+
+document.querySelectorAll('section[id], div[id]').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
