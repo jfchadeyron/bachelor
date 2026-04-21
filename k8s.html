@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kubernetes Avancé —</title>
+<title>Kubernetes Avancé — Travaux Pratiques Proxmox</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -514,14 +514,14 @@ footer{
     <div class="brand-title">
       <span>⚙</span> K8s Avancé
     </div>
-    <div class="brand-sub">Travaux Pratiques VirtualBox</div>
+    <div class="brand-sub">Travaux Pratiques Proxmox</div>
     <span class="part-badge">Partie 2 / 2</span>
   </div>
   <nav>
     <div class="nav-section">
       <div class="nav-section-label">Environnement</div>
-      <a href="#vbox-setup"><span class="num">00</span>VirtualBox — Cluster Lab<span class="lab-tag">lab</span></a>
-      <a href="#vbox-reseau"><span class="num">01</span>Réseau VirtualBox K8s<span class="lab-tag">lab</span></a>
+      <a href="#vbox-setup"><span class="num">00</span>Proxmox — Cluster Lab<span class="lab-tag">lab</span></a>
+      <a href="#vbox-reseau"><span class="num">01</span>Réseau Proxmox K8s<span class="lab-tag">lab</span></a>
     </div>
     <div class="nav-section">
       <div class="nav-section-label">Objets Avancés</div>
@@ -580,52 +580,53 @@ footer{
 <!-- ── HERO ── -->
 <div class="hero">
   <div class="hero-eyebrow">⚡ Partie 2 — Cours Avancé + Travaux Pratiques</div>
-  <h1>Kubernetes <em>Avancé</em><br><span>sur VirtualBox</span></h1>
+  <h1>Kubernetes <em>Avancé</em><br><span>sur Proxmox</span></h1>
   <p class="hero-desc">
-    Suite du cours d'initiation. 
+    Suite du cours d'initiation. Chaque concept est accompagné d'un travail pratique
+    complet à réaliser sur un cluster de VMs Proxmox. Configuration pas-à-pas depuis zéro.
   </p>
   <div class="hero-stats">
     <div class="stat"><div class="stat-val">15+</div><div class="stat-label">Travaux pratiques</div></div>
-    <div class="stat"><div class="stat-val">3</div><div class="stat-label">VMs VirtualBox</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">VMs Proxmox</div></div>
     <div class="stat"><div class="stat-val">8h+</div><div class="stat-label">de pratique</div></div>
     <div class="stat"><div class="stat-val">3</div><div class="stat-label">Projets complets</div></div>
   </div>
 </div>
 
 <!-- ════════════════════════════════════════════
-     MODULE 0 : SETUP VIRTUALBOX
+     MODULE 0 : SETUP Proxmox
 ════════════════════════════════════════════ -->
 <section class="module" id="vbox-setup">
   <div class="module-header">
     <span class="module-num blue">Module 00</span>
-    <h2>Construire son lab VirtualBox</h2>
+    <h2>Construire son lab Proxmox</h2>
   </div>
 
   <p>
-    Avant tout, il faut un vrai cluster. Nous allons créer <strong>3 machines virtuelles VirtualBox</strong> :
+    Avant tout, il faut un vrai cluster. Nous allons créer <strong>3 machines virtuelles Proxmox</strong> :
     un master et deux workers. C'est la configuration minimale pour reproduire un environnement de production réaliste.
   </p>
 
   <h3>Architecture du lab</h3>
 
   <div class="diagram">
-    <div class="dtitle">─── ARCHITECTURE DU LAB VIRTUALBOX ───</div>
+    <div class="dtitle">─── ARCHITECTURE DU LAB Proxmox ───</div>
     <pre><code>  Ton PC (Host)
-  ├─ VirtualBox Host-Only Network : 192.168.56.0/24
+  ├─ Proxmox Bridge Network : 192.168.56.0/24
   │
-  ├─ VM1 : k8s-master   → 192.168.56.10  (4 vCPU / 4 Go RAM)
+  ├─ VM1 : k8s-master   → 172.16.25.60  (4 vCPU / 4 Go RAM)
   │        rôle : Control Plane
   │        composants : API Server, Scheduler, etcd, Controller
   │
-  ├─ VM2 : k8s-worker1  → 192.168.56.11  (2 vCPU / 2 Go RAM)
+  ├─ VM2 : k8s-worker1  → 172.16.25.61  (2 vCPU / 2 Go RAM)
   │        rôle : Worker Node
   │
-  └─ VM3 : k8s-worker2  → 192.168.56.12  (2 vCPU / 2 Go RAM)
+  └─ VM3 : k8s-worker2  → 172.16.25.62  (2 vCPU / 2 Go RAM)
            rôle : Worker Node
 
   Accès depuis le host :
-  kubectl → 192.168.56.10:6443 (API Server)
-  Services NodePort → 192.168.56.1X:3XXXX</code></pre>
+  kubectl → 172.16.25.60:6443 (API Server)
+  </code></pre>
   </div>
 
   <h3>Configuration matérielle recommandée</h3>
@@ -648,8 +649,8 @@ footer{
   <div class="callout vbox">
     <div class="ci">📦</div>
     <div class="cb">
-      <strong>VirtualBox requis</strong>
-      Télécharge VirtualBox 7.x depuis <code>virtualbox.org</code>.
+      <strong>Proxmox requis</strong>
+      Télécharge Proxmox 7.x depuis <code>Proxmox.org</code>.
       La procédure fonctionne aussi avec VMware Workstation Player (gratuit) — les captures d'écran diffèrent mais les commandes Linux sont identiques.
     </div>
   </div>
@@ -659,10 +660,10 @@ footer{
     <div class="lab-header">
       <div class="lab-title">
         <span class="lab-icon">🔧</span>
-        TP 0.1 — Créer les 3 VMs VirtualBox
+        TP 0.1 — Créer les 3 VMs Proxmox
       </div>
       <div class="lab-badges">
-        <span class="badge vbox">VirtualBox</span>
+        <span class="badge vbox">Proxmox</span>
         <span class="badge diff-easy">Facile</span>
         <span class="badge time">⏱ 30 min</span>
       </div>
@@ -685,11 +686,11 @@ footer{
         <div class="step">
           <div class="step-n">2</div>
           <div class="step-c">
-            <h4>Créer le réseau Host-Only dans VirtualBox</h4>
-            <p>Dans VirtualBox : <strong>Fichier → Gestionnaire de réseau hôte → Créer</strong></p>
+            <h4>Créer le réseau Bridge dans Proxmox</h4>
+            <p>Dans Proxmox : <strong>Fichier → Gestionnaire de réseau hôte → Créer</strong></p>
             <ul>
               <li>Nom : <code>vboxnet0</code></li>
-              <li>Adresse IPv4 : <code>192.168.56.1</code></li>
+              <li>Adresse IPv4 : <code>172.16.255.254</code></li>
               <li>Masque : <code>255.255.255.0</code></li>
               <li>Désactiver le DHCP (on assignera les IPs manuellement)</li>
             </ul>
@@ -700,18 +701,18 @@ footer{
           <div class="step-n">3</div>
           <div class="step-c">
             <h4>Créer la VM Master (k8s-master)</h4>
-            <p>Clic droit → Nouvelle dans VirtualBox :</p>
+            <p>Clic droit → Nouvelle dans Proxmox :</p>
             <ul>
               <li><strong>Nom</strong> : <code>k8s-master</code></li>
               <li><strong>Type</strong> : Linux / Ubuntu (64-bit)</li>
               <li><strong>RAM</strong> : 4096 Mo (4 Go) — minimum pour le master</li>
               <li><strong>CPU</strong> : 2 vCPUs (onglet Système → Processeur)</li>
-              <li><strong>Disque dur</strong> : VDI dynamique, 20 Go</li>
+              <li><strong>Disque dur</strong> : VDI dynamique, 80 Go</li>
             </ul>
             <p><strong>Configuration réseau :</strong></p>
             <ul>
-              <li>Adaptateur 1 : <strong>NAT</strong> (accès Internet pour télécharger les paquets)</li>
-              <li>Adaptateur 2 : <strong>Réseau hôte uniquement</strong> → <code>vboxnet0</code></li>
+              <li>Adaptateur 1 : <strong>Bridge</strong> </li>
+
             </ul>
           </div>
         </div>
@@ -740,7 +741,7 @@ footer{
               <div class="code-topbar"><span class="code-label">bash — k8s-master</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
               <pre><code><span class="c"># Lister les interfaces réseau</span>
 <span class="p">$ </span><span class="k">ip</span> link show
-<span class="c"># enp0s3 = NAT (Internet), enp0s8 = Host-Only (cluster)</span>
+<span class="c"># enp0s8 = Bridge (cluster)</span>
 
 <span class="c"># Éditer la configuration netplan</span>
 <span class="p">$ </span><span class="k">sudo</span> nano /etc/netplan/00-installer-config.yaml</code></pre>
@@ -750,25 +751,23 @@ footer{
               <pre><code><span class="yk">network</span>:
   <span class="yk">version</span>: <span class="yn">2</span>
   <span class="yk">ethernets</span>:
-    <span class="yk">enp0s3</span>:                      <span class="yc"># Adaptateur NAT (Internet)</span>
-      <span class="yk">dhcp4</span>: <span class="yv">true</span>
-    <span class="yk">enp0s8</span>:                      <span class="yc"># Adaptateur Host-Only (cluster)</span>
+    <span class="yk">enp0s8</span>:                      <span class="yc"># Adaptateur Bridge (cluster)</span>
       <span class="yk">dhcp4</span>: <span class="yv">false</span>
       <span class="yk">addresses</span>:
-        - <span class="ys">192.168.56.10/24</span>      <span class="yc"># IP statique du master</span></code></pre>
+        - <span class="ys">172.16.25.60/24</span>      <span class="yc"># IP statique du master</span></code></pre>
             </div>
             <div class="code-block">
               <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
               <pre><code><span class="c"># Appliquer la config réseau</span>
 <span class="p">$ </span><span class="k">sudo</span> netplan apply
 <span class="p">$ </span><span class="k">ip</span> addr show enp0s8
-<span class="c"># Doit afficher : 192.168.56.10/24</span>
+<span class="c"># Doit afficher : 172.16.25.60/24</span>
 
 <span class="c"># Définir le hostname</span>
 <span class="p">$ </span><span class="k">sudo</span> hostnamectl set-hostname k8s-master
-<span class="p">$ </span><span class="k">sudo</span> bash -c <span class="s">'echo "192.168.56.10 k8s-master
-192.168.56.11 k8s-worker1
-192.168.56.12 k8s-worker2" >> /etc/hosts'</span></code></pre>
+<span class="p">$ </span><span class="k">sudo</span> bash -c <span class="s">'echo "172.16.25.60 k8s-master
+172.16.25.61 k8s-worker1
+172.16.25.62 k8s-worker2" >> /etc/hosts'</span></code></pre>
             </div>
           </div>
         </div>
@@ -777,7 +776,7 @@ footer{
           <div class="step-n">6</div>
           <div class="step-c">
             <h4>Cloner pour créer les Workers</h4>
-            <p>Dans VirtualBox, <strong>cloner</strong> la VM k8s-master (clic droit → Cloner) :</p>
+            <p>Dans Proxmox, <strong>cloner</strong> la VM k8s-master (clic droit → Cloner) :</p>
             <ul>
               <li>Nom clone 1 : <code>k8s-worker1</code> — RAM : 2 Go</li>
               <li>Nom clone 2 : <code>k8s-worker2</code> — RAM : 2 Go</li>
@@ -789,11 +788,11 @@ footer{
               <div class="code-topbar"><span class="code-label">bash — Sur k8s-worker1</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
               <pre><code><span class="p">$ </span><span class="k">sudo</span> hostnamectl set-hostname k8s-worker1
 <span class="c"># Modifier l'IP dans /etc/netplan/00-installer-config.yaml</span>
-<span class="c"># Changer 192.168.56.10 → 192.168.56.11</span>
+<span class="c"># Changer 172.16.25.60 → 172.16.25.61</span>
 <span class="p">$ </span><span class="k">sudo</span> nano /etc/netplan/00-installer-config.yaml
 <span class="p">$ </span><span class="k">sudo</span> netplan apply</code></pre>
             </div>
-            <p>Répéter sur k8s-worker2 avec l'IP <code>192.168.56.12</code>.</p>
+            <p>Répéter sur k8s-worker2 avec l'IP <code>172.16.25.62</code>.</p>
           </div>
         </div>
 
@@ -808,12 +807,12 @@ footer{
 <span class="p">$ </span><span class="k">ssh-keygen</span> -t ed25519 -C <span class="s">"k8s-lab"</span>
 
 <span class="c"># Copier la clé sur chaque VM</span>
-<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@192.168.56.10
-<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@192.168.56.11
-<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@192.168.56.12
+<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@172.16.25.60
+<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@172.16.25.61
+<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@172.16.25.62
 
 <span class="c"># Tester la connexion</span>
-<span class="p">$ </span><span class="k">ssh</span> k8sadmin@192.168.56.10
+<span class="p">$ </span><span class="k">ssh</span> k8sadmin@172.16.25.60
 <span class="c"># Doit se connecter sans mot de passe</span></code></pre>
             </div>
           </div>
@@ -825,9 +824,9 @@ footer{
         <div class="code-block">
           <div class="code-topbar"><span class="code-label">bash — Depuis ton PC</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
           <pre><code><span class="c"># Les 3 VMs doivent répondre au ping</span>
-<span class="p">$ </span><span class="k">ping</span> -c 2 192.168.56.10  <span class="c"># master</span>
-<span class="p">$ </span><span class="k">ping</span> -c 2 192.168.56.11  <span class="c"># worker1</span>
-<span class="p">$ </span><span class="k">ping</span> -c 2 192.168.56.12  <span class="c"># worker2</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 172.16.25.60  <span class="c"># master</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 172.16.25.61  <span class="c"># worker1</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 172.16.25.62  <span class="c"># worker2</span>
 
 <span class="c"># Les VMs doivent se voir entre elles (depuis master)</span>
 <span class="p">$ </span><span class="k">ping</span> -c 2 k8s-worker1
@@ -845,7 +844,7 @@ footer{
         TP 0.2 — Installer Kubernetes sur les 3 VMs
       </div>
       <div class="lab-badges">
-        <span class="badge vbox">VirtualBox</span>
+        <span class="badge vbox">Proxmox</span>
         <span class="badge diff-med">Intermédiaire</span>
         <span class="badge time">⏱ 45 min</span>
       </div>
@@ -923,7 +922,7 @@ echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join
       <div class="code-block">
         <div class="code-topbar"><span class="code-label">bash — Exécution sur les 3 VMs</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
         <pre><code><span class="c"># Sur ton PC, copier le script sur les 3 VMs et l'exécuter</span>
-<span class="p">$ </span><span class="k">for</span> ip in 192.168.56.10 192.168.56.11 192.168.56.12; do
+<span class="p">$ </span><span class="k">for</span> ip in 172.16.25.60 172.16.25.61 172.16.25.62; do
     <span class="k">scp</span> install-k8s-base.sh k8sadmin@$ip:~/ <span class="c"># Copier le script</span>
     <span class="k">ssh</span> k8sadmin@$ip <span class="s">"sudo bash ~/install-k8s-base.sh"</span>
     echo <span class="ok">"✅ $ip installé"</span>
@@ -935,7 +934,7 @@ echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join
         <div class="code-topbar"><span class="code-label">bash — SSH sur k8s-master</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
         <pre><code><span class="c"># Initialiser avec l'IP du réseau host-only (enp0s8)</span>
 <span class="p">$ </span><span class="k">sudo</span> kubeadm init \
-    --apiserver-advertise-address=<span class="v">192.168.56.10</span> \
+    --apiserver-advertise-address=<span class="v">172.16.25.60</span> \
     --pod-network-cidr=<span class="v">10.244.0.0/16</span> \
     --node-name=k8s-master
 
@@ -957,7 +956,7 @@ echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join
         <div class="code-topbar"><span class="code-label">bash — SSH sur k8s-worker1 ET k8s-worker2</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
         <pre><code><span class="c"># Coller la commande join générée par kubeadm</span>
 <span class="c"># (remplacer le token et le hash par les valeurs réelles)</span>
-<span class="p">$ </span><span class="k">sudo</span> kubeadm join 192.168.56.10:6443 \
+<span class="p">$ </span><span class="k">sudo</span> kubeadm join 172.16.25.60:6443 \
     --token <span class="v">abcdef.0123456789abcdef</span> \
     --discovery-token-ca-cert-hash sha256:<span class="v">xxxxxxxx...</span> \
     --node-name=k8s-worker1   <span class="c"># (ou k8s-worker2)</span></code></pre>
@@ -967,7 +966,7 @@ echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join
       <div class="code-block">
         <div class="code-topbar"><span class="code-label">bash — Sur ton PC (Linux/Mac)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
         <pre><code><span class="c"># Copier le kubeconfig depuis le master</span>
-<span class="p">$ </span><span class="k">scp</span> k8sadmin@192.168.56.10:~/.kube/config ~/.kube/config-vbox
+<span class="p">$ </span><span class="k">scp</span> k8sadmin@172.16.25.60:~/.kube/config ~/.kube/config-vbox
 
 <span class="c"># Utiliser ce contexte</span>
 <span class="p">$ </span><span class="k">export</span> KUBECONFIG=~/.kube/config-vbox
@@ -984,9 +983,9 @@ echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join
           <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
           <pre><code><span class="p">$ </span><span class="k">kubectl</span> get nodes -o wide
 <span class="c"># NAME           STATUS   ROLES           AGE   VERSION   INTERNAL-IP</span>
-<span class="ok"># k8s-master     Ready    control-plane   5m    v1.29.x   192.168.56.10</span>
-<span class="ok"># k8s-worker1    Ready    &lt;none&gt;          3m    v1.29.x   192.168.56.11</span>
-<span class="ok"># k8s-worker2    Ready    &lt;none&gt;          3m    v1.29.x   192.168.56.12</span>
+<span class="ok"># k8s-master     Ready    control-plane   5m    v1.29.x   172.16.25.60</span>
+<span class="ok"># k8s-worker1    Ready    &lt;none&gt;          3m    v1.29.x   172.16.25.61</span>
+<span class="ok"># k8s-worker2    Ready    &lt;none&gt;          3m    v1.29.x   172.16.25.62</span>
 
 <span class="p">$ </span><span class="k">kubectl</span> get pods -A
 <span class="c"># Tous les pods système doivent être Running</span></code></pre>
@@ -1552,7 +1551,7 @@ mysql> exit
         <pre><code><span class="c"># Télécharger et installer metrics-server</span>
 <span class="p">$ </span><span class="k">kubectl</span> apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
-<span class="c"># IMPORTANT pour VirtualBox : ajouter --kubelet-insecure-tls</span>
+<span class="c"># IMPORTANT pour Proxmox : ajouter --kubelet-insecure-tls</span>
 <span class="c"># car les certificats des VMs ne sont pas signés pour leur IP</span>
 <span class="p">$ </span><span class="k">kubectl</span> patch deployment metrics-server -n kube-system \
   --type=json \
@@ -2505,7 +2504,7 @@ EOF
       <div class="code-block">
         <div class="code-topbar"><span class="code-label">bash — Accéder à Grafana</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
         <pre><code><span class="c"># Obtenir l'URL Grafana</span>
-<span class="c"># Ouvrir dans le navigateur : http://192.168.56.11:30030</span>
+<span class="c"># Ouvrir dans le navigateur : http://172.16.25.61:30030</span>
 <span class="c"># (IP d'un worker Node)</span>
 
 <span class="c"># Récupérer le mot de passe admin de Grafana</span>
@@ -2518,7 +2517,7 @@ EOF
 <span class="c"># Mot de passe : (commande ci-dessus)</span>
 
 <span class="c"># Accéder à Prometheus directement</span>
-<span class="c"># http://192.168.56.11:30090</span></code></pre>
+<span class="c"># http://172.16.25.61:30090</span></code></pre>
       </div>
 
       <div class="callout tip">
@@ -2796,8 +2795,8 @@ EOF
 <span class="p">$ </span><span class="k">kubectl</span> get pods -n vote -w
 
 <span class="c"># Une fois tous en Running :</span>
-<span class="c"># Interface de vote  : http://192.168.56.11:30000</span>
-<span class="c"># Interface résultats: http://192.168.56.11:30001</span>
+<span class="c"># Interface de vote  : http://172.16.25.61:30000</span>
+<span class="c"># Interface résultats: http://172.16.25.61:30001</span>
 
 <span class="c"># Scaler le vote-app à 5 réplicas</span>
 <span class="p">$ </span><span class="k">kubectl</span> scale deployment vote -n vote --replicas=5
@@ -2883,7 +2882,7 @@ EOF
         <div class="score-item"><span class="si-label">Frontend Deployment (3 replicas)</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get deploy -n app-prod</span></div>
         <div class="score-item"><span class="si-label">HPA sur frontend actif</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get hpa -n app-prod</span></div>
         <div class="score-item"><span class="si-label">Liveness + Readiness Probes</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl describe pod</span></div>
-        <div class="score-item"><span class="si-label">Ingress accessible</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">curl http://192.168.56.11</span></div>
+        <div class="score-item"><span class="si-label">Ingress accessible</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">curl http://172.16.25.61</span></div>
         <div class="score-item"><span class="si-label">Monitoring Prometheus actif</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get pods -n monitoring</span></div>
         <div class="score-item"><span class="si-label">Grafana accessible (NodePort)</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">http://NODE_IP:30030</span></div>
         <div class="score-item"><span class="si-label">DaemonSet logs sur 3 nodes</span><div class="score-progress"><div class="score-fill" style="width:100%"></div></div><span style="font-size:0.75rem;color:var(--accent)">kubectl get ds -n kube-system</span></div>
@@ -2983,7 +2982,7 @@ EOF
 </section>
 
 <footer>
-  <p>Kubernetes Avancé — Travaux Pratiques VirtualBox</p>
+  <p>Kubernetes Avancé — Travaux Pratiques Proxmox</p>
   <p style="margin-top:6px;opacity:0.4;font-size:0.72rem;">Kubernetes® est une marque de la Cloud Native Computing Foundation (CNCF)</p>
 </footer>
 
