@@ -716,7 +716,7 @@ footer{
             <ul>
               <li>Langue : Français ou English</li>
               <li>Nom de la machine : <code>k8s-master</code></li>
-              <li>Utilisateur : <code>k8sadmin</code> (ou ton prénom)</li>
+              <li>Utilisateur : <code>root</code> (ou ton prénom)</li>
               <li><strong>Cocher : Install OpenSSH server</strong> ✅</li>
               <li>Ne pas installer d'autres snaps</li>
             </ul>
@@ -781,12 +781,12 @@ footer{
 <span class="p">$ </span><span class="k">ssh-keygen</span> -t ed25519 -C <span class="s">"k8s-lab"</span>
 
 <span class="c"># Copier la clé sur chaque VM</span>
-<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@172.16.25.60
-<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@172.16.25.61
-<span class="p">$ </span><span class="k">ssh-copy-id</span> k8sadmin@172.16.25.62
+<span class="p">$ </span><span class="k">ssh-copy-id</span> root@172.16.25.60
+<span class="p">$ </span><span class="k">ssh-copy-id</span> root@172.16.25.61
+<span class="p">$ </span><span class="k">ssh-copy-id</span> root@172.16.25.62
 
 <span class="c"># Tester la connexion</span>
-<span class="p">$ </span><span class="k">ssh</span> k8sadmin@172.16.25.60
+<span class="p">$ </span><span class="k">ssh</span> root@172.16.25.60
 <span class="c"># Doit se connecter sans mot de passe</span></code></pre>
             </div>
           </div>
@@ -877,8 +877,8 @@ echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join
         <div class="code-topbar"><span class="code-label">bash — Exécution sur les 3 VMs</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
         <pre><code><span class="c"># Sur ton PC, copier le script sur les 3 VMs et l'exécuter</span>
 <span class="p">$ </span><span class="k">for</span> ip in 172.16.25.60 172.16.25.61 172.16.25.62; do
-    <span class="k">scp</span> install-k8s-base.sh k8sadmin@$ip:~/ <span class="c"># Copier le script</span>
-    <span class="k">ssh</span> k8sadmin@$ip <span class="s">"sudo bash ~/install-k8s-base.sh"</span>
+    <span class="k">scp</span> install-k8s-base.sh root@$ip:~/ <span class="c"># Copier le script</span>
+    <span class="k">ssh</span> root@$ip <span class="s">"sudo bash ~/install-k8s-base.sh"</span>
     echo <span class="ok">"✅ $ip installé"</span>
   done</code></pre>
       </div>
@@ -920,7 +920,7 @@ echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join
       <div class="code-block">
         <div class="code-topbar"><span class="code-label">bash — Sur ton PC (Linux/Mac)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
         <pre><code><span class="c"># Copier le kubeconfig depuis le master</span>
-<span class="p">$ </span><span class="k">scp</span> k8sadmin@172.16.25.60:~/.kube/config ~/.kube/config-vbox
+<span class="p">$ </span><span class="k">scp</span> root@172.16.25.60:~/.kube/config ~/.kube/config-vbox
 
 <span class="c"># Utiliser ce contexte</span>
 <span class="p">$ </span><span class="k">export</span> KUBECONFIG=~/.kube/config-vbox
