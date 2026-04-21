@@ -858,7 +858,7 @@ footer{
 <span class="c"># =========================================================</span>
 
 
-echo <span class="s">"=== 4/6 Installation containerd ==="</span>
+echo <span class="s">"=== 1/3 Installation containerd ==="</span>
 <span class="k">apt-get</span> update -qq
 <span class="k">apt-get</span> install -y -qq ca-certificates curl gnupg
 <span class="k">install</span> -m 0755 -d /etc/apt/keyrings
@@ -874,7 +874,7 @@ echo <span class="s">"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/
 <span class="k">systemctl</span> restart containerd
 <span class="k">systemctl</span> enable containerd
 
-echo <span class="s">"=== 5/6 Installation kubeadm + kubelet + kubectl ==="</span>
+echo <span class="s">"=== 2/3 Installation kubeadm + kubelet + kubectl ==="</span>
 <span class="k">curl</span> -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
   <span class="k">gpg</span> --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo <span class="s">'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
@@ -884,7 +884,7 @@ echo <span class="s">'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gp
 <span class="k">apt-get</span> install -y -qq kubelet kubeadm kubectl
 <span class="k">apt-mark</span> hold kubelet kubeadm kubectl
 
-echo <span class="s">"=== 6/6 Activation kubelet ==="</span>
+echo <span class="s">"=== 3/3 Activation kubelet ==="</span>
 <span class="k">systemctl</span> enable kubelet
 
 echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join"</span></code></pre>
