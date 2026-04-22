@@ -1044,8 +1044,30 @@ footer{
       Déployer MySQL avec un StatefulSet. Vérifier que chaque pod a son propre volume persistant,
       et que le DNS interne permet de les adresser individuellement.
     </div>
-
-    <h4>Étape 1 — Créer le fichier mysql-statefulset.yaml</h4>
+ <h4>Étape 1 — Créer le fichier mysql-pv.yaml </h4>
+    <div class="code-block">
+      <div class="code-topbar"><span class="code-label">yaml — mysql-pv.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+      <pre><code><span class="c"># ─── Headless Service (pas d'IP fixe, pour le DNS uniquement) ───</span>
+<span class="yk">apiVersion: v1</span>
+<span class="yk">kind: PersistentVolume</span>
+<span class="yk">metadata:</span>
+<span class="yk">  name: mysql-pv-volume</span>
+<span class="yk">  labels:</span>
+<span class="yk">    type: local</span>
+<span class="yk">spec:</span>
+<span class="yk">  storageClassName: manual</span>
+<span class="yk">  capacity:</span>
+<span class="yk">    storage: 50Mi</span>
+<span class="yk">  accessModes:</span>
+<span class="yk">    - ReadWriteOnce</span>
+<span class="yk">  hostPath:</span>
+<span class="yk">    path: "/mnt/data/mysql"</span>: <span class="yv">v1</span></code></div>
+ <h4>Appliquer le fichier pv pour le volume persistant</h4>
+    <div class="code-block">
+      <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+      <pre><code><span class="p">$ </span><span class="k">kubectl apply -f mysql-pv.yaml</span></code></pre></div></div>
+    
+    <h4>Étape 1 bis — Créer le fichier mysql-statefulset.yaml</h4>
     <div class="code-block">
       <div class="code-topbar"><span class="code-label">yaml — mysql-statefulset.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
       <pre><code><span class="c"># ─── Headless Service (pas d'IP fixe, pour le DNS uniquement) ───</span>
@@ -1105,6 +1127,7 @@ footer{
         <span class="yk">name</span>: <span class="yv">mysql-data</span>
       <span class="yk">spec</span>:
         <span class="yk">accessModes</span>: [<span class="yv">ReadWriteOnce</span>]
+        <span class="yk"> storageClassName: manual /span>
         <span class="yk">resources</span>:
           <span class="yk">requests</span>:
             <span class="yk">storage</span>: <span class="ys">50Mi</span></code></pre>
