@@ -842,38 +842,75 @@ footer{
 <span class="p">$ </span><span class="k">nano install-k8s-base.sh  <span class="c"></span>
       <div class="code-block">
         <div class="code-topbar"><span class="code-label">contenu du fichier install-k8s-base.sh (à lancer sur les 3 VMs)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-
-        <pre>
-echo <span class="s">"=== 1/3 Installation containerd ==="</span>
-<span class="k">apt-get</span> update -qq
-<span class="k">apt-get</span> install -y -qq ca-certificates curl gnupg
-<span class="k">install</span> -m 0755 -d /etc/apt/keyrings
-<span class="k">curl</span> -fsSL https://download.docker.com/linux/ubuntu/gpg | <span class="k">gpg</span> --dearmor -o /etc/apt/keyrings/docker.gpg
-echo <span class="s">"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-  https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable"</span> | \
-  <span class="k">tee</span> /etc/apt/sources.list.d/docker.list
-<span class="k">apt-get</span> update -qq
-<span class="k">apt-get</span> install -y -qq containerd.io
-<span class="k">mkdir</span> -p /etc/containerd
-<span class="k">containerd</span> config default | <span class="k">tee</span> /etc/containerd/config.toml
-<span class="k">sed</span> -i <span class="s">'s/SystemdCgroup = false/SystemdCgroup = true/'</span> /etc/containerd/config.toml
-<span class="k">systemctl</span> restart containerd
-<span class="k">systemctl</span> enable containerd
-
-echo <span class="s">"=== 2/3 Installation kubeadm + kubelet + kubectl ==="</span>
-<span class="k">curl</span> -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
-  <span class="k">gpg</span> --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo <span class="s">'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
-  https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /'</span> | \
-  <span class="k">tee</span> /etc/apt/sources.list.d/kubernetes.list
-<span class="k">apt-get</span> update -qq
-<span class="k">apt-get</span> install -y -qq kubelet kubeadm kubectl
-<span class="k">apt-mark</span> hold kubelet kubeadm kubectl
-
-echo <span class="s">"=== 3/3 Activation kubelet ==="</span>
-<span class="k">systemctl</span> enable kubelet
-
-echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join"</span></code></pre>
+        <code id="code"><span class="line"><span class="ln"></span><span class="lc"><span class="sh">#!/usr/bin/env bash</span></span></span>
+          <span class="line"><span class="ln"></span><span class="lc"><span class="k">set</span> -euo pipefail</span></span>
+          <span class="line"><span class="ln"></span><span class="lc"></span></span>
+          <span class="line"><span class="ln"></span><span class="lc"><span class="k">if</span> [[ <span class="v">$EUID</span> -ne <span class="n">0</span> ]]; <span class="k">then</span></span></span>
+        <span class="ln"></span><span class="lc">  <span class="f">echo</span> <span class="s">"Ce script doit être exécuté en root (ou via sudo)."</span> &gt;&amp;2</span></span>
+<span class="line"><span class="ln"></span><span class="lc">  <span class="f">exit</span> <span class="n">1</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="k">fi</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"=== 0/3 Prérequis Kubernetes ==="</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="c"># Désactiver le swap (exigé par kubelet)</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc">swapoff -a</span></span>
+<span class="line"><span class="ln"></span><span class="lc">sed -i.bak <span class="s">'/\sswap\s/s/^/#/'</span> /etc/fstab</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="c"># Modules noyau</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="f">cat</span> &lt;&lt;EOF &gt;/etc/modules-load.d/k8s.conf</span></span>
+<span class="line"><span class="ln"></span><span class="lc">overlay</span></span>
+<span class="line"><span class="ln"></span><span class="lc">br_netfilter</span></span>
+<span class="line"><span class="ln"></span><span class="lc">EOF</span></span>
+<span class="line"><span class="ln"></span><span class="lc">modprobe overlay</span></span>
+<span class="line"><span class="ln"></span><span class="lc">modprobe br_netfilter</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="c"># Paramètres sysctl pour le réseau des pods</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="f">cat</span> &lt;&lt;EOF &gt;/etc/sysctl.d/k8s.conf</span></span>
+<span class="line"><span class="ln"></span><span class="lc">net.bridge.bridge-nf-call-iptables  = 1</span></span>
+<span class="line"><span class="ln"></span><span class="lc">net.bridge.bridge-nf-call-ip6tables = 1</span></span>
+<span class="line"><span class="ln"></span><span class="lc">net.ipv4.ip_forward                 = 1</span></span>
+<span class="line"><span class="ln"></span><span class="lc">EOF</span></span>
+<span class="line"><span class="ln"></span><span class="lc">sysctl --system &gt;/dev/null</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"=== 1/3 Installation containerd ==="</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc">apt-get update -qq</span></span>
+<span class="line"><span class="ln"></span><span class="lc">apt-get install -y -qq ca-certificates curl gnupg</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc">install -m <span class="n">0755</span> -d /etc/apt/keyrings</span></span>
+<span class="line"><span class="ln"></span><span class="lc">curl -fsSL https://download.docker.com/linux/ubuntu/gpg \</span></span>
+<span class="line"><span class="ln"></span><span class="lc">  | gpg --dearmor -o /etc/apt/keyrings/docker.gpg</span></span>
+<span class="line"><span class="ln"></span><span class="lc">chmod a+r /etc/apt/keyrings/docker.gpg</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="c"># Une seule ligne logique pour le dépôt : pas de \ dans une chaîne entre guillemets</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc">. /etc/os-release</span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"deb [arch=</span><span class="v">$(</span>dpkg --print-architecture<span class="v">)</span><span class="s"> signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu </span><span class="v">${VERSION_CODENAME}</span><span class="s"> stable"</span> \</span></span>
+<span class="line"><span class="ln"></span><span class="lc">  &gt; /etc/apt/sources.list.d/docker.list</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc">apt-get update -qq</span></span>
+<span class="line"><span class="ln"></span><span class="lc">apt-get install -y -qq containerd.io</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc">mkdir -p /etc/containerd</span></span>
+<span class="line"><span class="ln"></span><span class="lc">containerd config default &gt; /etc/containerd/config.toml</span></span>
+<span class="line"><span class="ln"></span><span class="lc">sed -i <span class="s">'s/SystemdCgroup = false/SystemdCgroup = true/'</span> /etc/containerd/config.toml</span></span>
+<span class="line"><span class="ln"></span><span class="lc">systemctl restart containerd</span></span>
+<span class="line"><span class="ln"></span><span class="lc">systemctl enable containerd</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"=== 2/3 Installation kubeadm + kubelet + kubectl ==="</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc">curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key \</span></span>
+<span class="line"><span class="ln"></span><span class="lc">  | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg</span></span>
+<span class="line"><span class="ln"></span><span class="lc">chmod a+r /etc/apt/keyrings/kubernetes-apt-keyring.gpg</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"</span> \</span></span>
+<span class="line"><span class="ln"></span><span class="lc">  &gt; /etc/apt/sources.list.d/kubernetes.list</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc">apt-get update -qq</span></span>
+<span class="line"><span class="ln"></span><span class="lc">apt-get install -y -qq kubelet kubeadm kubectl</span></span>
+<span class="line"><span class="ln"></span><span class="lc">apt-mark hold kubelet kubeadm kubectl</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"=== 3/3 Activation kubelet ==="</span></span></span>
+<span class="line"><span class="ln"></span><span class="lc">systemctl enable kubelet</span></span>
+<span class="line"><span class="ln"></span><span class="lc"></span></span>
+<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"✅ Terminé. Lance ensuite 'kubeadm init ...' sur le control-plane."</span></span></span>
+</code></pre>
 <span class="p">$ </span><span class="k">chmod +x install-k8s-base.sh  <span class="c"></span>
 <span class="p">$ </span><span class="k">sudo ./install-k8s-base.sh  <span class="c"></span>
 
