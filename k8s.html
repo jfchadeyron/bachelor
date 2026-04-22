@@ -948,23 +948,10 @@ footer{
     --node-name=k8s-worker1   <span class="c"># (ou k8s-worker2)</span></code></pre>
       </div>
 
-      <h4>Accéder au cluster depuis ton PC </h4>
-      <div class="code-block">
-        <div class="code-topbar"><span class="code-label">bash — Sur ton PC (Linux/Mac)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-        <pre><code><span class="c"># Copier le kubeconfig depuis le master</span>
-<span class="p">$ </span><span class="k">scp</span> root@172.16.25.60:~/.kube/config ~/.kube/config-vbox
-
-<span class="c"># Utiliser ce contexte</span>
-<span class="p">$ </span><span class="k">export</span> KUBECONFIG=~/.kube/config-vbox
-
-<span class="c"># Ou fusionner avec ton config existant</span>
-<span class="p">$ </span><span class="k">export</span> KUBECONFIG=~/.kube/config:~/.kube/config-vbox
-<span class="p">$ </span><span class="k">kubectl</span> config view --merge --flatten > /tmp/merged.yaml
-<span class="p">$ </span><span class="k">mv</span> /tmp/merged.yaml ~/.kube/config</code></pre>
-      </div>
+      
 
       <div class="verify">
-        <div class="verify-title">✅ Vérification finale du cluster</div>
+        <div class="verify-title">✅ Vérification finale du cluster DEPUIS LE MASTER</div>
         <div class="code-block">
           <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
           <pre><code><span class="p">$ </span><span class="k">kubectl</span> get nodes -o wide
