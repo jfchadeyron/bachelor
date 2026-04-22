@@ -624,7 +624,7 @@ footer{
   └─ VM3 : k8s-worker2  → 172.16.25.62  (2 vCPU / 2 Go RAM)
            rôle : Worker Node
 
-  Accès depuis le host :
+  Accès depuis le  :
   kubectl → 172.16.25.60:6443 (API Server)
   </code></pre>
   </div>
@@ -634,11 +634,11 @@ footer{
   <div class="vm-spec-grid">
     <div class="vm-spec">
       <div class="vs-val">8 Go+</div>
-      <div class="vs-label">RAM totale du host</div>
+      <div class="vs-label">RAM totale du </div>
     </div>
     <div class="vm-spec">
       <div class="vs-val">4+ cœurs</div>
-      <div class="vs-label">CPU du host</div>
+      <div class="vs-label">CPU du </div>
     </div>
     <div class="vm-spec">
       <div class="vs-val">40 Go+</div>
@@ -733,11 +733,11 @@ footer{
 <span class="p">$ </span><span class="k">sudo nano /etc/ssh/sshd_config</span>
 <span class="c"># Rajouter : </span>
 <span class="p">$ </span><span class="k">PermitRootLogin yes</span>
-<span class="c"># Définir le hostname</span>
-<span class="p">$ </span><span class="k">sudo</span> hostnamectl set-hostname k8s-master
+<span class="c"># Définir le name</span>
+<span class="p">$ </span><span class="k">sudo</span> namectl set-name k8s-master
 <span class="p">$ </span><span class="k">sudo</span> bash -c <span class="s">'echo "172.16.25.60 k8s-master
 172.16.25.61 k8s-worker1
-172.16.25.62 k8s-worker2" >> /etc/hosts'</span>
+172.16.25.62 k8s-worker2" >> /etc/s'</span>
 <span class="k">sudo nano /etc/sysctl.d/k8s.conf</span>
 <span class="c"># Rajouter : </span>
 <span class="k">net.bridge.bridge-nf-call-iptables=1</span>
@@ -761,10 +761,10 @@ footer{
               <li>Choisir : <strong>Clone complet</strong></li>
               <li>Réinitialiser les adresses MAC des cartes réseau ✅</li>
             </ul>
-            <p>Sur chaque worker, changer l'IP et le hostname :</p>
+            <p>Sur chaque worker, changer l'IP et le name :</p>
             <div class="code-block">
               <div class="code-topbar"><span class="code-label">bash — Sur k8s-worker1</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-              <pre><code><span class="p">$ </span><span class="k">sudo</span> hostnamectl set-hostname k8s-worker1
+              <pre><code><span class="p">$ </span><span class="k">sudo</span> namectl set-name k8s-worker1
 <span class="c"># Modifier l'IP dans /etc/netplan/00-installer-config.yaml</span>
 <span class="c"># Changer 172.16.25.60 → 172.16.25.61</span>
 <span class="p">$ </span><span class="k">sudo</span> nano /etc/netplan/00-installer-config.yaml
@@ -778,9 +778,9 @@ footer{
           <div class="step-n">7</div>
           <div class="step-c">
             <h4>Configurer SSH sans mot de passe (confort de travail)</h4>
-            <p>Sur ton PC host, génère une clé SSH et copie-la sur les VMs pour te connecter sans taper de mot de passe :</p>
+            <p>Sur ton PC , génère une clé SSH et copie-la sur les VMs pour te connecter sans taper de mot de passe :</p>
             <div class="code-block">
-              <div class="code-topbar"><span class="code-label">bash — Sur ton PC Host</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+              <div class="code-topbar"><span class="code-label">bash — Sur ton PC </span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
               <pre><code><span class="c"># Générer une clé SSH (si pas encore fait)</span>
 <span class="p">$ </span><span class="k">ssh-keygen</span> -t ed25519 -C <span class="s">"k8s-lab"</span>
 
@@ -801,13 +801,13 @@ footer{
         <div class="code-block">
           <div class="code-topbar"><span class="code-label">bash — Depuis ton PC</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
           <pre><code><span class="c"># Les 3 VMs doivent répondre au ping</span>
-<span class="p">$ </span><span class="k">ping</span> -c 2 172.16.25.60  <span class="c"># master</span>
-<span class="p">$ </span><span class="k">ping</span> -c 2 172.16.25.61  <span class="c"># worker1</span>
-<span class="p">$ </span><span class="k">ping</span> -c 2 172.16.25.62  <span class="c"># worker2</span>
+<span class="p">$ </span><span class="k">ping</span> 172.16.25.60  <span class="c"># master</span>
+<span class="p">$ </span><span class="k">ping</span> 172.16.25.61  <span class="c"># worker1</span>
+<span class="p">$ </span><span class="k">ping</span> 172.16.25.62  <span class="c"># worker2</span>
 
 <span class="c"># Les VMs doivent se voir entre elles (depuis master)</span>
-<span class="p">$ </span><span class="k">ping</span> -c 2 k8s-worker1
-<span class="p">$ </span><span class="k">ping</span> -c 2 k8s-worker2</code></pre>
+<span class="p">$ </span><span class="k">ping</span> k8s-worker1
+<span class="p">$ </span><span class="k">ping</span> k8s-worker2</code></pre>
         </div>
       </div>
     </div>
@@ -948,7 +948,7 @@ footer{
     --node-name=k8s-worker1   <span class="c"># (ou k8s-worker2)</span></code></pre>
       </div>
 
-      <h4>Accéder au cluster depuis ton PC Host</h4>
+      <h4>Accéder au cluster depuis ton PC </h4>
       <div class="code-block">
         <div class="code-topbar"><span class="code-label">bash — Sur ton PC (Linux/Mac)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
         <pre><code><span class="c"># Copier le kubeconfig depuis le master</span>
@@ -1287,10 +1287,10 @@ mysql> exit
               <span class="yk">readOnly</span>: <span class="yv">true</span>
       <span class="yk">volumes</span>:
         - <span class="yk">name</span>: <span class="yv">varlog</span>
-          <span class="yk">hostPath</span>:
+          <span class="yk">Path</span>:
             <span class="yk">path</span>: <span class="ys">/var/log</span>         <span class="yc"># Monter le dossier RÉEL du node</span>
         - <span class="yk">name</span>: <span class="yv">varlibdockercontainers</span>
-          <span class="yk">hostPath</span>:
+          <span class="yk">Path</span>:
             <span class="yk">path</span>: <span class="ys">/var/lib/docker/containers</span></code></pre>
       </div>
 
