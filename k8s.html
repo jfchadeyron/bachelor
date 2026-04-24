@@ -1191,7 +1191,7 @@ mysql> exit
 
 <span class="p">$ </span><span class="k">kubectl</span> wait --for=condition=Ready pod/mysql-0 --timeout=120s
 
-<span class="p">$ </span><span class="k">kubectl</span> exec -it mysql-0 -- mysql -u root -pTP_K8s_2024 -e "SHOW DATABASES;"
+<span class="p">$ </span><span class="k">kubectl</span> exec -it mysql-0 -- mysql -u root -pTP_K8s -e "SHOW DATABASES;"
 <span class="c"># ma_base_de_test est TOUJOURS là ! Le PVC a conservé les données.</span></code></pre>
     </div>
 
