@@ -1160,11 +1160,11 @@ footer{
 <span class="p">$ </span><span class="k">kubectl</span> run -it dns-test --image=busybox --rm -- sh
 
 <span class="c"># Dans le pod busybox :</span>
-/ # nslookup mysql-0.mysql-headless
+/ # nslookup mysql-0.mysql-headless.default.svc.cluster.local
 <span class="ok"># Server:    10.96.0.10</span>
 <span class="ok"># Address 1: 10.244.1.5 mysql-0.mysql-headless.default.svc.cluster.local</span>
 
-/ # nslookup mysql-1.mysql-headless
+/ # nslookup mysql-1.mysql-headless.default.svc.cluster.local
 <span class="ok"># Address 1: 10.244.2.3 mysql-1.mysql-headless.default.svc.cluster.local</span>
 <span class="c"># Chaque pod a une adresse DNS unique et stable !</span>
 
