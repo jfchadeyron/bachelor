@@ -1,0 +1,2856 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Fraunces:ital,wght@0,300;0,500;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0f1117;
+  --bg2:      #181c27;
+  --bg3:      #1e2235;
+  --bg4:      #252a3d;
+  --border:   #2e3450;
+  --border2:  #3d4468;
+  --aws:      #ff9900;
+  --aws2:     #ffb84d;
+  --aws-dim:  rgba(255,153,0,0.12);
+  --green:    #3ecf8e;
+  --red:      #ff6b6b;
+  --blue:     #4c9fff;
+  --purple:   #b47fff;
+  --cyan:     #50d8d7;
+  --yellow:   #ffd166;
+  --text:     #e8eaf6;
+  --text2:    #9097b8;
+  --text3:    #c0c5dd;
+  --shadow:   0 4px 24px rgba(0,0,0,0.4);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:15.5px;
+  line-height:1.8;
+}
+
+/* ══ SIDEBAR ══ */
+.sidebar{
+  position:fixed; left:0; top:0;
+  width:272px; height:100vh;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  z-index:100;
+  display:flex; flex-direction:column;
+}
+
+.sidebar-logo{
+  padding:22px 18px 18px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+
+.logo-mark{
+  display:flex; align-items:center; gap:10px;
+  font-family:'Fraunces',serif;
+  font-weight:700; font-size:1.15rem;
+  color:var(--aws);
+  margin-bottom:6px;
+}
+
+.logo-mark svg{width:28px;height:28px;}
+
+.logo-sub{
+  font-size:0.7rem;
+  color:var(--text2);
+  font-family:'IBM Plex Mono',monospace;
+  letter-spacing:0.03em;
+}
+
+.sidebar nav{padding:10px 0 24px; overflow-y:auto; flex:1;}
+
+.nav-group{
+  font-size:0.62rem;
+  font-weight:600;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--text2);
+  padding:14px 18px 5px;
+}
+
+.sidebar nav a{
+  display:flex; align-items:center; gap:9px;
+  padding:5px 18px;
+  font-size:0.82rem;
+  color:var(--text3);
+  text-decoration:none;
+  transition:all 0.15s;
+  border-left:2px solid transparent;
+  position:relative;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active{
+  color:var(--text);
+  background:var(--bg3);
+  border-left-color:var(--aws);
+}
+
+.nav-icon{
+  font-size:0.95rem;
+  width:18px; text-align:center;
+  flex-shrink:0;
+}
+
+/* ══ MAIN ══ */
+.main{
+  margin-left:272px;
+  max-width:940px;
+  padding:52px 60px 140px;
+}
+
+/* ══ HERO ══ */
+.hero{
+  padding:60px 0 50px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:70px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::before{
+  content:'';
+  position:absolute;
+  top:-60px; right:-40px;
+  width:380px; height:380px;
+  background: radial-gradient(circle, rgba(255,153,0,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.hero-eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.7rem; font-weight:600;
+  color:var(--aws);
+  background:var(--aws-dim);
+  border:1px solid rgba(255,153,0,0.25);
+  padding:4px 12px;
+  border-radius:20px;
+  margin-bottom:20px;
+  letter-spacing:0.04em;
+}
+
+.hero h1{
+  font-family:'Fraunces',serif;
+  font-size:3rem; font-weight:900;
+  line-height:1.1;
+  margin-bottom:18px;
+}
+
+.hero h1 em{
+  font-style:italic;
+  color:var(--aws);
+}
+
+.hero-desc{
+  font-size:1rem;
+  color:var(--text2);
+  max-width:580px;
+  line-height:1.85;
+  margin-bottom:28px;
+}
+
+.hero-pills{
+  display:flex; gap:10px; flex-wrap:wrap;
+}
+
+.pill{
+  display:flex; align-items:center; gap:6px;
+  font-size:0.78rem;
+  color:var(--text2);
+  background:var(--bg3);
+  border:1px solid var(--border);
+  padding:5px 12px; border-radius:20px;
+}
+
+/* ══ FREE TIER BANNER ══ */
+.free-banner{
+  background: linear-gradient(135deg, rgba(62,207,142,0.07) 0%, rgba(76,159,255,0.07) 100%);
+  border:1px solid rgba(62,207,142,0.25);
+  border-radius:12px;
+  padding:20px 24px;
+  margin:0 0 60px;
+  display:flex; gap:14px; align-items:flex-start;
+}
+
+.free-banner-icon{font-size:1.6rem; flex-shrink:0; margin-top:2px;}
+
+.free-banner-body h3{
+  font-size:0.95rem; font-weight:600;
+  color:var(--green);
+  margin-bottom:6px;
+}
+
+.free-banner-body p{
+  font-size:0.85rem; color:var(--text2); margin:0;
+}
+
+/* ══ CHAPTERS ══ */
+.chapter{
+  margin-bottom:86px;
+  padding-top:10px;
+}
+
+.ch-header{
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:30px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+
+.ch-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.65rem; font-weight:600;
+  color:var(--aws);
+  background:var(--aws-dim);
+  border:1px solid rgba(255,153,0,0.2);
+  padding:3px 9px; border-radius:4px;
+  flex-shrink:0;
+}
+
+.chapter h2{
+  font-family:'Fraunces',serif;
+  font-size:1.75rem; font-weight:700;
+}
+
+h3{
+  font-size:1.1rem; font-weight:600;
+  margin:36px 0 14px;
+  color:var(--text);
+  display:flex; align-items:center; gap:8px;
+}
+
+h3::before{
+  content:'';
+  width:3px; height:1em;
+  background:linear-gradient(to bottom, var(--aws), var(--aws2));
+  border-radius:2px;
+  display:inline-block;
+  flex-shrink:0;
+}
+
+h4{
+  font-size:0.95rem; font-weight:600;
+  color:var(--cyan);
+  margin:22px 0 10px;
+}
+
+p{margin-bottom:14px; color:var(--text3);}
+
+strong{color:var(--text); font-weight:600;}
+
+ul,ol{margin:8px 0 18px 22px; color:var(--text3);}
+li{margin-bottom:7px;}
+
+/* ══ CODE BLOCKS ══ */
+.code-wrap{
+  background:#08090e;
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  margin:18px 0;
+}
+
+.code-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 16px;
+  background:var(--bg3);
+  border-bottom:1px solid var(--border);
+}
+
+.code-lang{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.65rem; font-weight:600;
+  color:var(--text2);
+  text-transform:uppercase; letter-spacing:0.08em;
+}
+
+.code-dots{display:flex;gap:5px;}
+.code-dots span{width:10px;height:10px;border-radius:50%;}
+.dot-r{background:#ff5f57;} .dot-y{background:#febc2e;} .dot-g{background:#28c840;}
+
+pre code{
+  display:block;
+  padding:18px 20px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.81rem; line-height:1.72;
+  color:#d4d9f5;
+  white-space:pre; overflow-x:auto;
+}
+
+code:not(pre code){
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.82em;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  padding:1px 6px; border-radius:4px;
+  color:#ff9f66;
+}
+
+/* Syntax */
+.kw{color:#c792ea;}
+.fn{color:#82aaff;}
+.str{color:#c3e88d;}
+.num{color:#f78c6c;}
+.cm{color:#546e7a;font-style:italic;}
+.flag{color:#ffcb6b;}
+.val{color:#89ddff;}
+.pmt{color:#546e7a;user-select:none;}
+.env{color:#f07178;}
+.key{color:#80cbc4;}
+
+/* ══ CALLOUTS ══ */
+.callout{
+  border-radius:8px;
+  padding:15px 18px;
+  margin:20px 0;
+  border-left:3px solid;
+  display:flex; gap:12px;
+  font-size:0.88rem;
+}
+
+.callout-body{flex:1;}
+.callout-body strong{display:block; font-size:0.83rem; margin-bottom:4px;}
+
+.callout.info{background:rgba(76,159,255,0.07); border-color:var(--blue);}
+.callout.info .callout-body strong{color:var(--blue);}
+
+.callout.warn{background:rgba(255,209,102,0.07); border-color:var(--yellow);}
+.callout.warn .callout-body strong{color:var(--yellow);}
+
+.callout.tip{background:rgba(62,207,142,0.07); border-color:var(--green);}
+.callout.tip .callout-body strong{color:var(--green);}
+
+.callout.danger{background:rgba(255,107,107,0.07); border-color:var(--red);}
+.callout.danger .callout-body strong{color:var(--red);}
+
+.callout.aws{background:var(--aws-dim); border-color:var(--aws);}
+.callout.aws .callout-body strong{color:var(--aws);}
+
+/* ══ CMD EXPLAIN ══ */
+.cmd-box{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  margin:18px 0;
+}
+
+.cmd-box-head{
+  background:var(--bg3);
+  padding:11px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:8px;
+  font-size:0.82rem; font-weight:600;
+  color:var(--aws);
+  font-family:'IBM Plex Mono',monospace;
+}
+
+.cmd-box-body{padding:16px 18px;}
+.cmd-box-body p{font-size:0.87rem; margin-bottom:10px;}
+
+.arg-tbl{width:100%; font-size:0.81rem; border-collapse:collapse;}
+.arg-tbl tr{border-bottom:1px solid rgba(46,52,80,0.5);}
+.arg-tbl tr:last-child{border:none;}
+.arg-tbl td{padding:7px 10px; vertical-align:top;}
+.arg-tbl td:first-child{
+  font-family:'IBM Plex Mono',monospace;
+  color:var(--yellow);
+  width:200px; white-space:nowrap;
+}
+.arg-tbl td:last-child{color:var(--text2);}
+
+/* ══ SERVICE CARDS ══ */
+.svc-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+  gap:14px; margin:22px 0;
+}
+
+.svc-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:18px;
+  transition:border-color 0.2s, transform 0.15s;
+  cursor:default;
+}
+
+.svc-card:hover{border-color:var(--aws); transform:translateY(-2px);}
+
+.svc-card .svc-icon{
+  font-size:1.6rem; margin-bottom:10px;
+  display:block;
+}
+
+.svc-card h4{
+  margin:0 0 6px; font-size:0.9rem;
+  color:var(--text); font-weight:600;
+}
+
+.svc-card p{
+  font-size:0.79rem; color:var(--text2);
+  margin:0; line-height:1.55;
+}
+
+/* ══ COMPARISON TABLE ══ */
+.cmp-tbl{
+  width:100%; border-collapse:collapse;
+  font-size:0.87rem; margin:18px 0;
+}
+
+.cmp-tbl th{
+  background:var(--bg3);
+  padding:10px 14px;
+  text-align:left; font-size:0.75rem; font-weight:600;
+  color:var(--text2); text-transform:uppercase; letter-spacing:0.06em;
+  border:1px solid var(--border);
+}
+
+.cmp-tbl td{
+  padding:9px 14px;
+  border:1px solid var(--border);
+  color:var(--text3); vertical-align:top;
+}
+
+.cmp-tbl tr:hover td{background:rgba(255,255,255,0.015);}
+
+/* ══ STEP FLOW ══ */
+.steps{margin:22px 0;}
+
+.step{
+  display:flex; gap:16px;
+  margin-bottom:28px; position:relative;
+}
+
+.step:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  left:17px; top:38px;
+  width:2px;
+  height:calc(100% - 14px);
+  background:linear-gradient(to bottom, var(--aws), transparent);
+}
+
+.step-n{
+  width:36px; height:36px; border-radius:50%;
+  background:linear-gradient(135deg, var(--aws), var(--aws2));
+  color:#000; font-weight:700; font-size:0.85rem;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; position:relative; z-index:1;
+}
+
+.step-body{flex:1;}
+.step-body h4{margin:5px 0 8px; font-size:0.92rem; color:var(--text);}
+.step-body p{font-size:0.86rem;}
+
+/* ══ ARCH DIAGRAM ══ */
+.arch{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:24px 22px;
+  margin:22px 0;
+  overflow-x:auto;
+}
+
+.arch pre{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.75rem; line-height:1.65;
+  color:var(--text3);
+  background:none; border:none; padding:0; margin:0;
+  white-space:pre;
+}
+
+.arch .arch-title{
+  text-align:center;
+  color:var(--aws); font-weight:600; font-size:0.82rem;
+  margin-bottom:14px;
+  font-family:'IBM Plex Mono',monospace;
+}
+
+/* ══ STATUS BADGE ══ */
+.badge{
+  display:inline-block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.65rem; font-weight:600;
+  padding:2px 7px; border-radius:3px;
+  margin-left:6px; vertical-align:middle;
+}
+
+.badge.free{background:rgba(62,207,142,0.15); color:var(--green); border:1px solid rgba(62,207,142,0.3);}
+.badge.local{background:rgba(76,159,255,0.12); color:var(--blue); border:1px solid rgba(76,159,255,0.25);}
+.badge.cloud{background:var(--aws-dim); color:var(--aws); border:1px solid rgba(255,153,0,0.25);}
+
+/* ══ DIVIDER ══ */
+.divider{
+  height:1px;
+  background:linear-gradient(to right, transparent, var(--border), transparent);
+  margin:48px 0;
+}
+
+/* ══ FOOTER ══ */
+.footer{
+  margin-top:80px;
+  padding-top:40px;
+  border-top:1px solid var(--border);
+  text-align:center;
+  color:var(--text2);
+  font-size:0.8rem;
+}
+
+/* ══ SCROLL ══ */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:#4d5680;}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:860px){
+  .sidebar{display:none;}
+  .main{margin-left:0; padding:24px 18px 80px;}
+  .hero h1{font-size:2rem;}
+  .svc-grid{grid-template-columns:1fr;}
+}
+
+/* ══ SERVICE COLOR TAGS ══ */
+.s3-tag{color:#3ecf8e;}
+.ec2-tag{color:#ff9900;}
+.lambda-tag{color:#ff9900;}
+.dynamo-tag{color:#4c9fff;}
+.sqs-tag{color:#b47fff;}
+.iam-tag{color:#ff6b6b;}
+.vpc-tag{color:#50d8d7;}
+
+/* ══ LOCALSTACK BADGE ══ */
+.ls-support{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.67rem; padding:2px 8px;
+  border-radius:4px; vertical-align:middle;
+  margin-left:8px;
+}
+
+.ls-ok{background:rgba(62,207,142,0.12); color:var(--green); border:1px solid rgba(62,207,142,0.25);}
+.ls-partial{background:rgba(255,209,102,0.1); color:var(--yellow); border:1px solid rgba(255,209,102,0.2);}
+</style>
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="9" width="30" height="14" rx="2" fill="rgba(255,153,0,0.1)" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M6 16 L12 12 L18 17 L24 13 L28 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="6" cy="16" r="1.5" fill="currentColor"/>
+        <circle cx="28" cy="16" r="1.5" fill="currentColor"/>
+        <path d="M8 24 L8 28 M16 24 L16 28 M24 24 L24 28" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M5 28 L27 28" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      AWS & LocalStack
+    </div>
+    <div class="logo-sub">Sans carte de crédit · Gratuit</div>
+  </div>
+  <nav>
+    <div class="nav-group">Introduction</div>
+    <a href="#intro"><span class="nav-icon">☁️</span>Qu'est-ce qu'AWS ?</a>
+    <a href="#strategy"><span class="nav-icon">🆓</span>Apprendre sans CB</a>
+    <a href="#localstack-intro"><span class="nav-icon">🐋</span>LocalStack</a>
+
+    <div class="nav-group">Installation</div>
+    <a href="#install-docker"><span class="nav-icon">📦</span>Prérequis Docker</a>
+    <a href="#install-localstack"><span class="nav-icon">⚙️</span>Installer LocalStack</a>
+    <a href="#install-awscli"><span class="nav-icon">💻</span>AWS CLI</a>
+    <a href="#configurer-cli"><span class="nav-icon">🔧</span>Configurer la CLI</a>
+
+    <div class="nav-group">Services AWS</div>
+    <a href="#s3"><span class="nav-icon s3-tag">🗄️</span>S3 — Stockage</a>
+    <a href="#ec2"><span class="nav-icon ec2-tag">🖥️</span>EC2 — Machines virtuelles</a>
+    <a href="#lambda"><span class="nav-icon lambda-tag">λ</span>Lambda — Serverless</a>
+    <a href="#dynamodb"><span class="nav-icon dynamo-tag">🗃️</span>DynamoDB — NoSQL</a>
+    <a href="#sqs"><span class="nav-icon sqs-tag">📬</span>SQS — File de messages</a>
+    <a href="#iam"><span class="nav-icon iam-tag">🔐</span>IAM — Permissions</a>
+    <a href="#vpc"><span class="nav-icon vpc-tag">🌐</span>VPC — Réseau</a>
+
+    <div class="nav-group">Projets pratiques</div>
+    <a href="#projet1"><span class="nav-icon">🌍</span>Projet 1 — Site statique S3</a>
+    <a href="#projet2"><span class="nav-icon">⚡</span>Projet 2 — API Serverless</a>
+    <a href="#projet3"><span class="nav-icon">🛒</span>Projet 3 — App Full-Stack</a>
+
+    <div class="nav-group">Référence</div>
+    <a href="#cheatsheet"><span class="nav-icon">📋</span>Cheat Sheet CLI</a>
+    <a href="#free-tier"><span class="nav-icon">💡</span>Aller vers le vrai AWS</a>
+  </nav>
+</aside>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="main">
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="intro">
+  <div class="hero-eyebrow"></div>
+  <h1>Apprendre <em>AWS</em><br></h1>
+  <p class="hero-desc">
+    les Amazon Web Services en les simulant localement grâce à <strong>LocalStack</strong> — 
+    (une émulation complète d'AWS qui tourne dans Docker).
+  </p>
+  <div class="hero-pills">
+    <span class="pill">🐋 Nécessite Docker</span>
+    <span class="pill">💳 Zéro carte de crédit</span>
+    <span class="pill">🐧 Ubuntu / Linux / macOS / Windows</span>
+    <span class="pill">⏱ ~8h de cours</span>
+    <span class="pill">🔄 LocalStack 3.x</span>
+  </div>
+</section>
+
+<!-- ══ FREE BANNER ══ -->
+<div class="free-banner">
+  <div class="free-banner-icon">🆓</div>
+  <div class="free-banner-body">
+    <h3>Approche 100% gratuite adoptée dans ce cours</h3>
+    <p>
+      Ce cours utilise <strong>LocalStack</strong>, 
+      qui émule AWS localement dans Docker. Tous les exemples fonctionnent sur ta machine sans compte AWS. 
+      Le chapitre final explique comment passer au vrai AWS quand tu seras prêt.
+    </p>
+  </div>
+</div>
+
+<!-- ══ CHAPITRE 1 : Qu'est-ce qu'AWS ══ -->
+<section class="chapter" id="strategy">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 01</span>
+    <h2>Qu'est-ce qu'AWS et pourquoi l'apprendre ?</h2>
+  </div>
+
+  <p>
+    <strong>Amazon Web Services (AWS)</strong> est la plateforme cloud n°1 mondiale, lancée par Amazon en 2006.
+    Elle propose plus de 200 services : hébergement de serveurs, bases de données, stockage de fichiers, 
+    intelligence artificielle, réseaux, sécurité… 
+  </p>
+
+  <p>
+    En tant que développeur connaissant Docker, tu gères déjà les conteneurs sur une seule machine.
+    AWS te permet de faire pareil mais à l'échelle mondiale, avec des dizaines de datacenters, 
+    de la haute disponibilité, et sans gérer le matériel physique.
+  </p>
+
+  <h3>Le modèle Cloud : IaaS, PaaS, SaaS</h3>
+  <table class="cmp-tbl">
+    <thead><tr><th>Modèle</th><th>Tu gères</th><th>AWS gère</th><th>Exemple AWS</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>IaaS</strong><br><small>Infrastructure as a Service</small></td>
+        <td>OS, runtime, appli, données</td>
+        <td>Matériel, réseau, virtualisation</td>
+        <td>EC2 (serveurs virtuels)</td>
+      </tr>
+      <tr>
+        <td><strong>PaaS</strong><br><small>Platform as a Service</small></td>
+        <td>Appli, données</td>
+        <td>Tout le reste + OS + runtime</td>
+        <td>Elastic Beanstalk, RDS</td>
+      </tr>
+      <tr>
+        <td><strong>SaaS</strong><br><small>Software as a Service</small></td>
+        <td>Utilisation uniquement</td>
+        <td>Tout</td>
+        <td>S3 (stockage), SES (emails)</td>
+      </tr>
+      <tr>
+        <td><strong>FaaS</strong><br><small>Function as a Service</small></td>
+        <td>Code de la fonction</td>
+        <td>Tout (serveurs, scaling, OS)</td>
+        <td>AWS Lambda</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Les services AWS les plus utilisés</h3>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <span class="svc-icon">🗄️</span>
+      <h4 class="s3-tag">S3 — Simple Storage</h4>
+      <p>Stockage de fichiers à l'infini. Images, vidéos, backups, sites statiques. Comme un disque dur dans le cloud.</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">🖥️</span>
+      <h4 class="ec2-tag">EC2 — Elastic Compute</h4>
+      <p>Serveurs virtuels (VMs) dans le cloud. Tu choisis CPU, RAM, OS. Comme une VPS mais plus flexible.</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">λ</span>
+      <h4 class="lambda-tag">Lambda — Serverless</h4>
+      <p>Exécute du code sans serveur. Tu paies uniquement quand le code s'exécute. Idéal pour des APIs ou tâches ponctuelles.</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">🗃️</span>
+      <h4 class="dynamo-tag">DynamoDB — NoSQL</h4>
+      <p>Base de données NoSQL ultra-rapide et scalable. Pas de schéma fixe, performances constantes.</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">📬</span>
+      <h4 class="sqs-tag">SQS — Message Queue</h4>
+      <p>File de messages entre services. Comme RabbitMQ ou Kafka, mais géré par AWS. Découple les microservices.</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">🔐</span>
+      <h4 class="iam-tag">IAM — Permissions</h4>
+      <p>Gestion des identités et accès. Contrôle qui peut faire quoi sur tes ressources AWS.</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">🌐</span>
+      <h4 class="vpc-tag">VPC — Réseau Privé</h4>
+      <p>Réseau virtuel isolé dans AWS. Sous-réseaux, firewalls, passerelles. Ton datacenter privé dans le cloud.</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">🔄</span>
+      <h4>ECS / EKS — Conteneurs</h4>
+      <p>Lancer des conteneurs Docker dans le cloud. ECS = AWS natif, EKS = Kubernetes managé.</p>
+    </div>
+  </div>
+
+  <h3>Docker vs AWS — L'analogie clé</h3>
+  <table class="cmp-tbl">
+    <thead><tr><th>Concept Docker</th><th>Équivalent AWS</th><th>Rôle</th></tr></thead>
+    <tbody>
+      <tr><td><code>docker volume</code></td><td>S3, EBS</td><td>Persistance des données</td></tr>
+      <tr><td><code>docker run</code></td><td>EC2, ECS</td><td>Lancer un serveur / conteneur</td></tr>
+      <tr><td><code>docker network</code></td><td>VPC, Subnets</td><td>Réseau isolé</td></tr>
+      <tr><td><code>.env</code> file</td><td>SSM Parameter Store, Secrets Manager</td><td>Variables d'environnement</td></tr>
+      <tr><td>Docker Compose</td><td>CloudFormation, ECS Task</td><td>Orchestration multi-services</td></tr>
+      <tr><td>Nginx reverse proxy</td><td>ALB, CloudFront</td><td>Load balancer / CDN</td></tr>
+      <tr><td>Registry Docker Hub</td><td>ECR (Elastic Container Registry)</td><td>Stocker ses images Docker</td></tr>
+      <tr><td>Cron job</td><td>Lambda + EventBridge</td><td>Tâches planifiées</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══ CHAPITRE 2 : LocalStack ══ -->
+<section class="chapter" id="localstack-intro">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 02</span>
+    <h2>LocalStack — AWS dans Docker, gratuitement</h2>
+  </div>
+
+  <p>
+    <strong>LocalStack</strong> est un projet open source qui émule l'API d'AWS entièrement en local 
+    dans un conteneur Docker. Tu envoies exactement les mêmes commandes AWS CLI qu'en production, 
+    mais elles s'exécutent sur ta machine, sans coût et sans compte AWS.
+  </p>
+
+  <div class="callout aws">
+    <div style="font-size:1.2rem;flex-shrink:0;margin-top:2px;">🔧</div>
+    <div class="callout-body">
+      <strong>Ce que LocalStack émule (version Community gratuite)</strong>
+      S3, SQS, SNS, Lambda, DynamoDB, API Gateway, IAM, SES, CloudFormation, Kinesis, 
+      Route53, CloudWatch Logs, SSM, Secrets Manager, et plus encore. 
+      Plus de 50 services AWS disponibles gratuitement.
+    </div>
+  </div>
+
+  <div class="arch">
+    <div class="arch-title">── ARCHITECTURE LOCALSTACK ──</div>
+<pre>
+┌─────────────────────────────────────────────────────────┐
+│                    Ta Machine (Ubuntu)                  │
+│                                                         │
+│  ┌───────────────────────────────────────────────────┐  │
+│  │           Docker Engine                           │  │
+│  │                                                   │  │
+│  │  ┌─────────────────────────────────────────────┐  │  │
+│  │  │     Conteneur LocalStack                    │  │  │
+│  │  │                                             │  │  │
+│  │  │   Port 4566 ◄──── Point d'entrée unique    │  │  │
+│  │  │                                             │  │  │
+│  │  │   ┌──────┐ ┌──────┐ ┌────────┐ ┌───────┐  │  │  │
+│  │  │   │  S3  │ │ SQS  │ │Lambda  │ │Dynamo │  │  │  │
+│  │  │   └──────┘ └──────┘ └────────┘ └───────┘  │  │  │
+│  │  │   ┌──────┐ ┌──────┐ ┌────────┐ ┌───────┐  │  │  │
+│  │  │   │ IAM  │ │ SNS  │ │  API   │ │  SSM  │  │  │  │
+│  │  │   └──────┘ └──────┘ │Gateway │ └───────┘  │  │  │
+│  │  │                     └────────┘             │  │  │
+│  │  └─────────────────────────────────────────┘  │  │  │
+│  │                        ▲                       │  │  │
+│  │   ┌────────────────────┘                       │  │  │
+│  │   │  AWS CLI (awslocal) / SDK Python/Node/...  │  │  │
+│  │   └────────────────────────────────────────┘  │  │  │
+│  └───────────────────────────────────────────────┘  │  │
+└─────────────────────────────────────────────────────────┘
+
+Commande réelle AWS : aws s3 ls --endpoint-url http://localhost:4566
+</pre>
+  </div>
+
+  <div class="callout tip">
+    <div style="font-size:1rem;flex-shrink:0;">✅</div>
+    <div class="callout-body">
+      <strong>Compatibilité à 100%</strong>
+      Les commandes AWS CLI que tu apprends avec LocalStack sont <strong>exactement identiques</strong> 
+      à celles du vrai AWS. La seule différence : ajouter <code>--endpoint-url http://localhost:4566</code>. 
+      Quand tu passeras au vrai AWS, tu supprimes juste cet argument.
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHAPITRE 3 : Installation ══ -->
+<section class="chapter" id="install-docker">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 03</span>
+    <h2>Installation de l'environnement complet</h2>
+  </div>
+
+  <p>
+    Nous avons besoin de trois outils : <strong>Docker</strong> (que tu as déjà),
+    <strong>LocalStack</strong> (émule AWS), et <strong>AWS CLI</strong> (l'outil en ligne de commande).
+  </p>
+
+  <h3 id="install-localstack">Étape 1 — Lancer LocalStack avec Docker Compose</h3>
+  <p>
+    La façon la plus simple est de créer un fichier <code>docker-compose.yml</code> dédié à LocalStack.
+    Tu peux le placer dans <code>~/localstack/</code> et le laisser tourner en arrière-plan.
+  </p>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Préparer le dossier</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Créer un dossier de travail pour LocalStack</span>
+<span class="pmt">$ </span>mkdir -p ~/localstack ~/localstack/data
+<span class="pmt">$ </span>cd ~/localstack</code></pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">yaml — ~/localstack/docker-compose.yml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="key">version</span>: <span class="str">'3.8'</span>
+
+<span class="key">services</span>:
+  <span class="key">localstack</span>:
+    <span class="key">image</span>: <span class="str">localstack/localstack:3.4</span>    <span class="cm"># Version stable la plus récente</span>
+    <span class="key">container_name</span>: <span class="str">localstack</span>
+    <span class="key">ports</span>:
+      - <span class="str">"127.0.0.1:4566:4566"</span>           <span class="cm"># Port principal : tous les services</span>
+      - <span class="str">"127.0.0.1:4510-4559:4510-4559"</span> <span class="cm"># Ports additionnels (Lambda, etc.)</span>
+    <span class="key">environment</span>:
+      - <span class="env">SERVICES=s3,sqs,sns,lambda,dynamodb,iam,secretsmanager,ssm,apigateway,cloudwatch,logs</span>
+                                           <span class="cm"># Services à activer (vide = tous)</span>
+      - <span class="env">DEBUG=0</span>                          <span class="cm"># 1 pour plus de logs de debug</span>
+      - <span class="env">DATA_DIR=/var/lib/localstack/data</span> <span class="cm"># Persistance des données</span>
+      - <span class="env">DOCKER_HOST=unix:///var/run/docker.sock</span>  <span class="cm"># Pour Lambda (exécution en conteneur)</span>
+      - <span class="env">AWS_DEFAULT_REGION=eu-west-1</span>     <span class="cm"># Région par défaut (Paris = eu-west-3)</span>
+    <span class="key">volumes</span>:
+      - <span class="str">"./data:/var/lib/localstack"</span>      <span class="cm"># Persister les données entre restarts</span>
+      - <span class="str">"/var/run/docker.sock:/var/run/docker.sock"</span>  <span class="cm"># Docker socket pour Lambda</span>
+    <span class="key">networks</span>:
+      - <span class="str">localstack-net</span>
+    <span class="key">restart</span>: <span class="val">unless-stopped</span>
+
+<span class="key">networks</span>:
+  <span class="key">localstack-net</span>:
+    <span class="key">driver</span>: <span class="val">bridge</span></code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">Variables d'environnement LocalStack expliquées</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>SERVICES</td><td>Liste des services AWS à activer séparés par des virgules. Laisser vide active tout (plus lent au démarrage).</td></tr>
+        <tr><td>DEBUG=1</td><td>Affiche des logs détaillés dans la console du conteneur. Utile pour debugger.</td></tr>
+        <tr><td>DATA_DIR</td><td>Dossier où LocalStack stocke les données (S3 files, DynamoDB tables...). Permet de persister entre redémarrages.</td></tr>
+        <tr><td>DOCKER_HOST</td><td>Nécessaire pour que LocalStack puisse lancer des conteneurs Docker pour exécuter les fonctions Lambda.</td></tr>
+        <tr><td>AWS_DEFAULT_REGION</td><td>Région AWS simulée. <code>eu-west-3</code> = Paris, <code>us-east-1</code> = Virginie (défaut AWS).</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Démarrer LocalStack</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="pmt">$ </span><span class="fn">cd</span> ~/localstack
+
+<span class="cm"># Démarrer LocalStack en arrière-plan</span>
+<span class="pmt">$ </span>docker compose up <span class="flag">-d</span>
+
+<span class="cm"># Suivre les logs de démarrage</span>
+<span class="pmt">$ </span>docker compose logs <span class="flag">-f</span>
+
+<span class="cm"># Attendre le message : "Ready." dans les logs</span>
+<span class="cm"># LocalStack est prêt quand tu vois :</span>
+<span class="cm"># localstack  | Ready.</span>
+
+<span class="cm"># Vérifier que LocalStack répond (health check)</span>
+<span class="pmt">$ </span>curl http://localhost:4566/_localstack/health
+<span class="cm"># Réponse JSON avec le statut de chaque service</span>
+
+<span class="cm"># Voir les conteneurs actifs</span>
+<span class="pmt">$ </span>docker ps | grep localstack</code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">docker compose — arguments expliqués</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>up</td><td>Crée et démarre les conteneurs définis dans docker-compose.yml</td></tr>
+        <tr><td>-d / --detach</td><td>Mode détaché : tourne en arrière-plan, libère le terminal</td></tr>
+        <tr><td>logs -f</td><td>Affiche les logs en temps réel (<code>-f</code> = follow). Ctrl+C pour quitter sans arrêter le conteneur.</td></tr>
+        <tr><td>down</td><td>Arrête et supprime les conteneurs (mais conserve les volumes)</td></tr>
+        <tr><td>restart localstack</td><td>Redémarre uniquement le service <code>localstack</code></td></tr>
+        <tr><td>ps</td><td>Liste les conteneurs gérés par ce docker-compose</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h3 id="install-awscli">Étape 2 — Installer AWS CLI v2</h3>
+  <p>
+    L'AWS CLI (Command Line Interface) est l'outil qui te permet d'interagir avec AWS 
+    (ou LocalStack) depuis ton terminal. C'est l'équivalent de la commande <code>docker</code> 
+    mais pour AWS.
+  </p>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Installation AWS CLI v2 sur Ubuntu</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># ─── Méthode officielle AWS CLI v2 ───</span>
+
+<span class="cm"># 1. Télécharger l'installeur</span>
+<span class="pmt">$ </span>curl <span class="flag">"https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"</span> <span class="flag">-o</span> awscliv2.zip
+
+<span class="cm"># 2. Décompresser</span>
+<span class="pmt">$ </span>unzip awscliv2.zip
+
+<span class="cm"># 3. Installer (dans /usr/local/aws-cli)</span>
+<span class="pmt">$ </span>sudo ./aws/install
+
+<span class="cm"># 4. Vérifier l'installation</span>
+<span class="pmt">$ </span>aws <span class="flag">--version</span>
+<span class="cm"># aws-cli/2.x.x Python/3.x.x Linux/6.x.x</span>
+
+<span class="cm"># 5. Nettoyer</span>
+<span class="pmt">$ </span>rm <span class="flag">-rf</span> awscliv2.zip aws/</code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">Installer awslocal — le wrapper pratique pour LocalStack</div>
+    <div class="cmd-box-body">
+      <p>
+        <code>awslocal</code> est un wrapper de la CLI AWS qui ajoute automatiquement 
+        <code>--endpoint-url http://localhost:4566</code> à chaque commande. 
+        Tu n'as donc pas à le taper à chaque fois.
+      </p>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Installer awslocal</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Installer pip si pas déjà présent</span>
+<span class="pmt">$ </span>sudo apt-get install <span class="flag">-y</span> python3-pip
+
+<span class="cm"># Installer awscli-local (fournit la commande "awslocal")</span>
+<span class="pmt">$ </span>pip3 install awscli-local
+
+<span class="cm"># Vérifier</span>
+<span class="pmt">$ </span>awslocal <span class="flag">--version</span>
+
+<span class="cm"># Test : lister les buckets S3 (vide pour l'instant)</span>
+<span class="pmt">$ </span>awslocal s3 ls
+<span class="cm"># (pas de résultat = normal, aucun bucket créé)</span></code></pre>
+  </div>
+
+  <h3 id="configurer-cli">Étape 3 — Configurer AWS CLI pour LocalStack</h3>
+  <p>
+    Même si on utilise LocalStack, AWS CLI a besoin d'une configuration. 
+    Pour LocalStack, on utilise des valeurs fictives (n'importe quelle valeur fonctionne).
+  </p>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Configuration AWS CLI</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Configurer les credentials AWS (faux pour LocalStack)</span>
+<span class="pmt">$ </span>aws configure
+
+<span class="cm"># Il te demande :</span>
+<span class="cm"># AWS Access Key ID [None]: test</span>
+<span class="cm"># AWS Secret Access Key [None]: test</span>
+<span class="cm"># Default region name [None]: eu-west-3</span>
+<span class="cm"># Default output format [None]: json</span>
+
+<span class="cm"># OU en une seule commande :</span>
+<span class="pmt">$ </span>aws configure set aws_access_key_id <span class="str">test</span>
+<span class="pmt">$ </span>aws configure set aws_secret_access_key <span class="str">test</span>
+<span class="pmt">$ </span>aws configure set region <span class="str">eu-west-3</span>
+<span class="pmt">$ </span>aws configure set output <span class="str">json</span>
+
+<span class="cm"># Vérifier la config</span>
+<span class="pmt">$ </span>aws configure list</code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">aws configure — explication des champs</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>AWS Access Key ID</td><td>Identifiant de la clé d'accès. Pour LocalStack : <code>test</code>. Pour le vrai AWS : généré dans la console IAM.</td></tr>
+        <tr><td>AWS Secret Access Key</td><td>Clé secrète. Pour LocalStack : <code>test</code>. Pour le vrai AWS : visible une seule fois lors de la création.</td></tr>
+        <tr><td>Default region</td><td>Région AWS par défaut. <code>eu-west-3</code> = Paris. <code>us-east-1</code> = Virginie du Nord (la plus utilisée).</td></tr>
+        <tr><td>Default output format</td><td><code>json</code> = réponses en JSON. Autres options : <code>table</code> (lisible), <code>text</code> (scripts).</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div style="font-size:1rem;flex-shrink:0;">💡</div>
+    <div class="callout-body">
+      <strong>Fichiers de configuration créés</strong>
+      <code>aws configure</code> crée deux fichiers : <code>~/.aws/credentials</code> (clés) et <code>~/.aws/config</code> (région et format). 
+      Tu peux avoir plusieurs profils avec <code>aws configure --profile mon-profil</code> et 
+      basculer avec <code>--profile mon-profil</code> dans les commandes.
+    </div>
+  </div>
+
+  <h3>Tester que tout fonctionne</h3>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Test de l'installation complète</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Test avec awslocal (wrapper automatique)</span>
+<span class="pmt">$ </span>awslocal s3 ls
+<span class="cm"># (vide, c'est normal)</span>
+
+<span class="cm"># Test avec aws + endpoint-url explicite (même résultat)</span>
+<span class="pmt">$ </span>aws s3 ls <span class="flag">--endpoint-url</span> http://localhost:4566
+
+<span class="cm"># Créer un bucket de test</span>
+<span class="pmt">$ </span>awslocal s3 mb s3://mon-bucket-test
+
+<span class="cm"># Vérifier qu'il existe</span>
+<span class="pmt">$ </span>awslocal s3 ls
+<span class="cm"># 2024-01-15 10:30:00 mon-bucket-test</span>
+
+<span class="cm"># Supprimer le bucket de test</span>
+<span class="pmt">$ </span>awslocal s3 rb s3://mon-bucket-test</code></pre>
+  </div>
+
+  <div class="callout info">
+    <div style="font-size:1rem;flex-shrink:0;">📌</div>
+    <div class="callout-body">
+      <strong>Syntaxe dans ce cours</strong>
+      Dans tous les exemples suivants, j'utilise <code>awslocal</code> (le wrapper LocalStack). 
+      Si tu utilises le vrai AWS, remplace <code>awslocal</code> par <code>aws</code>. 
+      Toutes les commandes restent identiques.
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHAPITRE 4 : S3 ══ -->
+<section class="chapter" id="s3">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 04</span>
+    <h2>S3 — Simple Storage Service <span class="ls-support ls-ok">✓ LocalStack</span></h2>
+  </div>
+
+  <p>
+    <strong>Amazon S3</strong> est le service de stockage de fichiers d'AWS. 
+    Pense à lui comme un disque dur dans le cloud avec une capacité quasiment illimitée.
+    Il est organisé en <strong>buckets</strong> (sceaux), qui contiennent des <strong>objets</strong> (fichiers).
+  </p>
+
+  <div class="callout info">
+    <div style="font-size:1rem;flex-shrink:0;">🗄️</div>
+    <div class="callout-body">
+      <strong>Analogie Docker</strong>
+      S3 ≈ un volume Docker dans le cloud, accessible depuis partout via HTTPS. 
+      Mais contrairement aux volumes Docker (liés à un conteneur), 
+      les objets S3 sont indépendants et accessibles publiquement si tu le souhaites.
+    </div>
+  </div>
+
+  <h3>Concepts fondamentaux S3</h3>
+  <table class="cmp-tbl">
+    <thead><tr><th>Terme</th><th>Signification</th><th>Exemple</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Bucket</strong></td><td>Conteneur de fichiers. Nom globalement unique dans AWS.</td><td><code>mon-site-web-2024</code></td></tr>
+      <tr><td><strong>Object</strong></td><td>Un fichier (+ ses métadonnées) dans un bucket</td><td><code>images/photo.jpg</code></td></tr>
+      <tr><td><strong>Key</strong></td><td>Le "chemin" de l'objet dans le bucket (pas de vraie arborescence)</td><td><code>dossier/sous/fichier.txt</code></td></tr>
+      <tr><td><strong>Prefix</strong></td><td>Partie du chemin pour simuler un dossier</td><td><code>images/</code></td></tr>
+      <tr><td><strong>ACL</strong></td><td>Access Control List : qui peut lire/écrire l'objet</td><td><code>public-read</code></td></tr>
+      <tr><td><strong>Versioning</strong></td><td>Conserver l'historique des versions d'un fichier</td><td>Permet le rollback</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Commandes S3 essentielles</h3>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">awslocal s3 mb — Créer un bucket</div>
+    <div class="cmd-box-body">
+      <p><code>mb</code> = "make bucket". Crée un nouveau bucket S3.</p>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Créer un bucket (nom doit être unique, sans majuscules ni espaces)</span>
+<span class="pmt">$ </span>awslocal s3 mb s3://mon-premier-bucket
+<span class="cm"># make_bucket: mon-premier-bucket</span>
+
+<span class="cm"># Créer un bucket dans une région spécifique</span>
+<span class="pmt">$ </span>awslocal s3 mb s3://mon-bucket-paris <span class="flag">--region</span> eu-west-3
+
+<span class="cm"># Lister tous les buckets</span>
+<span class="pmt">$ </span>awslocal s3 ls
+<span class="cm"># 2024-01-15 10:30:00 mon-premier-bucket</span>
+<span class="cm"># 2024-01-15 10:31:00 mon-bucket-paris</span></code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">awslocal s3 cp — Copier des fichiers</div>
+    <div class="cmd-box-body">
+      <p>Copie un fichier local vers S3, ou depuis S3 vers local, ou entre deux emplacements S3.</p>
+      <table class="arg-tbl">
+        <tr><td>s3://bucket/key</td><td>Chemin d'un objet S3. Toujours préfixé par <code>s3://</code></td></tr>
+        <tr><td>--recursive</td><td>Copie un dossier entier et ses sous-dossiers</td></tr>
+        <tr><td>--acl public-read</td><td>Rend le fichier accessible publiquement via URL</td></tr>
+        <tr><td>--content-type</td><td>Définit le type MIME du fichier (ex: <code>text/html</code>)</td></tr>
+        <tr><td>--storage-class</td><td>Classe de stockage : STANDARD, GLACIER (archive pas chère), etc.</td></tr>
+        <tr><td>--exclude</td><td>Exclure des fichiers selon un pattern (ex: <code>"*.tmp"</code>)</td></tr>
+        <tr><td>--include</td><td>Inclure uniquement les fichiers matching le pattern</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Créer un fichier de test</span>
+<span class="pmt">$ </span>echo <span class="str">"Bonjour depuis S3 LocalStack!"</span> > bonjour.txt
+
+<span class="cm"># Uploader (local → S3)</span>
+<span class="pmt">$ </span>awslocal s3 cp bonjour.txt s3://mon-premier-bucket/bonjour.txt
+<span class="cm"># upload: ./bonjour.txt to s3://mon-premier-bucket/bonjour.txt</span>
+
+<span class="cm"># Uploader dans un "dossier" virtuel</span>
+<span class="pmt">$ </span>awslocal s3 cp bonjour.txt s3://mon-premier-bucket/docs/bonjour.txt
+
+<span class="cm"># Télécharger (S3 → local)</span>
+<span class="pmt">$ </span>awslocal s3 cp s3://mon-premier-bucket/bonjour.txt ./telecharge.txt
+
+<span class="cm"># Copier un dossier entier vers S3 (récursif)</span>
+<span class="pmt">$ </span>awslocal s3 cp ./mon-site/ s3://mon-premier-bucket/ <span class="flag">--recursive</span>
+
+<span class="cm"># Copier avec métadonnées de type de contenu</span>
+<span class="pmt">$ </span>awslocal s3 cp index.html s3://mon-premier-bucket/ <span class="flag">--content-type</span> <span class="str">"text/html"</span></code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">awslocal s3 ls — Lister les objets</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>s3://bucket/</td><td>Lister le contenu d'un bucket</td></tr>
+        <tr><td>s3://bucket/prefix/</td><td>Lister uniquement les objets avec ce préfixe (simuler un dossier)</td></tr>
+        <tr><td>--recursive</td><td>Lister récursivement tous les objets y compris sous-dossiers</td></tr>
+        <tr><td>--human-readable</td><td>Afficher les tailles en Ko/Mo/Go</td></tr>
+        <tr><td>--summarize</td><td>Afficher le nombre total d'objets et la taille totale</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Lister le contenu du bucket</span>
+<span class="pmt">$ </span>awslocal s3 ls s3://mon-premier-bucket/
+<span class="cm"># 2024-01-15 10:35:00       28 bonjour.txt</span>
+<span class="cm"># PRE docs/</span>
+
+<span class="cm"># Lister avec détails lisibles</span>
+<span class="pmt">$ </span>awslocal s3 ls s3://mon-premier-bucket/ <span class="flag">--recursive --human-readable --summarize</span>
+
+<span class="cm"># Lister seulement les fichiers du "dossier" docs/</span>
+<span class="pmt">$ </span>awslocal s3 ls s3://mon-premier-bucket/docs/</code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">awslocal s3 sync — Synchroniser des dossiers</div>
+    <div class="cmd-box-body">
+      <p>
+        <code>sync</code> synchronise un dossier local avec S3 (ou l'inverse). 
+        Il ne copie que les fichiers nouveaux ou modifiés. 
+        C'est la commande idéale pour déployer un site web statique.
+      </p>
+      <table class="arg-tbl">
+        <tr><td>source destination</td><td>Local → S3, S3 → Local, ou S3 → S3</td></tr>
+        <tr><td>--delete</td><td>Supprime dans la destination les fichiers qui n'existent plus dans la source</td></tr>
+        <tr><td>--exclude "*.log"</td><td>Exclure les fichiers .log de la synchronisation</td></tr>
+        <tr><td>--dryrun</td><td>Simule la synchronisation sans rien modifier (utile pour vérifier)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Synchroniser un dossier local vers S3</span>
+<span class="pmt">$ </span>awslocal s3 sync ./mon-site/ s3://mon-site-bucket/
+
+<span class="cm"># Avec suppression des fichiers obsolètes côté S3</span>
+<span class="pmt">$ </span>awslocal s3 sync ./mon-site/ s3://mon-site-bucket/ <span class="flag">--delete</span>
+
+<span class="cm"># Simulation avant de vraiment synchroniser</span>
+<span class="pmt">$ </span>awslocal s3 sync ./mon-site/ s3://mon-site-bucket/ <span class="flag">--dryrun</span>
+
+<span class="cm"># Télécharger tout un bucket localement</span>
+<span class="pmt">$ </span>awslocal s3 sync s3://mon-site-bucket/ ./backup-site/</code></pre>
+  </div>
+
+  <h3>Commandes S3 avancées</h3>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — awslocal s3api (API complète)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># ─── s3api : accès bas niveau à l'API S3 ───</span>
+
+<span class="cm"># Créer un bucket avec s3api</span>
+<span class="pmt">$ </span>awslocal s3api create-bucket <span class="flag">--bucket</span> mon-bucket-api \
+    <span class="flag">--region</span> eu-west-3 \
+    <span class="flag">--create-bucket-configuration</span> LocationConstraint=eu-west-3
+
+<span class="cm"># Activer le versioning sur un bucket</span>
+<span class="pmt">$ </span>awslocal s3api put-bucket-versioning \
+    <span class="flag">--bucket</span> mon-premier-bucket \
+    <span class="flag">--versioning-configuration</span> Status=Enabled
+
+<span class="cm"># Configurer un bucket pour héberger un site web statique</span>
+<span class="pmt">$ </span>awslocal s3api put-bucket-website \
+    <span class="flag">--bucket</span> mon-premier-bucket \
+    <span class="flag">--website-configuration</span> <span class="str">'{
+        "IndexDocument": {"Suffix": "index.html"},
+        "ErrorDocument": {"Key": "error.html"}
+    }'</span>
+
+<span class="cm"># Obtenir les métadonnées d'un objet</span>
+<span class="pmt">$ </span>awslocal s3api head-object \
+    <span class="flag">--bucket</span> mon-premier-bucket \
+    <span class="flag">--key</span> bonjour.txt
+
+<span class="cm"># Rendre un bucket public (désactive BlockPublicAccess)</span>
+<span class="pmt">$ </span>awslocal s3api put-public-access-block \
+    <span class="flag">--bucket</span> mon-premier-bucket \
+    <span class="flag">--public-access-block-configuration</span> <span class="str">"BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"</span>
+
+<span class="cm"># Supprimer un objet</span>
+<span class="pmt">$ </span>awslocal s3api delete-object \
+    <span class="flag">--bucket</span> mon-premier-bucket \
+    <span class="flag">--key</span> bonjour.txt
+
+<span class="cm"># Supprimer un bucket (doit être vide d'abord)</span>
+<span class="pmt">$ </span>awslocal s3 rm s3://mon-premier-bucket <span class="flag">--recursive</span>  <span class="cm"># Vider</span>
+<span class="pmt">$ </span>awslocal s3 rb s3://mon-premier-bucket                 <span class="cm"># Supprimer</span></code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">s3 vs s3api — Quelle différence ?</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>aws s3</td><td>Interface de haut niveau. Commandes simplifiées : cp, mv, ls, sync, rm, mb, rb. Idéal pour les opérations courantes avec fichiers.</td></tr>
+        <tr><td>aws s3api</td><td>Interface de bas niveau, accès direct à l'API REST S3. Permet toutes les configurations avancées : versioning, lifecycle, CORS, ACL, policy, website hosting.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHAPITRE 5 : EC2 ══ -->
+<section class="chapter" id="ec2">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 05</span>
+    <h2>EC2 — Elastic Compute Cloud <span class="ls-support ls-partial">~ LocalStack</span></h2>
+  </div>
+
+  <p>
+    <strong>EC2</strong> est le service de machines virtuelles d'AWS. Tu loues un serveur virtuel 
+    (appelé <em>instance</em>) avec les ressources que tu veux, dans la région que tu choisis.
+    C'est l'équivalent d'un VPS (Hetzner, OVH...) mais avec bien plus de flexibilité.
+  </p>
+
+  <div class="callout warn">
+    <div style="font-size:1rem;flex-shrink:0;">⚠️</div>
+    <div class="callout-body">
+      <strong>Support LocalStack limité pour EC2</strong>
+      LocalStack Community supporte EC2 en mode simulation légère. Les instances ne "tournent" 
+      pas vraiment (pas de vrai OS). Pour pratiquer EC2 réellement sans CB, 
+      utilise <strong>AWS Academy</strong> (gratuit pour étudiants) ou 
+      <strong>Play with AWS</strong> (labs temporaires). Ce chapitre couvre les commandes 
+      que tu utiliseras sur le vrai AWS.
+    </div>
+  </div>
+
+  <h3>Concepts EC2 fondamentaux</h3>
+  <table class="cmp-tbl">
+    <thead><tr><th>Terme</th><th>Signification</th><th>Analogie Docker</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Instance</strong></td><td>Une VM EC2 en cours d'exécution</td><td>Un conteneur en cours d'exécution</td></tr>
+      <tr><td><strong>AMI</strong></td><td>Amazon Machine Image : template du disque (OS + logiciels)</td><td>Une image Docker</td></tr>
+      <tr><td><strong>Instance Type</strong></td><td>Combinaison de CPU/RAM/réseau (ex: t3.micro)</td><td>--cpus et --memory dans docker run</td></tr>
+      <tr><td><strong>Security Group</strong></td><td>Firewall de l'instance : règles entrantes/sortantes</td><td>--publish de docker run</td></tr>
+      <tr><td><strong>Key Pair</strong></td><td>Clé SSH pour se connecter à l'instance</td><td>N/A</td></tr>
+      <tr><td><strong>EBS Volume</strong></td><td>Disque dur virtuel attaché à l'instance</td><td>Volume Docker</td></tr>
+      <tr><td><strong>Elastic IP</strong></td><td>IP publique fixe associée à une instance</td><td>N/A</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Types d'instances EC2 courants</h3>
+  <table class="cmp-tbl">
+    <thead><tr><th>Famille</th><th>Usage</th><th>Exemple</th><th>vCPU / RAM</th></tr></thead>
+    <tbody>
+      <tr><td><code>t3.micro</code></td><td>Usage général, dev/test <span class="badge free">Free Tier</span></td><td>Blog, API simple</td><td>2 / 1 Go</td></tr>
+      <tr><td><code>t3.small</code></td><td>Usage général léger</td><td>App web petite</td><td>2 / 2 Go</td></tr>
+      <tr><td><code>m5.large</code></td><td>Usage général équilibré</td><td>App web production</td><td>2 / 8 Go</td></tr>
+      <tr><td><code>c5.xlarge</code></td><td>CPU intensif</td><td>Calcul, encodage</td><td>4 / 8 Go</td></tr>
+      <tr><td><code>r5.large</code></td><td>RAM intensive</td><td>Base de données en mémoire</td><td>2 / 16 Go</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Commandes EC2 essentielles (AWS CLI)</h3>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Créer une paire de clés SSH</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Créer une paire de clés (la clé privée est téléchargée UNE SEULE FOIS)</span>
+<span class="pmt">$ </span>awslocal ec2 create-key-pair \
+    <span class="flag">--key-name</span> <span class="str">ma-cle-ssh</span> \
+    <span class="flag">--query</span> <span class="str">'KeyMaterial'</span> \
+    <span class="flag">--output</span> <span class="str">text</span> > ~/.ssh/ma-cle-ssh.pem
+
+<span class="cm"># Sécuriser les droits (SSH refuse les clés trop permissives)</span>
+<span class="pmt">$ </span>chmod 400 ~/.ssh/ma-cle-ssh.pem
+
+<span class="cm"># Lister les paires de clés existantes</span>
+<span class="pmt">$ </span>awslocal ec2 describe-key-pairs</code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">ec2 create-key-pair — arguments</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>--key-name</td><td>Nom de la paire de clés dans AWS. Doit être unique dans la région.</td></tr>
+        <tr><td>--query 'KeyMaterial'</td><td>Filtre la réponse JSON pour n'extraire que le contenu de la clé privée.</td></tr>
+        <tr><td>--output text</td><td>Format texte brut (sans les guillemets JSON). Nécessaire pour sauvegarder la clé.</td></tr>
+        <tr><td>&gt; fichier.pem</td><td>Redirige la sortie vers le fichier. La clé privée ne peut être récupérée qu'une seule fois.</td></tr>
+        <tr><td>chmod 400</td><td>Droits lecture seule pour le propriétaire. SSH refuse de se connecter si les droits sont trop ouverts.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Créer un Security Group et lancer une instance</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># ─── 1. Créer un Security Group (firewall) ───</span>
+<span class="pmt">$ </span>awslocal ec2 create-security-group \
+    <span class="flag">--group-name</span> <span class="str">mon-sg-web</span> \
+    <span class="flag">--description</span> <span class="str">"Security group pour serveur web"</span>
+<span class="cm"># Retourne : { "GroupId": "sg-xxxxxxxx" }</span>
+
+<span class="cm"># ─── 2. Autoriser SSH (port 22) depuis n'importe où ───</span>
+<span class="pmt">$ </span>awslocal ec2 authorize-security-group-ingress \
+    <span class="flag">--group-name</span> <span class="str">mon-sg-web</span> \
+    <span class="flag">--protocol</span> <span class="str">tcp</span> \
+    <span class="flag">--port</span> <span class="num">22</span> \
+    <span class="flag">--cidr</span> <span class="str">0.0.0.0/0</span>
+
+<span class="cm"># ─── 3. Autoriser HTTP (port 80) ───</span>
+<span class="pmt">$ </span>awslocal ec2 authorize-security-group-ingress \
+    <span class="flag">--group-name</span> <span class="str">mon-sg-web</span> \
+    <span class="flag">--protocol</span> <span class="str">tcp</span> \
+    <span class="flag">--port</span> <span class="num">80</span> \
+    <span class="flag">--cidr</span> <span class="str">0.0.0.0/0</span>
+
+<span class="cm"># ─── 4. Trouver l'AMI Ubuntu 24.04 (sur vrai AWS) ───</span>
+<span class="pmt">$ </span>aws ec2 describe-images \
+    <span class="flag">--owners</span> <span class="str">099720109477</span> \
+    <span class="flag">--filters</span> <span class="str">"Name=name,Values=ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"</span> \
+    <span class="flag">--query</span> <span class="str">'Images | sort_by(@, &CreationDate) | [-1].ImageId'</span> \
+    <span class="flag">--output</span> <span class="str">text</span>
+<span class="cm"># Retourne : ami-xxxxxxxxxxxxxxxxx</span>
+
+<span class="cm"># ─── 5. Lancer une instance EC2 ───</span>
+<span class="pmt">$ </span>awslocal ec2 run-instances \
+    <span class="flag">--image-id</span> <span class="str">ami-0c02fb55956c7d316</span> \
+    <span class="flag">--instance-type</span> <span class="str">t3.micro</span> \
+    <span class="flag">--key-name</span> <span class="str">ma-cle-ssh</span> \
+    <span class="flag">--security-groups</span> <span class="str">mon-sg-web</span> \
+    <span class="flag">--count</span> <span class="num">1</span> \
+    <span class="flag">--tag-specifications</span> <span class="str">'ResourceType=instance,Tags=[{Key=Name,Value=mon-serveur-web}]'</span></code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">ec2 run-instances — arguments clés</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>--image-id</td><td>L'AMI à utiliser. Chaque région a ses propres IDs d'AMI. Ubuntu = ami-0c02fb55956c7d316 en us-east-1.</td></tr>
+        <tr><td>--instance-type</td><td>Taille de la machine. <code>t3.micro</code> est gratuit (Free Tier) pendant 750h/mois la première année.</td></tr>
+        <tr><td>--key-name</td><td>Nom de la paire de clés SSH pour se connecter à l'instance.</td></tr>
+        <tr><td>--security-groups</td><td>Nom(s) du/des security groups à associer. Défini les règles de firewall.</td></tr>
+        <tr><td>--count N</td><td>Lancer N instances identiques en une commande.</td></tr>
+        <tr><td>--tag-specifications</td><td>Tags (étiquettes) pour identifier et organiser les ressources AWS.</td></tr>
+        <tr><td>--user-data</td><td>Script bash exécuté au premier démarrage de l'instance (comme cloud-init).</td></tr>
+        <tr><td>--subnet-id</td><td>Sous-réseau VPC dans lequel lancer l'instance.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Gérer les instances EC2</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Lister les instances</span>
+<span class="pmt">$ </span>awslocal ec2 describe-instances \
+    <span class="flag">--query</span> <span class="str">'Reservations[*].Instances[*].[InstanceId,InstanceType,State.Name,PublicIpAddress,Tags[?Key==`Name`].Value|[0]]'</span> \
+    <span class="flag">--output</span> <span class="str">table</span>
+
+<span class="cm"># Arrêter une instance (conserve les données EBS)</span>
+<span class="pmt">$ </span>awslocal ec2 stop-instances <span class="flag">--instance-ids</span> i-1234567890abcdef0
+
+<span class="cm"># Démarrer une instance</span>
+<span class="pmt">$ </span>awslocal ec2 start-instances <span class="flag">--instance-ids</span> i-1234567890abcdef0
+
+<span class="cm"># Terminer (supprimer définitivement) une instance</span>
+<span class="pmt">$ </span>awslocal ec2 terminate-instances <span class="flag">--instance-ids</span> i-1234567890abcdef0
+
+<span class="cm"># Se connecter en SSH (sur le vrai AWS)</span>
+<span class="pmt">$ </span>ssh <span class="flag">-i</span> ~/.ssh/ma-cle-ssh.pem ubuntu@<span class="val">IP_PUBLIQUE</span>
+
+<span class="cm"># Récupérer l'IP publique d'une instance</span>
+<span class="pmt">$ </span>awslocal ec2 describe-instances \
+    <span class="flag">--instance-ids</span> i-1234567890abcdef0 \
+    <span class="flag">--query</span> <span class="str">'Reservations[0].Instances[0].PublicIpAddress'</span> \
+    <span class="flag">--output</span> <span class="str">text</span></code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div style="font-size:1rem;flex-shrink:0;">🚀</div>
+    <div class="callout-body">
+      <strong>User Data : bootstrapper une instance au démarrage</strong>
+      Le paramètre <code>--user-data</code> accepte un script bash exécuté automatiquement au 
+      premier démarrage. Parfait pour installer Docker, Nginx, ou configurer l'instance 
+      sans se connecter manuellement. Exemple : 
+      <code>--user-data "#!/bin/bash\napt-get update\napt-get install -y nginx\n"</code>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHAPITRE 6 : Lambda ══ -->
+<section class="chapter" id="lambda">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 06</span>
+    <h2>Lambda — Fonctions Serverless <span class="ls-support ls-ok">✓ LocalStack</span></h2>
+  </div>
+
+  <p>
+    <strong>AWS Lambda</strong> permet d'exécuter du code <strong>sans gérer de serveur</strong>. 
+    Tu écris une fonction, tu la déploies, et AWS l'exécute à la demande. 
+    Tu ne paies que le temps d'exécution réel (première tranche de 1 million d'appels 
+    et 400 000 Go-secondes <strong>gratuits par mois à vie</strong>).
+  </p>
+
+  <div class="callout info">
+    <div style="font-size:1rem;flex-shrink:0;">⚡</div>
+    <div class="callout-body">
+      <strong>Analogie Docker</strong>
+      Lambda ≈ un conteneur qui démarre en millisecondes à la demande, exécute ta fonction, 
+      puis s'arrête. Tu n'as pas à gérer le serveur, l'OS, le scaling, ni la disponibilité.
+    </div>
+  </div>
+
+  <h3>Comment fonctionne Lambda</h3>
+  <div class="arch">
+    <div class="arch-title">── CYCLE DE VIE D'UNE LAMBDA ──</div>
+<pre>
+Déclencheur          Lambda          Ta Fonction
+(Trigger)        (AWS gère)         (Ton code)
+   │                  │                  │
+   │ 1. Événement     │                  │
+   │ ─────────────►   │                  │
+   │                  │ 2. Init cold     │
+   │                  │    start (rare)  │
+   │                  │ ─────────────►   │
+   │                  │                  │ 3. handler(event)
+   │                  │                  │ ───────────────►
+   │                  │                  │ 4. return result
+   │                  │ ◄─────────────   │
+   │ 5. Réponse       │                  │
+   │ ◄─────────────   │                  │
+   │                  │ (Conteneur gardé │
+   │                  │  en veille 15mn) │
+
+Déclencheurs possibles :
+ • API Gateway (requête HTTP)
+ • S3 (upload d'un fichier)
+ • SQS (nouveau message)
+ • EventBridge (cron job)
+ • DynamoDB (modification de données)
+</pre>
+  </div>
+
+  <h3>Créer et déployer une Lambda en Python</h3>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">1</div>
+      <div class="step-body">
+        <h4>Écrire la fonction Lambda</h4>
+        <div class="code-wrap">
+          <div class="code-head"><span class="code-lang">python — handler.py</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="kw">import</span> json
+<span class="kw">import</span> os
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+<span class="cm"># La fonction Lambda a TOUJOURS la signature handler(event, context)</span>
+<span class="kw">def</span> <span class="fn">handler</span>(event, context):
+    <span class="cm">"""
+    event   : dict contenant les données du déclencheur (ex: requête HTTP)
+    context : informations sur l'exécution Lambda (timeout, mémoire, etc.)
+    """</span>
+
+    <span class="cm"># Lire les paramètres de la requête (si appelé via API Gateway)</span>
+    params = event.get(<span class="str">'queryStringParameters'</span>, {}) <span class="kw">or</span> {}
+    nom    = params.get(<span class="str">'nom'</span>, <span class="str">'Monde'</span>)
+
+    <span class="cm"># Lire une variable d'environnement</span>
+    env = os.environ.get(<span class="str">'APP_ENV'</span>, <span class="str">'development'</span>)
+
+    <span class="cm"># Logique de ta fonction</span>
+    message = <span class="fn">f</span><span class="str">"Bonjour {nom} ! Il est {datetime.now().strftime('%H:%M:%S')}. Env: {env}"</span>
+
+    <span class="cm"># Retourner une réponse HTTP (format API Gateway)</span>
+    <span class="kw">return</span> {
+        <span class="str">'statusCode'</span>: <span class="num">200</span>,
+        <span class="str">'headers'</span>: {
+            <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span>,
+            <span class="str">'Access-Control-Allow-Origin'</span>: <span class="str">'*'</span>
+        },
+        <span class="str">'body'</span>: json.dumps({
+            <span class="str">'message'</span>: message,
+            <span class="str">'timestamp'</span>: datetime.now().isoformat()
+        })
+    }</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">2</div>
+      <div class="step-body">
+        <h4>Zipper la fonction (Lambda attend un .zip)</h4>
+        <div class="code-wrap">
+          <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="cm"># Créer le dossier de la fonction</span>
+<span class="pmt">$ </span>mkdir -p ~/lambda-demo && cd ~/lambda-demo
+
+<span class="cm"># Créer handler.py avec le code ci-dessus</span>
+<span class="pmt">$ </span>nano handler.py
+
+<span class="cm"># Zipper le fichier (Lambda exige un .zip)</span>
+<span class="pmt">$ </span>zip function.zip handler.py
+
+<span class="cm"># Si tu as des dépendances Python (pip) :</span>
+<span class="pmt">$ </span>pip3 install requests <span class="flag">--target</span> ./package/
+<span class="pmt">$ </span>cd package && zip <span class="flag">-r</span> ../function.zip . && cd ..
+<span class="pmt">$ </span>zip function.zip handler.py</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">3</div>
+      <div class="step-body">
+        <h4>Créer le rôle IAM d'exécution</h4>
+        <div class="code-wrap">
+          <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="cm"># Créer le rôle IAM que Lambda va utiliser pour s'exécuter</span>
+<span class="pmt">$ </span>awslocal iam create-role \
+    <span class="flag">--role-name</span> <span class="str">lambda-role</span> \
+    <span class="flag">--assume-role-policy-document</span> <span class="str">'{
+        "Version": "2012-10-17",
+        "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "lambda.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+        }]
+    }'</span>
+
+<span class="cm"># Attacher la politique d'exécution Lambda basique</span>
+<span class="pmt">$ </span>awslocal iam attach-role-policy \
+    <span class="flag">--role-name</span> <span class="str">lambda-role</span> \
+    <span class="flag">--policy-arn</span> <span class="str">arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">4</div>
+      <div class="step-body">
+        <h4>Déployer la fonction Lambda</h4>
+        <div class="code-wrap">
+          <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="cm"># Créer la fonction Lambda</span>
+<span class="pmt">$ </span>awslocal lambda create-function \
+    <span class="flag">--function-name</span> <span class="str">ma-premiere-lambda</span> \
+    <span class="flag">--runtime</span> <span class="str">python3.12</span> \
+    <span class="flag">--handler</span> <span class="str">handler.handler</span> \
+    <span class="flag">--zip-file</span> <span class="str">fileb://function.zip</span> \
+    <span class="flag">--role</span> <span class="str">arn:aws:iam::000000000000:role/lambda-role</span> \
+    <span class="flag">--memory-size</span> <span class="num">128</span> \
+    <span class="flag">--timeout</span> <span class="num">30</span> \
+    <span class="flag">--environment</span> <span class="str">'Variables={APP_ENV=production,VERSION=1.0}'</span></code></pre>
+        </div>
+        <div class="cmd-box">
+          <div class="cmd-box-head">lambda create-function — arguments</div>
+          <div class="cmd-box-body">
+            <table class="arg-tbl">
+              <tr><td>--function-name</td><td>Nom unique de ta Lambda dans la région</td></tr>
+              <tr><td>--runtime</td><td>Langage : <code>python3.12</code>, <code>nodejs20.x</code>, <code>java17</code>, <code>go1.x</code>, <code>dotnet8</code></td></tr>
+              <tr><td>--handler</td><td>Point d'entrée au format <code>fichier.fonction</code>. <code>handler.handler</code> = fichier <code>handler.py</code>, fonction <code>handler()</code></td></tr>
+              <tr><td>--zip-file fileb://</td><td><code>fileb://</code> = lecture en mode binaire (requis pour les zips). <code>file://</code> = texte.</td></tr>
+              <tr><td>--role</td><td>ARN du rôle IAM. LocalStack accepte <code>arn:aws:iam::000000000000:role/</code> (ID 000000000000 fictif)</td></tr>
+              <tr><td>--memory-size</td><td>RAM en Mo. Lambda alloue du CPU proportionnellement à la RAM. Min: 128, Max: 10240.</td></tr>
+              <tr><td>--timeout</td><td>Durée max en secondes. Si dépassée, Lambda est terminée. Max: 900 (15 min).</td></tr>
+              <tr><td>--environment</td><td>Variables d'environnement injectées dans la fonction</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">5</div>
+      <div class="step-body">
+        <h4>Invoquer et gérer la Lambda</h4>
+        <div class="code-wrap">
+          <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="cm"># Invoquer la Lambda manuellement</span>
+<span class="pmt">$ </span>awslocal lambda invoke \
+    <span class="flag">--function-name</span> <span class="str">ma-premiere-lambda</span> \
+    <span class="flag">--payload</span> <span class="str">'{"queryStringParameters": {"nom": "Alice"}}'</span> \
+    <span class="flag">--cli-binary-format</span> <span class="str">raw-in-base64-out</span> \
+    output.json
+
+<span class="cm"># Lire la réponse</span>
+<span class="pmt">$ </span>cat output.json
+
+<span class="cm"># Invoquer de façon asynchrone</span>
+<span class="pmt">$ </span>awslocal lambda invoke \
+    <span class="flag">--function-name</span> <span class="str">ma-premiere-lambda</span> \
+    <span class="flag">--invocation-type</span> <span class="str">Event</span> \
+    <span class="flag">--payload</span> <span class="str">'{}'</span> \
+    <span class="flag">--cli-binary-format</span> raw-in-base64-out \
+    /dev/null
+
+<span class="cm"># Mettre à jour le code d'une Lambda existante</span>
+<span class="pmt">$ </span>zip function.zip handler.py  <span class="cm"># Re-zipper</span>
+<span class="pmt">$ </span>awslocal lambda update-function-code \
+    <span class="flag">--function-name</span> <span class="str">ma-premiere-lambda</span> \
+    <span class="flag">--zip-file</span> <span class="str">fileb://function.zip</span>
+
+<span class="cm"># Mettre à jour les variables d'environnement</span>
+<span class="pmt">$ </span>awslocal lambda update-function-configuration \
+    <span class="flag">--function-name</span> <span class="str">ma-premiere-lambda</span> \
+    <span class="flag">--environment</span> <span class="str">'Variables={APP_ENV=staging}'</span>
+
+<span class="cm"># Voir les logs (nécessite CloudWatch)</span>
+<span class="pmt">$ </span>awslocal logs tail <span class="str">/aws/lambda/ma-premiere-lambda</span> <span class="flag">--follow</span>
+
+<span class="cm"># Lister les fonctions Lambda</span>
+<span class="pmt">$ </span>awslocal lambda list-functions \
+    <span class="flag">--query</span> <span class="str">'Functions[*].[FunctionName,Runtime,MemorySize,Timeout]'</span> \
+    <span class="flag">--output</span> <span class="str">table</span>
+
+<span class="cm"># Supprimer une Lambda</span>
+<span class="pmt">$ </span>awslocal lambda delete-function <span class="flag">--function-name</span> <span class="str">ma-premiere-lambda</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHAPITRE 7 : DynamoDB ══ -->
+<section class="chapter" id="dynamodb">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 07</span>
+    <h2>DynamoDB — Base de données NoSQL <span class="ls-support ls-ok">✓ LocalStack</span></h2>
+  </div>
+
+  <p>
+    <strong>DynamoDB</strong> est la base de données NoSQL managée d'AWS.
+    Elle est sans schéma fixe, très rapide (latence en millisecondes), 
+    et scale automatiquement. Elle se distingue de MongoDB par son modèle de clé-valeur/document
+    et son pricing à la demande.
+  </p>
+
+  <h3>Concepts DynamoDB</h3>
+  <table class="cmp-tbl">
+    <thead><tr><th>Terme DynamoDB</th><th>Équivalent SQL</th><th>Explication</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Table</strong></td><td>Table</td><td>Conteneur d'items</td></tr>
+      <tr><td><strong>Item</strong></td><td>Ligne</td><td>Un enregistrement (équivalent à un document JSON)</td></tr>
+      <tr><td><strong>Attribute</strong></td><td>Colonne</td><td>Champ d'un item (pas de schéma fixe sauf clés)</td></tr>
+      <tr><td><strong>Partition Key</strong></td><td>Clé primaire</td><td>Obligatoire. Détermine la partition physique.</td></tr>
+      <tr><td><strong>Sort Key</strong></td><td>Clé secondaire</td><td>Optionnelle. Permet de trier et filtrer dans une partition.</td></tr>
+      <tr><td><strong>GSI</strong></td><td>Index secondaire</td><td>Global Secondary Index : requête sur d'autres attributs</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Opérations DynamoDB</h3>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Créer une table DynamoDB</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Créer une table "utilisateurs" avec partition key = userId</span>
+<span class="pmt">$ </span>awslocal dynamodb create-table \
+    <span class="flag">--table-name</span> <span class="str">utilisateurs</span> \
+    <span class="flag">--attribute-definitions</span> \
+        AttributeName=userId,AttributeType=S \
+        AttributeName=createdAt,AttributeType=S \
+    <span class="flag">--key-schema</span> \
+        AttributeName=userId,KeyType=HASH \
+        AttributeName=createdAt,KeyType=RANGE \
+    <span class="flag">--billing-mode</span> PAY_PER_REQUEST</code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">dynamodb create-table — arguments</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>--table-name</td><td>Nom de la table, unique dans la région et le compte</td></tr>
+        <tr><td>--attribute-definitions</td><td>Définit le type des attributs utilisés comme clés. S = String, N = Number, B = Binary. Seules les clés sont obligatoires ici.</td></tr>
+        <tr><td>AttributeType=S</td><td>String. <code>N</code> = Number (entier ou décimal), <code>B</code> = Binary (binaire).</td></tr>
+        <tr><td>KeyType=HASH</td><td>Partition Key (clé principale). Il ne peut y en avoir qu'une par table.</td></tr>
+        <tr><td>KeyType=RANGE</td><td>Sort Key (clé de tri). Optionnelle. Permet de trier les items dans une même partition.</td></tr>
+        <tr><td>--billing-mode PAY_PER_REQUEST</td><td>Facturation à l'utilisation. Alternative : <code>PROVISIONED</code> avec throughput fixe (moins cher si trafic constant).</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — CRUD : Insérer, Lire, Modifier, Supprimer</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># ─── CREATE : Insérer un item (put-item) ───</span>
+<span class="pmt">$ </span>awslocal dynamodb put-item \
+    <span class="flag">--table-name</span> <span class="str">utilisateurs</span> \
+    <span class="flag">--item</span> <span class="str">'{
+        "userId":   {"S": "user-001"},
+        "createdAt":{"S": "2024-01-15T10:00:00"},
+        "nom":      {"S": "Alice Dupont"},
+        "email":    {"S": "alice@example.com"},
+        "age":      {"N": "30"},
+        "actif":    {"BOOL": true},
+        "tags":     {"L": [{"S": "admin"}, {"S": "premium"}]}
+    }'</span>
+
+<span class="cm"># ─── READ : Lire un item spécifique (get-item) ───</span>
+<span class="pmt">$ </span>awslocal dynamodb get-item \
+    <span class="flag">--table-name</span> <span class="str">utilisateurs</span> \
+    <span class="flag">--key</span> <span class="str">'{
+        "userId":   {"S": "user-001"},
+        "createdAt":{"S": "2024-01-15T10:00:00"}
+    }'</span>
+
+<span class="cm"># ─── UPDATE : Mettre à jour des attributs ───</span>
+<span class="pmt">$ </span>awslocal dynamodb update-item \
+    <span class="flag">--table-name</span> <span class="str">utilisateurs</span> \
+    <span class="flag">--key</span> <span class="str">'{"userId": {"S": "user-001"}, "createdAt": {"S": "2024-01-15T10:00:00"}}'</span> \
+    <span class="flag">--update-expression</span> <span class="str">"SET #age = :val, actif = :actif"</span> \
+    <span class="flag">--expression-attribute-names</span> <span class="str">'{"#age": "age"}'</span> \
+    <span class="flag">--expression-attribute-values</span> <span class="str">'{"d": {"N": "31"}, ":actif": {"BOOL": false}}'</span>
+
+<span class="cm"># ─── DELETE : Supprimer un item ───</span>
+<span class="pmt">$ </span>awslocal dynamodb delete-item \
+    <span class="flag">--table-name</span> <span class="str">utilisateurs</span> \
+    <span class="flag">--key</span> <span class="str">'{"userId": {"S": "user-001"}, "createdAt": {"S": "2024-01-15T10:00:00"}}'</span>
+
+<span class="cm"># ─── SCAN : Lire tous les items (attention aux grandes tables !) ───</span>
+<span class="pmt">$ </span>awslocal dynamodb scan <span class="flag">--table-name</span> <span class="str">utilisateurs</span>
+
+<span class="cm"># ─── QUERY : Requête efficace par clé ───</span>
+<span class="pmt">$ </span>awslocal dynamodb query \
+    <span class="flag">--table-name</span> <span class="str">utilisateurs</span> \
+    <span class="flag">--key-condition-expression</span> <span class="str">"userId = :uid"</span> \
+    <span class="flag">--expression-attribute-values</span> <span class="str">'{"d": {"S": "user-001"}}'</span></code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">Types de données DynamoDB</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>{"S": "texte"}</td><td>String — chaîne de caractères</td></tr>
+        <tr><td>{"N": "42"}</td><td>Number — nombre (entier ou décimal, toujours entre guillemets)</td></tr>
+        <tr><td>{"BOOL": true}</td><td>Boolean — vrai ou faux</td></tr>
+        <tr><td>{"NULL": true}</td><td>Null</td></tr>
+        <tr><td>{"L": [...]}</td><td>List — tableau de valeurs (types mixtes autorisés)</td></tr>
+        <tr><td>{"M": {...}}</td><td>Map — objet/dictionnaire imbriqué</td></tr>
+        <tr><td>{"SS": [...]}</td><td>String Set — ensemble de chaînes uniques</td></tr>
+        <tr><td>{"NS": [...]}</td><td>Number Set — ensemble de nombres uniques</td></tr>
+        <tr><td>scan vs query</td><td><code>scan</code> parcourt TOUTE la table (coûteux). <code>query</code> utilise l'index (toujours préférer query).</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHAPITRE 8 : SQS ══ -->
+<section class="chapter" id="sqs">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 08</span>
+    <h2>SQS — File de Messages <span class="ls-support ls-ok">✓ LocalStack</span></h2>
+  </div>
+
+  <p>
+    <strong>Amazon SQS</strong> (Simple Queue Service) est un service de file de messages managé.
+    Il découple les composants d'une application : le producteur envoie des messages, 
+    le consommateur les traite quand il est disponible. Idéal pour les architectures microservices.
+  </p>
+
+  <div class="callout info">
+    <div style="font-size:1rem;flex-shrink:0;">📬</div>
+    <div class="callout-body">
+      <strong>Cas d'usage typiques</strong>
+      Traitement d'images en arrière-plan, envoi d'emails asynchrone, 
+      pipeline de données, communication entre microservices sans couplage fort.
+    </div>
+  </div>
+
+  <h3>Deux types de files SQS</h3>
+  <table class="cmp-tbl">
+    <thead><tr><th>Type</th><th>Ordre</th><th>Déduplication</th><th>Usage</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Standard Queue</strong></td>
+        <td>Pas garanti (best effort)</td>
+        <td>Non (doublons possibles)</td>
+        <td>Traitement asynchrone haute performance</td>
+      </tr>
+      <tr>
+        <td><strong>FIFO Queue</strong></td>
+        <td>Strict (premier entré, premier sorti)</td>
+        <td>Oui (exactement une fois)</td>
+        <td>Commandes, transactions financières</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Créer et utiliser une file SQS</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># ─── Créer une file Standard ───</span>
+<span class="pmt">$ </span>awslocal sqs create-queue \
+    <span class="flag">--queue-name</span> <span class="str">ma-file-taches</span> \
+    <span class="flag">--attributes</span> <span class="str">'{
+        "VisibilityTimeout": "30",
+        "MessageRetentionPeriod": "86400"
+    }'</span>
+<span class="cm"># Retourne : {"QueueUrl": "http://localhost:4566/000000000000/ma-file-taches"}</span>
+
+<span class="cm"># ─── Créer une file FIFO (nom DOIT finir par .fifo) ───</span>
+<span class="pmt">$ </span>awslocal sqs create-queue \
+    <span class="flag">--queue-name</span> <span class="str">commandes.fifo</span> \
+    <span class="flag">--attributes</span> <span class="str">FifoQueue=true,ContentBasedDeduplication=true</span>
+
+<span class="cm"># ─── Envoyer un message ───</span>
+<span class="pmt">$ </span>awslocal sqs send-message \
+    <span class="flag">--queue-url</span> <span class="str">http://localhost:4566/000000000000/ma-file-taches</span> \
+    <span class="flag">--message-body</span> <span class="str">'{"action": "resize_image", "file": "photo.jpg", "size": "800x600"}'</span>
+
+<span class="cm"># ─── Recevoir un message (le message devient invisible pendant VisibilityTimeout) ───</span>
+<span class="pmt">$ </span>awslocal sqs receive-message \
+    <span class="flag">--queue-url</span> <span class="str">http://localhost:4566/000000000000/ma-file-taches</span> \
+    <span class="flag">--max-number-of-messages</span> <span class="num">5</span> \
+    <span class="flag">--wait-time-seconds</span> <span class="num">10</span>
+
+<span class="cm"># ─── Supprimer un message après traitement ───</span>
+<span class="pmt">$ </span>awslocal sqs delete-message \
+    <span class="flag">--queue-url</span> <span class="str">http://localhost:4566/000000000000/ma-file-taches</span> \
+    <span class="flag">--receipt-handle</span> <span class="str">RECEIPT_HANDLE_DU_MESSAGE</span>
+
+<span class="cm"># ─── Voir les infos de la file ───</span>
+<span class="pmt">$ </span>awslocal sqs get-queue-attributes \
+    <span class="flag">--queue-url</span> <span class="str">http://localhost:4566/000000000000/ma-file-taches</span> \
+    <span class="flag">--attribute-names</span> All
+
+<span class="cm"># ─── Lister toutes les files ───</span>
+<span class="pmt">$ </span>awslocal sqs list-queues
+
+<span class="cm"># ─── Vider une file ───</span>
+<span class="pmt">$ </span>awslocal sqs purge-queue \
+    <span class="flag">--queue-url</span> <span class="str">http://localhost:4566/000000000000/ma-file-taches</span></code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">SQS — Attributs importants</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>VisibilityTimeout</td><td>Durée (secondes) pendant laquelle un message reçu est invisible aux autres consommateurs. Si non supprimé dans ce délai, redevient visible (retry automatique).</td></tr>
+        <tr><td>MessageRetentionPeriod</td><td>Durée de rétention des messages (en secondes). Par défaut 4 jours, max 14 jours.</td></tr>
+        <tr><td>--wait-time-seconds</td><td>Long polling : attend jusqu'à N secondes qu'un message soit disponible. Réduit le nombre d'appels vides = moins de coûts.</td></tr>
+        <tr><td>--max-number-of-messages</td><td>Nombre max de messages à recevoir en un appel (1 à 10). Toujours utiliser > 1 pour l'efficacité.</td></tr>
+        <tr><td>receipt-handle</td><td>Identifiant unique d'un message reçu. Requis pour le supprimer. Change à chaque réception.</td></tr>
+        <tr><td>ContentBasedDeduplication</td><td>Pour FIFO : déduplique automatiquement les messages identiques envoyés dans un intervalle de 5 minutes.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHAPITRE 9 : IAM ══ -->
+<section class="chapter" id="iam">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 09</span>
+    <h2>IAM — Gestion des Identités et Accès <span class="ls-support ls-ok">✓ LocalStack</span></h2>
+  </div>
+
+  <p>
+    <strong>IAM</strong> (Identity and Access Management) contrôle <strong>qui</strong> peut faire 
+    <strong>quoi</strong> sur tes ressources AWS. C'est le service de sécurité fondamental d'AWS.
+    Chaque appel à une API AWS est vérifié par IAM.
+  </p>
+
+  <div class="callout danger">
+    <div style="font-size:1rem;flex-shrink:0;">🔐</div>
+    <div class="callout-body">
+      <strong>Règle d'or : Principe du moindre privilège</strong>
+      N'accorde toujours que les permissions strictement nécessaires. 
+      Jamais de wildcard <code>"Action": "*"</code> ou <code>"Resource": "*"</code> en production.
+      Un compte compromis avec des droits limités cause beaucoup moins de dégâts.
+    </div>
+  </div>
+
+  <h3>Concepts IAM</h3>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <span class="svc-icon">👤</span>
+      <h4>User</h4>
+      <p>Une identité permanente (personne ou service). A ses propres credentials (Access Key + Secret).</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">👥</span>
+      <h4>Group</h4>
+      <p>Collection d'utilisateurs partageant les mêmes permissions. Ex: "Developers", "Admins".</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">🎭</span>
+      <h4>Role</h4>
+      <p>Identité temporaire pour les services AWS (Lambda, EC2...). Pas de mot de passe permanent.</p>
+    </div>
+    <div class="svc-card">
+      <span class="svc-icon">📄</span>
+      <h4>Policy</h4>
+      <p>Document JSON définissant les permissions : quelles actions sur quelles ressources.</p>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Gestion IAM avec LocalStack</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># ─── Créer un utilisateur IAM ───</span>
+<span class="pmt">$ </span>awslocal iam create-user <span class="flag">--user-name</span> <span class="str">alice</span>
+
+<span class="cm"># Créer des access keys pour l'utilisateur</span>
+<span class="pmt">$ </span>awslocal iam create-access-key <span class="flag">--user-name</span> <span class="str">alice</span>
+
+<span class="cm"># ─── Créer un groupe ───</span>
+<span class="pmt">$ </span>awslocal iam create-group <span class="flag">--group-name</span> <span class="str">Developers</span>
+
+<span class="cm"># Ajouter alice au groupe</span>
+<span class="pmt">$ </span>awslocal iam add-user-to-group \
+    <span class="flag">--user-name</span> <span class="str">alice</span> \
+    <span class="flag">--group-name</span> <span class="str">Developers</span>
+
+<span class="cm"># ─── Créer une policy personnalisée ───</span>
+<span class="pmt">$ </span>awslocal iam create-policy \
+    <span class="flag">--policy-name</span> <span class="str">S3ReadOnlyMesBuckets</span> \
+    <span class="flag">--policy-document</span> <span class="str">'{
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::mon-bucket-*",
+                    "arn:aws:s3:::mon-bucket-*/*"
+                ]
+            }
+        ]
+    }'</span>
+
+<span class="cm"># ─── Attacher la policy à un groupe ───</span>
+<span class="pmt">$ </span>awslocal iam attach-group-policy \
+    <span class="flag">--group-name</span> <span class="str">Developers</span> \
+    <span class="flag">--policy-arn</span> <span class="str">arn:aws:iam::000000000000:policy/S3ReadOnlyMesBuckets</span>
+
+<span class="cm"># ─── Lister les policies d'un utilisateur ───</span>
+<span class="pmt">$ </span>awslocal iam list-attached-user-policies <span class="flag">--user-name</span> <span class="str">alice</span>
+<span class="pmt">$ </span>awslocal iam list-groups-for-user <span class="flag">--user-name</span> <span class="str">alice</span></code></pre>
+  </div>
+
+  <div class="cmd-box">
+    <div class="cmd-box-head">Structure d'une Policy IAM JSON</div>
+    <div class="cmd-box-body">
+      <table class="arg-tbl">
+        <tr><td>"Version": "2012-10-17"</td><td>Version du langage de policy. Toujours utiliser "2012-10-17" (la plus récente).</td></tr>
+        <tr><td>"Effect": "Allow"</td><td><code>Allow</code> = accorde la permission. <code>Deny</code> = refuse explicitement (prioritaire sur Allow).</td></tr>
+        <tr><td>"Action": [...]</td><td>Liste des actions autorisées. Format : <code>service:Action</code>. Ex: <code>s3:GetObject</code>, <code>lambda:InvokeFunction</code>. <code>*</code> = toutes les actions.</td></tr>
+        <tr><td>"Resource": [...]</td><td>Sur quelles ressources la policy s'applique. Format ARN. <code>*</code> = toutes les ressources.</td></tr>
+        <tr><td>"Condition": {...}</td><td>Optionnel. Applique la permission seulement si certaines conditions sont remplies (ex: IP spécifique, MFA activé).</td></tr>
+        <tr><td>ARN</td><td>Amazon Resource Name : identifiant unique de toute ressource AWS. Format : <code>arn:aws:service:region:account-id:resource</code></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHAPITRE 10 : VPC ══ -->
+<section class="chapter" id="vpc">
+  <div class="ch-header">
+    <span class="ch-num">Chapitre 10</span>
+    <h2>VPC — Virtual Private Cloud <span class="ls-support ls-partial">~ LocalStack</span></h2>
+  </div>
+
+  <p>
+    Un <strong>VPC</strong> est ton réseau privé isolé dans AWS. Toutes tes ressources 
+    (EC2, RDS, Lambda...) vivent dans un VPC. Par défaut, AWS crée un VPC par région pour toi.
+  </p>
+
+  <div class="arch">
+    <div class="arch-title">── ARCHITECTURE VPC TYPIQUE ──</div>
+<pre>
+Region AWS : eu-west-3 (Paris)
+┌──────────────────────────────────────────────────────────────────┐
+│  VPC : 10.0.0.0/16                                               │
+│                                                                  │
+│  Zone de Disponibilité A          Zone de Disponibilité B        │
+│  ┌─────────────────────────┐    ┌─────────────────────────┐     │
+│  │ Subnet Public           │    │ Subnet Public           │     │
+│  │ 10.0.1.0/24             │    │ 10.0.2.0/24             │     │
+│  │ [EC2 Web Server] ←──────┼────┼──→ [Load Balancer]      │     │
+│  └──────────┬──────────────┘    └──────────┬──────────────┘     │
+│             │ NAT Gateway                  │                     │
+│  ┌──────────▼──────────────┐    ┌──────────▼──────────────┐     │
+│  │ Subnet Privé            │    │ Subnet Privé            │     │
+│  │ 10.0.11.0/24            │    │ 10.0.12.0/24            │     │
+│  │ [EC2 App Server]        │    │ [RDS MySQL]             │     │
+│  │ [Lambda]                │    │ [ElastiCache Redis]     │     │
+│  └─────────────────────────┘    └─────────────────────────┘     │
+│                                                                  │
+│  Internet Gateway ←──── Trafic entrant/sortant public            │
+└──────────────────────────────────────────────────────────────────┘
+</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Créer un VPC avec subnets</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># ─── 1. Créer le VPC ───</span>
+<span class="pmt">$ </span>awslocal ec2 create-vpc \
+    <span class="flag">--cidr-block</span> <span class="str">10.0.0.0/16</span> \
+    <span class="flag">--tag-specifications</span> <span class="str">'ResourceType=vpc,Tags=[{Key=Name,Value=mon-vpc}]'</span>
+<span class="cm"># Retourne: VpcId: vpc-xxxxxxxx</span>
+<span class="env">VPC_ID=vpc-xxxxxxxx</span>  <span class="cm"># Sauvegarder l'ID</span>
+
+<span class="cm"># ─── 2. Créer des subnets publics ───</span>
+<span class="pmt">$ </span>awslocal ec2 create-subnet \
+    <span class="flag">--vpc-id</span> $VPC_ID \
+    <span class="flag">--cidr-block</span> <span class="str">10.0.1.0/24</span> \
+    <span class="flag">--availability-zone</span> <span class="str">eu-west-3a</span> \
+    <span class="flag">--tag-specifications</span> <span class="str">'ResourceType=subnet,Tags=[{Key=Name,Value=public-a}]'</span>
+
+<span class="cm"># ─── 3. Créer une Internet Gateway ───</span>
+<span class="pmt">$ </span>awslocal ec2 create-internet-gateway
+<span class="env">IGW_ID=igw-xxxxxxxx</span>
+
+<span class="cm"># ─── 4. Attacher l'IGW au VPC ───</span>
+<span class="pmt">$ </span>awslocal ec2 attach-internet-gateway \
+    <span class="flag">--internet-gateway-id</span> $IGW_ID \
+    <span class="flag">--vpc-id</span> $VPC_ID
+
+<span class="cm"># ─── 5. Créer une table de routage et ajouter la route vers internet ───</span>
+<span class="pmt">$ </span>awslocal ec2 create-route-table <span class="flag">--vpc-id</span> $VPC_ID
+<span class="env">RT_ID=rtb-xxxxxxxx</span>
+
+<span class="pmt">$ </span>awslocal ec2 create-route \
+    <span class="flag">--route-table-id</span> $RT_ID \
+    <span class="flag">--destination-cidr-block</span> <span class="str">0.0.0.0/0</span> \
+    <span class="flag">--gateway-id</span> $IGW_ID</code></pre>
+  </div>
+</section>
+
+<!-- ══ PROJET 1 ══ -->
+<section class="chapter" id="projet1">
+  <div class="ch-header">
+    <span class="ch-num">Projet 01</span>
+    <h2>Site Web Statique Hébergé sur S3</h2>
+  </div>
+
+  <p>
+    Déploie un site web HTML/CSS/JS complet hébergé dans S3. 
+    C'est l'une des utilisations les plus courantes et rentables d'AWS : 
+    héberger un site statique pour quelques centimes par mois (gratuit avec LocalStack !).
+  </p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">1</div>
+      <div class="step-body">
+        <h4>Créer le site web</h4>
+        <div class="code-wrap">
+          <div class="code-head"><span class="code-lang">bash — Préparer les fichiers</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="pmt">$ </span>mkdir -p ~/projet-s3-site && cd ~/projet-s3-site
+
+<span class="cm"># Créer index.html</span>
+<span class="pmt">$ </span>cat &gt; index.html <span class="str">&lt;&lt;'EOF'</span>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="fr"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Mon Site AWS S3&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;🚀 Bienvenue sur mon site S3 !&lt;/h1&gt;
+    &lt;p&gt;Ce site est hébergé dans un bucket Amazon S3.&lt;/p&gt;
+    &lt;button onclick="chargerDonnees()"&gt;Charger données&lt;/button&gt;
+    &lt;div id="result"&gt;&lt;/div&gt;
+    &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+EOF
+
+<span class="pmt">$ </span>cat &gt; style.css <span class="str">&lt;&lt;'EOF'</span>
+body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+h1 { color: #ff9900; }
+button { background: #ff9900; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; }
+EOF
+
+<span class="pmt">$ </span>cat &gt; app.js <span class="str">&lt;&lt;'EOF'</span>
+function chargerDonnees() {
+    document.getElementById('result').innerHTML = '✅ Site S3 opérationnel ! ' + new Date().toLocaleString();
+}
+EOF
+
+<span class="pmt">$ </span>cat &gt; error.html <span class="str">&lt;&lt;'EOF'</span>
+&lt;h1&gt;404 - Page non trouvée&lt;/h1&gt;
+EOF</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">2</div>
+      <div class="step-body">
+        <h4>Créer et configurer le bucket S3</h4>
+        <div class="code-wrap">
+          <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="cm"># Créer le bucket</span>
+<span class="pmt">$ </span>awslocal s3 mb s3://mon-site-statique-2024
+
+<span class="cm"># Désactiver le blocage des accès publics</span>
+<span class="pmt">$ </span>awslocal s3api put-public-access-block \
+    <span class="flag">--bucket</span> mon-site-statique-2024 \
+    <span class="flag">--public-access-block-configuration</span> \
+    <span class="str">"BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"</span>
+
+<span class="cm"># Configurer le bucket pour héberger un site web</span>
+<span class="pmt">$ </span>awslocal s3api put-bucket-website \
+    <span class="flag">--bucket</span> mon-site-statique-2024 \
+    <span class="flag">--website-configuration</span> <span class="str">'{
+        "IndexDocument": {"Suffix": "index.html"},
+        "ErrorDocument": {"Key": "error.html"}
+    }'</span>
+
+<span class="cm"># Ajouter une policy de lecture publique</span>
+<span class="pmt">$ </span>awslocal s3api put-bucket-policy \
+    <span class="flag">--bucket</span> mon-site-statique-2024 \
+    <span class="flag">--policy</span> <span class="str">'{
+        "Version": "2012-10-17",
+        "Statement": [{
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::mon-site-statique-2024/*"
+        }]
+    }'</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">3</div>
+      <div class="step-body">
+        <h4>Uploader les fichiers et accéder au site</h4>
+        <div class="code-wrap">
+          <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+          <pre><code><span class="cm"># Synchroniser tout le dossier vers S3</span>
+<span class="pmt">$ </span>awslocal s3 sync . s3://mon-site-statique-2024 \
+    <span class="flag">--exclude</span> <span class="str">"*.sh"</span>
+
+<span class="cm"># Vérifier les fichiers uploadés</span>
+<span class="pmt">$ </span>awslocal s3 ls s3://mon-site-statique-2024
+
+<span class="cm"># Accéder au site via LocalStack</span>
+<span class="pmt">$ </span>curl http://localhost:4566/mon-site-statique-2024/index.html
+
+<span class="cm"># Sur le vrai AWS, l'URL serait :</span>
+<span class="cm"># http://mon-site-statique-2024.s3-website.eu-west-3.amazonaws.com</span>
+
+<span class="cm"># Mettre à jour un seul fichier</span>
+<span class="pmt">$ </span>echo "&lt;p&gt;Mis à jour !&lt;/p&gt;" >> index.html
+<span class="pmt">$ </span>awslocal s3 cp index.html s3://mon-site-statique-2024/index.html \
+    <span class="flag">--content-type</span> <span class="str">"text/html"</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROJET 2 ══ -->
+<section class="chapter" id="projet2">
+  <div class="ch-header">
+    <span class="ch-num">Projet 02</span>
+    <h2>API Serverless avec Lambda + API Gateway</h2>
+  </div>
+
+  <p>
+    Construis une API REST complète sans serveur. 
+    Lambda exécute le code, API Gateway expose les endpoints HTTP. 
+    Coût sur AWS : quasi zéro pour un usage faible (1 million d'appels gratuits/mois).
+  </p>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">python — api_handler.py</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="kw">import</span> json
+<span class="kw">import</span> boto3
+<span class="kw">import</span> os
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+<span class="cm"># Connexion DynamoDB (LocalStack)</span>
+dynamo = boto3.resource(
+    <span class="str">'dynamodb'</span>,
+    endpoint_url=os.environ.get(<span class="str">'DYNAMODB_ENDPOINT'</span>, <span class="kw">None</span>)
+)
+table = dynamo.Table(<span class="str">'taches'</span>)
+
+<span class="kw">def</span> <span class="fn">handler</span>(event, context):
+    <span class="cm"># Récupérer la méthode HTTP et le chemin</span>
+    method = event.get(<span class="str">'httpMethod'</span>, <span class="str">'GET'</span>)
+    path   = event.get(<span class="str">'path'</span>, <span class="str">'/'</span>)
+    body   = json.loads(event.get(<span class="str">'body'</span>) <span class="kw">or</span> <span class="str">'{}'</span>)
+
+    <span class="kw">if</span> method == <span class="str">'GET'</span> <span class="kw">and</span> path == <span class="str">'/taches'</span>:
+        <span class="cm"># Lister toutes les tâches</span>
+        result = table.scan()
+        <span class="kw">return</span> <span class="fn">response</span>(<span class="num">200</span>, result[<span class="str">'Items'</span>])
+
+    <span class="kw">elif</span> method == <span class="str">'POST'</span> <span class="kw">and</span> path == <span class="str">'/taches'</span>:
+        <span class="cm"># Créer une tâche</span>
+        tache = {
+            <span class="str">'id'</span>:        <span class="fn">f</span><span class="str">"task-{datetime.now().timestamp():.0f}"</span>,
+            <span class="str">'titre'</span>:    body.get(<span class="str">'titre'</span>, <span class="str">'Sans titre'</span>),
+            <span class="str">'statut'</span>:   <span class="str">'pending'</span>,
+            <span class="str">'createdAt'</span>: datetime.now().isoformat()
+        }
+        table.put_item(Item=tache)
+        <span class="kw">return</span> <span class="fn">response</span>(<span class="num">201</span>, tache)
+
+    <span class="kw">return</span> <span class="fn">response</span>(<span class="num">404</span>, {<span class="str">'error'</span>: <span class="str">'Route non trouvée'</span>})
+
+<span class="kw">def</span> <span class="fn">response</span>(status, data):
+    <span class="kw">return</span> {
+        <span class="str">'statusCode'</span>: status,
+        <span class="str">'headers'</span>: {<span class="str">'Content-Type'</span>: <span class="str">'application/json'</span>, <span class="str">'Access-Control-Allow-Origin'</span>: <span class="str">'*'</span>},
+        <span class="str">'body'</span>: json.dumps(data, ensure_ascii=<span class="kw">False</span>)
+    }</code></pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Déployer l'API complète avec LocalStack</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="pmt">$ </span>mkdir -p ~/projet-api && cd ~/projet-api
+
+<span class="cm"># ─── 1. Créer la table DynamoDB ───</span>
+<span class="pmt">$ </span>awslocal dynamodb create-table \
+    <span class="flag">--table-name</span> taches \
+    <span class="flag">--attribute-definitions</span> AttributeName=id,AttributeType=S \
+    <span class="flag">--key-schema</span> AttributeName=id,KeyType=HASH \
+    <span class="flag">--billing-mode</span> PAY_PER_REQUEST
+
+<span class="cm"># ─── 2. Créer le rôle IAM pour Lambda ───</span>
+<span class="pmt">$ </span>awslocal iam create-role \
+    <span class="flag">--role-name</span> lambda-api-role \
+    <span class="flag">--assume-role-policy-document</span> \
+    <span class="str">'{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"lambda.amazonaws.com"},"Action":"sts:AssumeRole"}]}'</span>
+
+<span class="pmt">$ </span>awslocal iam attach-role-policy \
+    <span class="flag">--role-name</span> lambda-api-role \
+    <span class="flag">--policy-arn</span> arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+
+<span class="cm"># ─── 3. Créer api_handler.py ───</span>
+<span class="pmt">$ </span>cat > api_handler.py <span class="str">&lt;&lt;'PYEOF'</span>
+import json
+import boto3
+import os
+from datetime import datetime
+
+dynamo = boto3.resource(
+    'dynamodb',
+    endpoint_url=os.environ.get('DYNAMODB_ENDPOINT', None)
+)
+table = dynamo.Table('taches')
+
+def handler(event, context):
+    method = event.get('httpMethod', 'GET')
+    path   = event.get('path', '/')
+    body   = json.loads(event.get('body') or '{}')
+
+    if method == 'GET' and path == '/taches':
+        result = table.scan()
+        return response(200, result['Items'])
+
+    elif method == 'POST' and path == '/taches':
+        tache = {
+            'id':        f"task-{datetime.now().timestamp():.0f}",
+            'titre':     body.get('titre', 'Sans titre'),
+            'statut':    'pending',
+            'createdAt': datetime.now().isoformat()
+        }
+        table.put_item(Item=tache)
+        return response(201, tache)
+
+    elif method == 'DELETE' and path.startswith('/taches/'):
+        task_id = path.split('/')[-1]
+        table.delete_item(Key={'id': task_id})
+        return response(200, {'deleted': task_id})
+
+    return response(404, {'error': 'Route non trouvée'})
+
+def response(status, data):
+    return {
+        'statusCode': status,
+        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+        'body': json.dumps(data, ensure_ascii=False)
+    }
+PYEOF
+
+<span class="cm"># ─── 4. Zipper et déployer la Lambda ───</span>
+<span class="pmt">$ </span>pip3 install boto3 <span class="flag">--target</span> package/ <span class="flag">-q</span>
+<span class="pmt">$ </span>cp api_handler.py package/
+<span class="pmt">$ </span>cd package && zip <span class="flag">-r9</span> ../function.zip . && cd ..
+
+<span class="pmt">$ </span>awslocal lambda create-function \
+    <span class="flag">--function-name</span> api-taches \
+    <span class="flag">--runtime</span> python3.12 \
+    <span class="flag">--handler</span> api_handler.handler \
+    <span class="flag">--zip-file</span> fileb://function.zip \
+    <span class="flag">--role</span> arn:aws:iam::000000000000:role/lambda-api-role \
+    <span class="flag">--environment</span> <span class="str">'Variables={DYNAMODB_ENDPOINT=http://localhost:4566}'</span>
+
+<span class="cm"># ─── 5. Créer l'API Gateway ───</span>
+<span class="pmt">$ </span>awslocal apigateway create-rest-api \
+    <span class="flag">--name</span> <span class="str">"API Taches"</span>
+<span class="cm"># Retourne : { "id": "XXXXXXXXXX" } ← noter l'ID de l'API</span>
+<span class="env">API_ID=XXXXXXXXXX</span>
+
+<span class="cm"># ─── 6. Créer une ressource /taches ───</span>
+<span class="pmt">$ </span>ROOT_ID=$(awslocal apigateway get-resources <span class="flag">--rest-api-id</span> $API_ID <span class="flag">--query</span> <span class="str">'items[0].id'</span> <span class="flag">--output</span> text)
+
+<span class="pmt">$ </span>awslocal apigateway create-resource \
+    <span class="flag">--rest-api-id</span> $API_ID \
+    <span class="flag">--parent-id</span> $ROOT_ID \
+    <span class="flag">--path-part</span> taches
+<span class="env">RESOURCE_ID=YYYYYYYYYY</span>
+
+<span class="cm"># ─── 7. Créer méthode GET sur /taches ───</span>
+<span class="pmt">$ </span>awslocal apigateway put-method \
+    <span class="flag">--rest-api-id</span> $API_ID \
+    <span class="flag">--resource-id</span> $RESOURCE_ID \
+    <span class="flag">--http-method</span> GET \
+    <span class="flag">--authorization-type</span> NONE
+
+<span class="cm"># ─── 8. Connecter la méthode à Lambda ───</span>
+<span class="pmt">$ </span>awslocal apigateway put-integration \
+    <span class="flag">--rest-api-id</span> $API_ID \
+    <span class="flag">--resource-id</span> $RESOURCE_ID \
+    <span class="flag">--http-method</span> GET \
+    <span class="flag">--type</span> AWS_PROXY \
+    <span class="flag">--integration-http-method</span> POST \
+    <span class="flag">--uri</span> <span class="str">"arn:aws:apigateway:eu-west-3:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-3:000000000000:function:api-taches/invocations"</span>
+
+<span class="cm"># ─── 9. Déployer l'API ───</span>
+<span class="pmt">$ </span>awslocal apigateway create-deployment \
+    <span class="flag">--rest-api-id</span> $API_ID \
+    <span class="flag">--stage-name</span> prod
+
+<span class="cm"># ─── 10. Tester l'API ───</span>
+<span class="pmt">$ </span>curl http://localhost:4566/restapis/$API_ID/prod/_user_request_/taches
+<span class="cm"># []  ← liste vide pour l'instant</span>
+
+<span class="pmt">$ </span>curl <span class="flag">-X POST</span> http://localhost:4566/restapis/$API_ID/prod/_user_request_/taches \
+    <span class="flag">-H</span> <span class="str">"Content-Type: application/json"</span> \
+    <span class="flag">-d</span> <span class="str">'{"titre": "Apprendre AWS"}'</span>
+<span class="cm"># {"id": "task-1705312200", "titre": "Apprendre AWS", ...}</span></code></pre>
+  </div>
+</section>
+
+<!-- ══ PROJET 3 ══ -->
+<section class="chapter" id="projet3">
+  <div class="ch-header">
+    <span class="ch-num">Projet 03</span>
+    <h2>App Full-Stack : S3 + Lambda + DynamoDB + SQS</h2>
+  </div>
+
+  <p>
+    Ce projet combine tous les services appris pour construire un pipeline de traitement d'images :
+    upload sur S3 → message SQS → Lambda traite → résultat dans DynamoDB.
+    C'est un pattern classique d'architecture serverless event-driven.
+  </p>
+
+  <div class="arch">
+    <div class="arch-title">── ARCHITECTURE DU PROJET ──</div>
+<pre>
+  Utilisateur
+      │
+      │ 1. Upload image
+      ▼
+  ┌──────────┐
+  │  S3      │  bucket: images-upload
+  │ Bucket   │
+  └────┬─────┘
+       │ 2. Événement S3 (ObjectCreated)
+       ▼
+  ┌──────────┐
+  │  SQS     │  queue: traitement-images
+  │  Queue   │
+  └────┬─────┘
+       │ 3. Trigger Lambda
+       ▼
+  ┌──────────┐     4. Enregistre résultat
+  │  Lambda  │ ──────────────────────────► ┌──────────┐
+  │ Process  │                             │ DynamoDB │
+  └──────────┘                             │  images  │
+       │
+       │ 5. Copie image traitée
+       ▼
+  ┌──────────┐
+  │  S3      │  bucket: images-processed
+  │ Bucket   │
+  └──────────┘
+</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Créer et lancer le script de déploiement</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="pmt">$ </span>mkdir -p ~/projet-fullstack && cd ~/projet-fullstack
+
+<span class="pmt">$ </span>cat > deploy-projet3.sh <span class="str">&lt;&lt;'BASH'</span>
+#!/bin/bash
+# deploy-projet3.sh — Déployer le pipeline complet
+
+set -e  # Arrêter si une commande échoue
+
+echo "🚀 Déploiement du pipeline de traitement d'images..."
+
+# ─── 1. Créer les buckets S3 ───
+echo "📦 Création des buckets S3..."
+awslocal s3 mb s3://images-upload-local    2>/dev/null || echo "  bucket déjà existant"
+awslocal s3 mb s3://images-processed-local 2>/dev/null || echo "  bucket déjà existant"
+
+# ─── 2. Créer la table DynamoDB ───
+echo "🗃️  Création de la table DynamoDB..."
+awslocal dynamodb create-table \
+    --table-name images-metadata \
+    --attribute-definitions AttributeName=imageId,AttributeType=S \
+    --key-schema AttributeName=imageId,KeyType=HASH \
+    --billing-mode PAY_PER_REQUEST 2>/dev/null || echo "  table déjà existante"
+
+# ─── 3. Créer la file SQS ───
+echo "📬 Création de la file SQS..."
+awslocal sqs create-queue \
+    --queue-name traitement-images \
+    --attributes VisibilityTimeout=60 2>/dev/null || echo "  queue déjà existante"
+
+QUEUE_URL=$(awslocal sqs get-queue-url --queue-name traitement-images --query 'QueueUrl' --output text)
+QUEUE_ARN=$(awslocal sqs get-queue-attributes \
+    --queue-url $QUEUE_URL \
+    --attribute-names QueueArn \
+    --query 'Attributes.QueueArn' --output text)
+
+# ─── 4. Créer process_image.py ───
+echo "🐍 Création de process_image.py..."
+cat > /tmp/process_image.py &lt;&lt;'PYEOF'
+import json, boto3, os
+from datetime import datetime
+
+s3     = boto3.client('s3',         endpoint_url=os.environ.get('AWS_ENDPOINT'))
+dynamo = boto3.resource('dynamodb', endpoint_url=os.environ.get('AWS_ENDPOINT'))
+table  = dynamo.Table('images-metadata')
+
+def handler(event, context):
+    processed = 0
+    for record in event.get('Records', []):
+        try:
+            body   = json.loads(record['body'])
+            bucket = body.get('bucket', 'images-upload-local')
+            key    = body.get('key', 'unknown.jpg')
+
+            image_id = f"img-{datetime.now().timestamp():.0f}"
+            metadata = {
+                'imageId':     image_id,
+                'source':      f"s3://{bucket}/{key}",
+                'destination': f"s3://images-processed-local/processed-{key}",
+                'status':      'processed',
+                'processedAt': datetime.now().isoformat()
+            }
+
+            # Enregistrer dans DynamoDB
+            table.put_item(Item=metadata)
+
+            # Copier vers bucket de sortie
+            try:
+                s3.copy_object(
+                    CopySource={'Bucket': bucket, 'Key': key},
+                    Bucket='images-processed-local',
+                    Key=f"processed-{key}"
+                )
+            except Exception as e:
+                print(f"⚠️  Copie impossible : {e}")
+
+            print(f"✅ Image traitée : {key} → {image_id}")
+            processed += 1
+        except Exception as e:
+            print(f"❌ Erreur : {e}")
+            raise
+
+    return {'statusCode': 200, 'body': json.dumps({'processed': processed})}
+PYEOF
+
+cd /tmp && zip process_function.zip process_image.py && cd -
+
+# ─── 5. Créer le rôle IAM ───
+echo "🔐 Création du rôle IAM..."
+awslocal iam create-role \
+    --role-name pipeline-role \
+    --assume-role-policy-document \
+    '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"lambda.amazonaws.com"},"Action":"sts:AssumeRole"}]}' 2>/dev/null || true
+
+awslocal iam attach-role-policy \
+    --role-name pipeline-role \
+    --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess 2>/dev/null || true
+awslocal iam attach-role-policy \
+    --role-name pipeline-role \
+    --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess 2>/dev/null || true
+awslocal iam attach-role-policy \
+    --role-name pipeline-role \
+    --policy-arn arn:aws:iam::aws:policy/AmazonSQSFullAccess 2>/dev/null || true
+
+# ─── 6. Déployer la Lambda ───
+echo "λ Déploiement de la Lambda..."
+awslocal lambda create-function \
+    --function-name process-image \
+    --runtime python3.12 \
+    --handler process_image.handler \
+    --zip-file fileb:///tmp/process_function.zip \
+    --role arn:aws:iam::000000000000:role/pipeline-role \
+    --environment "Variables={AWS_ENDPOINT=http://localhost:4566}" \
+    --timeout 30 2>/dev/null || \
+awslocal lambda update-function-code \
+    --function-name process-image \
+    --zip-file fileb:///tmp/process_function.zip
+
+# ─── 7. Connecter SQS comme trigger de la Lambda ───
+echo "🔗 Connexion SQS → Lambda..."
+awslocal lambda create-event-source-mapping \
+    --function-name process-image \
+    --event-source-arn $QUEUE_ARN \
+    --batch-size 5 2>/dev/null || echo "  mapping déjà existant"
+
+echo ""
+echo "✅ Pipeline déployé avec succès !"
+echo "📋 Ressources : S3 × 2 | DynamoDB images-metadata | SQS traitement-images | Lambda process-image"
+echo ""
+echo "Test rapide :"
+echo "  awslocal sqs send-message --queue-url $QUEUE_URL --message-body '{\"bucket\":\"images-upload-local\",\"key\":\"test.jpg\"}'"
+BASH
+
+<span class="pmt">$ </span>chmod +x deploy-projet3.sh
+echo <span class="str">"✅ deploy-projet3.sh créé et prêt à l'emploi"</span></code></pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Tester le pipeline</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Lancer le déploiement (le script existe maintenant sur disque)</span>
+<span class="pmt">$ </span>./deploy-projet3.sh
+
+<span class="cm"># Uploader une "image" (fichier texte pour tester)</span>
+<span class="pmt">$ </span>echo "contenu image simulee" > test-image.jpg
+<span class="pmt">$ </span>awslocal s3 cp test-image.jpg s3://images-upload-local/test-image.jpg
+
+<span class="cm"># Envoyer un message SQS pour déclencher le traitement</span>
+<span class="pmt">$ </span>awslocal sqs send-message \
+    <span class="flag">--queue-url</span> http://localhost:4566/000000000000/traitement-images \
+    <span class="flag">--message-body</span> <span class="str">'{"bucket": "images-upload-local", "key": "test-image.jpg"}'</span>
+
+<span class="cm"># Voir les résultats dans DynamoDB</span>
+<span class="pmt">$ </span>awslocal dynamodb scan <span class="flag">--table-name</span> images-metadata
+
+<span class="cm"># Vérifier les logs de la Lambda</span>
+<span class="pmt">$ </span>awslocal logs describe-log-groups
+<span class="pmt">$ </span>awslocal logs tail /aws/lambda/process-image</code></pre>
+  </div>
+</section>
+
+<!-- ══ CHEAT SHEET ══ -->
+<section class="chapter" id="cheatsheet">
+  <div class="ch-header">
+    <span class="ch-num">Référence</span>
+    <h2>Cheat Sheet — Commandes AWS CLI Essentielles</h2>
+  </div>
+
+  <h3>LocalStack</h3>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code>docker compose up <span class="flag">-d</span>                            <span class="cm"># Démarrer LocalStack</span>
+docker compose down                              <span class="cm"># Arrêter</span>
+docker compose logs <span class="flag">-f</span>                          <span class="cm"># Logs temps réel</span>
+curl http://localhost:4566/_localstack/health    <span class="cm"># Statut des services</span>
+awslocal <span class="flag">--version</span>                             <span class="cm"># Vérifier awslocal</span></code></pre>
+  </div>
+
+  <h3>S3</h3>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code>awslocal s3 mb s3://bucket                          <span class="cm"># Créer bucket</span>
+awslocal s3 ls                                      <span class="cm"># Lister buckets</span>
+awslocal s3 ls s3://bucket/ <span class="flag">--recursive</span>            <span class="cm"># Lister contenu</span>
+awslocal s3 cp fichier.txt s3://bucket/             <span class="cm"># Upload</span>
+awslocal s3 cp s3://bucket/fichier.txt ./           <span class="cm"># Download</span>
+awslocal s3 sync ./ s3://bucket/ <span class="flag">--delete</span>          <span class="cm"># Synchroniser</span>
+awslocal s3 rm s3://bucket/fichier.txt              <span class="cm"># Supprimer objet</span>
+awslocal s3 rm s3://bucket/ <span class="flag">--recursive</span>            <span class="cm"># Vider bucket</span>
+awslocal s3 rb s3://bucket                          <span class="cm"># Supprimer bucket vide</span>
+awslocal s3 presign s3://bucket/key <span class="flag">--expires-in 3600</span> <span class="cm"># URL temporaire</span></code></pre>
+  </div>
+
+  <h3>Lambda</h3>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code>awslocal lambda list-functions                       <span class="cm"># Lister</span>
+awslocal lambda create-function <span class="flag">--function-name</span> nom ...   <span class="cm"># Créer</span>
+awslocal lambda update-function-code <span class="flag">--function-name</span> nom <span class="flag">--zip-file</span> fileb://f.zip  <span class="cm"># MAJ code</span>
+awslocal lambda invoke <span class="flag">--function-name</span> nom <span class="flag">--payload</span> '{}' <span class="flag">--cli-binary-format</span> raw-in-base64-out out.json  <span class="cm"># Invoquer</span>
+awslocal lambda get-function <span class="flag">--function-name</span> nom       <span class="cm"># Détails</span>
+awslocal lambda delete-function <span class="flag">--function-name</span> nom   <span class="cm"># Supprimer</span></code></pre>
+  </div>
+
+  <h3>DynamoDB</h3>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code>awslocal dynamodb list-tables                        <span class="cm"># Lister tables</span>
+awslocal dynamodb create-table <span class="flag">--table-name</span> t ...   <span class="cm"># Créer table</span>
+awslocal dynamodb put-item <span class="flag">--table-name</span> t <span class="flag">--item</span> '{}' <span class="cm"># Insérer</span>
+awslocal dynamodb get-item <span class="flag">--table-name</span> t <span class="flag">--key</span> '{}'  <span class="cm"># Lire</span>
+awslocal dynamodb update-item <span class="flag">--table-name</span> t ...    <span class="cm"># Mettre à jour</span>
+awslocal dynamodb delete-item <span class="flag">--table-name</span> t <span class="flag">--key</span> '{}' <span class="cm"># Supprimer</span>
+awslocal dynamodb scan <span class="flag">--table-name</span> t                <span class="cm"># Scanner tout</span>
+awslocal dynamodb query <span class="flag">--table-name</span> t <span class="flag">--key-condition-expression</span> ... <span class="cm"># Requête</span>
+awslocal dynamodb delete-table <span class="flag">--table-name</span> t       <span class="cm"># Supprimer table</span></code></pre>
+  </div>
+
+  <h3>SQS</h3>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code>awslocal sqs list-queues                             <span class="cm"># Lister files</span>
+awslocal sqs create-queue <span class="flag">--queue-name</span> nom          <span class="cm"># Créer file</span>
+awslocal sqs send-message <span class="flag">--queue-url</span> URL <span class="flag">--message-body</span> '{}' <span class="cm"># Envoyer</span>
+awslocal sqs receive-message <span class="flag">--queue-url</span> URL <span class="flag">--max-number-of-messages</span> 10 <span class="cm"># Recevoir</span>
+awslocal sqs delete-message <span class="flag">--queue-url</span> URL <span class="flag">--receipt-handle</span> H <span class="cm"># Supprimer msg</span>
+awslocal sqs purge-queue <span class="flag">--queue-url</span> URL           <span class="cm"># Vider file</span>
+awslocal sqs delete-queue <span class="flag">--queue-url</span> URL           <span class="cm"># Supprimer file</span></code></pre>
+  </div>
+
+  <h3>IAM</h3>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code>awslocal iam list-users                              <span class="cm"># Lister utilisateurs</span>
+awslocal iam create-user <span class="flag">--user-name</span> nom            <span class="cm"># Créer utilisateur</span>
+awslocal iam create-role <span class="flag">--role-name</span> nom ...        <span class="cm"># Créer rôle</span>
+awslocal iam attach-role-policy <span class="flag">--role-name</span> r <span class="flag">--policy-arn</span> arn <span class="cm"># Attacher policy</span>
+awslocal iam create-policy <span class="flag">--policy-name</span> nom <span class="flag">--policy-document</span> '{}' <span class="cm"># Policy custom</span>
+awslocal iam list-policies <span class="flag">--scope Local</span>            <span class="cm"># Lister policies custom</span></code></pre>
+  </div>
+
+  <h3>Outils de productivité CLI</h3>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Astuces</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># Format de sortie</span>
+awslocal s3 ls <span class="flag">--output</span> table     <span class="cm"># Affichage en tableau</span>
+awslocal s3 ls <span class="flag">--output</span> json      <span class="cm"># JSON brut</span>
+awslocal s3 ls <span class="flag">--output</span> text      <span class="cm"># Texte pour scripts bash</span>
+
+<span class="cm"># Filtrer la sortie avec --query (langage JMESPath)</span>
+awslocal lambda list-functions <span class="flag">--query</span> <span class="str">'Functions[*].FunctionName'</span>
+awslocal s3api list-buckets <span class="flag">--query</span> <span class="str">'Buckets[*].Name'</span> <span class="flag">--output</span> text
+
+<span class="cm"># Profils (plusieurs comptes AWS)</span>
+aws configure <span class="flag">--profile</span> dev    <span class="cm"># Configurer profil "dev"</span>
+aws s3 ls <span class="flag">--profile</span> dev         <span class="cm"># Utiliser le profil</span>
+<span class="env">AWS_PROFILE=dev</span> aws s3 ls       <span class="cm"># Variable d'environnement</span>
+
+<span class="cm"># Debug : voir la requête HTTP envoyée à AWS</span>
+aws s3 ls <span class="flag">--debug</span> 2>&1 | head -50
+
+<span class="cm"># Autocomplétion bash</span>
+complete <span class="flag">-C</span> $(which aws_completer) aws</code></pre>
+  </div>
+</section>
+
+<!-- ══ ALLER VERS LE VRAI AWS ══ -->
+<section class="chapter" id="free-tier">
+  <div class="ch-header">
+    <span class="ch-num">Étape suivante</span>
+    <h2>Passer au vrai AWS — Options sans risque financier</h2>
+  </div>
+
+  <p>
+    Maintenant que tu maîtrises les bases avec LocalStack, voici comment pratiquer 
+    sur le vrai AWS sans risque financier.
+  </p>
+
+  <h3>Option 1 — AWS Free Tier (12 mois + permanent)</h3>
+  <div class="callout tip">
+    <div style="font-size:1rem;flex-shrink:0;">🆓</div>
+    <div class="callout-body">
+      <strong>Ce qui est gratuit À VIE sur AWS (sans limite de temps)</strong>
+      Lambda : 1 million d'appels/mois • DynamoDB : 25 Go + 25 unités de capacité • 
+      S3 : 5 Go (12 mois) • SQS : 1 million de requêtes/mois • 
+      CloudWatch : 10 métriques, 1 million d'événements/mois • SNS : 1 million de publications/mois.
+    </div>
+  </div>
+
+  <p>
+    AWS demande une carte de crédit mais <strong>ne te facture pas</strong> si tu restes dans les limites 
+    du Free Tier. Tu peux configurer des <strong>alertes de budget</strong> à 0,01$ pour être notifié 
+    avant tout dépassement.
+  </p>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">bash — Migrer de LocalStack vers AWS réel</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+    <pre><code><span class="cm"># AVANT (LocalStack) :</span>
+awslocal s3 ls
+awslocal lambda list-functions
+
+<span class="cm"># APRÈS (vrai AWS) — Exactement les mêmes commandes !</span>
+aws s3 ls
+aws lambda list-functions
+
+<span class="cm"># La SEULE différence : ne pas utiliser "awslocal"</span>
+<span class="cm"># Et configurer de vraies credentials :</span>
+aws configure
+<span class="cm"># AWS Access Key ID: AKIAIOSFODNN7EXAMPLE  ← depuis Console AWS > IAM > Users</span>
+<span class="cm"># AWS Secret Access Key: wJalrXUtnFEMI/K7MDENG/... ← visible UNE SEULE FOIS</span>
+<span class="cm"># Default region: eu-west-3</span>
+<span class="cm"># Default output format: json</span></code></pre>
+  </div>
+
+  <h3>Option 2 — Créer un compte AWS et configurer une alerte budget $0</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">1</div>
+      <div class="step-body">
+        <h4>S'inscrire sur aws.amazon.com</h4>
+        <p>Tu as besoin : email, numéro de téléphone, carte de crédit (0$ débité pour la vérification).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <div class="step-body">
+        <h4>Configurer une alerte budget immédiatement</h4>
+        <p>Console AWS → Billing → Budgets → Create Budget → "Zero spend budget" → alerte à 0,01$. Tu seras notifié par email avant tout frais.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <div class="step-body">
+        <h4>Créer un utilisateur IAM (pas root !)</h4>
+        <p>Ne jamais utiliser le compte root pour le quotidien. IAM → Users → Create user → AdministratorAccess pour apprendre.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">4</div>
+      <div class="step-body">
+        <h4>Configurer AWS CLI avec les vraies credentials</h4>
+        <p>IAM → Users → ton-user → Security credentials → Create access key. Copier et configurer avec <code>aws configure</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Option 3 — Alternatives gratuites sans CB</h3>
+  <table class="cmp-tbl">
+    <thead><tr><th>Service</th><th>Ce qu'il offre</th><th>Lien</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>AWS Academy</strong></td>
+        <td>Gratuit pour étudiants via leur établissement. Accès complet AWS avec crédits.</td>
+        <td>aws.amazon.com/education/awsacademy</td>
+      </tr>
+      <tr>
+        <td><strong>AWS Educate</strong></td>
+        <td>Gratuit sans carte de crédit pour les étudiants. Environnements de labs.</td>
+        <td>aws.amazon.com/education/awseducate</td>
+      </tr>
+      <tr>
+        <td><strong>Qwiklabs / Google Cloud Skills Boost</strong></td>
+        <td>Labs temporaires AWS (payant mais certains labs gratuits)</td>
+        <td>cloudskillsboost.google</td>
+      </tr>
+      <tr>
+        <td><strong>AWS CloudQuest</strong></td>
+        <td>Jeu de rôle AWS entièrement gratuit, enseigne les services AWS de base</td>
+        <td>Via AWS Skill Builder</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div style="font-size:1rem;flex-shrink:0;">⭐</div>
+    <div class="callout-body">
+      <strong>Prochaines étapes recommandées</strong>
+      Une fois à l'aise avec ces fondamentaux, explore :
+      <strong>CloudFormation / Terraform</strong> pour l'infrastructure as code (IaC) —
+      définir toute ton infra AWS dans des fichiers YAML/HCL ;
+      <strong>ECS</strong> pour lancer tes conteneurs Docker dans AWS ;
+      <strong>RDS</strong> pour les bases de données SQL managées ;
+      <strong>CloudFront</strong> pour le CDN ;
+      et la certification <strong>AWS Cloud Practitioner</strong> (gratuite à préparer, ~100€ l'examen).
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <p>Cours AWS avec LocalStack — Sans carte de crédit</p>
+  <p style="margin-top:6px; opacity:0.4; font-size:0.72rem;">
+    Amazon Web Services™ est une marque d'Amazon.com. LocalStack est un projet open source indépendant sous licence Apache 2.0.
+  </p>
+</div>
+
+</main>
+
+<script>
+// Active nav highlight on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks  = document.querySelectorAll('.sidebar nav a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.sidebar nav a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -75% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
