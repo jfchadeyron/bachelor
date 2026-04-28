@@ -624,7 +624,7 @@ footer{
   └─ VM3 : k8s-worker2  → 172.16.25.62  (2 vCPU / 2 Go RAM)
            rôle : Worker Node
 
-  Accès depuis le  :
+  Accès depuis le host :
   kubectl → 172.16.25.60:6443 (API Server)
   </code></pre>
   </div>
@@ -634,11 +634,11 @@ footer{
   <div class="vm-spec-grid">
     <div class="vm-spec">
       <div class="vs-val">8 Go+</div>
-      <div class="vs-label">RAM totale du </div>
+      <div class="vs-label">RAM totale du host</div>
     </div>
     <div class="vm-spec">
       <div class="vs-val">4+ cœurs</div>
-      <div class="vs-label">CPU du </div>
+      <div class="vs-label">CPU du host</div>
     </div>
     <div class="vm-spec">
       <div class="vs-val">40 Go+</div>
@@ -733,18 +733,18 @@ footer{
 <span class="p">$ </span><span class="k">sudo nano /etc/ssh/sshd_config</span>
 <span class="c"># Rajouter : </span>
 <span class="p">$ </span><span class="k">PermitRootLogin yes</span>
-<span class="c"># Définir le name</span>
-<span class="p">$ </span><span class="k">sudo</span> namectl set-name k8s-master
+<span class="c"># Définir le hostname</span>
+<span class="p">$ </span><span class="k">sudo</span> hostnamectl set-hostname k8s-master
 <span class="p">$ </span><span class="k">sudo</span> bash -c <span class="s">'echo "172.16.25.60 k8s-master
 172.16.25.61 k8s-worker1
-172.16.25.62 k8s-worker2" >> /etc/s'</span>
+172.16.25.62 k8s-worker2" >> /etc/hosts'</span>
 <span class="k">sudo nano /etc/sysctl.d/k8s.conf</span>
 <span class="c"># Rajouter : </span>
-<span class="k">net.bridge.bridge-nf-call-iptables=1</span>
-<span class="k">net.bridge.bridge-nf-call-ip6tables=1</span>
-<span class="k">net.ipv4.ip_forward=1</span>
+<span class="k">net.bridge.bridge-nf-call-iptables  = 1</span>
+<span class="k">net.bridge.bridge-nf-call-ip6tables = 1</span>
+<span class="k">net.ipv4.ip_forward                 = 1</span>
 <span class="c"># Enregistrer puis executer : </span>
-<span class="k">sudo sysctl</span> --system
+<span class="k">sysctl</span> --system
 </code></pre>
             </div>
           </div>
@@ -761,10 +761,10 @@ footer{
               <li>Choisir : <strong>Clone complet</strong></li>
               <li>Réinitialiser les adresses MAC des cartes réseau ✅</li>
             </ul>
-            <p>Sur chaque worker, changer l'IP et le name :</p>
+            <p>Sur chaque worker, changer l'IP et le hostname :</p>
             <div class="code-block">
               <div class="code-topbar"><span class="code-label">bash — Sur k8s-worker1</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-              <pre><code><span class="p">$ </span><span class="k">sudo</span> namectl set-name k8s-worker1
+              <pre><code><span class="p">$ </span><span class="k">sudo</span> hostnamectl set-hostname k8s-worker1
 <span class="c"># Modifier l'IP dans /etc/netplan/00-installer-config.yaml</span>
 <span class="c"># Changer 172.16.25.60 → 172.16.25.61</span>
 <span class="p">$ </span><span class="k">sudo</span> nano /etc/netplan/00-installer-config.yaml
@@ -778,18 +778,18 @@ footer{
           <div class="step-n">7</div>
           <div class="step-c">
             <h4>Configurer SSH sans mot de passe (confort de travail)</h4>
-            <p>Sur ton PC , génère une clé SSH et copie-la sur les VMs pour te connecter sans taper de mot de passe :</p>
+            <p>Sur ton PC host, génère une clé SSH et copie-la sur les VMs pour te connecter sans taper de mot de passe :</p>
             <div class="code-block">
-              <div class="code-topbar"><span class="code-label">bash — Sur ton PC </span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+              <div class="code-topbar"><span class="code-label">bash — Sur ton PC Host</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
               <pre><code><span class="c"># Générer une clé SSH (si pas encore fait)</span>
 <span class="p">$ </span><span class="k">ssh-keygen</span> -t ed25519 -C <span class="s">"k8s-lab"</span>
 
 <span class="c"># Copier la clé sur chaque VM</span>
-<span class="p">$ </span><span class="k">ssh-copy-id</span> VOTREUSER@172.16.25.61
-<span class="p">$ </span><span class="k">ssh-copy-id</span> VOTREUSER@172.16.25.62
+<span class="p">$ </span><span class="k">ssh-copy-id</span> root@172.16.25.61
+<span class="p">$ </span><span class="k">ssh-copy-id</span> root@172.16.25.62
 
-<span class="c"># Tester la connexion DEPUIS LE MASTER</span>
-<span class="p">$ </span><span class="k">ssh</span> VOTREUSER@172.16.25.61
+<span class="c"># Tester la connexion</span>
+<span class="p">$ </span><span class="k">ssh</span> root@172.16.25.60
 <span class="c"># Doit se connecter sans mot de passe</span></code></pre>
             </div>
           </div>
@@ -801,13 +801,13 @@ footer{
         <div class="code-block">
           <div class="code-topbar"><span class="code-label">bash — Depuis ton PC</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
           <pre><code><span class="c"># Les 3 VMs doivent répondre au ping</span>
-<span class="p">$ </span><span class="k">ping</span> 172.16.25.60  <span class="c"># master</span>
-<span class="p">$ </span><span class="k">ping</span> 172.16.25.61  <span class="c"># worker1</span>
-<span class="p">$ </span><span class="k">ping</span> 172.16.25.62  <span class="c"># worker2</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 172.16.25.60  <span class="c"># master</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 172.16.25.61  <span class="c"># worker1</span>
+<span class="p">$ </span><span class="k">ping</span> -c 2 172.16.25.62  <span class="c"># worker2</span>
 
 <span class="c"># Les VMs doivent se voir entre elles (depuis master)</span>
-<span class="p">$ </span><span class="k">ping</span> k8s-worker1
-<span class="p">$ </span><span class="k">ping</span> k8s-worker2</code></pre>
+<span class="p">$ </span><span class="k">ping</span> -c 2 k8s-worker1
+<span class="p">$ </span><span class="k">ping</span> -c 2 k8s-worker2</code></pre>
         </div>
       </div>
     </div>
@@ -842,86 +842,52 @@ footer{
 <span class="p">$ </span><span class="k">nano install-k8s-base.sh  <span class="c"></span>
       <div class="code-block">
         <div class="code-topbar"><span class="code-label">contenu du fichier install-k8s-base.sh (à lancer sur les 3 VMs)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-        <code id="code"><span class="line"><span class="ln"></span><span class="lc"><span class="sh">#!/usr/bin/env bash</span></span></span>
-          <span class="line"><span class="ln"></span><span class="lc"><span class="k">set</span> -euo pipefail</span></span>
-          <span class="line"><span class="ln"></span><span class="lc"></span></span>
-          <span class="line"><span class="ln"></span><span class="lc"><span class="k">if</span> [[ <span class="v">$EUID</span> -ne <span class="n">0</span> ]]; <span class="k">then</span></span></span>
-        <span class="ln"></span><span class="lc">  <span class="f">echo</span> <span class="s">"Ce script doit être exécuté en root (ou via sudo)."</span> &gt;&amp;2</span></span>
-<span class="line"><span class="ln"></span><span class="lc">  <span class="f">exit</span> <span class="n">1</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="k">fi</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"=== 0/3 Prérequis Kubernetes ==="</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="c"># Désactiver le swap (exigé par kubelet)</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc">swapoff -a</span></span>
-<span class="line"><span class="ln"></span><span class="lc">sed -i.bak <span class="s">'/\sswap\s/s/^/#/'</span> /etc/fstab</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="c"># Modules noyau</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="f">cat</span> &lt;&lt;EOF &gt;/etc/modules-load.d/k8s.conf</span></span>
-<span class="line"><span class="ln"></span><span class="lc">overlay</span></span>
-<span class="line"><span class="ln"></span><span class="lc">br_netfilter</span></span>
-<span class="line"><span class="ln"></span><span class="lc">EOF</span></span>
-<span class="line"><span class="ln"></span><span class="lc">modprobe overlay</span></span>
-<span class="line"><span class="ln"></span><span class="lc">modprobe br_netfilter</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="c"># Paramètres sysctl pour le réseau des pods</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="f">cat</span> &lt;&lt;EOF &gt;/etc/sysctl.d/k8s.conf</span></span>
-<span class="line"><span class="ln"></span><span class="lc">net.bridge.bridge-nf-call-iptables  = 1</span></span>
-<span class="line"><span class="ln"></span><span class="lc">net.bridge.bridge-nf-call-ip6tables = 1</span></span>
-<span class="line"><span class="ln"></span><span class="lc">net.ipv4.ip_forward                 = 1</span></span>
-<span class="line"><span class="ln"></span><span class="lc">EOF</span></span>
-<span class="line"><span class="ln"></span><span class="lc">sudo sysctl --system &gt;/dev/null</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"=== 1/3 Installation containerd ==="</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc">apt-get update -qq</span></span>
-<span class="line"><span class="ln"></span><span class="lc">apt-get install -y -qq ca-certificates curl gnupg</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc">install -m <span class="n">0755</span> -d /etc/apt/keyrings</span></span>
-<span class="line"><span class="ln"></span><span class="lc">curl -fsSL https://download.docker.com/linux/ubuntu/gpg \</span></span>
-<span class="line"><span class="ln"></span><span class="lc">  | gpg --dearmor -o /etc/apt/keyrings/docker.gpg</span></span>
-<span class="line"><span class="ln"></span><span class="lc">chmod a+r /etc/apt/keyrings/docker.gpg</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="c"># Une seule ligne logique pour le dépôt : pas de \ dans une chaîne entre guillemets</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc">. /etc/os-release</span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"deb [arch=</span><span class="v">$(</span>dpkg --print-architecture<span class="v">)</span><span class="s"> signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu </span><span class="v">${VERSION_CODENAME}</span><span class="s"> stable"</span> \</span></span>
-<span class="line"><span class="ln"></span><span class="lc">  &gt; /etc/apt/sources.list.d/docker.list</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc">apt-get update -qq</span></span>
-<span class="line"><span class="ln"></span><span class="lc">apt-get install -y -qq containerd.io</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc">mkdir -p /etc/containerd</span></span>
-<span class="line"><span class="ln"></span><span class="lc">containerd config default &gt; /etc/containerd/config.toml</span></span>
-<span class="line"><span class="ln"></span><span class="lc">sed -i <span class="s">'s/SystemdCgroup = false/SystemdCgroup = true/'</span> /etc/containerd/config.toml</span></span>
-<span class="line"><span class="ln"></span><span class="lc">systemctl restart containerd</span></span>
-<span class="line"><span class="ln"></span><span class="lc">systemctl enable containerd</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"=== 2/3 Installation kubeadm + kubelet + kubectl ==="</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc">curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key \</span></span>
-<span class="line"><span class="ln"></span><span class="lc">  | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg</span></span>
-<span class="line"><span class="ln"></span><span class="lc">chmod a+r /etc/apt/keyrings/kubernetes-apt-keyring.gpg</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"</span> \</span></span>
-<span class="line"><span class="ln"></span><span class="lc">  &gt; /etc/apt/sources.list.d/kubernetes.list</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc">apt-get update -qq</span></span>
-<span class="line"><span class="ln"></span><span class="lc">apt-get install -y -qq kubelet kubeadm kubectl</span></span>
-<span class="line"><span class="ln"></span><span class="lc">apt-mark hold kubelet kubeadm kubectl</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"=== 3/3 Activation kubelet ==="</span></span></span>
-<span class="line"><span class="ln"></span><span class="lc">systemctl enable kubelet</span></span>
-<span class="line"><span class="ln"></span><span class="lc"></span></span>
-<span class="line"><span class="ln"></span><span class="lc"><span class="f">echo</span> <span class="s">"✅ Terminé. Lance ensuite 'kubeadm init ...' sur le control-plane."</span></span></span>
-</code></pre>
-<span class="p">$ </span><span class="k">chmod +x install-k8s-base.sh</span> <br> <span class="c"></span>
-<span class="p">$ </span><span class="k">sudo ./install-k8s-base.sh</span>  <span class="c"></span>
+
+        <pre>
+echo <span class="s">"=== 1/3 Installation containerd ==="</span>
+<span class="k">apt-get</span> update -qq
+<span class="k">apt-get</span> install -y -qq ca-certificates curl gnupg
+<span class="k">install</span> -m 0755 -d /etc/apt/keyrings
+<span class="k">curl</span> -fsSL https://download.docker.com/linux/ubuntu/gpg | <span class="k">gpg</span> --dearmor -o /etc/apt/keyrings/docker.gpg
+echo <span class="s">"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable"</span> | \
+  <span class="k">tee</span> /etc/apt/sources.list.d/docker.list
+<span class="k">apt-get</span> update -qq
+<span class="k">apt-get</span> install -y -qq containerd.io
+<span class="k">mkdir</span> -p /etc/containerd
+<span class="k">containerd</span> config default | <span class="k">tee</span> /etc/containerd/config.toml
+<span class="k">sed</span> -i <span class="s">'s/SystemdCgroup = false/SystemdCgroup = true/'</span> /etc/containerd/config.toml
+<span class="k">systemctl</span> restart containerd
+<span class="k">systemctl</span> enable containerd
+
+echo <span class="s">"=== 2/3 Installation kubeadm + kubelet + kubectl ==="</span>
+<span class="k">curl</span> -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
+  <span class="k">gpg</span> --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo <span class="s">'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+  https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /'</span> | \
+  <span class="k">tee</span> /etc/apt/sources.list.d/kubernetes.list
+<span class="k">apt-get</span> update -qq
+<span class="k">apt-get</span> install -y -qq kubelet kubeadm kubectl
+<span class="k">apt-mark</span> hold kubelet kubeadm kubectl
+
+echo <span class="s">"=== 3/3 Activation kubelet ==="</span>
+<span class="k">systemctl</span> enable kubelet
+
+echo <span class="ok">"✅ Installation terminée ! Prêt pour kubeadm init/join"</span></code></pre>
+<span class="p">$ </span><span class="k">chmod +x install-k8s-base.sh  <span class="c"></span>
+<span class="p">$ </span><span class="k">sudo ./install-k8s-base.sh  <span class="c"></span>
+
+      </div>
       </div>
 
       <h4>Initialiser le Control Plane (sur k8s-master uniquement)</h4>
       <div class="code-block">
         <div class="code-topbar"><span class="code-label">bash — SSH sur k8s-master</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-        <pre><code><span class="c"># Initialiser avec l'IP du réseau (eth0), Si erreur durant "sudo kubeadm init", tapez "sudo kubeadm reset" et confirmer le reset</span>
+        <pre><code><span class="c"># Initialiser avec l'IP du réseau (eth0)</span>
+<span class="c"># Note : 192.168.0.0/16 est le CIDR par défaut de Calico</span>
 <span class="p">$ </span><span class="k">sudo</span> kubeadm init \
     --apiserver-advertise-address=<span class="v">172.16.25.60</span> \
-    --pod-network-cidr=<span class="v">10.244.0.0/16</span> \
+    --pod-network-cidr=<span class="v">192.168.0.0/16</span> \
     --node-name=k8s-master
 
 <span class="c"># Configurer kubectl pour l'utilisateur courant</span>
@@ -929,12 +895,15 @@ footer{
 <span class="p">$ </span><span class="k">sudo</span> cp /etc/kubernetes/admin.conf $HOME/.kube/config
 <span class="p">$ </span><span class="k">sudo</span> chown $(id -u):$(id -g) $HOME/.kube/config
 
-<span class="c"># Installer le CNI Flannel (réseau des pods)</span>
-<span class="p">$ </span><span class="k">kubectl</span> apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+<span class="c"># Installer le CNI Calico (réseau des pods + support NetworkPolicies)</span>
+<span class="p">$ </span><span class="k">kubectl</span> apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+<span class="c"># Vérifier que les pods Calico démarrent correctement</span>
+<span class="p">$ </span><span class="k">kubectl</span> rollout status daemonset/calico-node -n kube-system
 
 <span class="c"># Récupérer la commande join pour les workers</span>
 <span class="c"># (affichée à la fin de kubeadm init, mais tu peux la regénérer)</span>
-<span class="c"># </span><span class="c">kubeadm token create --print-join-command</span></code></pre>
+<span class="p">$ </span><span class="k">kubeadm</span> token create --print-join-command</code></pre>
       </div>
 
       <h4>Joindre les Workers au cluster</h4>
@@ -948,10 +917,23 @@ footer{
     --node-name=k8s-worker1   <span class="c"># (ou k8s-worker2)</span></code></pre>
       </div>
 
-      
+      <h4>Accéder au cluster depuis ton PC Host</h4>
+      <div class="code-block">
+        <div class="code-topbar"><span class="code-label">bash — Sur ton PC (Linux/Mac)</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
+        <pre><code><span class="c"># Copier le kubeconfig depuis le master</span>
+<span class="p">$ </span><span class="k">scp</span> root@172.16.25.60:~/.kube/config ~/.kube/config-vbox
+
+<span class="c"># Utiliser ce contexte</span>
+<span class="p">$ </span><span class="k">export</span> KUBECONFIG=~/.kube/config-vbox
+
+<span class="c"># Ou fusionner avec ton config existant</span>
+<span class="p">$ </span><span class="k">export</span> KUBECONFIG=~/.kube/config:~/.kube/config-vbox
+<span class="p">$ </span><span class="k">kubectl</span> config view --merge --flatten > /tmp/merged.yaml
+<span class="p">$ </span><span class="k">mv</span> /tmp/merged.yaml ~/.kube/config</code></pre>
+      </div>
 
       <div class="verify">
-        <div class="verify-title">✅ Vérification finale du cluster DEPUIS LE MASTER</div>
+        <div class="verify-title">✅ Vérification finale du cluster</div>
         <div class="code-block">
           <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
           <pre><code><span class="p">$ </span><span class="k">kubectl</span> get nodes -o wide
@@ -1044,30 +1026,8 @@ footer{
       Déployer MySQL avec un StatefulSet. Vérifier que chaque pod a son propre volume persistant,
       et que le DNS interne permet de les adresser individuellement.
     </div>
- <h4>Étape 1 — Créer le fichier mysql-pv.yaml </h4>
-    <div class="code-block">
-      <div class="code-topbar"><span class="code-label">yaml — mysql-pv.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-      <pre><code><span class="c"># ─── Headless Service (pas d'IP fixe, pour le DNS uniquement) ───</span>
-<span class="yk">apiVersion: v1</span>
-<span class="yk">kind: PersistentVolume</span>
-<span class="yk">metadata:</span>
-<span class="yk">  name: mysql-pv-volume</span>
-<span class="yk">  labels:</span>
-<span class="yk">    type: local</span>
-<span class="yk">spec:</span>
-<span class="yk">  storageClassName: manual</span>
-<span class="yk">  capacity:</span>
-<span class="yk">    storage: 50Mi</span>
-<span class="yk">  accessModes:</span>
-<span class="yk">    - ReadWriteOnce</span>
-<span class="yk">  hostPath:</span>
-<span class="yk">    path: "/mnt/data/mysql"</span><span class="yv"></span></code></div>
- <h4>Appliquer le fichier pv pour le volume persistant</h4>
-    <div class="code-block">
-      <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
-      <pre><code><span class="p">$ </span><span class="k">kubectl apply -f mysql-pv.yaml</span></code></pre></div></div>
-    
-    <h4>Étape 1 bis — Créer le fichier mysql-statefulset.yaml</h4>
+
+    <h4>Étape 1 — Créer le fichier mysql-statefulset.yaml</h4>
     <div class="code-block">
       <div class="code-topbar"><span class="code-label">yaml — mysql-statefulset.yaml</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
       <pre><code><span class="c"># ─── Headless Service (pas d'IP fixe, pour le DNS uniquement) ───</span>
@@ -1115,7 +1075,7 @@ footer{
           <span class="yk">image</span>: <span class="yv">mysql:8.0</span>
           <span class="yk">env</span>:
             - <span class="yk">name</span>: <span class="yv">MYSQL_ROOT_PASSWORD</span>
-              <span class="yk">value</span>: <span class="ys">"TP_K8s"</span>
+              <span class="yk">value</span>: <span class="ys">"TP_K8s_2024"</span>
           <span class="yk">ports</span>:
             - <span class="yk">containerPort</span>: <span class="yn">3306</span>
               <span class="yk">name</span>: <span class="yv">mysql</span>
@@ -1127,10 +1087,9 @@ footer{
         <span class="yk">name</span>: <span class="yv">mysql-data</span>
       <span class="yk">spec</span>:
         <span class="yk">accessModes</span>: [<span class="yv">ReadWriteOnce</span>]
-        <span class="yk">storageClassName: manual </span>
         <span class="yk">resources</span>:
           <span class="yk">requests</span>:
-            <span class="yk">storage</span>: <span class="ys">50Mi</span></code></pre>
+            <span class="yk">storage</span>: <span class="ys">500Mi</span></code></pre>
     </div>
 
     <h4>Étape 2 — Déployer et observer</h4>
@@ -1160,12 +1119,12 @@ footer{
 <span class="p">$ </span><span class="k">kubectl</span> run -it dns-test --image=busybox --rm -- sh
 
 <span class="c"># Dans le pod busybox :</span>
-/ # nslookup mysql-0.mysql-headless.default.svc.cluster.local
+/ # nslookup mysql-0.mysql-headless
 <span class="ok"># Server:    10.96.0.10</span>
-<span class="ok"># Address 1: 10.244.1.5 mysql-0.mysql-headless.default.svc.cluster.local</span>
+<span class="ok"># Address 1: 192.168.1.5 mysql-0.mysql-headless.default.svc.cluster.local</span>
 
-/ # nslookup mysql-1.mysql-headless.default.svc.cluster.local
-<span class="ok"># Address 1: 10.244.2.3 mysql-1.mysql-headless.default.svc.cluster.local</span>
+/ # nslookup mysql-1.mysql-headless
+<span class="ok"># Address 1: 192.168.2.3 mysql-1.mysql-headless.default.svc.cluster.local</span>
 <span class="c"># Chaque pod a une adresse DNS unique et stable !</span>
 
 / # exit</code></pre>
@@ -1175,7 +1134,7 @@ footer{
     <div class="code-block">
       <div class="code-topbar"><span class="code-label">bash</span><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div></div>
       <pre><code><span class="c"># Se connecter à mysql-0 et créer une base de données</span>
-<span class="p">$ </span><span class="k">kubectl</span> exec -it mysql-0 -- mysql -u root -pTP_K8s
+<span class="p">$ </span><span class="k">kubectl</span> exec -it mysql-0 -- mysql -u root -pTP_K8s_2024
 
 mysql> CREATE DATABASE ma_base_de_test;
 mysql> SHOW DATABASES;
@@ -1191,7 +1150,7 @@ mysql> exit
 
 <span class="p">$ </span><span class="k">kubectl</span> wait --for=condition=Ready pod/mysql-0 --timeout=120s
 
-<span class="p">$ </span><span class="k">kubectl</span> exec -it mysql-0 -- mysql -u root -pTP_K8s -e "SHOW DATABASES;"
+<span class="p">$ </span><span class="k">kubectl</span> exec -it mysql-0 -- mysql -u root -pTP_K8s_2024 -e "SHOW DATABASES;"
 <span class="c"># ma_base_de_test est TOUJOURS là ! Le PVC a conservé les données.</span></code></pre>
     </div>
 
@@ -1240,7 +1199,7 @@ mysql> exit
     <div class="concept-card">
       <div class="cc-icon">🌐</div>
       <h4>Réseau</h4>
-      <p>CNI plugins (Flannel, Calico), kube-proxy lui-même est un DaemonSet</p>
+      <p>CNI plugins (Calico), kube-proxy lui-même est un DaemonSet</p>
     </div>
   </div>
 
@@ -1297,10 +1256,10 @@ mysql> exit
               <span class="yk">readOnly</span>: <span class="yv">true</span>
       <span class="yk">volumes</span>:
         - <span class="yk">name</span>: <span class="yv">varlog</span>
-          <span class="yk">Path</span>:
+          <span class="yk">hostPath</span>:
             <span class="yk">path</span>: <span class="ys">/var/log</span>         <span class="yc"># Monter le dossier RÉEL du node</span>
         - <span class="yk">name</span>: <span class="yv">varlibdockercontainers</span>
-          <span class="yk">Path</span>:
+          <span class="yk">hostPath</span>:
             <span class="yk">path</span>: <span class="ys">/var/lib/docker/containers</span></code></pre>
       </div>
 
@@ -1791,7 +1750,7 @@ mysql> exit
 <span class="c"># Vérifier les endpoints du Service</span>
 <span class="p">$ </span><span class="k">kubectl</span> get endpoints
 <span class="c"># NAME         ENDPOINTS</span>
-<span class="c"># app-probes   10.244.1.5:80  ← seulement le pod prêt apparaît</span></code></pre>
+<span class="c"># app-probes   192.168.1.5:80  ← seulement le pod prêt apparaît</span></code></pre>
       </div>
     </div>
   </div>
@@ -1812,16 +1771,16 @@ mysql> exit
     comme un firewall iptables entre tes microservices.
   </p>
 
-  <div class="callout warn">
-    <div class="ci">⚠️</div>
+  <div class="callout tip">
+    <div class="ci">✅</div>
     <div class="cb">
-      <strong>Prérequis : CNI compatible NetworkPolicy</strong>
-      Flannel (utilisé dans ce cours) ne supporte pas les NetworkPolicies nativement.
-      Pour ce TP, installe <strong>Calico</strong> (à la place de Flannel) ou ajoute le plugin <strong>Canal</strong>.
+      <strong>Calico : CNI avec support natif des NetworkPolicies</strong>
+      Ce cours utilise <strong>Calico</strong> comme plugin réseau (CNI), installé lors du TP 0.2.
+      Calico implémente nativement les NetworkPolicies Kubernetes et offre des règles réseau avancées.
+      Aucune configuration supplémentaire n'est nécessaire : les NetworkPolicies sont actives dès que Calico est installé.
       <br><br>
-      Remplacer Flannel par Calico :<br>
-      <code>kubectl delete -f kube-flannel.yml</code><br>
-      <code>kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml</code>
+      Vérifier que Calico est bien actif :<br>
+      <code>kubectl get pods -n kube-system -l k8s-app=calico-node</code>
     </div>
   </div>
 
@@ -1917,12 +1876,12 @@ mysql> exit
 
 <span class="c"># Obtenir les IPs des pods</span>
 <span class="p">$ </span><span class="k">kubectl</span> get pods -A -o wide
-<span class="c"># frontend-pod  10.244.1.10</span>
-<span class="c"># backend-pod   10.244.2.10</span>
-<span class="c"># db-pod        10.244.1.11</span>
+<span class="c"># frontend-pod  192.168.1.10</span>
+<span class="c"># backend-pod   192.168.2.10</span>
+<span class="c"># db-pod        192.168.1.11</span>
 
 <span class="c"># Tester depuis frontend vers DB (doit marcher SANS policies)</span>
-<span class="p">$ </span><span class="k">kubectl</span> exec -n frontend frontend-pod -- curl -s http://10.244.1.11 | head -3
+<span class="p">$ </span><span class="k">kubectl</span> exec -n frontend frontend-pod -- curl -s http://192.168.1.11 | head -3
 <span class="ok"># &lt;!DOCTYPE html&gt;  ← ça marche ! (normal, pas encore de policy)</span></code></pre>
       </div>
 
@@ -1954,11 +1913,11 @@ mysql> exit
         <pre><code><span class="p">$ </span><span class="k">kubectl</span> apply -f netpol-database.yaml
 
 <span class="c"># Test 1 : Frontend → DB (doit être BLOQUÉ)</span>
-<span class="p">$ </span><span class="k">kubectl</span> exec -n frontend frontend-pod -- curl -s --max-time 3 http://10.244.1.11
+<span class="p">$ </span><span class="k">kubectl</span> exec -n frontend frontend-pod -- curl -s --max-time 3 http://192.168.1.11
 <span class="err"># curl: (28) Operation timed out ← BLOQUÉ ! ✅</span>
 
 <span class="c"># Test 2 : Backend → DB (doit fonctionner)</span>
-<span class="p">$ </span><span class="k">kubectl</span> exec -n backend backend-pod -- curl -s http://10.244.1.11 | head -3
+<span class="p">$ </span><span class="k">kubectl</span> exec -n backend backend-pod -- curl -s http://192.168.1.11 | head -3
 <span class="ok"># &lt;!DOCTYPE html&gt; ← autorisé ✅</span>
 
 <span class="c"># Voir les policies actives</span>
