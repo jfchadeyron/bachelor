@@ -1142,6 +1142,14 @@ Commande réelle AWS : aws s3 ls --endpoint-url http://localhost:4566
 <span class="cm"># Télécharger (S3 → local)</span>
 <span class="pmt">$ </span>awslocal s3 cp s3://mon-premier-bucket/bonjour.txt ./telecharge.txt
 
+<span class="cm"># Créer un repertoire mon-site</span>
+<span class="pmt">$ </span>mkdir mon-site
+
+
+<span class="cm"># Créer un fichier index.html</span>
+<span class="pmt">$ </span>nano index.html</span>
+<span class="cm"># Enregistrer le fichier index.html et quitter nano</span>
+
 <span class="cm"># Copier un dossier entier vers S3 (récursif)</span>
 <span class="pmt">$ </span>awslocal s3 cp ./mon-site/ s3://mon-premier-bucket/ <span class="flag">--recursive</span>
 
