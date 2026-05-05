@@ -1,0 +1,2461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours complet : Google Cloud pour débutant (sans carte bancaire)</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f172a;
+    --bg-soft: #1e293b;
+    --bg-code: #1a202c;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --primary: #4285f4;   /* Bleu Google */
+    --secondary: #ea4335; /* Rouge Google */
+    --success: #34a853;   /* Vert Google */
+    --warning: #fbbc05;   /* Jaune Google */
+    --accent: #8ab4f8;
+    --border: #334155;
+    --shadow: 0 10px 25px rgba(0,0,0,.35);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+  }
+  /* Sidebar */
+  aside.toc {
+    background: var(--bg-soft);
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  aside.toc h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin: 0 0 12px 8px;
+  }
+  aside.toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  aside.toc ol li { margin: 2px 0; }
+  aside.toc a {
+    color: var(--text-dim);
+    text-decoration: none;
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    transition: all .15s;
+  }
+  aside.toc a:hover {
+    background: rgba(66,133,244,.12);
+    color: var(--accent);
+  }
+  /* Main */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 48px 80px;
+  }
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc05 100%);
+    padding: 2px;
+    border-radius: var(--radius);
+    margin-bottom: 40px;
+    box-shadow: var(--shadow);
+  }
+  .hero-inner {
+    background: var(--bg-soft);
+    border-radius: 8px;
+    padding: 32px 36px;
+  }
+  .hero h1 {
+    margin: 0 0 8px;
+    font-size: 2.4em;
+    line-height: 1.2;
+    background: linear-gradient(90deg, #4285f4, #34a853, #fbbc05, #ea4335);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p.subtitle {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 1.05em;
+  }
+  .hero .meta {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: rgba(66,133,244,.15);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    border: 1px solid rgba(66,133,244,.3);
+  }
+  /* Sections */
+  section {
+    margin-bottom: 56px;
+    padding-top: 16px;
+  }
+  h2 {
+    font-size: 1.85em;
+    color: var(--accent);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 10px;
+    margin-top: 48px;
+  }
+  h3 {
+    font-size: 1.35em;
+    color: #fff;
+    margin-top: 32px;
+  }
+  h4 {
+    font-size: 1.1em;
+    color: var(--warning);
+    margin-top: 20px;
+  }
+  p, li { color: var(--text); }
+  a { color: var(--accent); }
+  strong { color: #fff; }
+  code:not([class*="language-"]) {
+    background: var(--bg-code);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9em;
+    color: #f59e0b;
+    border: 1px solid var(--border);
+  }
+  pre[class*="language-"] {
+    border-radius: var(--radius);
+    padding: 16px 20px !important;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+  /* Callouts */
+  .callout {
+    border-left: 4px solid;
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin: 18px 0;
+    background: var(--bg-soft);
+  }
+  .callout.info     { border-color: var(--primary);   background: rgba(66,133,244,.08); }
+  .callout.tip      { border-color: var(--success);   background: rgba(52,168,83,.08); }
+  .callout.warning  { border-color: var(--warning);   background: rgba(251,188,5,.08); }
+  .callout.danger   { border-color: var(--secondary); background: rgba(234,67,53,.08); }
+  .callout strong.label {
+    display: block;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .callout.info    strong.label { color: var(--primary); }
+  .callout.tip     strong.label { color: var(--success); }
+  .callout.warning strong.label { color: var(--warning); }
+  .callout.danger  strong.label { color: var(--secondary); }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    background: var(--bg-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  th, td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: rgba(66,133,244,.12);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover { background: rgba(255,255,255,.02); }
+
+  /* Cmd arg list */
+  dl.args {
+    background: var(--bg-soft);
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin: 14px 0;
+  }
+  dl.args dt {
+    font-family: "SF Mono", Menlo, monospace;
+    color: var(--warning);
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  dl.args dt:first-child { margin-top: 0; }
+  dl.args dd {
+    margin: 4px 0 10px 0;
+    color: var(--text-dim);
+    font-size: 0.95em;
+  }
+  /* Responsive */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.toc {
+      position: relative;
+      max-height: none;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    main { padding: 24px 16px 60px; }
+    .hero h1 { font-size: 1.8em; }
+  }
+  /* Numbered steps */
+  ol.steps { counter-reset: step; list-style: none; padding-left: 0; }
+  ol.steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 10px 10px 10px 48px;
+    margin-bottom: 10px;
+    background: var(--bg-soft);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+  }
+  ol.steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-weight: bold;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+  .google-icons { display: flex; gap: 10px; margin: 14px 0; flex-wrap: wrap; }
+  .g-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+  }
+  .g-badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="toc">
+    <h2>Table des matières</h2>
+    <ol>
+      <li><a href="#chap-1">1. Introduction à Google Cloud</a></li>
+      <li><a href="#chap-2">2. Concepts fondamentaux</a></li>
+      <li><a href="#chap-3">3. Environnement sans CB</a></li>
+      <li><a href="#chap-4">4. Installation de gcloud CLI</a></li>
+      <li><a href="#chap-5">5. gcloud : les bases</a></li>
+      <li><a href="#chap-6">6. IAM &amp; service accounts</a></li>
+      <li><a href="#chap-7">7. Compute Engine</a></li>
+      <li><a href="#chap-8">8. Cloud Storage (émulateur)</a></li>
+      <li><a href="#chap-9">9. Cloud Run (avec Docker)</a></li>
+      <li><a href="#chap-10">10. Cloud Functions</a></li>
+      <li><a href="#chap-11">11. GKE / Kubernetes (Minikube)</a></li>
+      <li><a href="#chap-12">12. Artifact Registry</a></li>
+      <li><a href="#chap-13">13. Firestore (émulateur)</a></li>
+      <li><a href="#chap-14">14. Pub/Sub (émulateur)</a></li>
+      <li><a href="#chap-15">15. BigQuery</a></li>
+      <li><a href="#chap-16">16. Cloud Build &amp; CI/CD</a></li>
+      <li><a href="#chap-17">17. Monitoring &amp; Logging</a></li>
+      <li><a href="#chap-18">18. Projets pratiques</a></li>
+      <li><a href="#chap-19">19. Aller plus loin</a></li>
+    </ol>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <div class="hero">
+      <div class="hero-inner">
+        <h1>Google Cloud Platform : initiation complète</h1>
+        <p class="subtitle">Un cours pratique pour débutants — <strong>sans carte bancaire</strong>, en exploitant émulateurs locaux, Docker et Google Cloud Shell.</p>
+        <div class="meta">
+          <span class="tag">🎯 Niveau débutant</span>
+          <span class="tag">🐳 Pré-requis : Docker</span>
+          <span class="tag">💳 Aucune CB requise</span>
+          <span class="tag">⏱️ ~10-15h de pratique</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <strong class="label">À lire avant de commencer</strong>
+      <p>Ce cours est conçu pour vous permettre d'apprendre Google Cloud <strong>sans activer de facturation</strong>. Pour cela nous nous appuyons sur trois piliers :</p>
+      <ol>
+        <li><strong>Google Cloud Shell</strong> : un terminal gratuit dans le navigateur (5 Go, 50h/semaine) avec <code>gcloud</code> préinstallé — accessible avec un simple compte Google.</li>
+        <li><strong>Les émulateurs locaux officiels</strong> fournis par Google (Firestore, Pub/Sub, Datastore, Spanner, Bigtable…) : ils reproduisent fidèlement le comportement du cloud sur votre machine.</li>
+        <li><strong>Docker</strong> (que vous connaissez !) pour simuler des services comme Cloud Storage (<code>fake-gcs-server</code>), Cloud Run (runtime local), ou déployer <code>kubectl</code> via Minikube.</li>
+      </ol>
+      <p>À la fin, vous saurez lire/écrire toutes les commandes <code>gcloud</code> courantes, comprendre l'architecture GCP, et déployer des projets réels dès que vous activerez le niveau gratuit.</p>
+    </div>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 1 : INTRODUCTION -->
+<!-- ============================================================ -->
+<section id="chap-1">
+<h2>1. Introduction à Google Cloud</h2>
+
+<h3>1.1 Qu'est-ce que Google Cloud Platform (GCP) ?</h3>
+<p>Google Cloud Platform est la <strong>plateforme cloud publique</strong> de Google, équivalent d'AWS (Amazon) ou Azure (Microsoft). Elle expose sous forme de services managés l'infrastructure qui fait tourner Google Search, Gmail, YouTube… Vous louez de la puissance de calcul, du stockage, des bases de données, des API d'IA, etc., à l'usage (pay-as-you-go).</p>
+
+<p>GCP regroupe plus de 200 services. Les plus utilisés tombent dans quelques grandes familles :</p>
+
+<table>
+  <thead><tr><th>Famille</th><th>Services clés</th><th>Équivalent local / Docker</th></tr></thead>
+  <tbody>
+    <tr><td>Calcul (Compute)</td><td>Compute Engine (VM), Cloud Run (conteneurs), Cloud Functions (FaaS), GKE (Kubernetes)</td><td>VirtualBox, <code>docker run</code>, <code>functions-framework</code>, Minikube</td></tr>
+    <tr><td>Stockage</td><td>Cloud Storage (objet), Persistent Disk (bloc), Filestore (NFS)</td><td><code>fake-gcs-server</code>, volumes Docker</td></tr>
+    <tr><td>Bases de données</td><td>Cloud SQL (Postgres/MySQL), Firestore, BigQuery, Spanner, Bigtable</td><td>Postgres/MySQL Docker, émulateur Firestore, DuckDB pour BQ</td></tr>
+    <tr><td>Réseau</td><td>VPC, Load Balancer, Cloud DNS, Cloud CDN</td><td>Docker networks, Nginx</td></tr>
+    <tr><td>Messagerie</td><td>Pub/Sub, Cloud Tasks</td><td>Émulateur Pub/Sub, RabbitMQ</td></tr>
+    <tr><td>DevOps</td><td>Cloud Build, Artifact Registry, Cloud Deploy</td><td>GitHub Actions local, registry Docker</td></tr>
+    <tr><td>Data &amp; IA</td><td>BigQuery, Vertex AI, Dataflow</td><td>DuckDB, scikit-learn local</td></tr>
+  </tbody>
+</table>
+
+<h3>1.2 Pourquoi apprendre GCP quand on connaît Docker ?</h3>
+<p>Votre connaissance de Docker est un <strong>atout majeur</strong>. GCP a misé très tôt sur les conteneurs (Google a inventé Kubernetes !), ce qui fait que plusieurs services sont fondamentalement des "Docker managés" :</p>
+<ul>
+  <li><strong>Cloud Run</strong> : vous donnez une image Docker, Google la lance et gère le scaling automatique. C'est presque <code>docker run</code>, mais avec HTTPS, auto-scaling, observabilité…</li>
+  <li><strong>Artifact Registry</strong> : un Docker registry privé managé (comme Docker Hub mais chez Google).</li>
+  <li><strong>GKE</strong> : un cluster Kubernetes managé, idéal si vous utilisez déjà <code>docker-compose</code> et voulez scaler.</li>
+  <li><strong>Cloud Build</strong> : un CI qui construit vos images Docker depuis Git.</li>
+</ul>
+
+<h3>1.3 Différences GCP vs AWS (pour contexte)</h3>
+<p>Vous ne connaissez pas AWS, donc pas besoin de mémoriser — mais voici la correspondance la plus fréquente si vous croisez de la documentation :</p>
+<table>
+  <thead><tr><th>AWS</th><th>GCP</th><th>Rôle</th></tr></thead>
+  <tbody>
+    <tr><td>EC2</td><td>Compute Engine</td><td>Machines virtuelles</td></tr>
+    <tr><td>S3</td><td>Cloud Storage</td><td>Stockage d'objets</td></tr>
+    <tr><td>Lambda</td><td>Cloud Functions</td><td>Functions as a Service</td></tr>
+    <tr><td>Fargate</td><td>Cloud Run</td><td>Conteneurs serverless</td></tr>
+    <tr><td>EKS</td><td>GKE</td><td>Kubernetes managé</td></tr>
+    <tr><td>RDS</td><td>Cloud SQL</td><td>BDD relationnelles managées</td></tr>
+    <tr><td>DynamoDB</td><td>Firestore / Bigtable</td><td>BDD NoSQL</td></tr>
+    <tr><td>SNS/SQS</td><td>Pub/Sub</td><td>Messagerie asynchrone</td></tr>
+    <tr><td>Redshift</td><td>BigQuery</td><td>Entrepôt de données</td></tr>
+    <tr><td>CloudFormation</td><td>Deployment Manager / Terraform</td><td>Infrastructure as Code</td></tr>
+    <tr><td>IAM</td><td>IAM</td><td>Gestion des identités</td></tr>
+  </tbody>
+</table>
+
+<div class="callout tip">
+<strong class="label">💡 À retenir</strong>
+Google a inventé <strong>Kubernetes</strong>, <strong>gRPC</strong>, <strong>TensorFlow</strong>, le concept de <strong>MapReduce</strong>. GCP est particulièrement fort sur : data/analytics (BigQuery), l'IA (Vertex AI, APIs pré-entraînées type Vision/Translation), et les conteneurs (GKE, Cloud Run).
+</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 2 : CONCEPTS FONDAMENTAUX -->
+<!-- ============================================================ -->
+<section id="chap-2">
+<h2>2. Concepts fondamentaux</h2>
+
+<h3>2.1 La hiérarchie des ressources</h3>
+<p>Avant d'écrire la moindre commande, il faut comprendre <strong>comment GCP organise ce que vous créez</strong>. Tout ce que vous faites dans GCP existe à l'intérieur de cette hiérarchie :</p>
+
+<pre><code class="language-text">Organization (ex: entreprise.com)
+    └── Folder (ex: équipe-data)
+          └── Project (ex: my-first-project-2026) ← le conteneur principal
+                ├── Ressources (VM, buckets, BDD, etc.)
+                └── Permissions IAM
+</code></pre>
+
+<h4>Le <em>Project</em> — l'unité centrale</h4>
+<p>Le <strong>projet</strong> est le concept le plus important. Absolument toute ressource GCP appartient à un projet. Un projet c'est :</p>
+<ul>
+  <li>Un <strong>nom</strong> lisible (ex: "Mon Premier Projet")</li>
+  <li>Un <strong>Project ID</strong> unique <em>mondialement</em> (ex: <code>my-first-project-2026</code>) — vous le verrez dans toutes les commandes</li>
+  <li>Un <strong>Project Number</strong> automatique (ex: <code>123456789012</code>)</li>
+  <li>Un <strong>compte de facturation</strong> (optionnel tant que vous n'activez rien de payant)</li>
+  <li>Des <strong>API activées</strong> (par défaut, quasi rien — il faut activer chaque service)</li>
+</ul>
+
+<div class="callout warning">
+<strong class="label">⚠️ Bon à savoir</strong>
+Le <strong>Project ID est immuable</strong> et unique dans le monde entier. Choisissez-le bien. Il apparaîtra dans les URLs des services, dans les noms de buckets, etc.
+</div>
+
+<h3>2.2 Régions et zones</h3>
+<p>Google Cloud possède des datacenters partout dans le monde. On parle de :</p>
+<ul>
+  <li><strong>Multi-regions</strong> : grandes zones géographiques (<code>us</code>, <code>eu</code>, <code>asia</code>) — utilisé pour certains services comme Cloud Storage.</li>
+  <li><strong>Regions</strong> : une zone géographique précise (ex: <code>europe-west1</code> = Belgique, <code>europe-west9</code> = Paris).</li>
+  <li><strong>Zones</strong> : un datacenter <em>dans</em> une région (ex: <code>europe-west1-b</code>). C'est là qu'une VM tourne réellement.</li>
+</ul>
+
+<pre><code class="language-text">Multi-region "eu"
+ └── Region europe-west9 (Paris)
+        ├── Zone europe-west9-a
+        ├── Zone europe-west9-b
+        └── Zone europe-west9-c
+</code></pre>
+
+<div class="callout info">
+<strong class="label">Pourquoi c'est important ?</strong>
+<ul>
+  <li><strong>Latence</strong> : créez vos ressources proches de vos utilisateurs.</li>
+  <li><strong>Coût</strong> : les prix varient entre régions (Iowa <code>us-central1</code> est souvent le moins cher).</li>
+  <li><strong>Haute disponibilité</strong> : pour des apps critiques, on déploie sur plusieurs zones d'une même région.</li>
+  <li><strong>Conformité/RGPD</strong> : en Europe on privilégie <code>europe-west1</code>, <code>europe-west9</code> (Paris), <code>europe-west4</code> (Pays-Bas).</li>
+</ul>
+</div>
+
+<h3>2.3 APIs et services</h3>
+<p>Chaque service GCP expose une API REST. Avant de pouvoir utiliser (par ex.) Cloud Storage dans un projet, il faut <strong>activer son API</strong>. C'est une mesure de sécurité et de clarté : dans un nouveau projet, aucune API n'est activée.</p>
+<pre><code class="language-bash"># Exemple : activer l'API Cloud Storage
+gcloud services enable storage.googleapis.com
+
+# Lister les API déjà activées
+gcloud services list --enabled
+
+# Lister toutes les API disponibles (long !)
+gcloud services list --available
+</code></pre>
+
+<h3>2.4 Modèle de tarification (rapide)</h3>
+<p>Même si on ne paiera rien dans ce cours, comprenez le principe :</p>
+<ul>
+  <li><strong>Pay-as-you-go</strong> : vous payez à la seconde/minute/Go d'utilisation.</li>
+  <li><strong>Free Tier</strong> : chaque mois, un quota gratuit (ex: 1 micro VM, 5 Go de Cloud Storage, 2M d'invocations Cloud Functions…). Il est <em>permanent</em>, pas juste un essai.</li>
+  <li><strong>$300 de crédit</strong> offerts pendant 90 jours pour tout nouveau compte — mais il faut entrer une CB.</li>
+  <li><strong>Sustained use / committed use</strong> : remises automatiques si vous utilisez en continu ou vous engagez.</li>
+</ul>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 3 : ENVIRONNEMENT SANS CB -->
+<!-- ============================================================ -->
+<section id="chap-3">
+<h2>3. Préparer son environnement sans carte bancaire</h2>
+
+<p>Trois options complémentaires s'offrent à vous :</p>
+
+<h3>3.1 Option A : Google Cloud Shell (recommandé pour débuter)</h3>
+<p><strong>C'est une VM Linux gratuite, accessible dans un navigateur</strong>, avec <code>gcloud</code>, <code>gsutil</code>, <code>kubectl</code>, <code>docker</code>, <code>terraform</code>, <code>python</code>, <code>node</code> préinstallés, et 5 Go de stockage persistant dans <code>$HOME</code>.</p>
+
+<ol class="steps">
+  <li>Créez un compte Google (si ce n'est pas fait).</li>
+  <li>Allez sur <a href="https://console.cloud.google.com/" target="_blank">console.cloud.google.com</a>. Acceptez les CGU. <strong>N'activez PAS la facturation</strong> — on ne vous le demandera pas avant de créer une ressource payante.</li>
+  <li>Créez un projet (ex: <em>apprentissage-gcp</em>). Google vous donnera un Project ID du style <code>apprentissage-gcp-417856</code>.</li>
+  <li>En haut à droite, cliquez sur l'icône terminal (<em>Activate Cloud Shell</em>). Un terminal apparaît en bas de l'écran.</li>
+  <li>Vous êtes connecté, authentifié, et pouvez taper toutes les commandes du cours !</li>
+</ol>
+
+<div class="callout tip">
+<strong class="label">✅ Ce que vous pouvez faire gratuitement avec Cloud Shell</strong>
+<ul>
+  <li>Toutes les commandes <code>gcloud …</code> en lecture (list, describe).</li>
+  <li>Activer des API gratuites (ex: Cloud Functions, jusqu'à 2M invocations/mois gratuit… mais le <em>déploiement</em> nécessite la facturation).</li>
+  <li>Lancer des émulateurs locaux dans Cloud Shell même.</li>
+  <li>Éditer du code (<code>cloudshell edit</code>).</li>
+</ul>
+</div>
+
+<h3>3.2 Option B : gcloud CLI sur votre machine</h3>
+<p>Installer <code>gcloud</code> en local permet de travailler hors ligne, plus vite, et d'intégrer à votre IDE. Nous couvrons l'installation au chapitre 4.</p>
+
+<h3>3.3 Option C : Simuler GCP en local (le cœur du cours)</h3>
+<p>Google fournit officiellement des <strong>émulateurs</strong> — des binaires qui imitent le comportement des services GCP sur votre machine. Ils sont livrés dans la <em>Cloud SDK</em>. Voici les principaux :</p>
+<table>
+  <thead><tr><th>Service GCP</th><th>Émulateur / Alternative locale</th><th>Installation</th></tr></thead>
+  <tbody>
+    <tr><td>Firestore</td><td>Émulateur officiel</td><td><code>gcloud components install cloud-firestore-emulator</code></td></tr>
+    <tr><td>Pub/Sub</td><td>Émulateur officiel</td><td><code>gcloud components install pubsub-emulator</code></td></tr>
+    <tr><td>Datastore</td><td>Émulateur officiel</td><td>Inclus</td></tr>
+    <tr><td>Bigtable</td><td>Émulateur officiel</td><td><code>gcloud components install bigtable</code></td></tr>
+    <tr><td>Spanner</td><td>Image Docker officielle</td><td><code>docker run gcr.io/cloud-spanner-emulator/emulator</code></td></tr>
+    <tr><td>Cloud Storage</td><td>fake-gcs-server (tiers)</td><td>Image Docker <code>fsouza/fake-gcs-server</code></td></tr>
+    <tr><td>Cloud Functions</td><td>Functions Framework</td><td>Lib Python/Node : <code>pip install functions-framework</code></td></tr>
+    <tr><td>Cloud Run</td><td>Docker + Cloud Code</td><td>Extension VS Code / IntelliJ</td></tr>
+    <tr><td>GKE</td><td>Minikube</td><td><code>minikube start</code></td></tr>
+    <tr><td>Cloud Build</td><td><code>cloud-build-local</code> (deprecated) ou <code>docker buildx</code></td><td>Docker</td></tr>
+    <tr><td>BigQuery</td><td>Pas d'émulateur officiel — utiliser <a href="https://duckdb.org" target="_blank">DuckDB</a> pour le SQL, ou le <em>sandbox gratuit</em></td><td>Voir chap. 15</td></tr>
+  </tbody>
+</table>
+
+<div class="callout info">
+<strong class="label">Notre stack d'apprentissage</strong>
+Dans ce cours, vous utiliserez :
+<ol>
+  <li>Google Cloud Shell pour les commandes <code>gcloud</code> en mode lecture et l'exploration de la console.</li>
+  <li>Votre machine locale avec Docker pour tout ce qui est déploiement applicatif.</li>
+  <li>Les émulateurs Google pour les services de données (Firestore, Pub/Sub, etc.).</li>
+</ol>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 4 : INSTALLATION GCLOUD CLI -->
+<!-- ============================================================ -->
+<section id="chap-4">
+<h2>4. Installation de la gcloud CLI</h2>
+
+<p>Le <em>Google Cloud SDK</em> (aussi appelé <strong>gcloud CLI</strong>) est l'outil en ligne de commande qui parle aux API Google Cloud. Il contient plusieurs binaires :</p>
+<ul>
+  <li><code>gcloud</code> : la commande principale (VM, projets, IAM, déploiements…)</li>
+  <li><code>gsutil</code> : spécifique à Cloud Storage (copies de fichiers)</li>
+  <li><code>bq</code> : spécifique à BigQuery</li>
+  <li><code>kubectl</code> : pour Kubernetes (si GKE installé)</li>
+</ul>
+
+<h3>4.1 Installation sur Linux / macOS</h3>
+<pre><code class="language-bash"># Méthode universelle : script officiel
+curl https://sdk.cloud.google.com | bash
+
+# Recharger le shell
+exec -l $SHELL
+
+# Vérifier
+gcloud version
+</code></pre>
+
+<h4>Sur Ubuntu/Debian (paquet officiel)</h4>
+<pre><code class="language-bash"># Ajout de la clé et du dépôt
+sudo apt-get install -y apt-transport-https ca-certificates gnupg curl
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
+  sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
+  sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
+
+# Installation
+sudo apt-get update && sudo apt-get install google-cloud-cli
+</code></pre>
+
+<h4>Sur macOS via Homebrew</h4>
+<pre><code class="language-bash">brew install --cask google-cloud-sdk
+</code></pre>
+
+<h3>4.2 Installation via Docker (le plus simple !)</h3>
+<p>Puisque vous connaissez Docker, voici la méthode <strong>sans rien installer</strong> sur votre machine :</p>
+<pre><code class="language-bash"># Lancer une image gcloud en mode interactif
+docker run --rm -it \
+  -v "$HOME/.config/gcloud:/root/.config/gcloud" \
+  google/cloud-sdk:latest \
+  bash
+
+# Une fois à l'intérieur, tapez :
+gcloud version
+</code></pre>
+<dl class="args">
+<dt>--rm</dt><dd>Supprime le conteneur à la sortie (pour ne pas encombrer).</dd>
+<dt>-it</dt><dd>Mode interactif avec TTY alloué (nécessaire pour taper des commandes).</dd>
+<dt>-v "$HOME/.config/gcloud:/root/.config/gcloud"</dt><dd>Monte votre dossier local de configuration gcloud dans le conteneur. Ainsi votre authentification est persistée et partagée.</dd>
+<dt>google/cloud-sdk:latest</dt><dd>L'image Docker officielle Google avec gcloud, gsutil, bq, kubectl préinstallés.</dd>
+<dt>bash</dt><dd>Commande à exécuter dans le conteneur (ici, un shell interactif).</dd>
+</dl>
+
+<h3>4.3 Installation des composants additionnels</h3>
+<p>Certains outils (émulateurs, extensions) sont optionnels. On les installe avec <code>gcloud components</code> :</p>
+<pre><code class="language-bash"># Lister les composants installés et disponibles
+gcloud components list
+
+# Installer un composant
+gcloud components install cloud-firestore-emulator pubsub-emulator beta
+
+# Mettre à jour tous les composants
+gcloud components update
+
+# Supprimer un composant
+gcloud components remove cloud-firestore-emulator
+</code></pre>
+<dl class="args">
+<dt>install &lt;nom&gt;</dt><dd>Télécharge et installe un ou plusieurs composants. Les plus utiles pour ce cours : <code>cloud-firestore-emulator</code>, <code>pubsub-emulator</code>, <code>bigtable</code> (émulateur), <code>kubectl</code>, <code>beta</code>, <code>alpha</code> (commandes expérimentales).</dd>
+<dt>update</dt><dd>Met à jour tous les composants vers la dernière version.</dd>
+<dt>list</dt><dd>Affiche un tableau des composants avec leur statut.</dd>
+</dl>
+
+<div class="callout warning">
+<strong class="label">Si vous utilisez la version apt</strong>
+Sur Debian/Ubuntu l'installation via apt <em>désactive</em> <code>gcloud components install</code>. Il faut alors installer les composants via des paquets apt séparés, par exemple : <code>sudo apt-get install google-cloud-cli-pubsub-emulator</code>.
+</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 5 : GCLOUD CLI - LES BASES -->
+<!-- ============================================================ -->
+<section id="chap-5">
+<h2>5. gcloud CLI : les bases</h2>
+
+<h3>5.1 Anatomie d'une commande gcloud</h3>
+<p>Toutes les commandes suivent la même structure logique, façon verbe-sujet :</p>
+<pre><code class="language-text">gcloud  [GROUPE]  [SOUS-GROUPE]  [VERBE]  [NOM]  [--FLAGS]
+    │        │          │           │       │        │
+    │        │          │           │       │        └─ options (--region, --project, etc.)
+    │        │          │           │       └─ cible de l'action (nom de ressource)
+    │        │          │           └─ action (create, list, describe, delete, update)
+    │        │          └─ sous-catégorie (ex: "instances" pour Compute)
+    │        └─ famille de service (compute, storage, run, iam, projects…)
+    └─ binaire
+</code></pre>
+
+<h4>Exemples visuels</h4>
+<pre><code class="language-bash">gcloud compute instances list
+# └─┬─┘ └──┬──┘ └───┬───┘ └─┬┘
+#  bin  groupe  sous-grp  verbe
+
+gcloud run services describe my-api --region=europe-west1
+#            └───┬───┘ └──┬───┘  └┬─┘          └──────┬──────┘
+#            sous-grp   verbe   nom            flag obligatoire
+
+gcloud projects create apprentissage-gcp-2026 --name="Apprentissage"
+</code></pre>
+
+<h3>5.2 Authentification — la première étape</h3>
+<p>Avant toute action, <code>gcloud</code> doit savoir <em>qui</em> vous êtes. Deux modes :</p>
+<ul>
+  <li><strong>User credentials</strong> : vous vous connectez avec votre compte Google personnel (pour développer).</li>
+  <li><strong>Service account</strong> : un "robot" avec un fichier de clé JSON (pour les scripts/CI).</li>
+</ul>
+
+<pre><code class="language-bash"># 1. Lancer l'authentification (ouvre le navigateur)
+gcloud auth login
+
+# 2. Configurer le projet par défaut
+gcloud config set project MON_PROJECT_ID
+
+# 3. Vérifier la configuration active
+gcloud config list
+
+# 4. Voir les comptes connectés
+gcloud auth list
+
+# 5. Changer de compte
+gcloud config set account autre@gmail.com
+</code></pre>
+<dl class="args">
+<dt>gcloud auth login</dt><dd>Ouvre un navigateur pour une authentification OAuth2. Les credentials sont stockés localement dans <code>~/.config/gcloud/</code>. À faire une seule fois par machine.</dd>
+<dt>gcloud auth login --no-launch-browser</dt><dd>Utile sur serveur ou WSL : affiche une URL à copier dans un navigateur d'une autre machine.</dd>
+<dt>gcloud config set project &lt;id&gt;</dt><dd>Définit le projet par défaut. Évite de devoir écrire <code>--project=xxx</code> dans chaque commande.</dd>
+<dt>gcloud config list</dt><dd>Affiche la "configuration active" : compte, projet, région, zone par défaut.</dd>
+<dt>gcloud config configurations list</dt><dd>Liste toutes les configurations (vous pouvez en créer plusieurs : pro, perso, client-X).</dd>
+</dl>
+
+<h3>5.3 Application Default Credentials (ADC)</h3>
+<p>Quand <em>votre code</em> (Python, Go, Node…) veut appeler une API GCP, il utilise les <strong>ADC</strong>. C'est un mécanisme standard qui cherche des credentials dans l'ordre :</p>
+<ol>
+  <li>Variable d'environnement <code>GOOGLE_APPLICATION_CREDENTIALS</code> (chemin vers un JSON de service account).</li>
+  <li>Fichier <code>~/.config/gcloud/application_default_credentials.json</code>.</li>
+  <li>Métadonnées de la VM/Cloud Run/Functions (automatique en prod).</li>
+</ol>
+<pre><code class="language-bash"># Configurer les ADC (à faire une fois par machine)
+gcloud auth application-default login
+</code></pre>
+
+<div class="callout info">
+<strong class="label">💡 Différence clé</strong>
+<code>gcloud auth login</code> authentifie <strong>la CLI gcloud</strong>.<br>
+<code>gcloud auth application-default login</code> authentifie <strong>votre code applicatif</strong> (via les SDK Python/Java/etc).<br>
+Il faut <strong>faire les deux</strong> sur une machine de dev.
+</div>
+
+<h3>5.4 Commandes universelles : create, list, describe, delete, update</h3>
+<p>Presque tous les services supportent ces 5 verbes. Apprenez-les une fois, réutilisez partout :</p>
+<pre><code class="language-bash"># CREATE : créer une ressource
+gcloud compute instances create ma-vm --zone=europe-west1-b --machine-type=e2-micro
+
+# LIST : lister (souvent avec filtre)
+gcloud compute instances list
+gcloud compute instances list --filter="status=RUNNING"
+gcloud compute instances list --format="table(name, status, zone)"
+
+# DESCRIBE : détails d'une ressource
+gcloud compute instances describe ma-vm --zone=europe-west1-b
+
+# UPDATE : modifier
+gcloud compute instances add-tags ma-vm --zone=europe-west1-b --tags=http-server
+
+# DELETE : supprimer
+gcloud compute instances delete ma-vm --zone=europe-west1-b --quiet
+</code></pre>
+<dl class="args">
+<dt>--quiet / -q</dt><dd>Saute les confirmations interactives. Indispensable pour les scripts.</dd>
+<dt>--format=json|yaml|table|value|csv</dt><dd>Change la sortie. <code>value(nom)</code> extrait un seul champ — très utile pour piper : <code>FOR_ID=$(gcloud ... --format="value(id)")</code>.</dd>
+<dt>--filter="EXPR"</dt><dd>Filtre côté client. Exemples : <code>status=RUNNING</code>, <code>labels.env=prod</code>, <code>creationTimestamp&gt;'2024-01-01'</code>.</dd>
+<dt>--project=&lt;id&gt;</dt><dd>Override le projet pour cette commande uniquement.</dd>
+<dt>--verbosity=debug|info|warning|error</dt><dd>Niveau de log. <code>debug</code> affiche les requêtes HTTP envoyées, très pédagogique.</dd>
+</dl>
+
+<h3>5.5 Obtenir de l'aide</h3>
+<pre><code class="language-bash"># Aide générale
+gcloud help
+
+# Aide d'un groupe ou d'une commande
+gcloud help compute
+gcloud compute instances create --help
+
+# Version courte
+gcloud compute instances create -h
+
+# Aide recherchable
+gcloud topic filters
+gcloud topic formats
+gcloud topic configurations
+</code></pre>
+
+<h3>5.6 Manipuler plusieurs configurations</h3>
+<p>Très utile si vous jonglez entre plusieurs projets/comptes :</p>
+<pre><code class="language-bash"># Créer une nouvelle config
+gcloud config configurations create perso
+gcloud auth login
+gcloud config set project mon-projet-perso
+
+# Basculer
+gcloud config configurations activate perso
+gcloud config configurations activate default
+</code></pre>
+
+<h3>5.7 Format de sortie avancé</h3>
+<pre><code class="language-bash"># Extraire uniquement la colonne "name"
+gcloud compute instances list --format="value(name)"
+
+# Tableau customisé avec alias
+gcloud projects list --format="table(projectId:label=ID, name:label=NOM, projectNumber:label=NUM)"
+
+# JSON complet pour traitement jq
+gcloud compute instances list --format=json | jq '.[].name'
+
+# Tri
+gcloud projects list --sort-by=~createTime  # ~ = desc
+</code></pre>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 6 : IAM -->
+<!-- ============================================================ -->
+<section id="chap-6">
+<h2>6. IAM &amp; comptes de service</h2>
+
+<p>IAM (<em>Identity and Access Management</em>) est le système qui répond à la question : <strong>« Qui a le droit de faire quoi sur quelle ressource ? »</strong>. C'est la pièce la plus importante pour la sécurité.</p>
+
+<h3>6.1 Les 3 concepts fondamentaux</h3>
+<p>Une policy IAM se lit comme une phrase : <em>"&lt;MEMBER&gt; has &lt;ROLE&gt; on &lt;RESOURCE&gt;"</em>.</p>
+
+<h4>1. Member (l'identité)</h4>
+<ul>
+  <li><code>user:alice@gmail.com</code> — un utilisateur Google.</li>
+  <li><code>group:team@example.com</code> — un Google Group.</li>
+  <li><code>serviceAccount:svc@proj.iam.gserviceaccount.com</code> — un service account (un "robot").</li>
+  <li><code>domain:example.com</code> — tout utilisateur du domaine Workspace.</li>
+  <li><code>allUsers</code> — tout le monde sur Internet (attention !).</li>
+  <li><code>allAuthenticatedUsers</code> — n'importe qui avec un compte Google.</li>
+</ul>
+
+<h4>2. Role (ce qu'on peut faire)</h4>
+<p>Un rôle est un ensemble de <strong>permissions</strong> (ex: <code>storage.buckets.create</code>). Trois catégories :</p>
+<ul>
+  <li><strong>Basic roles</strong> (anciens, très larges — à éviter en prod) : <code>roles/owner</code>, <code>roles/editor</code>, <code>roles/viewer</code>.</li>
+  <li><strong>Predefined roles</strong> (ciblés par service) : <code>roles/storage.admin</code>, <code>roles/run.invoker</code>, <code>roles/bigquery.dataViewer</code>…</li>
+  <li><strong>Custom roles</strong> : vous composez vos propres permissions.</li>
+</ul>
+
+<h4>3. Resource (sur quoi)</h4>
+<p>Une policy peut être attachée à différents niveaux (le plus haut "gagne" en cumul) :</p>
+<pre><code class="language-text">Organization ──────── policy ✅
+  └── Folder ──────── policy ✅
+       └── Project ── policy ✅
+            └── Bucket / VM / etc. ── policy ✅ (granularité fine)
+</code></pre>
+
+<h3>6.2 Commandes IAM essentielles</h3>
+<pre><code class="language-bash"># Voir la policy IAM d'un projet
+gcloud projects get-iam-policy MON_PROJET
+
+# Ajouter un rôle à un utilisateur
+gcloud projects add-iam-policy-binding MON_PROJET \
+    --member="user:alice@gmail.com" \
+    --role="roles/viewer"
+
+# Retirer un rôle
+gcloud projects remove-iam-policy-binding MON_PROJET \
+    --member="user:alice@gmail.com" \
+    --role="roles/viewer"
+
+# Lister les rôles disponibles
+gcloud iam roles list --filter="name:storage"
+gcloud iam roles describe roles/storage.admin
+</code></pre>
+<dl class="args">
+<dt>get-iam-policy &lt;ressource&gt;</dt><dd>Retourne la policy au format YAML/JSON : qui a quoi. Sortez-la pour l'auditer.</dd>
+<dt>add-iam-policy-binding</dt><dd>Ajoute une paire member/role. Idempotent (ne fait rien si déjà présent).</dd>
+<dt>--member=...</dt><dd>Le préfixe est obligatoire : <code>user:</code>, <code>group:</code>, <code>serviceAccount:</code>, etc.</dd>
+<dt>--role=roles/XXX</dt><dd>Toujours préfixé par <code>roles/</code>. Tapez <code>gcloud iam roles list --filter="name:..."</code> pour chercher.</dd>
+<dt>--condition=...</dt><dd>(Avancé) Conditionne la permission (ex: expire après une date, limite à une IP).</dd>
+</dl>
+
+<h3>6.3 Les Service Accounts (comptes de service)</h3>
+<p>Un <strong>service account</strong> est une identité non-humaine. Votre VM, votre Cloud Function, votre app sur GKE, votre CI GitHub Actions… tout ce qui agit sur GCP sans humain utilise un SA.</p>
+
+<pre><code class="language-bash"># Créer un service account
+gcloud iam service-accounts create mon-app-sa \
+    --display-name="Service Account pour mon app" \
+    --description="Lit les fichiers du bucket archives"
+
+# Son email est : mon-app-sa@MON_PROJET.iam.gserviceaccount.com
+
+# Lui donner un rôle
+gcloud projects add-iam-policy-binding MON_PROJET \
+    --member="serviceAccount:mon-app-sa@MON_PROJET.iam.gserviceaccount.com" \
+    --role="roles/storage.objectViewer"
+
+# Générer une clé JSON (à protéger !)
+gcloud iam service-accounts keys create ma-cle.json \
+    --iam-account=mon-app-sa@MON_PROJET.iam.gserviceaccount.com
+
+# Utiliser cette clé dans votre code :
+export GOOGLE_APPLICATION_CREDENTIALS=/chemin/ma-cle.json
+python mon_script.py
+
+# Lister les clés
+gcloud iam service-accounts keys list \
+    --iam-account=mon-app-sa@MON_PROJET.iam.gserviceaccount.com
+
+# Supprimer une clé (en cas de fuite !)
+gcloud iam service-accounts keys delete KEY_ID \
+    --iam-account=mon-app-sa@MON_PROJET.iam.gserviceaccount.com
+</code></pre>
+
+<div class="callout danger">
+<strong class="label">⚠️ Sécurité des clés</strong>
+Les fichiers JSON de clés SA sont comme des mots de passe. <strong>Ne les committez JAMAIS</strong> dans Git. Ajoutez <code>*.json</code> à votre <code>.gitignore</code>. En prod, privilégiez :
+<ul>
+  <li><strong>Workload Identity</strong> (sur GKE) : pas de clé du tout, l'identité est attachée au pod.</li>
+  <li><strong>SA attachée à la VM/Cloud Run</strong> : l'auth est automatique via les métadonnées.</li>
+  <li><strong>Workload Identity Federation</strong> : pour les CI externes (GitHub Actions).</li>
+</ul>
+</div>
+
+<h3>6.4 Rôles utiles à retenir</h3>
+<table>
+  <thead><tr><th>Rôle</th><th>Usage</th></tr></thead>
+  <tbody>
+    <tr><td><code>roles/viewer</code></td><td>Lecture seule de toutes les ressources du projet</td></tr>
+    <tr><td><code>roles/editor</code></td><td>Lecture + modification (sans IAM)</td></tr>
+    <tr><td><code>roles/owner</code></td><td>Tout, y compris IAM</td></tr>
+    <tr><td><code>roles/storage.admin</code></td><td>Admin total sur Cloud Storage</td></tr>
+    <tr><td><code>roles/storage.objectViewer</code></td><td>Lire les objets de buckets</td></tr>
+    <tr><td><code>roles/run.invoker</code></td><td>Appeler un service Cloud Run</td></tr>
+    <tr><td><code>roles/run.admin</code></td><td>Déployer/gérer Cloud Run</td></tr>
+    <tr><td><code>roles/cloudsql.client</code></td><td>Se connecter à Cloud SQL</td></tr>
+    <tr><td><code>roles/pubsub.publisher</code></td><td>Publier sur un topic</td></tr>
+    <tr><td><code>roles/pubsub.subscriber</code></td><td>Lire d'une subscription</td></tr>
+    <tr><td><code>roles/bigquery.dataViewer</code></td><td>Lire les datasets BigQuery</td></tr>
+    <tr><td><code>roles/logging.logWriter</code></td><td>Écrire des logs (à donner à vos apps)</td></tr>
+  </tbody>
+</table>
+
+<div class="callout tip">
+<strong class="label">💡 Principe du moindre privilège</strong>
+Donnez toujours le rôle <strong>le plus étroit possible</strong>. Si une app ne fait que lire un bucket, donnez-lui <code>roles/storage.objectViewer</code>, pas <code>roles/storage.admin</code>. Cela limite les dégâts en cas de compromission.
+</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 7 : COMPUTE ENGINE -->
+<!-- ============================================================ -->
+<section id="chap-7">
+<h2>7. Compute Engine : les machines virtuelles</h2>
+
+<p>Compute Engine (<em>GCE</em>) fournit des VM Linux/Windows à la demande. C'est le service IaaS de base — équivalent EC2 chez AWS.</p>
+
+<h3>7.1 Concepts clés</h3>
+<ul>
+  <li><strong>Instance</strong> : une VM en cours d'exécution.</li>
+  <li><strong>Machine type</strong> : le gabarit (CPU, RAM). Ex: <code>e2-micro</code> (2 vCPU partagés, 1 Go) qui est le type du <em>Free Tier</em>.</li>
+  <li><strong>Image</strong> : le template disque (Debian 12, Ubuntu 22.04, ...). Les images Google sont préfixées par leur "famille".</li>
+  <li><strong>Boot disk</strong> : le disque système. <code>pd-standard</code> (HDD), <code>pd-balanced</code>, <code>pd-ssd</code>.</li>
+  <li><strong>Metadata / startup script</strong> : un script exécuté au démarrage de la VM.</li>
+  <li><strong>Network tags</strong> : labels utilisés par les règles de firewall.</li>
+</ul>
+
+<h3>7.2 Machine types principaux</h3>
+<table>
+  <thead><tr><th>Famille</th><th>Usage</th><th>Exemple</th></tr></thead>
+  <tbody>
+    <tr><td>E2</td><td>Généraliste low-cost</td><td><code>e2-micro</code> (Free Tier), <code>e2-standard-4</code></td></tr>
+    <tr><td>N2 / N2D</td><td>Généraliste perf</td><td><code>n2-standard-2</code></td></tr>
+    <tr><td>C3 / C4</td><td>Compute intensif</td><td><code>c3-standard-8</code></td></tr>
+    <tr><td>M3</td><td>Memory optimized</td><td><code>m3-megamem-64</code></td></tr>
+    <tr><td>A2 / G2</td><td>GPU / ML</td><td><code>a2-highgpu-1g</code></td></tr>
+  </tbody>
+</table>
+
+<h3>7.3 Commande de création d'une VM (syntaxe à maîtriser)</h3>
+<pre><code class="language-bash">gcloud compute instances create ma-premiere-vm \
+    --project=MON_PROJET \
+    --zone=europe-west1-b \
+    --machine-type=e2-micro \
+    --image-family=debian-12 \
+    --image-project=debian-cloud \
+    --boot-disk-size=10GB \
+    --boot-disk-type=pd-standard \
+    --tags=http-server \
+    --metadata=startup-script='#!/bin/bash
+apt-get update
+apt-get install -y nginx
+echo "Bonjour depuis $(hostname)" > /var/www/html/index.html' \
+    --service-account=mon-sa@MON_PROJET.iam.gserviceaccount.com \
+    --scopes=cloud-platform
+</code></pre>
+
+<dl class="args">
+<dt>ma-premiere-vm</dt><dd>Nom de l'instance. Doit être unique dans la zone, alphanumérique + tiret.</dd>
+<dt>--zone=europe-west1-b</dt><dd>Zone où la VM va tourner. Obligatoire (sauf si zone par défaut définie via <code>gcloud config set compute/zone</code>).</dd>
+<dt>--machine-type=e2-micro</dt><dd>Gabarit. <code>e2-micro</code> est dans le Free Tier (us-central1, us-west1, us-east1 uniquement).</dd>
+<dt>--image-family=debian-12</dt><dd>La "famille" suit automatiquement la dernière version. Alternative : <code>--image=debian-12-bookworm-v20240110</code> pour épingler.</dd>
+<dt>--image-project=debian-cloud</dt><dd>Projet où l'image est publiée. Chaque OS a le sien : <code>ubuntu-os-cloud</code>, <code>centos-cloud</code>, <code>rocky-linux-cloud</code>, <code>cos-cloud</code> (Container-Optimized OS).</dd>
+<dt>--boot-disk-size=10GB</dt><dd>Taille du disque système. Minimum 10 Go, défaut 10 Go.</dd>
+<dt>--boot-disk-type=pd-standard</dt><dd><code>pd-standard</code> (HDD, moins cher), <code>pd-balanced</code> (SSD équilibré), <code>pd-ssd</code> (SSD rapide).</dd>
+<dt>--tags=http-server</dt><dd>Tags réseau pour matcher des règles firewall. <code>http-server</code> et <code>https-server</code> sont des tags par défaut qui ouvrent 80/443.</dd>
+<dt>--metadata=startup-script='...'</dt><dd>Script exécuté au premier boot en root. Parfait pour installer des paquets, récupérer du code, etc. Alternative : <code>--metadata-from-file=startup-script=init.sh</code>.</dd>
+<dt>--service-account=EMAIL</dt><dd>Identité sous laquelle la VM agira (pour appeler d'autres API GCP).</dd>
+<dt>--scopes=cloud-platform</dt><dd>OAuth scopes. <code>cloud-platform</code> = tous les services ; à restreindre en prod.</dd>
+<dt>--preemptible / --provisioning-model=SPOT</dt><dd>Instances à bas prix (−70%) mais interruptibles.</dd>
+</dl>
+
+<h3>7.4 Cycle de vie d'une VM</h3>
+<pre><code class="language-bash"># Démarrer une VM arrêtée
+gcloud compute instances start ma-vm --zone=europe-west1-b
+
+# Arrêter (disque conservé, pas de facturation CPU)
+gcloud compute instances stop ma-vm --zone=europe-west1-b
+
+# Redémarrer
+gcloud compute instances reset ma-vm --zone=europe-west1-b
+
+# Supprimer
+gcloud compute instances delete ma-vm --zone=europe-west1-b --quiet
+
+# SSH (ouvre une session via IAP, pas besoin d'ouvrir le 22)
+gcloud compute ssh ma-vm --zone=europe-west1-b
+
+# Copier un fichier
+gcloud compute scp ./local-file.txt ma-vm:/tmp/ --zone=europe-west1-b
+
+# Récupérer la console série (debug de boot)
+gcloud compute instances get-serial-port-output ma-vm --zone=europe-west1-b
+</code></pre>
+
+<h3>7.5 Simuler une VM en local (sans GCP)</h3>
+<p>Pour pratiquer sans créer de ressource facturée, utilisez Docker pour simuler une "VM linux" :</p>
+
+<pre><code class="language-bash"># Une "VM" Debian avec SSH activé
+docker run -d --name fake-vm \
+    -p 2222:22 \
+    --hostname ma-premiere-vm \
+    debian:12 \
+    sh -c "apt-get update && apt-get install -y openssh-server && \
+           mkdir -p /run/sshd && \
+           echo 'root:root' | chpasswd && \
+           sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+           /usr/sbin/sshd -D"
+
+# Se connecter en SSH (simulant gcloud compute ssh)
+ssh root@localhost -p 2222
+</code></pre>
+
+<p>Ou plus proche de GCE, utilisez <strong>Vagrant</strong> + VirtualBox qui créent de vraies VM locales :</p>
+<pre><code class="language-bash"># Vagrantfile minimal
+cat &gt; Vagrantfile &lt;&lt;EOF
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bookworm64"
+  config.vm.hostname = "ma-premiere-vm"
+  config.vm.provision "shell", inline: &lt;&lt;-SHELL
+    apt-get update
+    apt-get install -y nginx
+    echo "Bonjour depuis $(hostname)" &gt; /var/www/html/index.html
+  SHELL
+end
+EOF
+
+vagrant up
+vagrant ssh
+vagrant destroy -f
+</code></pre>
+
+<h3>7.6 Règles de firewall</h3>
+<p>Par défaut, seul le SSH (22), RDP (3389) et ICMP sont ouverts. Pour exposer un port HTTP :</p>
+<pre><code class="language-bash">gcloud compute firewall-rules create allow-http \
+    --network=default \
+    --direction=INGRESS \
+    --action=ALLOW \
+    --rules=tcp:80,tcp:443 \
+    --source-ranges=0.0.0.0/0 \
+    --target-tags=http-server
+</code></pre>
+<dl class="args">
+<dt>--direction=INGRESS|EGRESS</dt><dd>Trafic entrant ou sortant.</dd>
+<dt>--action=ALLOW|DENY</dt><dd>Autoriser ou bloquer.</dd>
+<dt>--rules=tcp:80,udp:53,icmp</dt><dd>Protocoles et ports concernés.</dd>
+<dt>--source-ranges=0.0.0.0/0</dt><dd>Plage IP autorisée. <code>0.0.0.0/0</code> = Internet entier (public).</dd>
+<dt>--target-tags=http-server</dt><dd>S'applique aux VM ayant ce tag. Alternative : <code>--target-service-accounts=</code>.</dd>
+</dl>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 8 : CLOUD STORAGE -->
+<!-- ============================================================ -->
+<section id="chap-8">
+<h2>8. Cloud Storage (avec émulateur local)</h2>
+
+<p>Cloud Storage (<em>GCS</em>) est le service de <strong>stockage d'objets</strong> — équivalent S3 chez AWS. On l'utilise pour stocker photos, backups, datasets, fichiers statiques d'un site web, etc.</p>
+
+<h3>8.1 Concepts</h3>
+<ul>
+  <li><strong>Bucket</strong> : un conteneur de fichiers. Son nom est <strong>unique au monde</strong> (comme un domaine).</li>
+  <li><strong>Object</strong> : un fichier + métadonnées. Un object a une <em>clé</em> (le "chemin") et un <em>contenu</em>.</li>
+  <li><strong>Location</strong> : région, dual-region ou multi-region (plus cher mais multi-continent).</li>
+  <li><strong>Storage class</strong> : <em>Standard</em> (accès fréquent), <em>Nearline</em> (1x/mois), <em>Coldline</em> (1x/trimestre), <em>Archive</em> (1x/an, le moins cher mais latence de récupération).</li>
+</ul>
+
+<h3>8.2 L'outil gsutil / gcloud storage</h3>
+<p>Historiquement on utilise <code>gsutil</code>. Depuis 2022, Google pousse la commande <code>gcloud storage</code> (plus rapide grâce à des uploads parallèles en Go). Les deux coexistent, on montre les deux :</p>
+
+<pre><code class="language-bash"># === Créer un bucket ===
+gcloud storage buckets create gs://mon-bucket-unique-2026 \
+    --location=europe-west1 \
+    --default-storage-class=STANDARD \
+    --uniform-bucket-level-access
+
+# === Upload ===
+gcloud storage cp rapport.pdf gs://mon-bucket-unique-2026/docs/
+
+# Upload récursif d'un dossier
+gcloud storage cp -r ./mon-site/ gs://mon-bucket-unique-2026/
+
+# === Lister ===
+gcloud storage ls gs://mon-bucket-unique-2026/
+gcloud storage ls -l gs://mon-bucket-unique-2026/docs/    # détaillé
+gcloud storage ls -r gs://mon-bucket-unique-2026/**       # récursif
+
+# === Télécharger ===
+gcloud storage cp gs://mon-bucket-unique-2026/docs/rapport.pdf ./
+gcloud storage cp -r gs://mon-bucket-unique-2026/docs/ ./backup/
+
+# === Synchroniser (comme rsync) ===
+gcloud storage rsync ./site/ gs://mon-bucket-unique-2026/site/ --recursive --delete-unmatched-destination-objects
+
+# === Supprimer ===
+gcloud storage rm gs://mon-bucket-unique-2026/docs/vieux.txt
+gcloud storage rm -r gs://mon-bucket-unique-2026/old/    # dossier entier
+gcloud storage buckets delete gs://mon-bucket-unique-2026/
+
+# === Rendre public un fichier ===
+gcloud storage objects update gs://mon-bucket-unique-2026/public/image.png --add-acl-grant=entity=AllUsers,role=READER
+# OU (moderne, IAM)
+gcloud storage buckets add-iam-policy-binding gs://mon-bucket-unique-2026 \
+    --member=allUsers --role=roles/storage.objectViewer
+
+# === Signed URL (lien temporaire sans rendre public) ===
+gcloud storage sign-url gs://mon-bucket-unique-2026/private/file.pdf \
+    --private-key-file=./sa-key.json \
+    --duration=1h
+</code></pre>
+
+<dl class="args">
+<dt>--location=europe-west1</dt><dd>Région du bucket. Choisir proche des utilisateurs. Valeurs : régions (<code>europe-west1</code>), dual-region (<code>eur4</code>), multi-region (<code>eu</code>, <code>us</code>, <code>asia</code>).</dd>
+<dt>--default-storage-class</dt><dd>STANDARD / NEARLINE / COLDLINE / ARCHIVE. Peut être changé par objet après coup.</dd>
+<dt>--uniform-bucket-level-access</dt><dd><strong>Recommandé</strong> : une seule policy IAM pour tout le bucket (pas d'ACL par objet, plus simple à auditer).</dd>
+<dt>-r (ou --recursive)</dt><dd>Récursif. Indispensable pour dossiers.</dd>
+<dt>gs://...</dt><dd>Le scheme de l'URI Cloud Storage (équivalent <code>s3://</code> pour AWS).</dd>
+<dt>rsync --delete-unmatched-destination-objects</dt><dd>Supprime les fichiers de destination qui ne sont plus à la source. Utile pour un miroir exact.</dd>
+</dl>
+
+<h3>8.3 Émulateur Cloud Storage : fake-gcs-server</h3>
+<p>Google ne fournit pas d'émulateur officiel GCS (c'est une lacune !). Le projet open-source <code>fsouza/fake-gcs-server</code> comble cela parfaitement. Il expose une API compatible GCS sur votre machine.</p>
+
+<h4>Lancer le serveur</h4>
+<pre><code class="language-bash">docker run -d --name fake-gcs \
+    -p 4443:4443 \
+    -v $(pwd)/data:/storage \
+    fsouza/fake-gcs-server \
+    -scheme http \
+    -host 0.0.0.0 \
+    -port 4443 \
+    -public-host localhost:4443
+</code></pre>
+<dl class="args">
+<dt>-p 4443:4443</dt><dd>Expose le port 4443 (port par défaut du fake-gcs-server).</dd>
+<dt>-v $(pwd)/data:/storage</dt><dd>Montre un dossier local comme "stockage" : vous verrez y apparaître vos "buckets" comme des sous-dossiers.</dd>
+<dt>-scheme http</dt><dd>HTTP simple (pas de TLS). Pour la pratique c'est suffisant.</dd>
+<dt>-public-host localhost:4443</dt><dd>Host public à renvoyer dans les URLs signées.</dd>
+</dl>
+
+<h4>Utiliser avec le SDK Python</h4>
+<pre><code class="language-python">from google.cloud import storage
+import os
+
+# Pointer le SDK vers l'émulateur
+os.environ["STORAGE_EMULATOR_HOST"] = "http://localhost:4443"
+
+# Créer un client "anonyme" (pas besoin de credentials pour l'émulateur)
+client = storage.Client.create_anonymous_client()
+client.project = "test-project"
+
+# Créer un bucket
+bucket = client.create_bucket("mon-bucket-local")
+
+# Upload
+blob = bucket.blob("hello.txt")
+blob.upload_from_string("Hello Fake GCS !")
+
+# Download
+print(blob.download_as_text())
+
+# Lister
+for b in bucket.list_blobs():
+    print(b.name)
+</code></pre>
+
+<h4>Utiliser avec gsutil</h4>
+<pre><code class="language-bash"># Configurer gsutil pour qu'il tape l'émulateur
+cat &gt; ~/.boto &lt;&lt;EOF
+[Credentials]
+gs_host = localhost
+gs_port = 4443
+gs_host_header = storage.googleapis.com
+
+[Boto]
+https_validate_certificates = False
+is_secure = False
+EOF
+
+# Puis les commandes normales fonctionnent
+gsutil ls
+gsutil cp fichier.txt gs://mon-bucket-local/
+</code></pre>
+
+<div class="callout tip">
+<strong class="label">💡 Cas d'usage de l'émulateur</strong>
+<ul>
+  <li>Développer un backend qui lit/écrit des fichiers sans facturation.</li>
+  <li>Tests d'intégration CI (lancer l'émulateur en "service container" dans GitHub Actions).</li>
+  <li>Apprendre les commandes sans risque de toucher des données prod.</li>
+</ul>
+</div>
+
+<h3>8.4 Lifecycle rules (automatiser le nettoyage)</h3>
+<pre><code class="language-bash"># Fichier lifecycle.json
+cat > lifecycle.json <<'EOF'
+{
+  "lifecycle": {
+    "rule": [
+      {
+        "action": {"type": "Delete"},
+        "condition": {"age": 30}
+      },
+      {
+        "action": {"type": "SetStorageClass", "storageClass": "COLDLINE"},
+        "condition": {"age": 7, "matchesStorageClass": ["STANDARD"]}
+      }
+    ]
+  }
+}
+EOF
+
+# Appliquer
+gcloud storage buckets update gs://mon-bucket --lifecycle-file=lifecycle.json
+</code></pre>
+<p>Ci-dessus : après 7 jours les fichiers passent en Coldline, après 30 jours ils sont supprimés.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 9 : CLOUD RUN -->
+<!-- ============================================================ -->
+<section id="chap-9">
+<h2>9. Cloud Run : déployer des conteneurs</h2>
+
+<p><strong>Cloud Run est probablement le service GCP que vous utiliserez le plus</strong>, surtout en venant de Docker. Principe : vous donnez une image Docker, Google la lance en HTTPS, auto-scale de 0 à N, et facture à la requête.</p>
+
+<h3>9.1 Comment ça marche</h3>
+<p>Cloud Run attend un conteneur qui :</p>
+<ol>
+  <li>Écoute en HTTP sur le port défini par la variable d'environnement <code>$PORT</code> (souvent 8080).</li>
+  <li>Démarre en &lt; 4 min.</li>
+  <li>Est "stateless" (pas de session locale, pas d'écriture disque persistante).</li>
+</ol>
+
+<div class="callout info">
+<strong class="label">Cloud Run vs Cloud Functions vs GKE</strong>
+<ul>
+  <li><strong>Cloud Functions</strong> : vous écrivez <em>une fonction</em>. Google construit le conteneur.</li>
+  <li><strong>Cloud Run</strong> : vous fournissez <em>un conteneur</em>. Plus de flexibilité (langages, dépendances système), même simplicité.</li>
+  <li><strong>GKE</strong> : <em>vous gérez le cluster Kubernetes</em>. Pour orchestration avancée.</li>
+</ul>
+</div>
+
+<h3>9.2 Construire une app exemple en Python + Flask</h3>
+<pre><code class="language-python"># main.py
+import os
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return jsonify(
+        message="Hello Cloud Run !",
+        env=os.environ.get("K_SERVICE", "local"),
+        revision=os.environ.get("K_REVISION", "v1"),
+    )
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+</code></pre>
+
+<pre><code class="language-text"># requirements.txt
+flask==3.0.0
+gunicorn==21.2.0
+</code></pre>
+
+<pre><code class="language-dockerfile"># Dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Cloud Run passe un port dynamique dans $PORT
+ENV PORT=8080
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
+</code></pre>
+
+<h3>9.3 Tester en local avec Docker (sans GCP !)</h3>
+<pre><code class="language-bash">docker build -t hello-cloud-run .
+
+docker run --rm -p 8080:8080 -e PORT=8080 hello-cloud-run
+
+# Dans un autre terminal
+curl http://localhost:8080/
+</code></pre>
+
+<div class="callout tip">
+<strong class="label">C'est déjà presque Cloud Run !</strong>
+Si votre app tourne en Docker local avec juste la variable <code>$PORT</code>, elle tournera sur Cloud Run tel quel. C'est l'immense avantage : pas de vendor lock-in, tests locaux fidèles.
+</div>
+
+<h3>9.4 Déployer sur Cloud Run (syntaxe à connaître)</h3>
+<p>Deux façons de déployer :</p>
+<h4>Méthode A : depuis le code source (Google build pour vous)</h4>
+<pre><code class="language-bash">gcloud run deploy hello-service \
+    --source . \
+    --region=europe-west1 \
+    --allow-unauthenticated \
+    --memory=512Mi \
+    --cpu=1 \
+    --min-instances=0 \
+    --max-instances=3 \
+    --port=8080 \
+    --set-env-vars="ENV=prod,DEBUG=false"
+</code></pre>
+
+<h4>Méthode B : depuis une image déjà poussée</h4>
+<pre><code class="language-bash"># Build + push de l'image
+docker tag hello-cloud-run \
+    europe-west1-docker.pkg.dev/MON_PROJET/mon-repo/hello:v1
+docker push \
+    europe-west1-docker.pkg.dev/MON_PROJET/mon-repo/hello:v1
+
+# Déploiement
+gcloud run deploy hello-service \
+    --image=europe-west1-docker.pkg.dev/MON_PROJET/mon-repo/hello:v1 \
+    --region=europe-west1 \
+    --allow-unauthenticated
+</code></pre>
+
+<dl class="args">
+<dt>hello-service</dt><dd>Nom du service. Détermine l'URL : <code>https://hello-service-&lt;hash&gt;-ew.a.run.app</code>.</dd>
+<dt>--source .</dt><dd>Buildpacks Google construisent l'image depuis votre code (détecte Python, Node, Go, Java, .NET…).</dd>
+<dt>--image=URL</dt><dd>Image déjà présente dans Artifact Registry, Container Registry ou Docker Hub.</dd>
+<dt>--region=europe-west1</dt><dd>Région de déploiement.</dd>
+<dt>--allow-unauthenticated</dt><dd>Rend le service accessible publiquement (sinon : auth IAM obligatoire).</dd>
+<dt>--memory=512Mi</dt><dd>RAM allouée à chaque instance. De 128Mi à 32Gi.</dd>
+<dt>--cpu=1</dt><dd>Nombre de vCPU (0.5, 1, 2, 4, 6, 8).</dd>
+<dt>--min-instances=0</dt><dd>Scaling minimum. <strong>0 = scale to zero</strong> (pas de coût au repos, mais <em>cold start</em> au premier appel). <strong>1+</strong> = toujours chaud (mais facturé).</dd>
+<dt>--max-instances=3</dt><dd>Plafond pour éviter les factures délirantes en cas de pic.</dd>
+<dt>--port=8080</dt><dd>Port sur lequel votre conteneur écoute.</dd>
+<dt>--concurrency=80</dt><dd>Nombre max de requêtes simultanées par instance (défaut 80).</dd>
+<dt>--timeout=300</dt><dd>Timeout par requête en secondes (max 3600).</dd>
+<dt>--set-env-vars="K=V,K2=V2"</dt><dd>Variables d'environnement. Alternative : <code>--set-secrets</code> pour utiliser Secret Manager.</dd>
+<dt>--service-account=EMAIL</dt><dd>Identité du runtime (pour appeler d'autres API GCP).</dd>
+<dt>--ingress=all|internal|internal-and-cloud-load-balancing</dt><dd>Qui peut atteindre le service (internet vs VPC).</dd>
+</dl>
+
+<h3>9.5 Gérer les services Cloud Run</h3>
+<pre><code class="language-bash"># Lister les services
+gcloud run services list --region=europe-west1
+
+# Détails
+gcloud run services describe hello-service --region=europe-west1
+
+# URL
+gcloud run services describe hello-service \
+    --region=europe-west1 \
+    --format='value(status.url)'
+
+# Voir les révisions (chaque déploiement crée une révision)
+gcloud run revisions list --service=hello-service --region=europe-west1
+
+# Rollback (re-router le traffic vers une vieille révision)
+gcloud run services update-traffic hello-service \
+    --region=europe-west1 \
+    --to-revisions=hello-service-00002-abc=100
+
+# Canary : 90% v1, 10% v2
+gcloud run services update-traffic hello-service \
+    --region=europe-west1 \
+    --to-revisions=hello-service-00001-xxx=90,hello-service-00002-yyy=10
+
+# Supprimer
+gcloud run services delete hello-service --region=europe-west1 --quiet
+</code></pre>
+
+<h3>9.6 Voir les logs</h3>
+<pre><code class="language-bash"># Derniers logs
+gcloud run services logs read hello-service --region=europe-west1 --limit=50
+
+# Stream en temps réel
+gcloud run services logs tail hello-service --region=europe-west1
+
+# Filtrer par sévérité
+gcloud run services logs read hello-service \
+    --region=europe-west1 \
+    --log-filter='severity>=ERROR'
+</code></pre>
+
+<h3>9.7 "Émuler" Cloud Run en local avec Docker Compose</h3>
+<p>Pour simuler plusieurs services Cloud Run communiquant entre eux, un <code>docker-compose.yml</code> fait parfaitement le job :</p>
+<pre><code class="language-yaml">version: "3.9"
+services:
+  api:
+    build: ./api
+    environment:
+      - PORT=8080
+      - K_SERVICE=api
+      - DB_HOST=db
+    ports:
+      - "8080:8080"
+    depends_on: [db]
+
+  worker:
+    build: ./worker
+    environment:
+      - PORT=8081
+      - PUBSUB_EMULATOR_HOST=pubsub:8085
+    depends_on: [pubsub]
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_PASSWORD=secret
+
+  pubsub:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
+    command: gcloud beta emulators pubsub start --host-port=0.0.0.0:8085
+    ports:
+      - "8085:8085"
+</code></pre>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 10 : CLOUD FUNCTIONS -->
+<!-- ============================================================ -->
+<section id="chap-10">
+<h2>10. Cloud Functions : Functions as a Service</h2>
+
+<p>Cloud Functions (<em>CF</em>) vous permet d'écrire <strong>juste une fonction</strong> — pas de Dockerfile à gérer. Google détecte le langage (Python, Node.js, Go, Java, PHP, Ruby, .NET) et empaquette le tout.</p>
+
+<h3>10.1 Deux types de triggers</h3>
+<ul>
+  <li><strong>HTTP</strong> : la fonction est appelée via une URL HTTPS (REST).</li>
+  <li><strong>Event-driven</strong> : déclenchement par un événement : nouveau fichier dans un bucket, message Pub/Sub, écriture Firestore, log, etc.</li>
+</ul>
+
+<p>Depuis 2023, Cloud Functions s'appelle <strong>Cloud Run functions</strong> (gen2) et est construit <em>au-dessus</em> de Cloud Run + Eventarc. Mais le SDK <code>gcloud functions</code> reste identique.</p>
+
+<h3>10.2 Exemple : fonction HTTP en Python</h3>
+<pre><code class="language-python"># main.py
+import functions_framework
+
+@functions_framework.http
+def hello_world(request):
+    """Répond à une requête HTTP."""
+    name = request.args.get("name", "anonyme")
+    return f"Bonjour {name} !\n", 200
+</code></pre>
+
+<pre><code class="language-text"># requirements.txt
+functions-framework==3.*
+</code></pre>
+
+<h3>10.3 Tester localement (sans déployer !)</h3>
+<p>C'est <strong>le gros avantage</strong> de Functions Framework : c'est juste une lib Python qui expose votre fonction en HTTP local, exactement comme Google le fera en prod.</p>
+
+<pre><code class="language-bash">pip install functions-framework
+
+# Lancer la fonction en local sur le port 8080
+functions-framework --target=hello_world --debug
+
+# Dans un autre terminal
+curl "http://localhost:8080/?name=Alice"
+# => Bonjour Alice !
+</code></pre>
+<dl class="args">
+<dt>--target=hello_world</dt><dd>Le nom de la fonction Python (le décorateur <code>@functions_framework.http</code> la "marque").</dd>
+<dt>--port=8080</dt><dd>Port d'écoute.</dd>
+<dt>--debug</dt><dd>Mode verbeux avec reload automatique.</dd>
+<dt>--signature-type=http|event|cloudevent</dt><dd>Type de fonction. HTTP pour REST, <code>cloudevent</code> pour les triggers Pub/Sub, Storage, Firestore.</dd>
+</dl>
+
+<h3>10.4 Déployer sur Cloud Functions (syntaxe)</h3>
+<pre><code class="language-bash">gcloud functions deploy hello-world \
+    --gen2 \
+    --runtime=python312 \
+    --region=europe-west1 \
+    --source=. \
+    --entry-point=hello_world \
+    --trigger-http \
+    --allow-unauthenticated \
+    --memory=256Mi \
+    --timeout=60s
+</code></pre>
+
+<dl class="args">
+<dt>--gen2</dt><dd><strong>Indispensable</strong> : utilise la nouvelle génération (basée sur Cloud Run). Plus performant, plus de limites généreuses.</dd>
+<dt>--runtime=python312</dt><dd>Runtime à utiliser. Les valeurs usuelles : <code>python312</code>, <code>nodejs20</code>, <code>go122</code>, <code>java21</code>.</dd>
+<dt>--source=.</dt><dd>Dossier contenant <code>main.py</code> / <code>index.js</code>… et le fichier de deps.</dd>
+<dt>--entry-point=hello_world</dt><dd>Nom de la fonction à appeler (doit correspondre au nom dans le code).</dd>
+<dt>--trigger-http</dt><dd>Déclenchement HTTP. Alternatives : <code>--trigger-topic=TOPIC</code>, <code>--trigger-event-filters="type=google.cloud.storage.object.v1.finalized"</code>.</dd>
+<dt>--allow-unauthenticated</dt><dd>Accessible sans token Google (public). Sinon : appel IAM obligatoire.</dd>
+<dt>--memory=256Mi</dt><dd>RAM. Influence aussi le CPU alloué.</dd>
+<dt>--timeout=60s</dt><dd>Durée max par invocation (9 min max en gen2).</dd>
+</dl>
+
+<h3>10.5 Exemple : fonction déclenchée par Cloud Storage</h3>
+<pre><code class="language-python"># main.py
+import functions_framework
+
+@functions_framework.cloud_event
+def on_file_upload(cloud_event):
+    data = cloud_event.data
+    print(f"Fichier uploadé : {data['name']} dans {data['bucket']}")
+    print(f"Taille : {data['size']} octets")
+</code></pre>
+
+<pre><code class="language-bash">gcloud functions deploy file-watcher \
+    --gen2 \
+    --runtime=python312 \
+    --region=europe-west1 \
+    --source=. \
+    --entry-point=on_file_upload \
+    --trigger-event-filters="type=google.cloud.storage.object.v1.finalized" \
+    --trigger-event-filters="bucket=mon-bucket-unique-2026"
+</code></pre>
+
+<h3>10.6 Tester localement avec un CloudEvent</h3>
+<pre><code class="language-bash"># Lancer la fonction
+functions-framework --target=on_file_upload --signature-type=cloudevent --port=8080
+
+# Envoyer un événement simulé (format CloudEvents)
+curl -X POST http://localhost:8080/ \
+    -H "Content-Type: application/json" \
+    -H "ce-id: 12345" \
+    -H "ce-specversion: 1.0" \
+    -H "ce-source: //storage.googleapis.com/projects/_/buckets/mon-bucket" \
+    -H "ce-type: google.cloud.storage.object.v1.finalized" \
+    -d '{
+      "bucket": "mon-bucket",
+      "name": "test.jpg",
+      "size": "12345"
+    }'
+</code></pre>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 11 : GKE / KUBERNETES -->
+<!-- ============================================================ -->
+<section id="chap-11">
+<h2>11. GKE &amp; Kubernetes (avec Minikube)</h2>
+
+<p>Google Kubernetes Engine (GKE) est la version managée de Kubernetes. Puisque GKE = K8s standard + "sucre GCP", <strong>apprendre Kubernetes avec Minikube en local</strong> est la façon idéale de se former sans carte bancaire.</p>
+
+<h3>11.1 Rappels Kubernetes (pour débutant venant de Docker)</h3>
+<p>Si vous venez de <code>docker-compose</code>, voici les équivalences :</p>
+<table>
+  <thead><tr><th>Docker / Compose</th><th>Kubernetes</th><th>Rôle</th></tr></thead>
+  <tbody>
+    <tr><td>Conteneur</td><td><strong>Pod</strong> (1+ conteneurs)</td><td>Unité d'exécution la plus fine</td></tr>
+    <tr><td>Service (compose)</td><td><strong>Deployment</strong></td><td>Gère N replicas d'un pod</td></tr>
+    <tr><td>Port publish</td><td><strong>Service</strong> (ClusterIP, NodePort, LoadBalancer)</td><td>Exposition réseau</td></tr>
+    <tr><td>—</td><td><strong>Ingress</strong></td><td>Routage HTTP(S) externe</td></tr>
+    <tr><td>env_file</td><td><strong>ConfigMap</strong> / <strong>Secret</strong></td><td>Configuration / secrets</td></tr>
+    <tr><td>Volume</td><td><strong>PersistentVolume</strong> + PVC</td><td>Stockage persistant</td></tr>
+    <tr><td>Image</td><td>Image (mêmes registries)</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<h3>11.2 Installer Minikube</h3>
+<pre><code class="language-bash"># Linux
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# macOS
+brew install minikube
+
+# Lancer le cluster (driver Docker le plus simple si vous avez Docker)
+minikube start --driver=docker --cpus=2 --memory=4g
+
+# Vérifier
+kubectl cluster-info
+kubectl get nodes
+</code></pre>
+
+<h3>11.3 Premier déploiement : un pod puis un Deployment</h3>
+<pre><code class="language-bash"># Déployer nginx directement (approche impérative)
+kubectl create deployment web --image=nginx:1.25 --replicas=3
+
+# Voir les pods
+kubectl get pods
+kubectl get pods -o wide     # + IPs + nœud
+
+# Exposer le déploiement (crée un Service)
+kubectl expose deployment web --port=80 --type=NodePort
+
+# Récupérer l'URL accessible
+minikube service web --url
+</code></pre>
+
+<h3>11.4 Approche déclarative (recommandée)</h3>
+<p>En prod, on écrit des manifests YAML dans Git :</p>
+<pre><code class="language-yaml"># web-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.25
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector:
+    app: web
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
+</code></pre>
+
+<pre><code class="language-bash"># Appliquer
+kubectl apply -f web-deployment.yaml
+
+# Mettre à jour (idempotent)
+kubectl apply -f web-deployment.yaml
+
+# Supprimer
+kubectl delete -f web-deployment.yaml
+</code></pre>
+
+<h3>11.5 Commandes kubectl essentielles</h3>
+<pre><code class="language-bash"># === Inspecter ===
+kubectl get all                       # tout
+kubectl get deploy,svc,pod           # types spécifiques
+kubectl describe pod web-abc-123     # détails complets (events en bas !)
+
+# === Logs & shell ===
+kubectl logs web-abc-123              # logs d'un pod
+kubectl logs -f web-abc-123           # suivre en live (-f = follow)
+kubectl logs -l app=web --tail=50    # tous les pods du label
+
+kubectl exec -it web-abc-123 -- /bin/sh   # shell dans le pod
+
+# === Port-forward (accès local rapide) ===
+kubectl port-forward svc/web 8080:80
+# Puis http://localhost:8080
+
+# === Scaling ===
+kubectl scale deployment web --replicas=5
+
+# === Rolling update ===
+kubectl set image deployment/web nginx=nginx:1.26
+kubectl rollout status deployment/web
+kubectl rollout undo deployment/web    # rollback
+
+# === Config ===
+kubectl create configmap app-config --from-literal=DB_HOST=db.example.com
+kubectl create secret generic db-pass --from-literal=password=s3cr3t
+</code></pre>
+
+<dl class="args">
+<dt>kubectl apply -f FICHIER</dt><dd>Applique un manifest (create + update). Mode déclaratif.</dd>
+<dt>-o yaml|json|wide|name</dt><dd>Format de sortie. <code>-o yaml</code> est excellent pour comprendre l'état réel.</dd>
+<dt>-n NAMESPACE</dt><dd>Cible un namespace (défaut : <code>default</code>). Exemple : <code>-n kube-system</code>.</dd>
+<dt>-l KEY=VALUE</dt><dd>Sélecteur de labels (très utilisé).</dd>
+<dt>--dry-run=client -o yaml</dt><dd>Génère un YAML sans l'appliquer — excellent pour démarrer un manifest.</dd>
+</dl>
+
+<h3>11.6 Addons utiles de Minikube</h3>
+<pre><code class="language-bash">minikube addons list
+minikube addons enable ingress          # nginx ingress controller
+minikube addons enable metrics-server   # kubectl top pods
+minikube addons enable dashboard        # UI web
+minikube dashboard                      # ouvre l'UI dans le navigateur
+</code></pre>
+
+<h3>11.7 Déployer sur GKE (ce qui change)</h3>
+<p>Une fois confortable avec Minikube, déployer sur GKE est identique côté <code>kubectl</code>. La différence est la création du cluster :</p>
+<pre><code class="language-bash"># GKE Autopilot : Google gère tout (pas de gestion de nodes)
+gcloud container clusters create-auto mon-cluster \
+    --region=europe-west1
+
+# GKE Standard : vous gérez les pools de nodes
+gcloud container clusters create mon-cluster \
+    --zone=europe-west1-b \
+    --num-nodes=3 \
+    --machine-type=e2-small \
+    --disk-size=30
+
+# Récupérer les credentials (configure kubectl)
+gcloud container clusters get-credentials mon-cluster --region=europe-west1
+
+# À partir de là, kubectl agit sur GKE !
+kubectl apply -f mon-manifest.yaml
+</code></pre>
+
+<div class="callout tip">
+<strong class="label">💡 GKE Autopilot vs Standard</strong>
+<strong>Autopilot</strong> (recommandé pour débuter) : Google gère les nodes, la sécurité, l'autoscaling. Facturation à la pod/ressource. <strong>Standard</strong> : vous gérez les VMs, plus flexible mais plus de responsabilités.
+</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 12 : ARTIFACT REGISTRY -->
+<!-- ============================================================ -->
+<section id="chap-12">
+<h2>12. Artifact Registry</h2>
+
+<p>Artifact Registry est le <strong>Docker registry privé managé</strong> de GCP (il remplace Container Registry, l'ancien service). Il stocke aussi d'autres formats : Maven, npm, Python, etc.</p>
+
+<h3>12.1 Créer un repository</h3>
+<pre><code class="language-bash">gcloud artifacts repositories create mon-repo \
+    --repository-format=docker \
+    --location=europe-west1 \
+    --description="Mes images Docker"
+</code></pre>
+<dl class="args">
+<dt>--repository-format=docker</dt><dd>Le type de registry. Autres valeurs : <code>maven</code>, <code>npm</code>, <code>python</code>, <code>apt</code>, <code>yum</code>.</dd>
+<dt>--location=europe-west1</dt><dd>Région où stocker les images.</dd>
+</dl>
+
+<h3>12.2 Authentifier Docker</h3>
+<p>Pour que <code>docker push</code> fonctionne, il faut dire à Docker comment s'authentifier auprès d'Artifact Registry :</p>
+<pre><code class="language-bash">gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+# Cela ajoute un "credHelper" dans ~/.docker/config.json
+# qui fait appel à gcloud pour obtenir un token OAuth.
+</code></pre>
+
+<h3>12.3 Tag + push</h3>
+<p>Un tag d'image Artifact Registry respecte ce schéma :</p>
+<pre><code class="language-text">LOCATION-docker.pkg.dev/PROJECT/REPO/IMAGE:TAG
+└────────┬────────────┘ └──┬──┘ └─┬┘ └┬─┘  └┬┘
+       registry        projet repo  img  version
+</code></pre>
+
+<pre><code class="language-bash"># Build
+docker build -t hello-app .
+
+# Tag vers Artifact Registry
+docker tag hello-app \
+    europe-west1-docker.pkg.dev/MON_PROJET/mon-repo/hello-app:v1
+
+# Push
+docker push europe-west1-docker.pkg.dev/MON_PROJET/mon-repo/hello-app:v1
+
+# Lister
+gcloud artifacts docker images list \
+    europe-west1-docker.pkg.dev/MON_PROJET/mon-repo
+
+# Lister les tags d'une image
+gcloud artifacts docker tags list \
+    europe-west1-docker.pkg.dev/MON_PROJET/mon-repo/hello-app
+</code></pre>
+
+<h3>12.4 Alternative locale : un registry Docker privé</h3>
+<p>Pour pratiquer sans GCP, utilisez l'image officielle <code>registry:2</code> qui expose l'API Docker Registry :</p>
+<pre><code class="language-bash">docker run -d --name local-registry \
+    -p 5000:5000 \
+    -v $(pwd)/registry-data:/var/lib/registry \
+    registry:2
+
+# Tag + push vers le registry local
+docker tag hello-app localhost:5000/hello-app:v1
+docker push localhost:5000/hello-app:v1
+
+# Consulter
+curl http://localhost:5000/v2/_catalog
+curl http://localhost:5000/v2/hello-app/tags/list
+</code></pre>
+<p>Couplé à Minikube, vous pouvez déployer depuis ce registry local dans votre cluster K8s — ce qui reproduit exactement le workflow GKE ↔ Artifact Registry.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 13 : FIRESTORE -->
+<!-- ============================================================ -->
+<section id="chap-13">
+<h2>13. Firestore (avec émulateur officiel)</h2>
+
+<p>Firestore est la base NoSQL orientée document de Google (proche de MongoDB). C'est un des services qui a le <strong>meilleur émulateur</strong> — parfait pour apprendre sans facturer.</p>
+
+<h3>13.1 Modèle de données</h3>
+<p>Firestore organise les données en <strong>documents</strong> (JSON-like) regroupés en <strong>collections</strong>, qui peuvent contenir des <strong>sous-collections</strong> :</p>
+<pre><code class="language-text">/users (collection)
+  └── alice (document id)       { name, email, age }
+         └── /orders (sous-collection)
+                └── order-42    { date, total, items }
+  └── bob                        { name, email, age }
+</code></pre>
+
+<h3>13.2 Installer et lancer l'émulateur</h3>
+<pre><code class="language-bash"># Pré-requis : Java 11+ (l'émulateur tourne en JVM)
+java -version
+
+# Installer l'émulateur
+gcloud components install cloud-firestore-emulator
+
+# Lancer
+gcloud emulators firestore start --host-port=localhost:8200
+</code></pre>
+<p>Alternativement via Docker (pas de Java à installer) :</p>
+<pre><code class="language-bash">docker run -d --name firestore-emu \
+    -p 8200:8200 \
+    gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators \
+    gcloud emulators firestore start --host-port=0.0.0.0:8200
+</code></pre>
+
+<h3>13.3 Se connecter depuis Python</h3>
+<pre><code class="language-python"># pip install google-cloud-firestore
+import os
+from google.cloud import firestore
+
+# Pointer le SDK vers l'émulateur
+os.environ["FIRESTORE_EMULATOR_HOST"] = "localhost:8200"
+os.environ["GCLOUD_PROJECT"] = "demo-project"
+
+db = firestore.Client()
+
+# --- CREATE ---
+db.collection("users").document("alice").set({
+    "name": "Alice",
+    "age": 30,
+    "email": "alice@example.com"
+})
+
+# ID auto-généré
+db.collection("users").add({"name": "Bob", "age": 25})
+
+# --- READ (un doc) ---
+doc = db.collection("users").document("alice").get()
+if doc.exists:
+    print(doc.to_dict())
+
+# --- QUERY ---
+q = db.collection("users").where("age", ">", 20).limit(10)
+for d in q.stream():
+    print(d.id, "=>", d.to_dict())
+
+# --- UPDATE (partiel) ---
+db.collection("users").document("alice").update({"age": 31})
+
+# --- DELETE ---
+db.collection("users").document("alice").delete()
+</code></pre>
+
+<h3>13.4 Commandes gcloud Firestore</h3>
+<pre><code class="language-bash"># Créer la base (à faire une seule fois par projet)
+gcloud firestore databases create \
+    --location=europe-west1 \
+    --type=firestore-native
+
+# Exporter (backup)
+gcloud firestore export gs://mon-bucket/backups/
+
+# Importer
+gcloud firestore import gs://mon-bucket/backups/
+
+# Lister les index composites
+gcloud firestore indexes composite list
+</code></pre>
+
+<div class="callout tip">
+<strong class="label">💡 L'émulateur est ultra réaliste</strong>
+L'émulateur Firestore implémente : transactions, batched writes, queries, index composites, security rules. La seule chose qu'il ne fait pas : fédération d'auth avec Firebase Auth. Pour vos projets d'apprentissage, vous ne sentirez aucune différence avec la prod.
+</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 14 : PUB/SUB -->
+<!-- ============================================================ -->
+<section id="chap-14">
+<h2>14. Pub/Sub (avec émulateur officiel)</h2>
+
+<p>Pub/Sub est le bus de messages asynchrones de GCP (équivalent Kafka / SQS+SNS). Modèle <em>publish-subscribe</em> : un <strong>publisher</strong> envoie à un <strong>topic</strong>, un ou plusieurs <strong>subscribers</strong> consomment via des <strong>subscriptions</strong>.</p>
+
+<h3>14.1 Concepts</h3>
+<ul>
+  <li><strong>Topic</strong> : le canal (ex: <code>orders-created</code>).</li>
+  <li><strong>Subscription</strong> : un "tuyau" de lecture. Chaque subscription reçoit une copie de chaque message. Deux modes :
+    <ul>
+      <li><strong>Pull</strong> : le consommateur demande les messages.</li>
+      <li><strong>Push</strong> : Pub/Sub POST chaque message à une URL HTTPS.</li>
+    </ul>
+  </li>
+  <li><strong>Ack</strong> : le consommateur acquitte le message (sinon redelivery après <em>ack deadline</em>).</li>
+  <li><strong>Dead Letter Topic</strong> : messages non ack après N tentatives.</li>
+</ul>
+
+<h3>14.2 Lancer l'émulateur</h3>
+<pre><code class="language-bash">gcloud components install pubsub-emulator beta
+
+# Démarrer
+gcloud beta emulators pubsub start --host-port=localhost:8085
+
+# Dans un autre terminal, configurer l'environnement pour les SDK :
+export PUBSUB_EMULATOR_HOST=localhost:8085
+export GOOGLE_CLOUD_PROJECT=demo-project
+</code></pre>
+
+<p>Ou via Docker :</p>
+<pre><code class="language-bash">docker run -d --name pubsub-emu \
+    -p 8085:8085 \
+    gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators \
+    gcloud beta emulators pubsub start --host-port=0.0.0.0:8085
+</code></pre>
+
+<h3>14.3 gcloud Pub/Sub — syntaxe</h3>
+<pre><code class="language-bash"># === Topics ===
+gcloud pubsub topics create orders
+gcloud pubsub topics list
+gcloud pubsub topics describe orders
+gcloud pubsub topics publish orders --message='{"id":1,"total":42}'
+gcloud pubsub topics delete orders
+
+# === Subscriptions ===
+gcloud pubsub subscriptions create orders-worker \
+    --topic=orders \
+    --ack-deadline=30
+
+# Pull en mode CLI (debug)
+gcloud pubsub subscriptions pull orders-worker --auto-ack --limit=5
+
+# Subscription push vers Cloud Run
+gcloud pubsub subscriptions create orders-push \
+    --topic=orders \
+    --push-endpoint=https://my-cloud-run-xxx.run.app/ \
+    --push-auth-service-account=invoker@MON_PROJET.iam.gserviceaccount.com
+</code></pre>
+<dl class="args">
+<dt>--ack-deadline=30</dt><dd>Délai (secondes) pour acquitter un message avant redelivery. 10 à 600.</dd>
+<dt>--message-retention-duration=7d</dt><dd>Durée pendant laquelle les messages sont conservés si non ack (défaut 7 jours).</dd>
+<dt>--dead-letter-topic=dead-orders</dt><dd>Topic où envoyer les messages non ack après <code>--max-delivery-attempts</code> tentatives.</dd>
+<dt>--push-endpoint=URL</dt><dd>Active le mode push vers un endpoint HTTPS.</dd>
+<dt>--expiration-period=never</dt><dd>Empêche la subscription d'expirer après 31 jours d'inactivité.</dd>
+</dl>
+
+<h3>14.4 Exemple code Python</h3>
+<pre><code class="language-python"># publisher.py
+import os
+from google.cloud import pubsub_v1
+
+os.environ["PUBSUB_EMULATOR_HOST"] = "localhost:8085"
+PROJECT = "demo-project"
+
+publisher = pubsub_v1.PublisherClient()
+topic_path = publisher.topic_path(PROJECT, "orders")
+
+# Créer le topic si besoin
+try:
+    publisher.create_topic(request={"name": topic_path})
+except Exception:
+    pass
+
+# Publier
+future = publisher.publish(topic_path, b'{"id":1,"total":42}')
+print("Message publié, ID:", future.result())
+</code></pre>
+
+<pre><code class="language-python"># subscriber.py
+import os
+from google.cloud import pubsub_v1
+
+os.environ["PUBSUB_EMULATOR_HOST"] = "localhost:8085"
+PROJECT = "demo-project"
+
+subscriber = pubsub_v1.SubscriberClient()
+sub_path = subscriber.subscription_path(PROJECT, "orders-worker")
+
+def handle(message):
+    print(f"Reçu: {message.data.decode()}")
+    message.ack()  # confirmer le traitement
+
+future = subscriber.subscribe(sub_path, callback=handle)
+print("En attente... Ctrl+C pour quitter")
+try:
+    future.result()
+except KeyboardInterrupt:
+    future.cancel()
+</code></pre>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 15 : BIGQUERY -->
+<!-- ============================================================ -->
+<section id="chap-15">
+<h2>15. BigQuery</h2>
+
+<p>BigQuery est l'entrepôt de données analytique de GCP : des pétaoctets interrogés en SQL en quelques secondes. Il n'y a pas d'émulateur officiel, mais deux options pour apprendre gratuitement :</p>
+
+<h3>15.1 Option A : le sandbox BigQuery (gratuit, sans CB !)</h3>
+<div class="callout tip">
+<strong class="label">✅ Le sandbox BigQuery est gratuit et sans CB</strong>
+C'est l'une des <strong>rares exceptions</strong> GCP où vous n'avez besoin d'aucun paiement. Vous avez droit à :
+<ul>
+  <li>10 Go de stockage actif</li>
+  <li>1 Tio de requêtes par mois</li>
+  <li>Vie permanente (pas seulement un trial)</li>
+</ul>
+</div>
+<ol class="steps">
+  <li>Allez sur <a href="https://console.cloud.google.com/bigquery" target="_blank">console.cloud.google.com/bigquery</a>.</li>
+  <li>Acceptez les CGU du sandbox.</li>
+  <li>Vous pouvez taper du SQL tout de suite !</li>
+</ol>
+
+<h3>15.2 Concepts</h3>
+<pre><code class="language-text">Projet GCP
+  └── Dataset        (groupe de tables, genre "schema")
+        └── Table    (rangs + colonnes)
+        └── View     (requête sauvegardée)
+</code></pre>
+
+<h3>15.3 Commande bq (la CLI de BigQuery)</h3>
+<pre><code class="language-bash"># === Datasets ===
+bq ls                                # lister les datasets
+bq mk --dataset --location=EU mon_projet:analytics
+bq rm -d mon_projet:analytics
+
+# === Tables ===
+bq ls mon_projet:analytics
+bq show mon_projet:analytics.clients
+
+# Créer une table avec un schéma
+bq mk --table \
+    mon_projet:analytics.clients \
+    "id:INTEGER,name:STRING,created:TIMESTAMP"
+
+# Charger un CSV local
+bq load --source_format=CSV --skip_leading_rows=1 \
+    analytics.clients ./clients.csv \
+    "id:INTEGER,name:STRING,created:TIMESTAMP"
+
+# === Query ===
+bq query --use_legacy_sql=false \
+    "SELECT COUNT(*) FROM \`mon_projet.analytics.clients\` WHERE created > '2024-01-01'"
+
+# Exporter vers Cloud Storage
+bq extract analytics.clients gs://mon-bucket/export.csv
+</code></pre>
+<dl class="args">
+<dt>--use_legacy_sql=false</dt><dd><strong>Toujours à mettre</strong> : active le SQL standard (ANSI). Le "legacy" est l'ancien dialecte Google, à éviter.</dd>
+<dt>--dry_run</dt><dd>Estime la taille de la requête sans l'exécuter — utile pour contrôler le coût.</dd>
+<dt>--maximum_bytes_billed=10000000</dt><dd>Annule la query si elle dépasserait X octets facturés — garde-fou.</dd>
+</dl>
+
+<h3>15.4 Exemples SQL datasets publics</h3>
+<p>BigQuery propose des centaines de datasets publics <strong>gratuits à requêter</strong> (dans la limite de 1 Tio/mois du sandbox) :</p>
+<pre><code class="language-sql">-- Top 10 des dépôts GitHub avec le plus de stars
+SELECT repo_name, watch_count
+FROM `bigquery-public-data.github_repos.sample_repos`
+ORDER BY watch_count DESC
+LIMIT 10;
+
+-- Population mondiale par pays (Wikipédia)
+SELECT country_name, total_population
+FROM `bigquery-public-data.census_bureau_international.country_names_area`
+ORDER BY total_population DESC
+LIMIT 20;
+
+-- Tendances Google
+SELECT term, score, refresh_date
+FROM `bigquery-public-data.google_trends.top_terms`
+WHERE rank = 1
+ORDER BY refresh_date DESC
+LIMIT 50;
+</code></pre>
+
+<h3>15.5 Option B : apprendre le SQL BQ avec DuckDB en local</h3>
+<p>DuckDB est une BDD analytique locale qui parle presque le même SQL que BigQuery. Parfait pour pratiquer l'analytique sans réseau :</p>
+<pre><code class="language-bash">pip install duckdb
+
+python -c "
+import duckdb
+duckdb.sql('SELECT 42 AS answer').show()
+duckdb.sql(\"SELECT * FROM read_csv_auto('ventes.csv') LIMIT 5\").show()
+"
+</code></pre>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 16 : CLOUD BUILD -->
+<!-- ============================================================ -->
+<section id="chap-16">
+<h2>16. Cloud Build &amp; CI/CD</h2>
+
+<p>Cloud Build est le service d'intégration continue de GCP. Il lit un fichier <code>cloudbuild.yaml</code> qui décrit des <em>étapes</em>, chacune étant un conteneur qui exécute une action (build Docker, tests, déploiement...).</p>
+
+<h3>16.1 Anatomie d'un cloudbuild.yaml</h3>
+<pre><code class="language-yaml">steps:
+# 1. Construire l'image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'europe-west1-docker.pkg.dev/$PROJECT_ID/mon-repo/app:$SHORT_SHA', '.']
+
+# 2. Pousser l'image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'europe-west1-docker.pkg.dev/$PROJECT_ID/mon-repo/app:$SHORT_SHA']
+
+# 3. Déployer sur Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+    - run
+    - deploy
+    - mon-app
+    - --image=europe-west1-docker.pkg.dev/$PROJECT_ID/mon-repo/app:$SHORT_SHA
+    - --region=europe-west1
+    - --platform=managed
+
+images:
+- 'europe-west1-docker.pkg.dev/$PROJECT_ID/mon-repo/app:$SHORT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+</code></pre>
+
+<dl class="args">
+<dt>$PROJECT_ID</dt><dd>Variable remplacée automatiquement par le projet Cloud Build.</dd>
+<dt>$SHORT_SHA</dt><dd>Hash court du commit Git (si déclenché par push).</dd>
+<dt>$BUILD_ID, $COMMIT_SHA, $BRANCH_NAME</dt><dd>Autres variables standard.</dd>
+<dt>name: IMAGE</dt><dd>Image Docker de l'outil à utiliser dans cette étape (<code>gcr.io/cloud-builders/</code> contient plein d'outils officiels).</dd>
+<dt>entrypoint</dt><dd>Override le <code>ENTRYPOINT</code> de l'image.</dd>
+<dt>images:</dt><dd>Liste des images à pousser automatiquement après le build.</dd>
+</dl>
+
+<h3>16.2 Lancer un build manuellement</h3>
+<pre><code class="language-bash"># Lancer un build depuis le répertoire courant
+gcloud builds submit --config=cloudbuild.yaml .
+
+# Ou un build simple "build + push" sans YAML
+gcloud builds submit --tag=europe-west1-docker.pkg.dev/$PROJECT/mon-repo/app:v1
+
+# Voir les builds récents
+gcloud builds list --limit=5
+
+# Voir les logs d'un build
+gcloud builds log BUILD_ID
+</code></pre>
+
+<h3>16.3 Alternatives locales pour apprendre</h3>
+
+<h4>Alternative 1 : act (run GitHub Actions localement)</h4>
+<p>Si vous écrivez une pipeline GitHub Actions, <a href="https://github.com/nektos/act" target="_blank"><code>act</code></a> la lance en local avec Docker :</p>
+<pre><code class="language-bash"># Installer
+curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+
+# Dans un repo avec .github/workflows/*.yml
+act
+</code></pre>
+
+<h4>Alternative 2 : reproduire les étapes à la main</h4>
+<p>Chaque étape Cloud Build n'est qu'un <code>docker run</code> avec des args. Vous pouvez reproduire :</p>
+<pre><code class="language-bash"># Équivalent d'une étape "docker build"
+docker build -t mon-app:test .
+
+# Équivalent d'une étape de test
+docker run --rm -v $(pwd):/app -w /app python:3.12 \
+    bash -c "pip install -r requirements.txt && pytest"
+
+# Équivalent d'un déploiement
+docker run --rm -v $HOME/.config/gcloud:/root/.config/gcloud \
+    google/cloud-sdk:latest \
+    gcloud run deploy ...
+</code></pre>
+
+<h3>16.4 Triggers (CI automatique sur git push)</h3>
+<pre><code class="language-bash"># Créer un trigger GitHub (nécessite de connecter le repo via la console)
+gcloud builds triggers create github \
+    --repo-name=mon-repo \
+    --repo-owner=mon-user \
+    --branch-pattern="^main$" \
+    --build-config=cloudbuild.yaml \
+    --name=deploy-main
+</code></pre>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 17 : MONITORING -->
+<!-- ============================================================ -->
+<section id="chap-17">
+<h2>17. Monitoring &amp; Logging</h2>
+
+<p>Cloud Operations (ex-Stackdriver) regroupe les outils d'observabilité. Quatre briques principales :</p>
+<ul>
+  <li><strong>Cloud Logging</strong> : tous les logs (stdout des VMs/pods/services, logs d'audit).</li>
+  <li><strong>Cloud Monitoring</strong> : métriques + dashboards + alertes.</li>
+  <li><strong>Cloud Trace</strong> : distributed tracing (OpenTelemetry).</li>
+  <li><strong>Error Reporting</strong> : agrège les erreurs applicatives.</li>
+</ul>
+
+<h3>17.1 Cloud Logging</h3>
+<p>La bonne nouvelle : <strong>tout ce que votre app écrit sur stdout/stderr dans Cloud Run, Functions, GKE, est automatiquement capturé</strong> dans Cloud Logging.</p>
+
+<pre><code class="language-bash"># Lire les logs d'un service
+gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=hello-service" \
+    --limit=20 \
+    --format=json
+
+# Logs récents en direct (équivalent tail -f)
+gcloud logging tail "resource.type=cloud_run_revision"
+
+# Envoyer un log custom
+gcloud logging write mon-log "Message de test" --severity=INFO
+</code></pre>
+
+<h3>17.2 Logs structurés (JSON)</h3>
+<p>Pour des logs filtrables par champ, loggez du <strong>JSON</strong> sur stdout. Cloud Logging les parsera automatiquement :</p>
+<pre><code class="language-python">import json, sys
+
+def log(severity, message, **kwargs):
+    entry = dict(severity=severity, message=message, **kwargs)
+    print(json.dumps(entry), flush=True)
+
+log("INFO", "Nouvel utilisateur", user_id=42, plan="free")
+log("ERROR", "Échec DB", query="SELECT ...", duration_ms=2500)
+</code></pre>
+
+<p>Dans la console Logging, vous pourrez alors filtrer : <code>jsonPayload.user_id=42</code>.</p>
+
+<h3>17.3 Requêtes de logs (LQL - Logging Query Language)</h3>
+<pre><code class="language-text"># Erreurs récentes d'un service
+resource.type="cloud_run_revision"
+resource.labels.service_name="hello-service"
+severity>=ERROR
+
+# Logs d'une VM spécifique
+resource.type="gce_instance"
+resource.labels.instance_id="1234567890"
+timestamp>="2024-11-01T00:00:00Z"
+
+# Filtrer par champ JSON
+jsonPayload.user_id=42
+jsonPayload.duration_ms>1000
+</code></pre>
+
+<h3>17.4 Métriques &amp; alertes</h3>
+<pre><code class="language-bash"># Lister les métriques disponibles
+gcloud monitoring metrics list --filter="metric.type:run.googleapis.com"
+
+# Les métriques custom se créent via le SDK (client OpenTelemetry)
+</code></pre>
+
+<p>La création d'alertes (SMS, email, Slack) se fait plus facilement dans la console web sous <em>Monitoring &gt; Alerting</em>, car la syntaxe YAML des policies est verbeuse.</p>
+
+<h3>17.5 Équivalent local : la stack Prometheus + Grafana + Loki</h3>
+<p>Pour pratiquer l'observabilité sans GCP, la stack "PLG" est la référence open-source. Un <code>docker-compose.yml</code> minimaliste :</p>
+<pre><code class="language-yaml">version: "3"
+services:
+  prometheus:
+    image: prom/prometheus
+    ports: ["9090:9090"]
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    ports: ["3000:3000"]
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+  loki:
+    image: grafana/loki:latest
+    ports: ["3100:3100"]
+
+  promtail:
+    image: grafana/promtail
+    volumes:
+      - /var/log:/var/log
+      - ./promtail.yml:/etc/promtail/config.yml
+</code></pre>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 18 : PROJETS PRATIQUES -->
+<!-- ============================================================ -->
+<section id="chap-18">
+<h2>18. Projets pratiques</h2>
+
+<p>Il est temps de mettre en pratique ! Voici 5 projets progressifs, <strong>100% réalisables sans carte bancaire</strong>, en utilisant Docker + émulateurs + Cloud Shell.</p>
+
+<h3>Projet 1 : API REST avec Flask, déployée en "fake Cloud Run"</h3>
+<p><strong>Objectif</strong> : construire une API "todo list" qui tourne exactement comme sur Cloud Run.</p>
+<ol class="steps">
+  <li>Créez un dossier <code>todo-api/</code> avec <code>main.py</code> (Flask), <code>requirements.txt</code>, <code>Dockerfile</code> (voir chapitre 9).</li>
+  <li>Ajoutez 4 endpoints : <code>GET /todos</code>, <code>POST /todos</code>, <code>PATCH /todos/:id</code>, <code>DELETE /todos/:id</code>.</li>
+  <li>Stockez les todos dans une liste Python en mémoire pour commencer.</li>
+  <li>Construisez : <code>docker build -t todo-api .</code></li>
+  <li>Lancez : <code>docker run -p 8080:8080 -e PORT=8080 todo-api</code></li>
+  <li>Testez avec <code>curl</code> ou Postman.</li>
+  <li><strong>Bonus</strong> : écrivez la commande <code>gcloud run deploy</code> que vous lanceriez. Ça vous entraîne sur la syntaxe.</li>
+</ol>
+
+<h3>Projet 2 : image resizer avec Cloud Storage + Cloud Functions (émulés)</h3>
+<p><strong>Objectif</strong> : une fonction qui, à chaque nouvelle image uploadée dans un bucket, génère une thumbnail.</p>
+<ol class="steps">
+  <li>Lancez <code>fake-gcs-server</code> (chapitre 8).</li>
+  <li>Écrivez une fonction Python avec Pillow qui prend un CloudEvent et redimensionne.</li>
+  <li>Testez avec Functions Framework + curl simulé (chapitre 10).</li>
+  <li><strong>Bonus</strong> : orchestrez en <code>docker-compose.yml</code> : fake-gcs + la fonction + un script "uploader".</li>
+</ol>
+
+<h3>Projet 3 : micro-service "Order Processing" avec Pub/Sub</h3>
+<p><strong>Objectif</strong> : un publisher reçoit des commandes HTTP, les publie sur Pub/Sub, un worker les traite.</p>
+<ol class="steps">
+  <li>Lancez l'émulateur Pub/Sub.</li>
+  <li>Service <strong>api</strong> (Flask) : reçoit <code>POST /orders</code>, publie sur topic <code>orders-created</code>.</li>
+  <li>Service <strong>worker</strong> : souscrit à <code>orders-created</code>, calcule une facture, la sauvegarde dans Firestore (émulé).</li>
+  <li>Tout le monde dans un <code>docker-compose.yml</code> avec : <code>api</code>, <code>worker</code>, <code>pubsub-emu</code>, <code>firestore-emu</code>.</li>
+  <li><strong>Bonus</strong> : ajoutez un <strong>dead letter topic</strong> pour les messages qui échouent.</li>
+</ol>
+
+<h3>Projet 4 : mini GKE — déploiement multi-tier</h3>
+<p><strong>Objectif</strong> : déployer une app 3-tiers (frontend, API, BDD) sur Minikube.</p>
+<ol class="steps">
+  <li>Frontend : Nginx servant du HTML statique (un Deployment de 2 replicas).</li>
+  <li>Backend : votre API Flask du projet 1 (Deployment + Service ClusterIP).</li>
+  <li>BDD : Postgres (StatefulSet + PVC).</li>
+  <li>Ingress pour router <code>/</code> → frontend, <code>/api</code> → backend.</li>
+  <li>ConfigMap pour les variables d'env non-sensibles, Secret pour le mot de passe DB.</li>
+  <li><strong>Bonus</strong> : déployez Prometheus via Helm et scrape-z votre API.</li>
+</ol>
+
+<h3>Projet 5 : pipeline data avec BigQuery sandbox</h3>
+<p><strong>Objectif</strong> : analytique simple sur un dataset public, entièrement gratuit.</p>
+<ol class="steps">
+  <li>Dans la console BigQuery (sandbox), créez un dataset <code>stackoverflow_analyse</code>.</li>
+  <li>Requêtez <code>bigquery-public-data.stackoverflow.posts_questions</code> — ex: "top 20 des tags les plus postés en 2023".</li>
+  <li>Sauvegardez le résultat dans une table via <code>CREATE TABLE AS SELECT</code>.</li>
+  <li>Depuis Python (avec <code>google-cloud-bigquery</code>), lancez la requête et sortez un CSV local.</li>
+  <li><strong>Bonus</strong> : faites un notebook Jupyter qui affiche un graphe avec <code>pandas</code> + <code>matplotlib</code>.</li>
+</ol>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 19 : ALLER PLUS LOIN -->
+<!-- ============================================================ -->
+<section id="chap-19">
+<h2>19. Aller plus loin</h2>
+
+<h3>19.1 Ressources officielles gratuites</h3>
+<ul>
+  <li><a href="https://cloud.google.com/docs" target="_blank">Documentation officielle</a> — la référence.</li>
+  <li><a href="https://www.cloudskillsboost.google/" target="_blank">Cloud Skills Boost</a> (ex-Qwiklabs) — labs pratiques interactifs, certains gratuits.</li>
+  <li><a href="https://codelabs.developers.google.com/?cat=Cloud" target="_blank">Codelabs</a> — tutoriels pas-à-pas par cas d'usage.</li>
+  <li><a href="https://github.com/GoogleCloudPlatform/" target="_blank">GitHub GoogleCloudPlatform</a> — tonnes d'exemples officiels.</li>
+</ul>
+
+<h3>19.2 Certifications Google Cloud</h3>
+<p>Si vous voulez valider votre apprentissage :</p>
+<table>
+  <thead><tr><th>Certification</th><th>Niveau</th><th>Public</th></tr></thead>
+  <tbody>
+    <tr><td>Cloud Digital Leader</td><td>Intro</td><td>Non-techniques</td></tr>
+    <tr><td>Associate Cloud Engineer</td><td>Débutant/intermédiaire</td><td>Dev/Ops débutants — <strong>idéal après ce cours</strong></td></tr>
+    <tr><td>Professional Cloud Developer</td><td>Avancé</td><td>Devs expérimentés</td></tr>
+    <tr><td>Professional Cloud Architect</td><td>Avancé</td><td>Architectes</td></tr>
+    <tr><td>Professional Data Engineer</td><td>Avancé</td><td>Data</td></tr>
+  </tbody>
+</table>
+
+<h3>19.3 Quand activer la facturation ?</h3>
+<p>À un moment, pour aller plus loin, vous devrez ajouter une CB. Voici comment <strong>rester dans le gratuit</strong> :</p>
+<ul>
+  <li><strong>Free Tier permanent</strong> : 1 VM e2-micro (us-central1/us-west1/us-east1), 5 Go Cloud Storage, 2 millions d'appels Cloud Functions/mois, 2 millions de requêtes Cloud Run/mois... <a href="https://cloud.google.com/free/docs/free-cloud-features" target="_blank">Liste complète</a>.</li>
+  <li><strong>$300 de crédits</strong> sur 90 jours pour les nouveaux comptes.</li>
+  <li><strong>Alertes de budget</strong> : configurez immédiatement une alerte à 1€, 5€, 10€ via <em>Billing &gt; Budgets</em> pour éviter les mauvaises surprises.</li>
+  <li><strong>Limitez les régions</strong> : e2-micro gratuit n'est dispo que dans certaines régions US.</li>
+</ul>
+
+<div class="callout warning">
+<strong class="label">⚠️ Gardez toujours ces réflexes</strong>
+<ul>
+  <li><code>--max-instances</code> sur Cloud Run pour plafonner les coûts en cas de pic.</li>
+  <li>Supprimez les ressources de test en fin de journée (<code>gcloud compute instances delete ...</code>).</li>
+  <li>Configurez une alerte de budget dès l'activation du billing.</li>
+  <li>Ne rendez jamais un bucket public sans en avoir besoin (risque de fuite + coûts de bande passante).</li>
+</ul>
+</div>
+
+<h3>19.4 Récapitulatif des commandes les plus importantes</h3>
+<pre><code class="language-bash"># Setup
+gcloud auth login
+gcloud config set project MON_PROJET
+gcloud services enable run.googleapis.com
+
+# Compute
+gcloud compute instances create NAME --zone=Z --machine-type=e2-micro
+gcloud compute ssh NAME --zone=Z
+gcloud compute instances delete NAME --zone=Z
+
+# Storage
+gcloud storage buckets create gs://NAME --location=R
+gcloud storage cp FILE gs://NAME/
+gcloud storage ls gs://NAME/
+
+# Cloud Run
+gcloud run deploy NAME --source=. --region=R --allow-unauthenticated
+gcloud run services list --region=R
+gcloud run services logs read NAME --region=R
+
+# Functions
+gcloud functions deploy NAME --gen2 --runtime=python312 \
+    --trigger-http --entry-point=fn --source=.
+
+# Pub/Sub
+gcloud pubsub topics create T
+gcloud pubsub topics publish T --message=M
+gcloud pubsub subscriptions create S --topic=T
+gcloud pubsub subscriptions pull S --auto-ack
+
+# Artifact Registry
+gcloud artifacts repositories create R --repository-format=docker --location=L
+gcloud auth configure-docker L-docker.pkg.dev
+
+# IAM
+gcloud iam service-accounts create SA
+gcloud projects add-iam-policy-binding P --member=M --role=ROLE
+
+# Logging
+gcloud logging read "FILTER" --limit=N
+gcloud logging tail "FILTER"
+</code></pre>
+
+<h3>19.5 Le mot de la fin</h3>
+<p>Vous avez maintenant une vue d'ensemble solide de Google Cloud. Vos atouts :</p>
+<ul>
+  <li>Vous connaissez la hiérarchie Organization → Project → Ressources.</li>
+  <li>Vous savez lire/écrire n'importe quelle commande <code>gcloud</code>.</li>
+  <li>Vous pouvez simuler 90% des services en local avec Docker + émulateurs.</li>
+  <li>Vous reconnaissez les concepts communs (IAM, régions, API activation).</li>
+  <li>Votre familiarité avec Docker vous rend immédiatement opérationnel sur Cloud Run et GKE.</li>
+</ul>
+
+<p>La <strong>meilleure façon de progresser</strong> : entreprendre les 5 projets pratiques du chapitre précédent. Chacun consolide 2-3 chapitres. Bon courage, et bienvenue dans le cloud !</p>
+
+<div style="text-align:center; margin:40px 0; padding:24px; background:var(--bg-soft); border-radius:var(--radius); border:1px solid var(--border);">
+  <div class="google-icons" style="justify-content:center; margin-bottom:12px;">
+    <span class="g-badge"><span class="dot" style="background:#4285f4"></span> Compute</span>
+    <span class="g-badge"><span class="dot" style="background:#ea4335"></span> Storage</span>
+    <span class="g-badge"><span class="dot" style="background:#fbbc05"></span> Data</span>
+    <span class="g-badge"><span class="dot" style="background:#34a853"></span> AI/ML</span>
+  </div>
+  <p style="margin:0; color:var(--text-dim);">Fin du cours — À vous de jouer 🚀</p>
+</div>
+
+</section>
+
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+</body>
+</html>
