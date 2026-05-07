@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>quizz — Infrastructure, Virtualisation & Cloud</title>
+<title>Quiz — Infrastructure, Virtualisation & Cloud</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -488,7 +488,7 @@
     </div>
     <h1>Infrastructure, Virtualisation &amp; Cloud</h1>
     <p class="subtitle">
-      Un quizz pour vérifier vos acquis sur les notions vues en cours :
+      Un quiz pour vérifier vos acquis sur les notions vues en cours :
       du serveur physique au cloud, en passant par Docker, Kubernetes, Ansible et le monitoring.
     </p>
 
@@ -515,10 +515,10 @@
       </div>
     </div>
 
-    <button class="btn primary" id="startBtn">Commencer le quizz →</button>
+    <button class="btn primary" id="startBtn">Commencer le quiz →</button>
   </section>
 
-  <!-- quizz SCREEN -->
+  <!-- QUIZ SCREEN -->
   <section id="quiz" class="card hidden">
     <div class="progress-wrap">
       <div class="progress-info">
@@ -574,7 +574,7 @@
   </section>
 
   <footer>
-    <p>// Bachelor Informatique · quizz pédagogique</p>
+    <p>// Bachelor Informatique · Quiz pédagogique</p>
   </footer>
 </div>
 
@@ -875,7 +875,7 @@ const QUESTIONS = [
    ÉTAT DU QUIZ
    ============================================================ */
 const NB_QUESTIONS = 50;
-let currentquizz = [];
+let currentQuiz = [];
 let currentIndex = 0;
 let score = 0;
 
@@ -884,7 +884,7 @@ let score = 0;
    ============================================================ */
 const $ = (id) => document.getElementById(id);
 const intro = $("intro");
-const quizz = $("quiz");
+const quiz = $("quiz");
 const result = $("result");
 
 /* ============================================================
@@ -927,7 +927,7 @@ function show(section) {
    QUIZ
    ============================================================ */
 function startQuiz() {
-  currentquizz = pickQuestions(NB_QUESTIONS);
+  currentQuiz = pickQuestions(NB_QUESTIONS);
   currentIndex = 0;
   score = 0;
   renderQuestion();
