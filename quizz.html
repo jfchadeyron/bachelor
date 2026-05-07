@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quiz — Infrastructure, Virtualisation & Cloud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1020;
+    --bg-2: #0f1730;
+    --panel: #131c3a;
+    --panel-2: #182447;
+    --border: #243264;
+    --text: #e6ecff;
+    --muted: #8c97c2;
+    --accent: #6ee7ff;
+    --accent-2: #a78bfa;
+    --good: #34d399;
+    --bad: #f87171;
+    --warn: #fbbf24;
+    --shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(167, 139, 250, 0.18), transparent 60%),
+      radial-gradient(900px 500px at 0% 100%, rgba(110, 231, 255, 0.14), transparent 60%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  header.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .brand .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .card {
+    background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(8px);
+  }
+
+  .intro h1 {
+    margin: 0 0 12px;
+    font-size: clamp(28px, 4.2vw, 44px);
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(90deg, var(--text) 0%, var(--accent) 60%, var(--accent-2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .intro .subtitle {
+    color: var(--muted);
+    font-size: 16px;
+    margin: 0 0 28px;
+    max-width: 60ch;
+  }
+
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 28px;
+  }
+  .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(110, 231, 255, 0.08);
+    border: 1px solid rgba(110, 231, 255, 0.25);
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .rules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 0 0 32px;
+  }
+  .rule {
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .rule .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .rule .label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .rule .desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--panel-2);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn.primary {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color: #0b1020;
+    border: none;
+    font-weight: 700;
+  }
+  .btn.primary:hover { box-shadow: 0 10px 30px -10px var(--accent); }
+
+  .btn.ghost { background: transparent; }
+
+  .progress-wrap { margin-bottom: 24px; }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  .progress-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    width: 0%;
+    transition: width 0.4s ease;
+    border-radius: 999px;
+  }
+
+  .question-block { animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(110, 231, 255, 0.08);
+    border: 1px solid rgba(110, 231, 255, 0.25);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+
+  .question-text {
+    font-size: clamp(18px, 2.6vw, 22px);
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0 0 24px;
+  }
+
+  .answers {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .answer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: left;
+    font-size: 15px;
+    color: var(--text);
+    font-family: inherit;
+  }
+  .answer:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(110, 231, 255, 0.05);
+    transform: translateX(2px);
+  }
+  .answer:disabled { cursor: default; }
+
+  .answer .letter {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* On marque uniquement la réponse choisie : on ne révèle jamais la bonne. */
+  .answer.chosen-good {
+    border-color: var(--good);
+    background: rgba(52, 211, 153, 0.1);
+  }
+  .answer.chosen-good .letter {
+    background: var(--good);
+    color: #0b1020;
+    border-color: var(--good);
+  }
+  .answer.chosen-bad {
+    border-color: var(--bad);
+    background: rgba(248, 113, 113, 0.1);
+  }
+  .answer.chosen-bad .letter {
+    background: var(--bad);
+    color: #0b1020;
+    border-color: var(--bad);
+  }
+
+  .feedback {
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    animation: fadeIn 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .feedback.good {
+    border-color: rgba(52, 211, 153, 0.4);
+    color: var(--good);
+    background: rgba(52, 211, 153, 0.06);
+  }
+  .feedback.bad {
+    border-color: rgba(248, 113, 113, 0.4);
+    color: var(--bad);
+    background: rgba(248, 113, 113, 0.06);
+  }
+  .feedback .icon {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .result { text-align: center; }
+  .score-ring {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+  .score-ring svg {
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+  }
+  .score-ring .track {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.06);
+    stroke-width: 10;
+  }
+  .score-ring .fill {
+    fill: none;
+    stroke: url(#scoreGrad);
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .score-ring .center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-ring .num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .score-ring .out-of {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.1em;
+  }
+
+  .verdict {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .result .summary {
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .stat {
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .stat .v {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .stat .l {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+  .stat.ok .v { color: var(--good); }
+  .stat.ko .v { color: var(--bad); }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  footer {
+    margin-top: 32px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 600px) {
+    .card { padding: 24px 20px; }
+    .stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <span class="dot"></span>
+      <span>Bachelor Informatique // Quiz</span>
+    </div>
+    <div class="meta" id="metaInfo">50 questions · ~15 min</div>
+  </header>
+
+  <!-- INTRO SCREEN -->
+  <section id="intro" class="card intro">
+    <div class="topics">
+      <span class="chip">On-Premise</span>
+      <span class="chip">Virtualisation</span>
+      <span class="chip">Conteneurs</span>
+      <span class="chip">Monitoring</span>
+      <span class="chip">Cloud</span>
+    </div>
+    <h1>Infrastructure, Virtualisation &amp; Cloud</h1>
+    <p class="subtitle">
+      Un quiz pour vérifier vos acquis sur les notions vues en cours :
+      du serveur physique au cloud, en passant par Docker, Kubernetes, Ansible et le monitoring.
+    </p>
+
+    <div class="rules">
+      <div class="rule">
+        <div class="num">01</div>
+        <div class="label">50 questions</div>
+        <div class="desc">Tirées au hasard</div>
+      </div>
+      <div class="rule">
+        <div class="num">02</div>
+        <div class="label">Note sur 20</div>
+        <div class="desc">0,4 point par bonne réponse</div>
+      </div>
+      <div class="rule">
+        <div class="num">03</div>
+        <div class="label">Rejouable</div>
+        <div class="desc">Questions différentes</div>
+      </div>
+      <div class="rule">
+        <div class="num">04</div>
+        <div class="label">Feedback simple</div>
+        <div class="desc">Vrai ou faux uniquement</div>
+      </div>
+    </div>
+
+    <button class="btn primary" id="startBtn">Commencer le quiz →</button>
+  </section>
+
+  <!-- QUIZ SCREEN -->
+  <section id="quiz" class="card hidden">
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="progressText">Question 1 / 50</span>
+        <span id="categoryText">—</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <div class="question-block" id="questionBlock">
+      <span class="question-tag" id="questionTag">Catégorie</span>
+      <h2 class="question-text" id="questionText"></h2>
+      <div class="answers" id="answersList"></div>
+      <div class="feedback hidden" id="feedback"></div>
+      <div class="nav">
+        <button class="btn primary hidden" id="nextBtn">Suivant →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULT SCREEN -->
+  <section id="result" class="card result hidden">
+    <div class="score-ring">
+      <svg viewBox="0 0 120 120">
+        <defs>
+          <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6ee7ff"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
+          </linearGradient>
+        </defs>
+        <circle class="track" cx="60" cy="60" r="52"/>
+        <circle class="fill" id="scoreFill" cx="60" cy="60" r="52"
+                stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="center">
+        <div class="num" id="scoreNum">0</div>
+        <div class="out-of">/ 20</div>
+      </div>
+    </div>
+
+    <h2 class="verdict" id="verdict">—</h2>
+    <p class="summary" id="summary">—</p>
+
+    <div class="stats">
+      <div class="stat ok"><div class="v" id="statRight">0</div><div class="l">Bonnes</div></div>
+      <div class="stat ko"><div class="v" id="statWrong">0</div><div class="l">Erreurs</div></div>
+      <div class="stat"><div class="v" id="statRate">0%</div><div class="l">Réussite</div></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="retryBtn">↻ Refaire le quiz</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>// Bachelor Informatique · Quiz pédagogique</p>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   BANQUE DE QUESTIONS (~100)
+   Thèmes : On-Premise, Serveur physique,
+   Virtualisation (VirtualBox, Proxmox, Hyper-V, VMware ESXi, LXC),
+   Conteneurs (Docker, Kubernetes), Ansible,
+   Cloud (IaaS / PaaS / SaaS, AWS, GCP, Azure),
+   Réseau (WireGuard, Nginx, NPM),
+   Monitoring (Prometheus, Grafana, Zabbix, Nagios, PRTG),
+   Sauvegarde (Veeam)
+   ============================================================ */
+const QUESTIONS = [
+  // ----- ON-PREMISE / SERVEUR PHYSIQUE -----
+  { cat: "On-Premise", q: "Que signifie le terme « On-Premise » ?",
+    options: ["Une infrastructure hébergée et gérée localement par l'entreprise", "Une application livrée via un abonnement cloud", "Un service hébergé dans un datacenter public", "Un protocole de communication réseau"], correct: 0 },
+  { cat: "On-Premise", q: "Quel est un avantage du modèle On-Premise par rapport au cloud public ?",
+    options: ["Une mise à l'échelle quasi-illimitée et automatique", "Un contrôle total sur le matériel et les données", "Aucun investissement initial", "Aucune compétence interne nécessaire"], correct: 1 },
+  { cat: "On-Premise", q: "Quel est un inconvénient majeur du On-Premise ?",
+    options: ["Le coût initial (CAPEX) élevé en matériel et infrastructure", "Une dépendance forte à internet", "L'impossibilité d'utiliser des VM", "L'absence totale de sécurité"], correct: 0 },
+  { cat: "On-Premise", q: "OPEX vs CAPEX : le On-Premise repose plutôt sur :",
+    options: ["Du CAPEX (investissement) important", "Uniquement de l'OPEX", "Aucune dépense", "De la facturation à la seconde"], correct: 0 },
+  { cat: "Serveur physique", q: "Quel est l'inconvénient principal d'un serveur physique unique sans virtualisation ?",
+    options: ["Il consomme moins d'énergie", "Les ressources matérielles sont sous-utilisées", "Il est impossible d'y installer un OS", "Il ne peut pas être connecté au réseau"], correct: 1 },
+  { cat: "Serveur physique", q: "Que désigne-t-on par « bare-metal » ?",
+    options: ["Un serveur en panne", "Un serveur physique sans OS ni hyperviseur préinstallé", "Un serveur uniquement dédié aux conteneurs", "Un serveur virtuel"], correct: 1 },
+  { cat: "Serveur physique", q: "Quel composant n'est PAS un élément matériel d'un serveur ?",
+    options: ["CPU", "RAM", "Hyperviseur", "Carte réseau"], correct: 2 },
+  { cat: "Serveur physique", q: "RAID 1 correspond à :",
+    options: ["Du striping (entrelacement) sans redondance", "Du miroir entre deux disques", "Du RAID avec parité distribuée", "Aucune redondance et aucune performance"], correct: 1 },
+  { cat: "Serveur physique", q: "Quel acronyme désigne une alimentation de secours pour serveur ?",
+    options: ["UPS", "VPN", "RAID", "BIOS"], correct: 0 },
+
+  // ----- VIRTUALISATION -----
+  { cat: "Virtualisation", q: "Quelle est la principale différence entre une VM et un conteneur ?",
+    options: ["Une VM embarque son propre OS, un conteneur partage le noyau de l'hôte", "Un conteneur est plus lourd qu'une VM", "Une VM ne peut pas accéder au réseau", "Il n'y a aucune différence"], correct: 0 },
+  { cat: "Virtualisation", q: "Lequel de ces outils est un hyperviseur de TYPE 1 (bare-metal) ?",
+    options: ["VirtualBox", "VMware ESXi", "Docker", "Ansible"], correct: 1 },
+  { cat: "Virtualisation", q: "Un hyperviseur de TYPE 2 :",
+    options: ["S'installe directement sur le matériel", "S'installe au-dessus d'un OS hôte", "Ne peut faire tourner qu'une seule VM", "Est réservé aux serveurs"], correct: 1 },
+  { cat: "Virtualisation", q: "Quelle technologie permet à plusieurs VM de partager une même carte réseau physique ?",
+    options: ["NAT, bridge ou switch virtuel", "Une fibre dédiée par VM", "Un câble Ethernet par VM", "C'est impossible"], correct: 0 },
+  { cat: "Virtualisation", q: "Quel avantage NE fait PAS partie des intérêts de la virtualisation ?",
+    options: ["Mutualisation des ressources matérielles", "Isolation entre environnements", "Snapshot et restauration", "Augmentation automatique de la fréquence du CPU physique"], correct: 3 },
+  { cat: "VirtualBox", q: "VirtualBox est principalement utilisé pour :",
+    options: ["Orchestrer des conteneurs en production", "Faire de la virtualisation desktop / poste de travail", "Surveiller un réseau d'entreprise", "Gérer des sauvegardes"], correct: 1 },
+  { cat: "VirtualBox", q: "VirtualBox est édité par :",
+    options: ["Microsoft", "Oracle", "VMware", "Red Hat"], correct: 1 },
+  { cat: "VirtualBox", q: "Quel format de disque virtuel est natif à VirtualBox ?",
+    options: ["VHDX", "VMDK", "VDI", "QCOW2"], correct: 2 },
+  { cat: "VirtualBox", q: "VirtualBox est un hyperviseur de :",
+    options: ["Type 1", "Type 2", "Type 3", "Aucun, c'est un OS"], correct: 1 },
+  { cat: "Proxmox", q: "Proxmox VE est une plateforme qui permet de gérer :",
+    options: ["Uniquement des conteneurs Docker", "Des VM (KVM) ET des conteneurs LXC", "Uniquement des bases de données", "Uniquement du stockage objet"], correct: 1 },
+  { cat: "Proxmox", q: "Proxmox VE est basé sur quel système d'exploitation ?",
+    options: ["Windows Server", "Debian Linux", "FreeBSD", "Red Hat Enterprise"], correct: 1 },
+  { cat: "Proxmox", q: "Quel hyperviseur Proxmox utilise-t-il pour les VM ?",
+    options: ["Hyper-V", "KVM", "ESXi", "Xen"], correct: 1 },
+  { cat: "Proxmox", q: "Quelle fonctionnalité Proxmox permet de regrouper plusieurs nœuds ?",
+    options: ["Le mode cluster", "Le mode standalone", "Le mode rescue", "Le mode kiosk"], correct: 0 },
+  { cat: "Proxmox", q: "Comment accède-t-on principalement à l'administration de Proxmox ?",
+    options: ["Via une interface web (port 8006)", "Uniquement via SSH en CLI", "Via un client lourd Windows", "Uniquement via un téléphone"], correct: 0 },
+  { cat: "Hyper-V", q: "Hyper-V est l'hyperviseur développé par :",
+    options: ["Red Hat", "VMware", "Microsoft", "Oracle"], correct: 2 },
+  { cat: "Hyper-V", q: "Hyper-V est de quel type ?",
+    options: ["Type 1 (bare-metal)", "Type 2", "Ce n'est pas un hyperviseur", "Type 3"], correct: 0 },
+  { cat: "Hyper-V", q: "Sur quel système Hyper-V peut-il s'activer en tant que rôle ?",
+    options: ["macOS", "Windows Server / Windows Pro", "Android", "iOS"], correct: 1 },
+  { cat: "Hyper-V", q: "Quel format de disque virtuel est utilisé par Hyper-V ?",
+    options: ["VDI", "VMDK", "VHDX", "QCOW2"], correct: 2 },
+  { cat: "VMware ESXi", q: "Quel composant de VMware permet de gérer plusieurs hôtes ESXi de façon centralisée ?",
+    options: ["vCenter Server", "Workstation", "Fusion", "Player"], correct: 0 },
+  { cat: "VMware ESXi", q: "Quelle fonctionnalité VMware permet de déplacer une VM d'un hôte à un autre sans interruption ?",
+    options: ["vMotion", "vBackup", "vSphere Restore", "vSnapshot"], correct: 0 },
+  { cat: "VMware ESXi", q: "Le format de disque virtuel utilisé par VMware est :",
+    options: ["VDI", "VMDK", "VHDX", "QCOW2"], correct: 1 },
+  { cat: "VMware ESXi", q: "ESXi est un hyperviseur de :",
+    options: ["Type 1", "Type 2", "Type 3", "Aucun, c'est un OS classique"], correct: 0 },
+  { cat: "VMware ESXi", q: "Quelle fonctionnalité VMware répartit automatiquement la charge entre hôtes ?",
+    options: ["DRS (Distributed Resource Scheduler)", "Workstation", "Fusion", "vTrace"], correct: 0 },
+
+  // ----- LXC -----
+  { cat: "LXC", q: "LXC (Linux Containers) se distingue de Docker par le fait que :",
+    options: ["Il est conçu pour faire tourner un OS Linux complet dans un conteneur", "Il fonctionne uniquement sous Windows", "Il est plus lourd qu'une VM", "Il ne supporte pas le réseau"], correct: 0 },
+  { cat: "LXC", q: "LXC est souvent qualifié de :",
+    options: ["Conteneur applicatif (comme Docker)", "Conteneur système / VM légère", "Hyperviseur de type 1", "Outil de monitoring"], correct: 1 },
+  { cat: "LXC", q: "LXC fonctionne nativement sous :",
+    options: ["Windows uniquement", "Linux", "macOS uniquement", "Aucun OS"], correct: 1 },
+
+  // ----- DOCKER -----
+  { cat: "Docker", q: "Quelle commande permet de lister les conteneurs Docker en cours d'exécution ?",
+    options: ["docker list", "docker ps", "docker show", "docker status"], correct: 1 },
+  { cat: "Docker", q: "Quel fichier décrit comment construire une image Docker ?",
+    options: ["docker-compose.yml", ".dockerignore", "Dockerfile", "image.conf"], correct: 2 },
+  { cat: "Docker", q: "À quoi sert Docker Compose ?",
+    options: ["À compresser les images Docker", "À définir et lancer des applications multi-conteneurs via un fichier YAML", "À monitorer les conteneurs", "À remplacer Kubernetes en production"], correct: 1 },
+  { cat: "Docker", q: "Quelle commande télécharge une image depuis le Docker Hub ?",
+    options: ["docker get", "docker pull", "docker download", "docker fetch"], correct: 1 },
+  { cat: "Docker", q: "Quelle instruction Dockerfile définit la commande lancée au démarrage du conteneur ?",
+    options: ["RUN", "CMD", "FROM", "COPY"], correct: 1 },
+  { cat: "Docker", q: "Quelle instruction Dockerfile spécifie l'image de base ?",
+    options: ["BASE", "FROM", "IMAGE", "PARENT"], correct: 1 },
+  { cat: "Docker", q: "Que permet l'option `-d` de la commande `docker run` ?",
+    options: ["Lancer le conteneur en mode détaché (arrière-plan)", "Supprimer le conteneur après exécution", "Activer le mode debug", "Désactiver le réseau"], correct: 0 },
+  { cat: "Docker", q: "Quelle commande permet de supprimer un conteneur arrêté ?",
+    options: ["docker delete", "docker rm", "docker remove", "docker drop"], correct: 1 },
+  { cat: "Docker", q: "Quelle est la différence entre une image et un conteneur ?",
+    options: ["Aucune, ce sont des synonymes", "L'image est le modèle, le conteneur est l'instance en cours d'exécution", "L'image est plus lourde que le conteneur", "Le conteneur s'exécute sans image"], correct: 1 },
+  { cat: "Docker", q: "Quel registre par défaut Docker utilise-t-il pour les images publiques ?",
+    options: ["GitHub", "Docker Hub", "GitLab Registry", "AWS ECR"], correct: 1 },
+  { cat: "Docker", q: "Quel mécanisme permet à un conteneur de conserver des données après son arrêt ?",
+    options: ["Les volumes (volumes Docker)", "Les snapshots de RAM", "Les images en lecture seule", "Le mode privilégié"], correct: 0 },
+  { cat: "Docker", q: "Quelle commande affiche les logs d'un conteneur ?",
+    options: ["docker logs", "docker output", "docker tail", "docker print"], correct: 0 },
+  { cat: "Docker", q: "Quelle commande construit une image à partir d'un Dockerfile ?",
+    options: ["docker make", "docker build", "docker create", "docker compile"], correct: 1 },
+
+  // ----- KUBERNETES -----
+  { cat: "Kubernetes", q: "Quelle est la plus petite unité déployable dans Kubernetes ?",
+    options: ["Un container", "Un pod", "Un node", "Un cluster"], correct: 1 },
+  { cat: "Kubernetes", q: "Quel rôle joue le Control Plane dans Kubernetes ?",
+    options: ["Il exécute les conteneurs applicatifs", "Il gère l'état du cluster et orchestre les workloads", "Il sert de base de données utilisateur", "Il remplace Docker"], correct: 1 },
+  { cat: "Kubernetes", q: "Quel objet Kubernetes expose un ensemble de pods sur le réseau ?",
+    options: ["Deployment", "ConfigMap", "Service", "Volume"], correct: 2 },
+  { cat: "Kubernetes", q: "Quel objet Kubernetes gère le cycle de vie et le nombre de réplicas d'une application ?",
+    options: ["Deployment", "Pod", "Secret", "Namespace"], correct: 0 },
+  { cat: "Kubernetes", q: "Quelle base de données stocke l'état du cluster Kubernetes ?",
+    options: ["MySQL", "PostgreSQL", "etcd", "MongoDB"], correct: 2 },
+  { cat: "Kubernetes", q: "Quel outil en ligne de commande pilote un cluster Kubernetes ?",
+    options: ["kubeadm", "kubectl", "kubelet", "k9s"], correct: 1 },
+  { cat: "Kubernetes", q: "Quel composant tourne sur chaque worker node et exécute les pods ?",
+    options: ["kube-proxy", "kubelet", "kube-scheduler", "etcd"], correct: 1 },
+  { cat: "Kubernetes", q: "Quel objet Kubernetes permet de stocker des données sensibles (mots de passe, tokens) ?",
+    options: ["ConfigMap", "Secret", "Volume", "Ingress"], correct: 1 },
+  { cat: "Kubernetes", q: "Quel objet expose une application HTTP au monde extérieur via un nom de domaine ?",
+    options: ["Service", "Ingress", "Pod", "Job"], correct: 1 },
+  { cat: "Kubernetes", q: "Que signifie l'abréviation « k8s » ?",
+    options: ["Kubernetes (8 lettres entre K et S)", "Kernel 8 systems", "Kafka 8 streams", "Aucune signification particulière"], correct: 0 },
+  { cat: "Kubernetes", q: "Quel format de fichier est utilisé pour décrire les ressources Kubernetes ?",
+    options: ["XML", "JSON ou YAML", "TOML", "INI"], correct: 1 },
+  { cat: "Kubernetes", q: "À quoi sert un Namespace ?",
+    options: ["À isoler logiquement des ressources dans un même cluster", "À créer une VM", "À chiffrer le trafic", "À sauvegarder les pods"], correct: 0 },
+
+  // ----- ANSIBLE -----
+  { cat: "Ansible", q: "Ansible est un outil de :",
+    options: ["Virtualisation", "Gestion de configuration et automatisation", "Conteneurisation", "Sauvegarde de bases de données"], correct: 1 },
+  { cat: "Ansible", q: "Quelle est une caractéristique clé d'Ansible ?",
+    options: ["Il nécessite un agent installé sur chaque machine cible", "Il fonctionne en mode agentless via SSH", "Il ne fonctionne que sur Windows", "Il a besoin d'une base de données dédiée"], correct: 1 },
+  { cat: "Ansible", q: "Quel format est utilisé pour écrire les playbooks Ansible ?",
+    options: ["JSON", "XML", "YAML", "TOML"], correct: 2 },
+  { cat: "Ansible", q: "Comment appelle-t-on le fichier qui liste les machines gérées par Ansible ?",
+    options: ["Le playbook", "L'inventory (inventaire)", "Le manifest", "Le rolebook"], correct: 1 },
+  { cat: "Ansible", q: "Que désigne un « rôle » dans Ansible ?",
+    options: ["Un utilisateur du système", "Un ensemble réutilisable de tâches, variables et templates organisés", "Une machine cible", "Un type de réseau"], correct: 1 },
+  { cat: "Ansible", q: "Que signifie le concept d'idempotence en Ansible ?",
+    options: ["Exécuter plusieurs fois un playbook produit le même résultat sans effets indésirables", "Le playbook ne peut s'exécuter qu'une seule fois", "Le playbook s'exécute en parallèle", "Le playbook chiffre les données"], correct: 0 },
+  { cat: "Ansible", q: "Ansible est édité (à l'origine racheté) par :",
+    options: ["Google", "Microsoft", "Red Hat", "Canonical"], correct: 2 },
+  { cat: "Ansible", q: "Quel module Ansible permet d'installer un paquet sur une machine Debian/Ubuntu ?",
+    options: ["yum", "apt", "dnf", "winget"], correct: 1 },
+  { cat: "Ansible", q: "Quel module Ansible permet de copier un fichier vers une machine cible ?",
+    options: ["copy", "send", "transfer", "scp"], correct: 0 },
+
+  // ----- MODÈLES CLOUD -----
+  { cat: "Cloud · IaaS", q: "IaaS signifie :",
+    options: ["Internet as a Service", "Infrastructure as a Service", "Integration as a Service", "Identity as a Service"], correct: 1 },
+  { cat: "Cloud · PaaS", q: "Quel exemple correspond le mieux au modèle PaaS ?",
+    options: ["Une VM Linux brute louée chez un hébergeur", "Une plateforme qui héberge votre code et gère l'OS, le runtime et le scaling", "Une suite bureautique en ligne", "Un serveur installé dans vos locaux"], correct: 1 },
+  { cat: "Cloud · SaaS", q: "Lequel de ces services est un exemple typique de SaaS ?",
+    options: ["Amazon EC2", "Microsoft 365", "Kubernetes", "VMware ESXi"], correct: 1 },
+  { cat: "Cloud", q: "Dans quel modèle le client a-t-il le MOINS de responsabilités à gérer ?",
+    options: ["On-Premise", "IaaS", "PaaS", "SaaS"], correct: 3 },
+  { cat: "Cloud", q: "Dans le modèle IaaS, le client est responsable de :",
+    options: ["Rien", "L'OS, les applications et les données", "Uniquement l'application", "Uniquement les données"], correct: 1 },
+  { cat: "Cloud", q: "Lequel de ces éléments n'est PAS un modèle de service cloud ?",
+    options: ["IaaS", "PaaS", "SaaS", "RaaS-X"], correct: 3 },
+  { cat: "Cloud", q: "Que signifie un cloud « hybride » ?",
+    options: ["Une combinaison de cloud public et de ressources privées (on-premise)", "Un cloud uniquement public", "Un cloud uniquement privé", "Un cloud sans connexion internet"], correct: 0 },
+  { cat: "Cloud", q: "Quel terme désigne le fait d'augmenter automatiquement les ressources selon la demande ?",
+    options: ["L'élasticité (auto-scaling)", "La virtualisation", "La conteneurisation", "L'idempotence"], correct: 0 },
+  { cat: "Cloud", q: "Le modèle de facturation typique du cloud public est :",
+    options: ["Pay-as-you-go (à la consommation)", "Forfait à 99 ans", "Achat unique du matériel", "Aucune facturation"], correct: 0 },
+
+  // ----- AWS -----
+  { cat: "AWS", q: "Que désigne « EC2 » chez AWS ?",
+    options: ["Un service de stockage objet", "Un service de machines virtuelles (compute)", "Une base de données relationnelle", "Un CDN"], correct: 1 },
+  { cat: "AWS", q: "Quel service AWS est utilisé pour le stockage d'objets ?",
+    options: ["S3", "EBS", "Lambda", "Route 53"], correct: 0 },
+  { cat: "AWS", q: "Quel service AWS permet d'exécuter du code sans gérer de serveur (FaaS) ?",
+    options: ["EC2", "Lambda", "RDS", "S3"], correct: 1 },
+  { cat: "AWS", q: "Quel service AWS gère les bases de données relationnelles managées ?",
+    options: ["DynamoDB", "RDS", "S3", "ECS"], correct: 1 },
+  { cat: "AWS", q: "Que désigne une « region » chez AWS ?",
+    options: ["Un datacenter unique", "Une zone géographique contenant plusieurs Availability Zones", "Un type de VM", "Un service de DNS"], correct: 1 },
+  { cat: "AWS", q: "Quel service AWS est un DNS managé ?",
+    options: ["Route 53", "CloudFront", "VPC", "IAM"], correct: 0 },
+  { cat: "AWS", q: "Quel service AWS gère les permissions et les utilisateurs ?",
+    options: ["IAM", "S3", "EC2", "Lambda"], correct: 0 },
+  { cat: "AWS", q: "Quel service AWS est un CDN (Content Delivery Network) ?",
+    options: ["CloudFront", "Lambda", "RDS", "IAM"], correct: 0 },
+
+  // ----- GOOGLE CLOUD -----
+  { cat: "Google Cloud", q: "Quel service de Google Cloud est l'équivalent d'AWS EC2 ?",
+    options: ["Cloud Storage", "Compute Engine", "BigQuery", "Cloud Run"], correct: 1 },
+  { cat: "Google Cloud", q: "Quel service GCP est utilisé pour l'analytique de données massives ?",
+    options: ["BigQuery", "Compute Engine", "Cloud DNS", "Cloud Build"], correct: 0 },
+  { cat: "Google Cloud", q: "Quel service GCP héberge des conteneurs sans serveur ?",
+    options: ["Compute Engine", "Cloud Run", "BigQuery", "Cloud SQL"], correct: 1 },
+  { cat: "Google Cloud", q: "Quel service GCP est l'équivalent d'AWS S3 ?",
+    options: ["Cloud Storage", "Cloud SQL", "Compute Engine", "Pub/Sub"], correct: 0 },
+  { cat: "Google Cloud", q: "Quel service GCP est un Kubernetes managé ?",
+    options: ["GKE", "GCE", "GCS", "GAE"], correct: 0 },
+
+  // ----- AZURE -----
+  { cat: "Azure", q: "Azure est le cloud public de :",
+    options: ["Amazon", "Google", "Microsoft", "IBM"], correct: 2 },
+  { cat: "Azure", q: "Quel service Azure correspond aux machines virtuelles ?",
+    options: ["Azure Functions", "Azure Virtual Machines", "Azure Storage", "Azure DevOps"], correct: 1 },
+  { cat: "Azure", q: "Quel service Azure est l'équivalent d'AWS Lambda ?",
+    options: ["Azure Functions", "Azure SQL", "Azure Storage", "Azure DNS"], correct: 0 },
+  { cat: "Azure", q: "Quel service Azure héberge un cluster Kubernetes managé ?",
+    options: ["AKS (Azure Kubernetes Service)", "AVD", "ACR", "ASR"], correct: 0 },
+  { cat: "Azure", q: "Quel service Azure est un registre d'images de conteneurs ?",
+    options: ["ACR (Azure Container Registry)", "AKS", "AVD", "ASR"], correct: 0 },
+
+  // ----- RÉSEAU / VPN -----
+  { cat: "WireGuard", q: "WireGuard est :",
+    options: ["Un pare-feu applicatif", "Un protocole et une solution VPN moderne", "Un orchestrateur de conteneurs", "Un système de monitoring"], correct: 1 },
+  { cat: "WireGuard", q: "Sur quel protocole de transport repose WireGuard ?",
+    options: ["TCP", "UDP", "ICMP", "HTTP"], correct: 1 },
+  { cat: "WireGuard", q: "Quelle est une force notable de WireGuard ?",
+    options: ["Une base de code minimaliste et performante", "Une configuration extrêmement complexe", "Un fonctionnement uniquement sous Windows", "Le chiffrement faible"], correct: 0 },
+  { cat: "WireGuard", q: "WireGuard est intégré nativement dans :",
+    options: ["Le noyau Linux", "Microsoft Word", "Le BIOS", "Aucun système"], correct: 0 },
+  { cat: "Nginx", q: "Nginx est principalement utilisé comme :",
+    options: ["Système d'exploitation", "Serveur web et reverse proxy", "Base de données", "Hyperviseur"], correct: 1 },
+  { cat: "Nginx", q: "Que peut faire Nginx en plus de servir des fichiers statiques ?",
+    options: ["Reverse proxy, load balancing, terminaison TLS", "Compiler du code C", "Chiffrer un disque dur", "Orchestrer un cluster Kubernetes"], correct: 0 },
+  { cat: "Nginx Proxy Manager", q: "Que permet l'outil NPM (Nginx Proxy Manager) ?",
+    options: ["Gérer des paquets Node.js", "Configurer des reverse proxies Nginx via une interface web", "Monitorer les conteneurs Docker", "Sauvegarder des bases de données"], correct: 1 },
+  { cat: "Nginx Proxy Manager", q: "NPM facilite notamment la gestion des certificats :",
+    options: ["GPG", "Let's Encrypt", "SSH", "PGP"], correct: 1 },
+  { cat: "Réseau", q: "Quel port est utilisé par défaut pour HTTPS ?",
+    options: ["80", "443", "21", "22"], correct: 1 },
+  { cat: "Réseau", q: "Quel port est utilisé par défaut pour HTTP ?",
+    options: ["80", "443", "21", "22"], correct: 0 },
+  { cat: "Réseau", q: "Que signifie un reverse proxy ?",
+    options: ["Un proxy qui se place côté serveur, devant les services applicatifs", "Un proxy qui se place uniquement côté client", "Un VPN inversé", "Un firewall matériel"], correct: 0 },
+  { cat: "Réseau", q: "Quel protocole est utilisé pour se connecter en ligne de commande sécurisée à un serveur Linux ?",
+    options: ["FTP", "Telnet", "SSH", "SMTP"], correct: 2 },
+
+  // ----- MONITORING -----
+  { cat: "Prometheus", q: "Prometheus est avant tout :",
+    options: ["Une base de données de séries temporelles orientée monitoring", "Un orchestrateur de conteneurs", "Un outil de sauvegarde", "Un VPN"], correct: 0 },
+  { cat: "Prometheus", q: "Quel langage de requête Prometheus utilise-t-il ?",
+    options: ["SQL", "PromQL", "GraphQL", "MongoDB Query"], correct: 1 },
+  { cat: "Prometheus", q: "Comment Prometheus collecte-t-il ses métriques par défaut ?",
+    options: ["En mode pull (il interroge les cibles)", "Uniquement en push", "Uniquement par e-mail", "Via SNMP exclusivement"], correct: 0 },
+  { cat: "Prometheus", q: "Comment appelle-t-on un programme qui expose des métriques au format Prometheus ?",
+    options: ["Un exporter", "Un compiler", "Un broker", "Un router"], correct: 0 },
+  { cat: "Grafana", q: "À quoi sert Grafana ?",
+    options: ["À héberger des bases de données", "À visualiser des métriques sous forme de tableaux de bord", "À déployer des applications", "À chiffrer du trafic réseau"], correct: 1 },
+  { cat: "Grafana", q: "Grafana peut se connecter à quelles sources de données ?",
+    options: ["Uniquement Prometheus", "Prometheus, InfluxDB, Loki, MySQL, Elasticsearch et bien d'autres", "Uniquement MySQL", "Aucune source externe"], correct: 1 },
+  { cat: "Monitoring", q: "Quel duo est très souvent utilisé ensemble pour le monitoring ?",
+    options: ["Docker + Ansible", "Prometheus + Grafana", "Veeam + WireGuard", "Nginx + LXC"], correct: 1 },
+  { cat: "Zabbix", q: "Zabbix est :",
+    options: ["Un système de monitoring open-source d'infrastructure et applicatifs", "Un service cloud propriétaire d'AWS", "Un système de gestion de version", "Un protocole VPN"], correct: 0 },
+  { cat: "Zabbix", q: "Zabbix peut superviser via :",
+    options: ["Des agents et des protocoles comme SNMP, IPMI, JMX", "Uniquement HTTP", "Uniquement SSH", "Uniquement la voix sur IP"], correct: 0 },
+  { cat: "Nagios", q: "Nagios est connu pour être :",
+    options: ["Un des plus anciens outils de monitoring d'infrastructure", "Un orchestrateur de conteneurs", "Un fournisseur cloud", "Un système de fichiers distribué"], correct: 0 },
+  { cat: "Nagios", q: "Quel principe est central dans Nagios ?",
+    options: ["Les checks (sondes) qui vérifient l'état des services", "Le minage de cryptomonnaie", "La compilation de code", "Le streaming vidéo"], correct: 0 },
+  { cat: "PRTG", q: "PRTG Network Monitor est édité par :",
+    options: ["Red Hat", "Paessler", "Microsoft", "Canonical"], correct: 1 },
+  { cat: "PRTG", q: "PRTG est principalement orienté :",
+    options: ["Supervision réseau et infrastructure (sondes, capteurs)", "Création de sites web", "Edition vidéo", "Compilation Java"], correct: 0 },
+
+  // ----- SAUVEGARDE -----
+  { cat: "Veeam", q: "Veeam est principalement spécialisé dans :",
+    options: ["Le monitoring réseau", "La sauvegarde et la restauration (notamment des environnements virtualisés)", "L'orchestration de conteneurs", "Le développement web"], correct: 1 },
+  { cat: "Veeam", q: "Quelle règle de sauvegarde est souvent associée aux bonnes pratiques ?",
+    options: ["La règle 1-1-1", "La règle 3-2-1", "La règle 5-5-5", "La règle 100-10-1"], correct: 1 },
+  { cat: "Veeam", q: "Que signifie un RPO (Recovery Point Objective) ?",
+    options: ["La quantité maximale de données qu'on accepte de perdre", "Le temps maximal pour restaurer", "Le nombre de copies", "La taille du backup"], correct: 0 },
+  { cat: "Veeam", q: "Que signifie un RTO (Recovery Time Objective) ?",
+    options: ["La durée maximale acceptable pour restaurer le service", "La quantité de données perdues", "Le nombre de sauvegardes", "Le coût de la sauvegarde"], correct: 0 },
+  { cat: "Sauvegarde", q: "Quelle est la différence entre une sauvegarde incrémentale et différentielle ?",
+    options: ["L'incrémentale ne sauvegarde que les changements depuis la DERNIÈRE sauvegarde, la différentielle depuis la dernière COMPLÈTE", "Aucune différence", "L'incrémentale est plus lourde", "La différentielle ne sauvegarde rien"], correct: 0 },
+  { cat: "Sauvegarde", q: "Quelle stratégie correspond à une sauvegarde de toutes les données à chaque fois ?",
+    options: ["Sauvegarde complète (full)", "Sauvegarde incrémentale", "Sauvegarde différentielle", "Sauvegarde miroir RAID"], correct: 0 }
+];
+
+/* ============================================================
+   ÉTAT DU QUIZ
+   ============================================================ */
+const NB_QUESTIONS = 50;
+let currentQuiz = [];
+let currentIndex = 0;
+let score = 0;
+
+/* ============================================================
+   ÉLÉMENTS DOM
+   ============================================================ */
+const $ = (id) => document.getElementById(id);
+const intro = $("intro");
+const quiz = $("quiz");
+const result = $("result");
+
+/* ============================================================
+   UTILITAIRES
+   ============================================================ */
+function shuffle(array) {
+  const a = array.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pickQuestions(n) {
+  const pool = shuffle(QUESTIONS);
+  const count = Math.min(n, pool.length);
+  return pool.slice(0, count).map(q => {
+    const indexed = q.options.map((opt, i) => ({ opt, isCorrect: i === q.correct }));
+    const shuffled = shuffle(indexed);
+    return {
+      cat: q.cat,
+      q: q.q,
+      options: shuffled.map(o => o.opt),
+      correct: shuffled.findIndex(o => o.isCorrect)
+    };
+  });
+}
+
+/* ============================================================
+   NAVIGATION ÉCRANS
+   ============================================================ */
+function show(section) {
+  [intro, quiz, result].forEach(s => s.classList.add("hidden"));
+  section.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+function startQuiz() {
+  currentQuiz = pickQuestions(NB_QUESTIONS);
+  currentIndex = 0;
+  score = 0;
+  renderQuestion();
+  show(quiz);
+}
+
+function renderQuestion() {
+  const q = currentQuiz[currentIndex];
+  const total = currentQuiz.length;
+
+  $("progressText").textContent = `Question ${currentIndex + 1} / ${total}`;
+  $("categoryText").textContent = q.cat.toUpperCase();
+  $("progressFill").style.width = `${(currentIndex / total) * 100}%`;
+
+  $("questionTag").textContent = q.cat;
+  $("questionText").textContent = q.q;
+
+  const list = $("answersList");
+  list.innerHTML = "";
+  const letters = ["A", "B", "C", "D", "E", "F"];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "answer";
+    btn.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.addEventListener("click", () => handleAnswer(i, btn));
+    list.appendChild(btn);
+  });
+
+  $("feedback").classList.add("hidden");
+  $("feedback").className = "feedback hidden";
+  $("nextBtn").classList.add("hidden");
+  $("nextBtn").textContent = (currentIndex === total - 1) ? "Voir mes résultats →" : "Suivant →";
+}
+
+function handleAnswer(chosen, btnEl) {
+  const q = currentQuiz[currentIndex];
+  const buttons = document.querySelectorAll(".answer");
+  const isRight = chosen === q.correct;
+
+  // On marque UNIQUEMENT la réponse choisie en vert ou rouge.
+  // On ne révèle JAMAIS la bonne réponse si l'élève s'est trompé.
+  buttons.forEach((b, i) => {
+    b.disabled = true;
+    if (i === chosen) {
+      b.classList.add(isRight ? "chosen-good" : "chosen-bad");
+    }
+  });
+
+  if (isRight) score++;
+
+  // Feedback minimaliste : juste vrai ou faux
+  const fb = $("feedback");
+  fb.className = "feedback " + (isRight ? "good" : "bad");
+  fb.innerHTML = isRight
+    ? `<span class="icon">✓</span><span>Bonne réponse</span>`
+    : `<span class="icon">✗</span><span>Mauvaise réponse</span>`;
+  fb.classList.remove("hidden");
+
+  $("nextBtn").classList.remove("hidden");
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= currentQuiz.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+/* ============================================================
+   RÉSULTAT
+   ============================================================ */
+function showResult() {
+  const total = currentQuiz.length;
+  const note20 = Math.round((score / total) * 20 * 10) / 10;
+  const rate = Math.round((score / total) * 100);
+
+  $("scoreNum").textContent = note20;
+  $("statRight").textContent = score;
+  $("statWrong").textContent = total - score;
+  $("statRate").textContent = `${rate}%`;
+
+  let verdict, summary;
+  if (rate >= 90) {
+    verdict = "Excellent travail 🎯";
+    summary = "Vous maîtrisez très bien les notions vues en cours.";
+  } else if (rate >= 70) {
+    verdict = "Bon niveau 👍";
+    summary = "De bonnes bases, quelques points à consolider.";
+  } else if (rate >= 50) {
+    verdict = "Niveau moyen ⚙️";
+    summary = "Il reste des notions à revoir, mais c'est sur la bonne voie.";
+  } else {
+    verdict = "À retravailler 📚";
+    summary = "Reprenez les supports de cours et retentez le quiz.";
+  }
+  $("verdict").textContent = verdict;
+  $("summary").textContent = summary;
+
+  // Anneau de score (animation)
+  const circumference = 2 * Math.PI * 52;
+  const offset = circumference - (rate / 100) * circumference;
+  const ring = $("scoreFill");
+  ring.style.strokeDasharray = circumference;
+  ring.style.strokeDashoffset = circumference;
+  setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100);
+
+  // Animation du compteur
+  const numEl = $("scoreNum");
+  let cur = 0;
+  const target = note20;
+  const stepTime = 14;
+  const steps = 50;
+  const inc = target / steps;
+  const interval = setInterval(() => {
+    cur += inc;
+    if (cur >= target) { cur = target; clearInterval(interval); }
+    numEl.textContent = (Math.round(cur * 10) / 10).toFixed(1).replace(/\.0$/, "");
+  }, stepTime);
+
+  show(result);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+$("startBtn").addEventListener("click", startQuiz);
+$("nextBtn").addEventListener("click", nextQuestion);
+$("retryBtn").addEventListener("click", startQuiz);
+</script>
+</body>
+</html>
