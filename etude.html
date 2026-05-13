@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Étude Comparative — OVH vs AWS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f13;
+    --surface: #16181f;
+    --card: #1c1f2a;
+    --border: #2a2d3a;
+    --ovh: #00b4e6;
+    --ovh-dim: rgba(0,180,230,0.12);
+    --aws: #ff9900;
+    --aws-dim: rgba(255,153,0,0.12);
+    --neutral: #7b8194;
+    --text: #e8eaf0;
+    --text-dim: #9097ae;
+    --green: #22c55e;
+    --red: #f87171;
+    --accent: #6366f1;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .header-left {}
+  .badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--accent);
+    background: rgba(99,102,241,.15);
+    border: 1px solid rgba(99,102,241,.3);
+    padding: .25rem .75rem;
+    border-radius: 2px;
+    margin-bottom: .9rem;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: #fff;
+    line-height: 1.1;
+  }
+  header h1 span.ovh { color: var(--ovh); }
+  header h1 span.aws { color: var(--aws); }
+  .header-meta {
+    display: flex;
+    gap: .5rem;
+    margin-top: .75rem;
+    flex-wrap: wrap;
+  }
+  .meta-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    color: var(--text-dim);
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: .2rem .6rem;
+    border-radius: 2px;
+  }
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .4rem;
+    flex-shrink: 0;
+  }
+  .time-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: .75rem;
+    color: var(--green);
+    background: rgba(34,197,94,.1);
+    border: 1px solid rgba(34,197,94,.25);
+    padding: .4rem .9rem;
+    border-radius: 2px;
+  }
+
+  /* ── LAYOUT ── */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* ── SCENARIO BOX ── */
+  .scenario {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.75rem 2rem;
+  }
+  .scenario-title {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .scenario h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.2rem;
+  }
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: .6rem;
+  }
+  .spec {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: .75rem 1rem;
+  }
+  .spec-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: .2rem;
+  }
+  .spec-value {
+    font-size: .95rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* ── STEPS ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .steps { display: flex; flex-direction: column; gap: 1px; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .step:hover { border-color: var(--accent); }
+
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-right: 1px solid var(--border);
+  }
+  .step.ovh-step .step-num { background: var(--ovh-dim); color: var(--ovh); }
+  .step.aws-step .step-num { background: var(--aws-dim); color: var(--aws); }
+  .step.shared-step .step-num { background: rgba(99,102,241,.1); color: var(--accent); }
+
+  .step-body { padding: 1.1rem 1.4rem; }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: .5rem;
+  }
+  .provider-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: .6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    padding: .15rem .5rem;
+    border-radius: 2px;
+  }
+  .tag-ovh { background: var(--ovh-dim); color: var(--ovh); border: 1px solid rgba(0,180,230,.3); }
+  .tag-aws { background: var(--aws-dim); color: var(--aws); border: 1px solid rgba(255,153,0,.3); }
+  .tag-both { background: rgba(99,102,241,.1); color: var(--accent); border: 1px solid rgba(99,102,241,.3); }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .step-desc {
+    font-size: .88rem;
+    color: var(--text-dim);
+    line-height: 1.55;
+    margin-bottom: .75rem;
+  }
+  .step-action {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: .4rem .9rem;
+    border-radius: 2px;
+    transition: opacity .2s;
+  }
+  .step-action:hover { opacity: .75; }
+  .action-ovh { background: var(--ovh-dim); color: var(--ovh); border: 1px solid rgba(0,180,230,.4); }
+  .action-aws { background: var(--aws-dim); color: var(--aws); border: 1px solid rgba(255,153,0,.4); }
+  .action-both { background: rgba(99,102,241,.1); color: var(--accent); border: 1px solid rgba(99,102,241,.4); }
+
+  .step-note {
+    margin-top: .6rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem;
+    color: var(--text-dim);
+    background: var(--surface);
+    border-left: 2px solid var(--border);
+    padding: .4rem .75rem;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ── LIVRABLE ── */
+  .livrable {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .livrable-header {
+    padding: 1rem 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: .95rem;
+  }
+  .livrable-body { padding: 1.25rem 1.5rem; }
+  .livrable-row {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    padding: .55rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: .87rem;
+  }
+  .livrable-row:last-child { border-bottom: none; }
+  .check { color: var(--green); font-size: .9rem; flex-shrink: 0; margin-top: .05rem; }
+  .livrable-text { color: var(--text-dim); }
+  .livrable-text strong { color: var(--text); font-weight: 500; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="badge">TP Infrastructure Cloud · Bachelor</div>
+    <h1>
+      Étude comparative des coûts<br>
+      <span class="ovh">OVH VPS</span> vs <span class="aws">Amazon AWS</span>
+    </h1>
+    <div class="header-meta">
+      <span class="meta-tag">Mai 2026</span>
+      <span class="meta-tag">Calculateurs publics uniquement</span>
+      <span class="meta-tag">Captures d'écran obligatoires</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="time-badge">⏱ ~45 min</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- SCÉNARIO -->
+  <div class="scenario">
+    <div class="scenario-title">// Scénario imposé — identique pour les deux fournisseurs</div>
+    <h2>Hébergement d'un serveur web pour une PME</h2>
+    <div class="specs-grid">
+      <div class="spec">
+        <div class="spec-label">vCPU</div>
+        <div class="spec-value">4 cœurs</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">RAM</div>
+        <div class="spec-value">8 Go</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Stockage</div>
+        <div class="spec-value">80 Go SSD</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Trafic sortant</div>
+        <div class="spec-value">1 To / mois</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">OS</div>
+        <div class="spec-value">Linux Ubuntu</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Région</div>
+        <div class="spec-value">France / Europe</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPES OVH -->
+  <div>
+    <div class="section-label">// Étape 1 — OVH Cloud</div>
+    <div class="steps">
+
+      <div class="step ovh-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="provider-tag tag-ovh">OVH</span>
+            <span class="step-title">Aller sur la page VPS</span>
+          </div>
+          <p class="step-desc">Rendez-vous sur la page officielle OVH VPS. Repérez l'offre <strong>VPS Comfort</strong> (4 vCore, 8 Go RAM, 160 Go NVMe). C'est l'offre la plus proche de notre scénario.</p>
+          <a href="https://www.ovhcloud.com/fr/vps/" target="_blank" class="step-action action-ovh">→ ovhcloud.com/fr/vps/</a>
+          <div class="step-note">📸 Capture d'écran de la page tarifaire OVH avec le prix visible</div>
+        </div>
+      </div>
+
+      <div class="step ovh-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="provider-tag tag-ovh">OVH</span>
+            <span class="step-title">Relever les coûts OVH</span>
+          </div>
+          <p class="step-desc">Notez dans votre tableau les postes suivants chez OVH :</p>
+          <p class="step-desc"><strong>Instance VPS Comfort</strong> → prix affiché /mois &nbsp;|&nbsp; <strong>Stockage</strong> → inclus dans l'offre &nbsp;|&nbsp; <strong>Trafic 1 To</strong> → illimité inclus &nbsp;|&nbsp; <strong>IPv4</strong> → incluse &nbsp;|&nbsp; <strong>Backup / Snapshot</strong> → option payante, noter le prix</p>
+          <div class="step-note">⚠️ Vérifiez si le trafic est bien illimité en Europe (petites lignes en bas de page)</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ÉTAPES AWS -->
+  <div>
+    <div class="section-label">// Étape 2 — Amazon AWS</div>
+    <div class="steps">
+
+      <div class="step aws-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="provider-tag tag-aws">AWS</span>
+            <span class="step-title">Ouvrir le calculateur AWS</span>
+          </div>
+          <p class="step-desc">AWS ne publie pas de tarif "tout-en-un". Il faut utiliser le <strong>calculateur officiel</strong> et ajouter chaque poste manuellement.</p>
+          <a href="https://calculator.aws/pricing/2/estimate" target="_blank" class="step-action action-aws">→ calculator.aws</a>
+          <div class="step-note">📸 Capture d'écran de votre estimation finale dans le calculateur AWS</div>
+        </div>
+      </div>
+
+      <div class="step aws-step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="provider-tag tag-aws">AWS</span>
+            <span class="step-title">Ajouter l'instance EC2</span>
+          </div>
+          <p class="step-desc">Dans le calculateur, cliquez sur <strong>« Ajouter un service »</strong> → cherchez <strong>EC2</strong>. Sélectionnez :</p>
+          <p class="step-desc">Région : <strong>Europe (Paris) — eu-west-3</strong> &nbsp;|&nbsp; OS : <strong>Linux</strong> &nbsp;|&nbsp; Instance : <strong>m6i.large</strong> (2 vCPU, 8 Go) &nbsp;|&nbsp; Utilisation : <strong>100 % / mois (On-Demand)</strong></p>
+          <div class="step-note">💡 Pas d'instance 4 vCPU / 8 Go chez AWS → m6i.large est le plus proche en RAM. Notez cet écart dans votre rapport.</div>
+        </div>
+      </div>
+
+      <div class="step aws-step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="provider-tag tag-aws">AWS</span>
+            <span class="step-title">Ajouter le stockage EBS</span>
+          </div>
+          <p class="step-desc">Dans le même calculateur, ajoutez le service <strong>EBS (Elastic Block Store)</strong>. Choisissez :</p>
+          <p class="step-desc">Type : <strong>gp3 (SSD généraliste)</strong> &nbsp;|&nbsp; Taille : <strong>80 Go</strong> &nbsp;|&nbsp; Région : <strong>Europe (Paris)</strong></p>
+          <div class="step-note">⚠️ Sur AWS, le stockage n'est PAS inclus dans l'instance — c'est un service séparé facturé à la Go</div>
+        </div>
+      </div>
+
+      <div class="step aws-step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="provider-tag tag-aws">AWS</span>
+            <span class="step-title">Calculer le trafic réseau sortant</span>
+          </div>
+          <p class="step-desc">AWS facture le trafic <strong>sortant vers Internet</strong>. Appliquez la règle suivante :</p>
+          <p class="step-desc"><strong>Tarif :</strong> 100 Go gratuits/mois, puis <strong>0,09 $/Go</strong> (premiers 10 To) en région Paris.<br>
+          <strong>Calcul :</strong> 1 000 Go − 100 Go gratuits = <strong>900 Go facturés × 0,09 $</strong></p>
+          <div class="step-note">📌 Le trafic entrant (upload vers votre serveur) est gratuit chez AWS</div>
+        </div>
+      </div>
+
+      <div class="step aws-step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="provider-tag tag-aws">AWS</span>
+            <span class="step-title">Ajouter l'adresse IPv4 publique</span>
+          </div>
+          <p class="step-desc">Depuis février 2024, AWS facture <strong>toute adresse IPv4 publique</strong>, même attachée à une instance active.</p>
+          <p class="step-desc"><strong>Tarif :</strong> 0,005 $/heure × 730 h = <strong>~3,65 $/mois</strong></p>
+          <div class="step-note">💡 Ce coût est souvent oublié — il est pourtant obligatoire pour exposer un serveur web</div>
+        </div>
+      </div>
+
+      <div class="step aws-step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="provider-tag tag-aws">AWS</span>
+            <span class="step-title">Ajouter les snapshots EBS (backup)</span>
+          </div>
+          <p class="step-desc">Un snapshot EBS est une <strong>photo instantanée de votre volume</strong> à un instant T, stockée dans S3. C'est le mécanisme de backup natif d'AWS. Contrairement à OVH où le snapshot est une option forfaitaire, AWS facture <strong>au Go réellement stocké</strong> dans le snapshot.</p>
+          <p class="step-desc">
+            <strong>Comment ça marche :</strong> le 1er snapshot = copie complète du volume (80 Go). Les suivants sont <strong>incrémentaux</strong> (seules les données modifiées sont facturées).<br><br>
+            <strong>Tarif :</strong> <strong>0,05 $/Go/mois</strong> sur la capacité occupée par le snapshot.<br>
+            <strong>Calcul pour 1 snapshot complet de 80 Go :</strong> 80 × 0,05 $ = <strong>4 $/mois ≈ 3,68 €/mois</strong>
+          </p>
+          <div class="step-note">⚠️ Si vous conservez plusieurs snapshots (ex. 1/semaine = ~4/mois), le coût se multiplie. Avec 4 snapshots : ~16 $ ≈ 14,70 €/mois — à comparer avec l'option snapshot OVH à prix fixe.</div>
+          <div class="step-note" style="margin-top:.4rem; border-left-color: var(--aws);">📌 Différence clé OVH vs AWS : chez OVH, le snapshot est une option à <strong>prix fixe mensuel</strong>. Chez AWS, le coût varie selon la taille du volume et le nombre de snapshots conservés.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LIVRABLE -->
+  <div class="livrable">
+    <div class="livrable-header">📋 Ce que vous devez rendre</div>
+    <div class="livrable-body">
+      <div class="livrable-row">
+        <span class="check">✓</span>
+        <span class="livrable-text"><strong>Tableau de coûts complété</strong> — tous les postes : compute, EBS, trafic, IPv4, snapshot. Totaux mensuel et annuel pour chaque fournisseur.</span>
+      </div>
+      <div class="livrable-row">
+        <span class="check">✓</span>
+        <span class="livrable-text"><strong>2 captures d'écran minimum</strong> — page tarifaire OVH + estimation finale du calculateur AWS</span>
+      </div>
+      <div class="livrable-row">
+        <span class="check">✓</span>
+        <span class="livrable-text"><strong>Analyse des snapshots</strong> — expliquer la différence de modèle entre OVH (forfait fixe) et AWS EBS (facturation au Go × nombre de snapshots conservés)</span>
+      </div>
+      <div class="livrable-row">
+        <span class="check">✓</span>
+        <span class="livrable-text"><strong>Identifier le poste le plus coûteux chez AWS</strong> — quel poste représente la plus grande part de la facture ? Pourquoi OVH ne l'a pas ?</span>
+      </div>
+      <div class="livrable-row">
+        <span class="check">✓</span>
+        <span class="livrable-text"><strong>Conclusion en 5 lignes</strong> — pour quel type de client recommanderiez-vous chaque solution ?</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Rapport pédagogique · Bachelor Infrastructure Cloud · Mai 2026 &nbsp;—&nbsp; Prix indicatifs issus des grilles publiques (vérifier avant rendu)
+</footer>
+
+</body>
+</html>
