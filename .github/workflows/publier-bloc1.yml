@@ -1,0 +1,56 @@
+name: Publication BLOC 1
+
+# Met en ligne chaque matin le cours et le TP des séances dont la date est arrivée
+# (dates dans .github/bloc1/calendrier.json).
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+    inputs:
+      jusqua:
+        description: "Publier tout de suite jusqu'à la séance n° (laisser vide pour suivre le calendrier)"
+        required: false
+        default: ""
+      essai:
+        description: "Vérifier seulement la clé, sans rien publier"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: publication-bloc1
+  cancel-in-progress: false
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mettre en ligne les séances arrivées à échéance
+        env:
+          BLOC1_CLE: ${{ secrets.BLOC1_CLE }}
+          JUSQUA: ${{ inputs.jusqua }}
+          ESSAI: ${{ inputs.essai }}
+        run: python3 .github/scripts/publier_bloc1.py
+
+      - name: Enregistrer dans le dépôt
+        if: ${{ inputs.essai != true }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add -A bloc1 .github/bloc1
+          if git diff --cached --quiet; then
+            echo "Rien de nouveau."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Mise en ligne des supports du BLOC 1"
+          git push
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" >/dev/null || true

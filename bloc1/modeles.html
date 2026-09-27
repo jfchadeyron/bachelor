@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modèles de livrables | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Des modèles en Markdown à copier dans vos propres fichiers : journal de bord, inventaire, fiches de diagnostic et d&#x27;incident, fiche de choix, matrices, cahier de recette, procédures, journal des modif">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="kind-page">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="lab.html">Le lab</a>
+    <a href="memo.html">Aide-mémoire</a>
+    <a href="glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="glossaire.html"><span>Glossaire</span></a></div><div class="nav-item active"><a class="nav-link" href="modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="index.html">Accueil</a><span class="sep">›</span><span>Modèles de livrables</span></div>
+<header class="hero">
+  <span class="surtitre">Ressources</span>
+  <h1>Modèles de livrables</h1>
+  <p class="lead">Des modèles en Markdown à copier dans vos propres fichiers : journal de bord, inventaire, fiches de diagnostic et d'incident, fiche de choix, matrices, cahier de recette, procédures, journal des modifications et plan du dossier d'exploitation.</p>
+  
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#journal-de-bord">Journal de bord</a></li><li><a href="#inventaire-du-lab">Inventaire du lab</a></li><li><a href="#fiche-de-diagnostic-et-fiche-dincident">Fiche de diagnostic et fiche d’incident</a></li><li><a href="#fiche-de-choix-dune-solution">Fiche de choix d’une solution</a></li><li><a href="#matrice-des-droits">Matrice des droits</a></li><li><a href="#cahier-de-recette">Cahier de recette</a></li><li><a href="#procédure-dexploitation">Procédure d’exploitation</a></li><li><a href="#procédure-daccès-administrateur">Procédure d’accès administrateur</a></li><li><a href="#journal-des-modifications">Journal des modifications</a></li><li><a href="#plan-du-dossier-dexploitation">Plan du dossier d’exploitation</a></li></ul></nav>
+<article class="content">
+<h2 id="journal-de-bord">Journal de bord</h2>
+<p>À tenir à <strong>chaque séance</strong>. Il vous sert de mémoire et il est évalué.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : journal-de-bord.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu"># Journal de bord, Séance NN, &lt;titre de la séance&gt;</span></span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="ss">- </span>Date :</span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="ss">- </span>VM utilisées :</span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="ss">- </span>Snapshots pris :</span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a><span class="fu">## Ce que j'ai fait</span></span>
+<span id="cb1-8"><a aria-hidden="true" href="#cb1-8" tabindex="-1"></a><span class="ss">1. </span>…</span>
+<span id="cb1-9"><a aria-hidden="true" href="#cb1-9" tabindex="-1"></a><span class="ss">2. </span>…</span>
+<span id="cb1-10"><a aria-hidden="true" href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a aria-hidden="true" href="#cb1-11" tabindex="-1"></a><span class="fu">## Commandes importantes</span></span>
+<span id="cb1-12"><a aria-hidden="true" href="#cb1-12" tabindex="-1"></a>| Machine | Commande | Pourquoi | Résultat |</span>
+<span id="cb1-13"><a aria-hidden="true" href="#cb1-13" tabindex="-1"></a>|---|---|---|---|</span>
+<span id="cb1-14"><a aria-hidden="true" href="#cb1-14" tabindex="-1"></a>| SRV-LNX-01 | <span class="in">`sudo ufw status verbose`</span> | vérifier le filtrage | 22/tcp depuis 10.10.10.30 |</span>
+<span id="cb1-15"><a aria-hidden="true" href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a aria-hidden="true" href="#cb1-16" tabindex="-1"></a><span class="fu">## Problèmes rencontrés</span></span>
+<span id="cb1-17"><a aria-hidden="true" href="#cb1-17" tabindex="-1"></a>| Symptôme | Cause trouvée | Solution | Comment je l'ai trouvée |</span>
+<span id="cb1-18"><a aria-hidden="true" href="#cb1-18" tabindex="-1"></a>|---|---|---|---|</span>
+<span id="cb1-19"><a aria-hidden="true" href="#cb1-19" tabindex="-1"></a></span>
+<span id="cb1-20"><a aria-hidden="true" href="#cb1-20" tabindex="-1"></a><span class="fu">## Réponses aux questions du TP</span></span>
+<span id="cb1-21"><a aria-hidden="true" href="#cb1-21" tabindex="-1"></a><span class="ss">1. </span>…</span>
+<span id="cb1-22"><a aria-hidden="true" href="#cb1-22" tabindex="-1"></a></span>
+<span id="cb1-23"><a aria-hidden="true" href="#cb1-23" tabindex="-1"></a><span class="fu">## Ce que je retiens / ce que je dois revoir</span></span>
+<span id="cb1-24"><a aria-hidden="true" href="#cb1-24" tabindex="-1"></a><span class="ss">- </span>…</span></code></pre></div></div>
+<h2 id="inventaire-du-lab">Inventaire du lab</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : inventaire.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu"># Inventaire du lab Hexalog</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a>| VM | Système et version | Rôle | vCPU | RAM | Disques | Type (modèle, clone) | Réseau | Adresse IP | Compte d'administration | Services et ports ouverts | Dernière mise à jour | Snapshots importants |</span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a>|---|---|---|---|---|---|---|---|---|---|---|---|---|</span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a>| SRV-LNX-01 | Debian 13.x | intranet, partages | 1 | 1 Go | 20 Go + 5 Go | clone intégral | LAB-HEXALOG | 10.10.10.20 | sysadmin (clé) | 22 (depuis bastion), 80 | | 03-ip-fixe, 10-ssh-durci |</span></code></pre></div></div>
+<h2 id="fiche-de-diagnostic-et-fiche-dincident">Fiche de diagnostic et fiche d’incident</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : incident-NN.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu"># Incident n° NN</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="ss">- </span>Date et heure de détection :</span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="ss">- </span>Signalé par / symptôme décrit :</span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="ss">- </span>Machines concernées :</span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="ss">- </span>Gravité (bloquant, dégradé, mineur) :</span>
+<span id="cb3-7"><a aria-hidden="true" href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a aria-hidden="true" href="#cb3-8" tabindex="-1"></a><span class="fu">## Symptôme constaté</span></span>
+<span id="cb3-9"><a aria-hidden="true" href="#cb3-9" tabindex="-1"></a>Commande exécutée et résultat obtenu :</span>
+<span id="cb3-10"><a aria-hidden="true" href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a aria-hidden="true" href="#cb3-11" tabindex="-1"></a><span class="fu">## Hypothèses</span></span>
+<span id="cb3-12"><a aria-hidden="true" href="#cb3-12" tabindex="-1"></a><span class="ss">1. </span>…</span>
+<span id="cb3-13"><a aria-hidden="true" href="#cb3-13" tabindex="-1"></a><span class="ss">2. </span>…</span>
+<span id="cb3-14"><a aria-hidden="true" href="#cb3-14" tabindex="-1"></a></span>
+<span id="cb3-15"><a aria-hidden="true" href="#cb3-15" tabindex="-1"></a><span class="fu">## Tests réalisés</span></span>
+<span id="cb3-16"><a aria-hidden="true" href="#cb3-16" tabindex="-1"></a>| Test (machine, commande) | Résultat | Conclusion |</span>
+<span id="cb3-17"><a aria-hidden="true" href="#cb3-17" tabindex="-1"></a>|---|---|---|</span>
+<span id="cb3-18"><a aria-hidden="true" href="#cb3-18" tabindex="-1"></a></span>
+<span id="cb3-19"><a aria-hidden="true" href="#cb3-19" tabindex="-1"></a><span class="fu">## Cause</span></span>
+<span id="cb3-20"><a aria-hidden="true" href="#cb3-20" tabindex="-1"></a>Cause identifiée et preuve (ligne de journal, configuration, événement) :</span>
+<span id="cb3-21"><a aria-hidden="true" href="#cb3-21" tabindex="-1"></a></span>
+<span id="cb3-22"><a aria-hidden="true" href="#cb3-22" tabindex="-1"></a><span class="fu">## Correction</span></span>
+<span id="cb3-23"><a aria-hidden="true" href="#cb3-23" tabindex="-1"></a>Action réalisée (machine, commande, fichier modifié) :</span>
+<span id="cb3-24"><a aria-hidden="true" href="#cb3-24" tabindex="-1"></a></span>
+<span id="cb3-25"><a aria-hidden="true" href="#cb3-25" tabindex="-1"></a><span class="fu">## Vérification</span></span>
+<span id="cb3-26"><a aria-hidden="true" href="#cb3-26" tabindex="-1"></a>Test qui prouve le retour à la normale :</span>
+<span id="cb3-27"><a aria-hidden="true" href="#cb3-27" tabindex="-1"></a></span>
+<span id="cb3-28"><a aria-hidden="true" href="#cb3-28" tabindex="-1"></a><span class="fu">## Prévention</span></span>
+<span id="cb3-29"><a aria-hidden="true" href="#cb3-29" tabindex="-1"></a>Ce qu'il faudrait faire pour que cela ne se reproduise pas :</span></code></pre></div></div>
+<h2 id="fiche-de-choix-dune-solution">Fiche de choix d’une solution</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : fiche-de-choix.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu"># Fiche de choix, &lt;besoin&gt;</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="fu">## Besoin et contraintes</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="ss">- </span>Besoin :</span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="ss">- </span>Contraintes (budget, compétences, délais, réglementation, disponibilité attendue) :</span>
+<span id="cb4-6"><a aria-hidden="true" href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a aria-hidden="true" href="#cb4-7" tabindex="-1"></a><span class="fu">## Options comparées</span></span>
+<span id="cb4-8"><a aria-hidden="true" href="#cb4-8" tabindex="-1"></a>| Critère | Option A | Option B |</span>
+<span id="cb4-9"><a aria-hidden="true" href="#cb4-9" tabindex="-1"></a>|---|---|---|</span>
+<span id="cb4-10"><a aria-hidden="true" href="#cb4-10" tabindex="-1"></a>| Coût mensuel d'hébergement | | |</span>
+<span id="cb4-11"><a aria-hidden="true" href="#cb4-11" tabindex="-1"></a>| Coût mensuel complet (avec administration) | | |</span>
+<span id="cb4-12"><a aria-hidden="true" href="#cb4-12" tabindex="-1"></a>| TCO sur 3 ans | | |</span>
+<span id="cb4-13"><a aria-hidden="true" href="#cb4-13" tabindex="-1"></a>| Disponibilité (SLA et indisponibilité mensuelle) | | |</span>
+<span id="cb4-14"><a aria-hidden="true" href="#cb4-14" tabindex="-1"></a>| Exploitation (qui fait quoi) | | |</span>
+<span id="cb4-15"><a aria-hidden="true" href="#cb4-15" tabindex="-1"></a>| Compétences nécessaires | | |</span>
+<span id="cb4-16"><a aria-hidden="true" href="#cb4-16" tabindex="-1"></a>| Sécurité et responsabilité | | |</span>
+<span id="cb4-17"><a aria-hidden="true" href="#cb4-17" tabindex="-1"></a>| Dépendance au fournisseur | | |</span>
+<span id="cb4-18"><a aria-hidden="true" href="#cb4-18" tabindex="-1"></a></span>
+<span id="cb4-19"><a aria-hidden="true" href="#cb4-19" tabindex="-1"></a><span class="fu">## Calculs</span></span>
+<span id="cb4-20"><a aria-hidden="true" href="#cb4-20" tabindex="-1"></a>Détail des calculs :</span>
+<span id="cb4-21"><a aria-hidden="true" href="#cb4-21" tabindex="-1"></a></span>
+<span id="cb4-22"><a aria-hidden="true" href="#cb4-22" tabindex="-1"></a><span class="fu">## Recommandation (10 lignes maximum)</span></span>
+<span id="cb4-23"><a aria-hidden="true" href="#cb4-23" tabindex="-1"></a>…</span>
+<span id="cb4-24"><a aria-hidden="true" href="#cb4-24" tabindex="-1"></a></span>
+<span id="cb4-25"><a aria-hidden="true" href="#cb4-25" tabindex="-1"></a><span class="fu">## Risques et points de vigilance</span></span>
+<span id="cb4-26"><a aria-hidden="true" href="#cb4-26" tabindex="-1"></a><span class="ss">- </span>…</span></code></pre></div></div>
+<h2 id="matrice-des-droits">Matrice des droits</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : matrice-droits.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu"># Matrice des droits, &lt;serveur ou système&gt;</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a>| Ressource | Direction | RH | Comptabilité | Exploitation | Informatique |</span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a>|---|---|---|---|---|---|</span>
+<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a>| Commun | RW | RW | RW | RW | RW |</span>
+<span id="cb5-6"><a aria-hidden="true" href="#cb5-6" tabindex="-1"></a>| … | | | | | |</span>
+<span id="cb5-7"><a aria-hidden="true" href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a aria-hidden="true" href="#cb5-8" tabindex="-1"></a>RW = lecture-écriture, RO = lecture seule, vide = aucun accès.</span>
+<span id="cb5-9"><a aria-hidden="true" href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a aria-hidden="true" href="#cb5-10" tabindex="-1"></a><span class="fu">## Mise en œuvre</span></span>
+<span id="cb5-11"><a aria-hidden="true" href="#cb5-11" tabindex="-1"></a>| Ressource | Groupe portant le droit | Membres (groupes) | Permission posée |</span>
+<span id="cb5-12"><a aria-hidden="true" href="#cb5-12" tabindex="-1"></a>|---|---|---|---|</span>
+<span id="cb5-13"><a aria-hidden="true" href="#cb5-13" tabindex="-1"></a>| E:\Partages\Comptabilite | DL_Compta_RW | GG_Comptabilite | Modification (OI)(CI) |</span></code></pre></div></div>
+<h2 id="cahier-de-recette">Cahier de recette</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : cahier-de-recette.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu"># Cahier de recette, Infrastructure Hexalog</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a>| ID | Axe | Exigence | Machine et compte | Étapes du test | Résultat attendu | Résultat obtenu | Preuve | Statut |</span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a>|---|---|---|---|---|---|---|---|---|</span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a>| R-01 | Exposition | l'intranet est accessible depuis l'hôte | PC hôte | navigateur http://127.0.0.1:8080 | page Intranet Hexalog | | capture R-01 | |</span>
+<span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a>| R-02 | Exposition | MariaDB n'est pas joignable par le réseau | CLI-LNX-01 (sysadmin) | <span class="in">`nc -zv -w 3 10.10.10.20 3306`</span> | échec | | | |</span>
+<span id="cb6-7"><a aria-hidden="true" href="#cb6-7" tabindex="-1"></a>| R-03 | Droits | … | | | | | | |</span>
+<span id="cb6-8"><a aria-hidden="true" href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a aria-hidden="true" href="#cb6-9" tabindex="-1"></a>Statut : OK, KO (écart à corriger), NT (non testé).</span>
+<span id="cb6-10"><a aria-hidden="true" href="#cb6-10" tabindex="-1"></a>Au moins un tiers de tests négatifs (ce qui doit être refusé).</span></code></pre></div></div>
+<h2 id="procédure-dexploitation">Procédure d’exploitation</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : procedure-XX.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu"># Procédure, &lt;titre&gt;</span></span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="ss">- </span>Référence et version :</span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a><span class="ss">- </span>Auteur / validée par :</span>
+<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a><span class="ss">- </span>Dernière mise à jour :</span>
+<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a aria-hidden="true" href="#cb7-7" tabindex="-1"></a><span class="fu">## Objet et périmètre</span></span>
+<span id="cb7-8"><a aria-hidden="true" href="#cb7-8" tabindex="-1"></a>Ce que fait la procédure, sur quelles machines.</span>
+<span id="cb7-9"><a aria-hidden="true" href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a aria-hidden="true" href="#cb7-10" tabindex="-1"></a><span class="fu">## Prérequis</span></span>
+<span id="cb7-11"><a aria-hidden="true" href="#cb7-11" tabindex="-1"></a><span class="ss">- </span>Droits nécessaires :</span>
+<span id="cb7-12"><a aria-hidden="true" href="#cb7-12" tabindex="-1"></a><span class="ss">- </span>Informations à réunir :</span>
+<span id="cb7-13"><a aria-hidden="true" href="#cb7-13" tabindex="-1"></a><span class="ss">- </span>Précaution (snapshot, sauvegarde) :</span>
+<span id="cb7-14"><a aria-hidden="true" href="#cb7-14" tabindex="-1"></a></span>
+<span id="cb7-15"><a aria-hidden="true" href="#cb7-15" tabindex="-1"></a><span class="fu">## Étapes</span></span>
+<span id="cb7-16"><a aria-hidden="true" href="#cb7-16" tabindex="-1"></a><span class="ss">1. </span>Sur <span class="dt">&lt;</span><span class="kw">machine</span><span class="dt">&gt;</span>, en tant que <span class="dt">&lt;</span><span class="kw">compte</span><span class="dt">&gt;</span> :</span>
+<span id="cb7-17"><a aria-hidden="true" href="#cb7-17" tabindex="-1"></a>   <span class="in">`commande exacte`</span></span>
+<span id="cb7-18"><a aria-hidden="true" href="#cb7-18" tabindex="-1"></a>   Résultat attendu : …</span>
+<span id="cb7-19"><a aria-hidden="true" href="#cb7-19" tabindex="-1"></a><span class="ss">2. </span>…</span>
+<span id="cb7-20"><a aria-hidden="true" href="#cb7-20" tabindex="-1"></a></span>
+<span id="cb7-21"><a aria-hidden="true" href="#cb7-21" tabindex="-1"></a><span class="fu">## Vérifications</span></span>
+<span id="cb7-22"><a aria-hidden="true" href="#cb7-22" tabindex="-1"></a><span class="ss">- </span>…</span>
+<span id="cb7-23"><a aria-hidden="true" href="#cb7-23" tabindex="-1"></a></span>
+<span id="cb7-24"><a aria-hidden="true" href="#cb7-24" tabindex="-1"></a><span class="fu">## Retour arrière</span></span>
+<span id="cb7-25"><a aria-hidden="true" href="#cb7-25" tabindex="-1"></a><span class="ss">- </span>…</span></code></pre></div></div>
+<h2 id="procédure-daccès-administrateur">Procédure d’accès administrateur</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : procedure-acces-admin.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="fu"># Procédure d'accès aux serveurs Hexalog</span></span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="fu">## Qui</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a>Liste nominative des administrateurs et de leurs comptes d'administration :</span>
+<span id="cb8-5"><a aria-hidden="true" href="#cb8-5" tabindex="-1"></a>| Personne | Compte AD d'administration | Compte Linux | Clé SSH (empreinte) | Périmètre |</span>
+<span id="cb8-6"><a aria-hidden="true" href="#cb8-6" tabindex="-1"></a>|---|---|---|---|---|</span>
+<span id="cb8-7"><a aria-hidden="true" href="#cb8-7" tabindex="-1"></a></span>
+<span id="cb8-8"><a aria-hidden="true" href="#cb8-8" tabindex="-1"></a><span class="fu">## Comment</span></span>
+<span id="cb8-9"><a aria-hidden="true" href="#cb8-9" tabindex="-1"></a><span class="ss">- </span>Point d'entrée unique : bastion BST-LNX-01 (adresse, port)</span>
+<span id="cb8-10"><a aria-hidden="true" href="#cb8-10" tabindex="-1"></a><span class="ss">- </span>Authentification : clé SSH personnelle protégée par phrase de passe (MFA si disponible)</span>
+<span id="cb8-11"><a aria-hidden="true" href="#cb8-11" tabindex="-1"></a><span class="ss">- </span>Linux : rebond <span class="in">`ssh -J`</span> / <span class="in">`ProxyJump`</span> ; Windows : tunnel SSH puis bureau à distance avec un compte <span class="in">`adm.*`</span></span>
+<span id="cb8-12"><a aria-hidden="true" href="#cb8-12" tabindex="-1"></a></span>
+<span id="cb8-13"><a aria-hidden="true" href="#cb8-13" tabindex="-1"></a><span class="fu">## D'où</span></span>
+<span id="cb8-14"><a aria-hidden="true" href="#cb8-14" tabindex="-1"></a>Postes ou réseaux autorisés :</span>
+<span id="cb8-15"><a aria-hidden="true" href="#cb8-15" tabindex="-1"></a></span>
+<span id="cb8-16"><a aria-hidden="true" href="#cb8-16" tabindex="-1"></a><span class="fu">## Quand</span></span>
+<span id="cb8-17"><a aria-hidden="true" href="#cb8-17" tabindex="-1"></a>Horaires, demande préalable (ticket), information des utilisateurs :</span>
+<span id="cb8-18"><a aria-hidden="true" href="#cb8-18" tabindex="-1"></a></span>
+<span id="cb8-19"><a aria-hidden="true" href="#cb8-19" tabindex="-1"></a><span class="fu">## Traces</span></span>
+<span id="cb8-20"><a aria-hidden="true" href="#cb8-20" tabindex="-1"></a><span class="ss">- </span>Journaux consultés (bastion, serveurs Linux, journal Sécurité Windows)</span>
+<span id="cb8-21"><a aria-hidden="true" href="#cb8-21" tabindex="-1"></a><span class="ss">- </span>Durée de conservation, personnes habilitées à les consulter, fréquence de revue</span>
+<span id="cb8-22"><a aria-hidden="true" href="#cb8-22" tabindex="-1"></a></span>
+<span id="cb8-23"><a aria-hidden="true" href="#cb8-23" tabindex="-1"></a><span class="fu">## Urgence</span></span>
+<span id="cb8-24"><a aria-hidden="true" href="#cb8-24" tabindex="-1"></a>Compte bris de glace : où est le mot de passe, qui peut l'utiliser, à qui signaler l'usage, changement du mot de passe après usage.</span>
+<span id="cb8-25"><a aria-hidden="true" href="#cb8-25" tabindex="-1"></a></span>
+<span id="cb8-26"><a aria-hidden="true" href="#cb8-26" tabindex="-1"></a><span class="fu">## Arrivée et départ d'un administrateur</span></span>
+<span id="cb8-27"><a aria-hidden="true" href="#cb8-27" tabindex="-1"></a><span class="ss">- </span>Arrivée : création des comptes, dépôt de la clé publique, ajout aux groupes</span>
+<span id="cb8-28"><a aria-hidden="true" href="#cb8-28" tabindex="-1"></a><span class="ss">- </span>Départ : désactivation des comptes, retrait des clés sur le bastion et les serveurs, changement des mots de passe partagés</span></code></pre></div></div>
+<h2 id="journal-des-modifications">Journal des modifications</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : journal-modifications.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="fu"># Journal des modifications</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a>| Date et heure | Auteur | Machine | Modification | Raison / demande | Retour arrière | Vérifié par |</span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a>|---|---|---|---|---|---|---|</span></code></pre></div></div>
+<h2 id="plan-du-dossier-dexploitation">Plan du dossier d’exploitation</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : dossier-exploitation/README.md</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="fu"># Dossier d'exploitation. Hexalog</span></span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a><span class="ss">1. </span>Présentation (périmètre, services, contacts)</span>
+<span id="cb10-4"><a aria-hidden="true" href="#cb10-4" tabindex="-1"></a><span class="ss">2. </span>Schéma d'architecture</span>
+<span id="cb10-5"><a aria-hidden="true" href="#cb10-5" tabindex="-1"></a><span class="ss">3. </span>Inventaire</span>
+<span id="cb10-6"><a aria-hidden="true" href="#cb10-6" tabindex="-1"></a><span class="ss">4. </span>Plan d'adressage, DNS et redirections</span>
+<span id="cb10-7"><a aria-hidden="true" href="#cb10-7" tabindex="-1"></a><span class="ss">5. </span>Matrice des flux</span>
+<span id="cb10-8"><a aria-hidden="true" href="#cb10-8" tabindex="-1"></a><span class="ss">6. </span>Organisation de l'annuaire (OU, groupes, conventions, comptes d'administration)</span>
+<span id="cb10-9"><a aria-hidden="true" href="#cb10-9" tabindex="-1"></a><span class="ss">7. </span>Matrices des droits (Windows, Linux)</span>
+<span id="cb10-10"><a aria-hidden="true" href="#cb10-10" tabindex="-1"></a><span class="ss">8. </span>Politique d'authentification et de verrouillage</span>
+<span id="cb10-11"><a aria-hidden="true" href="#cb10-11" tabindex="-1"></a><span class="ss">9. </span>Procédure d'accès administrateur</span>
+<span id="cb10-12"><a aria-hidden="true" href="#cb10-12" tabindex="-1"></a><span class="ss">10. </span>Procédures d'exploitation</span>
+<span id="cb10-13"><a aria-hidden="true" href="#cb10-13" tabindex="-1"></a><span class="ss">11. </span>Cahier de recette et résultats</span>
+<span id="cb10-14"><a aria-hidden="true" href="#cb10-14" tabindex="-1"></a><span class="ss">12. </span>Journal des modifications</span></code></pre></div></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="glossaire.html"><span class="dir">‹ Page précédente</span><span class="titre">Glossaire</span></a><span></span></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aide-mémoire des commandes | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Les commandes utilisées dans le bloc, regroupées par thème. Pour le détail et les options, voir le cours correspondant ou la page de manuel (man commande, Get-Help commande).">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="kind-page">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="lab.html">Le lab</a>
+    <a href="memo.html">Aide-mémoire</a>
+    <a href="glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item active"><a class="nav-link" href="memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="index.html">Accueil</a><span class="sep">›</span><span>Aide-mémoire des commandes</span></div>
+<header class="hero">
+  <span class="surtitre">Ressources</span>
+  <h1>Aide-mémoire des commandes</h1>
+  <p class="lead">Les commandes utilisées dans le bloc, regroupées par thème. Pour le détail et les options, voir le cours correspondant ou la page de manuel (man commande, Get-Help commande).</p>
+  
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#virtualbox-vboxmanage">VirtualBox (VBoxManage)</a></li><li><a href="#réseau">Réseau</a></li><li><a href="#linux-système">Linux : système</a></li><li><a href="#linux-comptes-et-droits">Linux : comptes et droits</a></li><li><a href="#ssh">SSH</a></li><li><a href="#ufw">UFW</a></li><li><a href="#windows-server-administration">Windows Server : administration</a></li><li><a href="#active-directory">Active Directory</a></li><li><a href="#partages-et-ntfs">Partages et NTFS</a></li><li><a href="#événements-windows-à-connaître">Événements Windows à connaître</a></li></ul></nav>
+<article class="content">
+<h2 id="virtualbox-vboxmanage">VirtualBox (VBoxManage)</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>VBoxManage list vms</code> / <code>list runningvms</code></td>
+<td>lister les VM / celles qui tournent</td>
+</tr>
+<tr class="even">
+<td><code>VBoxManage showvminfo NOM</code></td>
+<td>configuration d’une VM</td>
+</tr>
+<tr class="odd">
+<td><code>VBoxManage snapshot NOM take NOM-SNAP</code></td>
+<td>prendre un snapshot</td>
+</tr>
+<tr class="even">
+<td><code>VBoxManage snapshot NOM list</code> / <code>restore NOM-SNAP</code></td>
+<td>lister / restaurer</td>
+</tr>
+<tr class="odd">
+<td><code>VBoxManage natnetwork list</code></td>
+<td>réseaux NAT</td>
+</tr>
+<tr class="even">
+<td><code>VBoxManage natnetwork add --netname LAB-HEXALOG --network "10.10.10.0/24" --enable --dhcp on</code></td>
+<td>créer un réseau NAT</td>
+</tr>
+<tr class="odd">
+<td><code>VBoxManage natnetwork modify --netname LAB-HEXALOG --dhcp off</code></td>
+<td>désactiver son DHCP</td>
+</tr>
+<tr class="even">
+<td><code>VBoxManage natnetwork modify --netname LAB-HEXALOG --port-forward-4 "nom:tcp:[127.0.0.1]:8080:[10.10.10.20]:80"</code></td>
+<td>ajouter une redirection</td>
+</tr>
+<tr class="odd">
+<td><code>VBoxManage natnetwork modify --netname LAB-HEXALOG --port-forward-4 delete nom</code></td>
+<td>supprimer une redirection</td>
+</tr>
+<tr class="even">
+<td><code>VBoxManage export NOM -o NOM.ova</code></td>
+<td>exporter une VM</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="réseau">Réseau</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Besoin</th>
+<th>Linux</th>
+<th>Windows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>adresses</td>
+<td><code>ip -br a</code></td>
+<td><code>Get-NetIPConfiguration</code>, <code>ipconfig /all</code></td>
+</tr>
+<tr class="even">
+<td>routes</td>
+<td><code>ip route</code></td>
+<td><code>Get-NetRoute</code>, <code>route print</code></td>
+</tr>
+<tr class="odd">
+<td>tester une machine</td>
+<td><code>ping -c 3 IP</code></td>
+<td><code>Test-Connection IP</code>, <code>ping IP</code></td>
+</tr>
+<tr class="even">
+<td>tester un port</td>
+<td><code>nc -zv -w 3 IP PORT</code></td>
+<td><code>Test-NetConnection IP -Port PORT</code></td>
+</tr>
+<tr class="odd">
+<td>requête HTTP</td>
+<td><code>curl -I http://IP</code></td>
+<td><code>curl.exe -I http://IP</code>, <code>Invoke-WebRequest</code></td>
+</tr>
+<tr class="even">
+<td>résoudre un nom</td>
+<td><code>dig +short nom</code>, <code>getent hosts nom</code></td>
+<td><code>Resolve-DnsName nom</code>, <code>nslookup nom</code></td>
+</tr>
+<tr class="odd">
+<td>enregistrement SRV</td>
+<td><code>dig -t SRV _ldap._tcp.hexalog.lan</code></td>
+<td><code>Resolve-DnsName -Type SRV _ldap._tcp.hexalog.lan</code></td>
+</tr>
+<tr class="even">
+<td>ports en écoute</td>
+<td><code>sudo ss -tulpn</code></td>
+<td><code>Get-NetTCPConnection -State Listen</code>, <code>netstat -ano</code></td>
+</tr>
+<tr class="odd">
+<td>chemin réseau</td>
+<td><code>tracepath IP</code>, <code>traceroute IP</code></td>
+<td><code>tracert IP</code></td>
+</tr>
+<tr class="even">
+<td>capture de trafic</td>
+<td><code>sudo tcpdump -ni enp0s3 port 53</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>configuration permanente</td>
+<td><code>/etc/network/interfaces</code>, <code>/etc/resolv.conf</code></td>
+<td><code>New-NetIPAddress</code>, <code>Set-DnsClientServerAddress</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="linux-système">Linux : système</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>cat /etc/os-release</code>, <code>hostnamectl</code>, <code>uname -r</code></td>
+<td>version, nom, noyau</td>
+</tr>
+<tr class="even">
+<td><code>sudo apt update</code> / <code>sudo apt full-upgrade</code></td>
+<td>rafraîchir / mettre à jour</td>
+</tr>
+<tr class="odd">
+<td><code>sudo apt install PAQUET</code> / <code>remove</code> / <code>purge</code></td>
+<td>installer / supprimer</td>
+</tr>
+<tr class="even">
+<td><code>apt show PAQUET</code>, <code>dpkg -L PAQUET</code></td>
+<td>informations, fichiers installés</td>
+</tr>
+<tr class="odd">
+<td><code>systemctl status SERVICE</code></td>
+<td>état d’un service</td>
+</tr>
+<tr class="even">
+<td><code>sudo systemctl start</code> / <code>stop</code> / <code>restart</code> / <code>reload SERVICE</code></td>
+<td>agir sur un service</td>
+</tr>
+<tr class="odd">
+<td><code>sudo systemctl enable --now</code> / <code>disable SERVICE</code></td>
+<td>démarrage automatique</td>
+</tr>
+<tr class="even">
+<td><code>systemctl --failed</code></td>
+<td>services en échec</td>
+</tr>
+<tr class="odd">
+<td><code>journalctl -u SERVICE -n 50 --no-pager</code></td>
+<td>journal d’un service</td>
+</tr>
+<tr class="even">
+<td><code>journalctl -p err -b</code></td>
+<td>erreurs depuis le démarrage</td>
+</tr>
+<tr class="odd">
+<td><code>journalctl -f</code></td>
+<td>suivre en direct</td>
+</tr>
+<tr class="even">
+<td><code>journalctl -t useradd -t usermod --since today</code></td>
+<td>messages d’un programme</td>
+</tr>
+<tr class="odd">
+<td><code>lsblk</code>, <code>blkid</code>, <code>df -h</code>, <code>du -sh DOSSIER</code></td>
+<td>disques et espace</td>
+</tr>
+<tr class="even">
+<td><code>sudo mkfs.ext4 -L NOM /dev/sdb1</code>, <code>sudo mount -a</code></td>
+<td>formater, monter selon fstab</td>
+</tr>
+<tr class="odd">
+<td><code>free -h</code>, <code>uptime</code>, <code>htop</code></td>
+<td>mémoire, charge</td>
+</tr>
+<tr class="even">
+<td><code>sudo nginx -t</code>, <code>sudo sshd -t</code>, <code>sudo dnsmasq --test</code></td>
+<td>tester une configuration</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="linux-comptes-et-droits">Linux : comptes et droits</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>id NOM</code>, <code>getent passwd NOM</code>, <code>getent group GROUPE</code></td>
+<td>identité, groupes</td>
+</tr>
+<tr class="even">
+<td><code>sudo useradd -m -s /bin/bash -G g1,g2 NOM</code></td>
+<td>créer un utilisateur</td>
+</tr>
+<tr class="odd">
+<td><code>sudo passwd NOM</code>, <code>echo "NOM:MDP" | sudo chpasswd</code></td>
+<td>définir un mot de passe</td>
+</tr>
+<tr class="even">
+<td><code>sudo groupadd GROUPE</code></td>
+<td>créer un groupe</td>
+</tr>
+<tr class="odd">
+<td><code>sudo usermod -aG GROUPE NOM</code></td>
+<td>ajouter à un groupe (toujours <code>-aG</code>)</td>
+</tr>
+<tr class="even">
+<td><code>sudo gpasswd -d NOM GROUPE</code></td>
+<td>retirer d’un groupe</td>
+</tr>
+<tr class="odd">
+<td><code>sudo usermod -L</code> / <code>-U NOM</code></td>
+<td>verrouiller / déverrouiller</td>
+</tr>
+<tr class="even">
+<td><code>sudo chage -l NOM</code>, <code>sudo chage -M 365 -E AAAA-MM-JJ NOM</code></td>
+<td>expiration</td>
+</tr>
+<tr class="odd">
+<td><code>sudo userdel -r NOM</code></td>
+<td>supprimer avec le dossier personnel</td>
+</tr>
+<tr class="even">
+<td><code>ls -l</code>, <code>ls -ld DOSSIER</code></td>
+<td>droits</td>
+</tr>
+<tr class="odd">
+<td><code>chmod 750 F</code>, <code>chmod u+x,g-w F</code>, <code>chmod 2770 DOSSIER</code></td>
+<td>modifier les droits</td>
+</tr>
+<tr class="even">
+<td><code>sudo chown user:groupe F</code>, <code>sudo chgrp -R groupe D</code></td>
+<td>propriétaire, groupe</td>
+</tr>
+<tr class="odd">
+<td><code>umask</code>, <code>umask 027</code></td>
+<td>masque de création</td>
+</tr>
+<tr class="even">
+<td><code>getfacl F</code>, <code>sudo setfacl -m g:GROUPE:rx D</code></td>
+<td>lire / ajouter une ACL</td>
+</tr>
+<tr class="odd">
+<td><code>sudo setfacl -d -m g::rwx,o::--- D</code></td>
+<td>ACL par défaut (héritage)</td>
+</tr>
+<tr class="even">
+<td><code>sudo -u NOM commande</code></td>
+<td>tester en tant qu’un autre utilisateur</td>
+</tr>
+<tr class="odd">
+<td><code>sudo visudo -f /etc/sudoers.d/FICHIER</code>, <code>sudo visudo -c</code></td>
+<td>règles sudo</td>
+</tr>
+<tr class="even">
+<td><code>sudo -l</code>, <code>sudo -l -U NOM</code></td>
+<td>droits sudo</td>
+</tr>
+<tr class="odd">
+<td><code>sudo journalctl _COMM=sudo</code></td>
+<td>traces sudo</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="ssh">SSH</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ssh-keygen -t ed25519 -C "commentaire"</code></td>
+<td>créer une paire de clés</td>
+</tr>
+<tr class="even">
+<td><code>ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hôte</code></td>
+<td>déposer la clé publique</td>
+</tr>
+<tr class="odd">
+<td><code>ssh user@hôte</code>, <code>ssh -p 2222 user@127.0.0.1</code></td>
+<td>se connecter</td>
+</tr>
+<tr class="even">
+<td><code>ssh -J bastion user@cible</code></td>
+<td>rebond par un bastion</td>
+</tr>
+<tr class="odd">
+<td><code>ssh -N -L 13389:10.10.10.10:3389 bastion</code></td>
+<td>tunnel vers un port interne</td>
+</tr>
+<tr class="even">
+<td><code>eval "$(ssh-agent)"</code>, <code>ssh-add</code></td>
+<td>agent SSH</td>
+</tr>
+<tr class="odd">
+<td><code>ssh-keygen -lf fichier.pub</code></td>
+<td>empreinte d’une clé</td>
+</tr>
+<tr class="even">
+<td><code>ssh-keygen -R "[127.0.0.1]:2222"</code></td>
+<td>oublier une empreinte</td>
+</tr>
+<tr class="odd">
+<td><code>scp F user@hôte:/chemin</code>, <code>scp -P 2222 …</code>, <code>sftp hôte</code></td>
+<td>transferts</td>
+</tr>
+<tr class="even">
+<td><code>sudo sshd -t</code>, <code>sudo sshd -T</code></td>
+<td>tester / afficher la configuration effective</td>
+</tr>
+<tr class="odd">
+<td><code>sudo journalctl -u ssh</code></td>
+<td>connexions</td>
+</tr>
+</tbody>
+</table></div>
+<p>Côté Windows (PowerShell), déposer une clé sans <code>ssh-copy-id</code> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC Windows</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">Get-Content</span> <span class="va">$env</span><span class="op">:</span>USERPROFILE\<span class="op">.</span><span class="fu">ssh</span>\id_ed25519<span class="op">.</span><span class="fu">pub</span> <span class="op">|</span> ssh <span class="op">-</span>p 2222 user@127<span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">1</span> <span class="st">"mkdir -p ~/.ssh &amp;&amp; chmod 700 ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys &amp;&amp; chmod 600 ~/.ssh/authorized_keys"</span></span></code></pre></div></div>
+<h2 id="ufw">UFW</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sudo ufw default deny incoming</code> / <code>allow outgoing</code></td>
+<td>politiques par défaut</td>
+</tr>
+<tr class="even">
+<td><code>sudo ufw allow 80/tcp</code></td>
+<td>ouvrir un port à tous</td>
+</tr>
+<tr class="odd">
+<td><code>sudo ufw allow from 10.10.10.30 to any port 22 proto tcp</code></td>
+<td>ouvrir à une seule source</td>
+</tr>
+<tr class="even">
+<td><code>sudo ufw enable</code> / <code>disable</code></td>
+<td>activer / désactiver</td>
+</tr>
+<tr class="odd">
+<td><code>sudo ufw status verbose</code>, <code>sudo ufw status numbered</code></td>
+<td>état, règles numérotées</td>
+</tr>
+<tr class="even">
+<td><code>sudo ufw delete N</code></td>
+<td>supprimer la règle N</td>
+</tr>
+<tr class="odd">
+<td><code>sudo journalctl -k | grep 'UFW BLOCK'</code></td>
+<td>paquets refusés</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="windows-server-administration">Windows Server : administration</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Rename-Computer -NewName NOM -Restart</code></td>
+<td>renommer</td>
+</tr>
+<tr class="even">
+<td><code>New-NetIPAddress -InterfaceAlias Ethernet -IPAddress IP -PrefixLength 24 -DefaultGateway GW</code></td>
+<td>adresse fixe</td>
+</tr>
+<tr class="odd">
+<td><code>Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses DNS</code></td>
+<td>DNS</td>
+</tr>
+<tr class="even">
+<td><code>Get-WindowsFeature</code>, <code>Install-WindowsFeature NOM -IncludeManagementTools</code></td>
+<td>rôles et fonctionnalités</td>
+</tr>
+<tr class="odd">
+<td><code>Get-Service NOM</code>, <code>Get-Service NOM -RequiredServices</code>, <code>sc.exe qc NOM</code></td>
+<td>services</td>
+</tr>
+<tr class="even">
+<td><code>Start-Service</code>, <code>Stop-Service</code>, <code>Set-Service NOM -StartupType Automatic</code></td>
+<td>agir sur un service</td>
+</tr>
+<tr class="odd">
+<td><code>Get-WinEvent -LogName System -MaxEvents 20</code></td>
+<td>journal Système</td>
+</tr>
+<tr class="even">
+<td><code>Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625}</code></td>
+<td>événements par ID</td>
+</tr>
+<tr class="odd">
+<td><code>Get-NetFirewallRule</code>, <code>New-NetFirewallRule</code>, <code>Set-NetFirewallRule -RemoteAddress IP</code></td>
+<td>pare-feu</td>
+</tr>
+<tr class="even">
+<td><code>Get-Disk</code>, <code>Initialize-Disk</code>, <code>New-Partition</code>, <code>Format-Volume</code>, <code>Get-Volume</code></td>
+<td>disques</td>
+</tr>
+<tr class="odd">
+<td><code>Get-HotFix</code></td>
+<td>mises à jour installées</td>
+</tr>
+<tr class="even">
+<td><code>gpupdate /force</code>, <code>gpresult /r</code></td>
+<td>stratégies de groupe</td>
+</tr>
+<tr class="odd">
+<td><code>auditpol /get /category:*</code></td>
+<td>stratégie d’audit</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="active-directory">Active Directory</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Install-ADDSForest -DomainName hexalog.lan -DomainNetbiosName HEXALOG -InstallDns</code></td>
+<td>créer le domaine</td>
+</tr>
+<tr class="even">
+<td><code>Get-ADDomain</code>, <code>Get-ADDomainController</code>, <code>dcdiag /q</code></td>
+<td>vérifier</td>
+</tr>
+<tr class="odd">
+<td><code>New-ADOrganizationalUnit -Name NOM -Path "OU=…,DC=hexalog,DC=lan"</code></td>
+<td>créer une OU</td>
+</tr>
+<tr class="even">
+<td><code>New-ADGroup -Name NOM -GroupScope Global</code> (ou <code>DomainLocal</code>) <code>-GroupCategory Security -Path …</code></td>
+<td>créer un groupe</td>
+</tr>
+<tr class="odd">
+<td><code>New-ADUser -Name … -SamAccountName … -UserPrincipalName … -Path … -AccountPassword … -Enabled $true</code></td>
+<td>créer un utilisateur</td>
+</tr>
+<tr class="even">
+<td><code>Add-ADGroupMember G -Members u</code>, <code>Remove-ADGroupMember G -Members u</code></td>
+<td>appartenance</td>
+</tr>
+<tr class="odd">
+<td><code>Get-ADGroupMember G -Recursive</code>, <code>Get-ADPrincipalGroupMembership u</code></td>
+<td>qui est dans quoi</td>
+</tr>
+<tr class="even">
+<td><code>Set-ADUser u -Department … -Title …</code>, <code>Move-ADObject … -TargetPath …</code></td>
+<td>modifier, déplacer</td>
+</tr>
+<tr class="odd">
+<td><code>Disable-ADAccount u</code>, <code>Enable-ADAccount u</code>, <code>Unlock-ADAccount u</code></td>
+<td>états du compte</td>
+</tr>
+<tr class="even">
+<td><code>Set-ADAccountPassword u -Reset -NewPassword (Read-Host -AsSecureString)</code></td>
+<td>réinitialiser</td>
+</tr>
+<tr class="odd">
+<td><code>Search-ADAccount -LockedOut</code> / <code>-AccountInactive -TimeSpan 90.00:00:00</code> / <code>-AccountDisabled</code></td>
+<td>recherches</td>
+</tr>
+<tr class="even">
+<td><code>Get-ADDefaultDomainPasswordPolicy</code>, <code>Get-ADUserResultantPasswordPolicy u</code></td>
+<td>politiques de mot de passe</td>
+</tr>
+<tr class="odd">
+<td><code>Add-DnsServerResourceRecordA -ZoneName hexalog.lan -Name NOM -IPv4Address IP</code></td>
+<td>enregistrement DNS</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="partages-et-ntfs">Partages et NTFS</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>icacls D</code></td>
+<td>afficher les permissions</td>
+</tr>
+<tr class="even">
+<td><code>icacls D /grant "HEXALOG\GROUPE:(OI)(CI)M"</code></td>
+<td>Modification, héritée partout</td>
+</tr>
+<tr class="odd">
+<td><code>icacls D /grant "HEXALOG\GROUPE:(OI)(CI)RX"</code></td>
+<td>Lecture et exécution</td>
+</tr>
+<tr class="even">
+<td><code>icacls D /inheritance:r</code></td>
+<td>supprimer l’héritage</td>
+</tr>
+<tr class="odd">
+<td><code>icacls D /save fichier.txt /t</code></td>
+<td>sauvegarder les permissions</td>
+</tr>
+<tr class="even">
+<td><code>New-SmbShare -Name N -Path D -FullAccess … -ChangeAccess … -FolderEnumerationMode AccessBased</code></td>
+<td>créer un partage avec ABE</td>
+</tr>
+<tr class="odd">
+<td><code>Get-SmbShare</code>, <code>Get-SmbShareAccess -Name N</code></td>
+<td>partages et permissions de partage</td>
+</tr>
+<tr class="even">
+<td><code>New-FsrmQuota -Path D -Size 500MB</code></td>
+<td>quota</td>
+</tr>
+<tr class="odd">
+<td><code>smbclient //serveur/partage -U 'HEXALOG\u' -c 'ls'</code> (Linux)</td>
+<td>tester un accès</td>
+</tr>
+</tbody>
+</table></div>
+<p>SID utiles : <code>*S-1-5-32-544</code> Administrateurs, <code>*S-1-5-18</code> Système, <code>*S-1-5-11</code> Utilisateurs authentifiés ; groupe Admins du domaine : SID du domaine suivi de <code>-512</code>.</p>
+<h2 id="événements-windows-à-connaître">Événements Windows à connaître</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4624 / 4625</td>
+<td>ouverture de session réussie / échouée (type 2 interactive, 3 réseau, 10 bureau à distance)</td>
+</tr>
+<tr class="even">
+<td>4672</td>
+<td>session avec privilèges d’administration</td>
+</tr>
+<tr class="odd">
+<td>4720 / 4726</td>
+<td>compte créé / supprimé</td>
+</tr>
+<tr class="even">
+<td>4722 / 4725</td>
+<td>compte activé / désactivé</td>
+</tr>
+<tr class="odd">
+<td>4724</td>
+<td>mot de passe réinitialisé par un administrateur</td>
+</tr>
+<tr class="even">
+<td>4728 / 4729, 4732 / 4733</td>
+<td>ajout / retrait d’un groupe global, local</td>
+</tr>
+<tr class="odd">
+<td>4740 / 4767</td>
+<td>compte verrouillé / déverrouillé</td>
+</tr>
+<tr class="even">
+<td>4663</td>
+<td>accès à un fichier audité</td>
+</tr>
+<tr class="odd">
+<td>1102</td>
+<td>journal de sécurité effacé</td>
+</tr>
+<tr class="even">
+<td>7000 / 7001</td>
+<td>service qui ne démarre pas / dépendance en échec</td>
+</tr>
+</tbody>
+</table></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="cours/s15-synthese.html" data-seance="15"><span class="dir">‹ Page précédente</span><span class="titre">Séance 15 : Synthèse et évaluation finale</span></a><a class="next" href="glossaire.html"><span class="dir">Page suivante ›</span><span class="titre">Glossaire</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossaire | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Les termes techniques du bloc, avec une définition courte et le numéro de la séance où ils sont expliqués en détail.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="kind-page">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="lab.html">Le lab</a>
+    <a href="memo.html">Aide-mémoire</a>
+    <a href="glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item active"><a class="nav-link" href="glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="index.html">Accueil</a><span class="sep">›</span><span>Glossaire</span></div>
+<header class="hero">
+  <span class="surtitre">Ressources</span>
+  <h1>Glossaire</h1>
+  <p class="lead">Les termes techniques du bloc, avec une définition courte et le numéro de la séance où ils sont expliqués en détail.</p>
+  
+</header>
+
+<article class="content">
+<p><a href="#a">A</a> | <a href="#b">B</a> | <a href="#c">C</a> | <a href="#d">D</a> | <a href="#e">E</a> | <a href="#f">F</a> | <a href="#g">G</a> | <a href="#h">H</a> | <a href="#i">I</a> | <a href="#j">J</a> | <a href="#k">K</a> | <a href="#l">L</a> | <a href="#m">M</a> | <a href="#n">N</a> | <a href="#o">O</a> | <a href="#p">P</a> | <a href="#r">R</a> | <a href="#s">S</a> | <a href="#t">T</a> | <a href="#u">U</a> | <a href="#v">V</a> | <a href="#z">Z</a></p>
+<h2 id="a">A</h2>
+<dl>
+<dt>ABE (énumération basée sur l’accès)</dt>
+<dd>
+Option d’un partage Windows qui masque à chaque utilisateur les dossiers auxquels il n’a pas accès. (S7)
+</dd>
+<dt>ACL (liste de contrôle d’accès)</dt>
+<dd>
+Liste d’entrées indiquant qui a quels droits sur un objet. Sous Windows, les permissions NTFS sont des ACL ; sous Linux, les ACL POSIX complètent les droits <code>rwx</code>. (S7, S9)
+</dd>
+<dt>ACL par défaut</dt>
+<dd>
+Sous Linux, ACL posée sur un dossier et appliquée automatiquement aux fichiers qui y seront créés : l’équivalent de l’héritage NTFS. (S9)
+</dd>
+<dt>Active Directory (AD DS)</dt>
+<dd>
+Service d’annuaire de Microsoft : il centralise comptes, groupes et ordinateurs d’un domaine et authentifie les utilisateurs. (S6)
+</dd>
+<dt>AGDLP</dt>
+<dd>
+Méthode d’attribution des droits : comptes dans des groupes globaux, groupes globaux dans des groupes de domaine local, permissions aux groupes de domaine local. (S6, S7)
+</dd>
+<dt>Authentification</dt>
+<dd>
+Preuve de l’identité déclarée (mot de passe, clé, second facteur). À distinguer de l’autorisation. (S11)
+</dd>
+<dt>Autorisation</dt>
+<dd>
+Détermination de ce qu’une identité authentifiée a le droit de faire. (S11)
+</dd>
+</dl>
+<h2 id="b">B</h2>
+<dl>
+<dt>Bail DHCP</dt>
+<dd>
+Durée pendant laquelle un client peut utiliser l’adresse attribuée par le serveur DHCP. (S3)
+</dd>
+<dt>Bastion</dt>
+<dd>
+Serveur durci, seul point d’entrée des accès d’administration ; les serveurs n’acceptent l’administration que depuis lui. (S12)
+</dd>
+<dt>Bris de glace (compte)</dt>
+<dd>
+Compte d’administration réservé aux urgences, au mot de passe conservé en lieu sûr, dont l’usage est exceptionnel et tracé. (S12)
+</dd>
+</dl>
+<h2 id="c">C</h2>
+<dl>
+<dt>CAPEX</dt>
+<dd>
+Dépense d’investissement (achat de matériel), amortie sur plusieurs années. (S1)
+</dd>
+<dt>CIDR</dt>
+<dd>
+Notation du masque par le nombre de bits de la partie réseau : <code>/24</code> = <code>255.255.255.0</code>. (S3)
+</dd>
+<dt>Clé d’hôte</dt>
+<dd>
+Clé qui identifie un serveur SSH ; son empreinte est enregistrée dans <code>known_hosts</code> à la première connexion. (S10)
+</dd>
+<dt>Clone (intégral, lié)</dt>
+<dd>
+Copie d’une VM ; le clone intégral est autonome, le clone lié s’appuie sur un snapshot du modèle. (S2)
+</dd>
+<dt>Cloud hybride</dt>
+<dd>
+Combinaison d’une infrastructure sur site et de services cloud, reliés et gérés ensemble. (S1)
+</dd>
+<dt>Contrôleur de domaine (DC)</dt>
+<dd>
+Serveur qui héberge une copie de l’annuaire Active Directory et authentifie les utilisateurs. (S6)
+</dd>
+</dl>
+<h2 id="d">D</h2>
+<dl>
+<dt>DHCP</dt>
+<dd>
+Protocole d’attribution automatique d’adresse IP, masque, passerelle et DNS (échange DORA). (S3)
+</dd>
+<dt>DN (nom distinctif)</dt>
+<dd>
+Chemin complet d’un objet dans l’annuaire : <code>CN=Alice Martin,OU=Comptabilite,…,DC=hexalog,DC=lan</code>. (S6)
+</dd>
+<dt>DNS</dt>
+<dd>
+Système de résolution des noms en adresses IP (enregistrements A, CNAME, PTR, SRV…). (S3)
+</dd>
+<dt>Domaine</dt>
+<dd>
+Ensemble d’objets Active Directory partageant la même base et les mêmes règles, identifié par un nom DNS (<code>hexalog.lan</code>). (S6)
+</dd>
+<dt>Dossier d’exploitation</dt>
+<dd>
+Documentation de référence d’une infrastructure : architecture, inventaire, flux, droits, procédures, recette. (S14)
+</dd>
+</dl>
+<h2 id="e">E</h2>
+<dl>
+<dt>Empreinte (fingerprint)</dt>
+<dd>
+Résumé court d’une clé, qui permet de la vérifier ou de l’identifier (<code>SHA256:…</code>). (S10)
+</dd>
+</dl>
+<h2 id="f">F</h2>
+<dl>
+<dt>FGPP (stratégie de mot de passe affinée)</dt>
+<dd>
+Politique de mot de passe et de verrouillage appliquée à certains utilisateurs ou groupes d’un domaine. (S11)
+</dd>
+<dt>FIDO2</dt>
+<dd>
+Standard d’authentification par clé de sécurité ou passkey, résistant à l’hameçonnage. (S11)
+</dd>
+</dl>
+<h2 id="g">G</h2>
+<dl>
+<dt>GPO (stratégie de groupe)</dt>
+<dd>
+Ensemble de paramètres appliqués par Active Directory à des utilisateurs ou ordinateurs (mots de passe, audit, configuration). (S11, S13)
+</dd>
+<dt>Groupe de sécurité</dt>
+<dd>
+Groupe qui peut recevoir des permissions. Étendues : globale, domaine local, universelle. (S6)
+</dd>
+<dt>Groupe de sécurité (cloud)</dt>
+<dd>
+Pare-feu stateful appliqué à une VM ou un sous-réseau dans le cloud (Security Group, NSG). (S4)
+</dd>
+</dl>
+<h2 id="h">H</h2>
+<dl>
+<dt>Hachage (empreinte de mot de passe)</dt>
+<dd>
+Transformation à sens unique d’un mot de passe, stockée à sa place, avec un sel et un algorithme lent. (S9, S11)
+</dd>
+<dt>Héritage</dt>
+<dd>
+Propagation des permissions d’un dossier à son contenu. (S7, S9)
+</dd>
+<dt>Hyperviseur</dt>
+<dd>
+Logiciel qui crée et exécute des machines virtuelles. Type 1 : sur le matériel ; type 2 : sur un système hôte. (S1)
+</dd>
+</dl>
+<h2 id="i">I</h2>
+<dl>
+<dt>IaaS</dt>
+<dd>
+Infrastructure as a Service : location de VM, stockage et réseau ; le client gère système, applications et données. (S1, S4)
+</dd>
+<dt>icacls</dt>
+<dd>
+Commande Windows d’affichage et de modification des permissions NTFS. (S7)
+</dd>
+</dl>
+<h2 id="j">J</h2>
+<dl>
+<dt>JML (Joiner, Mover, Leaver)</dt>
+<dd>
+Cycle de vie d’une identité : arrivée, mobilité, départ. (S13)
+</dd>
+<dt>journalctl</dt>
+<dd>
+Commande de lecture du journal de systemd sous Linux. (S8)
+</dd>
+</dl>
+<h2 id="k">K</h2>
+<dl>
+<dt>Kerberos</dt>
+<dd>
+Protocole d’authentification par tickets d’Active Directory (port 88), qui exige des horloges synchronisées. (S11)
+</dd>
+<dt>known_hosts</dt>
+<dd>
+Fichier du client SSH contenant les empreintes des serveurs déjà acceptés. (S10)
+</dd>
+</dl>
+<h2 id="l">L</h2>
+<dl>
+<dt>LDAP</dt>
+<dd>
+Protocole d’interrogation et de modification d’un annuaire (ports 389 et 636). (S11)
+</dd>
+<dt>Lock-in</dt>
+<dd>
+Dépendance à un fournisseur, qui rend coûteux le changement. (S1, S4)
+</dd>
+</dl>
+<h2 id="m">M</h2>
+<dl>
+<dt>Masque de sous-réseau</dt>
+<dd>
+Valeur qui sépare la partie réseau de la partie hôte d’une adresse IP. (S3)
+</dd>
+<dt>MFA</dt>
+<dd>
+Authentification multifacteur : au moins deux facteurs de catégories différentes (savoir, posséder, être). (S11)
+</dd>
+<dt>Moindre privilège</dt>
+<dd>
+Principe selon lequel chacun ne reçoit que les droits strictement nécessaires à sa fonction. (S6, S7, S9)
+</dd>
+</dl>
+<h2 id="n">N</h2>
+<dl>
+<dt>NAT</dt>
+<dd>
+Traduction d’adresses : des machines privées sortent sur Internet avec l’adresse du routeur. (S3)
+</dd>
+<dt>NLA</dt>
+<dd>
+Authentification au niveau du réseau pour le bureau à distance : l’utilisateur s’authentifie avant la création de la session. (S12)
+</dd>
+<dt>NTFS</dt>
+<dd>
+Système de fichiers de Windows, qui gère permissions, quotas, audit et chiffrement. (S5, S7)
+</dd>
+</dl>
+<h2 id="o">O</h2>
+<dl>
+<dt>On-premise</dt>
+<dd>
+Infrastructure possédée et exploitée par l’entreprise, dans ses locaux ou une baie louée. (S1)
+</dd>
+<dt>OPEX</dt>
+<dd>
+Dépense d’exploitation récurrente (abonnement, énergie, maintenance). (S1)
+</dd>
+<dt>OU (unité d’organisation)</dt>
+<dd>
+Conteneur de l’annuaire pour organiser les objets, déléguer l’administration et appliquer des GPO. (S6)
+</dd>
+<dt>OVA</dt>
+<dd>
+Fichier d’export d’une VM au format ouvert OVF, importable dans d’autres hyperviseurs. (S2)
+</dd>
+</dl>
+<h2 id="p">P</h2>
+<dl>
+<dt>PaaS</dt>
+<dd>
+Platform as a Service : plateforme managée pour déployer code et bases de données sans gérer le système. (S1, S4)
+</dd>
+<dt>PAM</dt>
+<dd>
+Chaîne de modules d’authentification de Linux (<code>/etc/pam.d/</code>). (S11)
+</dd>
+<dt>Passerelle par défaut</dt>
+<dd>
+Routeur vers lequel une machine envoie tout ce qui n’est pas sur son réseau local. (S3)
+</dd>
+<dt>Port</dt>
+<dd>
+Numéro qui désigne un service sur une machine (22 SSH, 80 HTTP, 445 SMB, 3389 RDP…). (S3)
+</dd>
+<dt>ProxyJump</dt>
+<dd>
+Option SSH de rebond par un bastion, sans déposer de clé privée sur celui-ci. (S12)
+</dd>
+</dl>
+<h2 id="r">R</h2>
+<dl>
+<dt>RBAC</dt>
+<dd>
+Contrôle d’accès basé sur les rôles : les droits sont donnés à des rôles, les rôles à des personnes. (S6)
+</dd>
+<dt>RDP</dt>
+<dd>
+Protocole de bureau à distance de Windows (port 3389). (S5, S12)
+</dd>
+<dt>Recette</dt>
+<dd>
+Vérification formelle, à partir des exigences, que ce qui a été livré fonctionne comme demandé. (S14)
+</dd>
+<dt>Redirection de ports</dt>
+<dd>
+Règle NAT qui rend joignable depuis l’extérieur un service d’une machine interne. (S3)
+</dd>
+<dt>Réseau NAT</dt>
+<dd>
+Mode réseau VirtualBox où plusieurs VM partagent un routeur NAT : elles se voient et sortent sur Internet. (S2)
+</dd>
+<dt>Revue d’accès</dt>
+<dd>
+Vérification périodique, validée par les responsables, que chacun n’a que les droits nécessaires. (S13)
+</dd>
+<dt>Rôle (Windows Server)</dt>
+<dd>
+Fonction principale rendue par un serveur (AD DS, DNS, serveur de fichiers, IIS…). (S5)
+</dd>
+</dl>
+<h2 id="s">S</h2>
+<dl>
+<dt>SaaS</dt>
+<dd>
+Software as a Service : application finie utilisée en ligne ; le client gère ses données et ses utilisateurs. (S1)
+</dd>
+<dt>Service</dt>
+<dd>
+Programme qui tourne en arrière-plan (service Windows, unité systemd). (S5, S8)
+</dd>
+<dt>setgid (sur un dossier)</dt>
+<dd>
+Bit spécial qui fait hériter aux nouveaux fichiers le groupe du dossier. (S9)
+</dd>
+<dt>SID</dt>
+<dd>
+Identifiant de sécurité unique d’un compte ou d’un groupe Windows. (S6)
+</dd>
+<dt>SLA</dt>
+<dd>
+Engagement contractuel de niveau de service, par exemple 99,9 % de disponibilité. (S4)
+</dd>
+<dt>SMB</dt>
+<dd>
+Protocole de partage de fichiers Windows (port 445). (S7)
+</dd>
+<dt>Snapshot</dt>
+<dd>
+Photographie de l’état d’une VM, permettant d’y revenir ; ce n’est pas une sauvegarde. (S2)
+</dd>
+<dt>SSH</dt>
+<dd>
+Protocole d’administration à distance chiffré (port 22). (S10)
+</dd>
+<dt>SSO</dt>
+<dd>
+Authentification unique : une seule authentification pour accéder à plusieurs applications. (S11)
+</dd>
+<dt>Sticky bit</dt>
+<dd>
+Bit spécial d’un dossier qui empêche de supprimer les fichiers des autres. (S9)
+</dd>
+<dt>sudo</dt>
+<dd>
+Commande qui exécute une commande avec les droits d’un autre utilisateur (root), selon des règles et avec traçabilité. (S9)
+</dd>
+<dt>systemd</dt>
+<dd>
+Gestionnaire de démarrage et de services des distributions Linux actuelles. (S8)
+</dd>
+</dl>
+<h2 id="t">T</h2>
+<dl>
+<dt>TCO</dt>
+<dd>
+Coût total de possession d’une solution sur sa durée de vie. (S1)
+</dd>
+<dt>Tunnel SSH</dt>
+<dd>
+Connexion transportée à l’intérieur d’une session SSH (<code>ssh -L</code>). (S12)
+</dd>
+</dl>
+<h2 id="u">U</h2>
+<dl>
+<dt>UFW</dt>
+<dd>
+Outil simple de gestion du pare-feu sous Debian et Ubuntu. (S4, S12)
+</dd>
+<dt>umask</dt>
+<dd>
+Masque qui retire des droits aux fichiers et dossiers au moment de leur création. (S9)
+</dd>
+<dt>UPN</dt>
+<dd>
+Nom d’utilisateur au format adresse de messagerie : <code>a.martin@hexalog.lan</code>. (S6)
+</dd>
+</dl>
+<h2 id="v">V</h2>
+<dl>
+<dt>VPN</dt>
+<dd>
+Tunnel chiffré à travers un réseau non sûr, entre deux sites ou pour un utilisateur nomade. (S12)
+</dd>
+</dl>
+<h2 id="z">Z</h2>
+<dl>
+<dt>Zero Trust</dt>
+<dd>
+Approche de sécurité qui vérifie chaque accès (identité, appareil, contexte) au lieu de faire confiance au réseau interne. (S12)
+</dd>
+</dl>
+
+</article>
+<nav class="prevnext"><a class="prev" href="memo.html"><span class="dir">‹ Page précédente</span><span class="titre">Aide-mémoire des commandes</span></a><a class="next" href="modeles.html"><span class="dir">Page suivante ›</span><span class="titre">Modèles de livrables</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="assets/app.js"></script>
+</body>
+</html>

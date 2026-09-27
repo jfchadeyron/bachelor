@@ -1,0 +1,20 @@
+{
+  "commentaire": "Date de mise en ligne du cours et du TP de chaque séance (AAAA-MM-JJ). La publication a lieu tôt le matin, heure de Paris.",
+  "seances": [
+    {"numero": 1, "date": "2026-09-29", "titre": "Environnements et premier lab"},
+    {"numero": 2, "date": "2026-10-01", "titre": "VirtualBox : snapshots, clones, réseaux"},
+    {"numero": 3, "date": "2026-10-02", "titre": "Réseau IP, NAT, DNS et DHCP"},
+    {"numero": 4, "date": "2026-10-06", "titre": "Cloud : lire une architecture IaaS/PaaS"},
+    {"numero": 5, "date": "2026-10-07", "titre": "Windows Server : les fondamentaux"},
+    {"numero": 6, "date": "2026-10-08", "titre": "Active Directory : utilisateurs, groupes, OU"},
+    {"numero": 7, "date": "2026-10-09", "titre": "Permissions NTFS et partages"},
+    {"numero": 8, "date": "2026-10-13", "titre": "Linux : distributions et administration"},
+    {"numero": 9, "date": "2026-10-14", "titre": "Linux : comptes, droits, ACL et sudo"},
+    {"numero": 10, "date": "2026-10-15", "titre": "SSH : accès sécurisé par clés"},
+    {"numero": 11, "date": "2026-10-16", "titre": "Authentification : concepts et politiques"},
+    {"numero": 12, "date": "2026-10-21", "titre": "Accès distants : RDP, SSH, bastion, VPN"},
+    {"numero": 13, "date": "2026-10-21", "titre": "Cycle de vie des comptes et audit"},
+    {"numero": 14, "date": "2026-10-23", "titre": "Documenter et valider une infrastructure"},
+    {"numero": 15, "date": "2026-10-23", "titre": "Synthèse et évaluation finale"}
+  ]
+}
