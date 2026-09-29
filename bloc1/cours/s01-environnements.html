@@ -1,0 +1,469 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 1 : Environnements et premier lab | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Ce qu'est une infrastructure informatique, où elle peut être hébergée (sur site, dans le cloud ou les deux), qui gère quoi selon le modèle de service, et pourquoi la virtualisation est l'outil de base">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item active" data-seance="1"><a class="nav-link" href="s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="../tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="../tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="../tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="../tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="../tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="../tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="../tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="../tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="../tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="../tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="../tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="../tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="../tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="../tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module A : Environnements et lab</span><span class="sep">›</span><span>Séance 1</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 1</span>
+  <h1>Environnements d'infrastructure et premier lab</h1>
+  <p class="lead">Ce qu'est une infrastructure informatique, où elle peut être hébergée (sur site, dans le cloud ou les deux), qui gère quoi selon le modèle de service, et pourquoi la virtualisation est l'outil de base de l'administrateur. La séance se termine par l'installation de votre premier serveur virtuel.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>aucun</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp01-environnements.html" data-seance="1">TP 1 : Installer VirtualBox et une première VM Debian</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#quest-ce-quune-infrastructure-informatique">1. Qu’est-ce qu’une infrastructure informatique ?</a></li><li><a href="#où-héberger-linfrastructure-les-modèles-de-déploiement">2. Où héberger l’infrastructure : les modèles de déploiement</a></li><li><a href="#qui-gère-quoi-iaas-paas-saas">3. Qui gère quoi : IaaS, PaaS, SaaS</a></li><li><a href="#la-virtualisation">4. La virtualisation</a></li><li><a href="#le-lab-du-bloc">5. Le lab du bloc</a></li><li><a href="#à-retenir">6. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<p>À la fin de cette séance, vous êtes capable de :</p>
+<ul>
+<li>citer les grandes briques d’une infrastructure d’entreprise et leur rôle ;</li>
+<li>distinguer les modèles <strong>on-premise</strong>, <strong>cloud</strong> et <strong>hybride</strong>, avec leurs avantages et leurs limites ;</li>
+<li>expliquer les modèles de service <strong>IaaS</strong>, <strong>PaaS</strong> et <strong>SaaS</strong> et le principe de <strong>responsabilité partagée</strong> ;</li>
+<li>expliquer ce qu’est un <strong>hyperviseur</strong> et la différence entre type 1 et type 2 ;</li>
+<li>installer VirtualBox et une machine virtuelle Debian (TP).</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 h 30</td>
+<td>Cours : infrastructures, modèles de déploiement, modèles de service, virtualisation</td>
+</tr>
+<tr class="even">
+<td>2 h</td>
+<td><a data-seance="1" href="../tp/tp01-environnements.html">TP 1 : Installer VirtualBox et une première VM Debian</a></td>
+</tr>
+<tr class="odd">
+<td>30 min</td>
+<td>Quiz et point sur le journal de bord</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="quest-ce-quune-infrastructure-informatique">1. Qu’est-ce qu’une infrastructure informatique ?</h2>
+<p>L’<strong>infrastructure</strong> désigne tout ce qui permet aux applications et aux utilisateurs de fonctionner : le matériel, les systèmes, le réseau et les services techniques communs. Les utilisateurs ne la voient pas, mais quand elle tombe, plus rien ne marche.</p>
+<p>On la découpe habituellement en couches :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Couche</th>
+<th>Exemples</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Matériel</td>
+<td>serveurs, baies de stockage, onduleurs, climatisation</td>
+<td>fournir la puissance de calcul, la mémoire et l’espace disque</td>
+</tr>
+<tr class="even">
+<td>Réseau</td>
+<td>switchs, routeurs, pare-feu, bornes Wi-Fi, liens opérateur</td>
+<td>relier les machines entre elles et à Internet</td>
+</tr>
+<tr class="odd">
+<td>Virtualisation</td>
+<td>VMware ESXi, Hyper-V, Proxmox VE</td>
+<td>découper un serveur physique en plusieurs serveurs virtuels</td>
+</tr>
+<tr class="even">
+<td>Systèmes</td>
+<td>Windows Server, Linux</td>
+<td>faire tourner les services et les applications</td>
+</tr>
+<tr class="odd">
+<td>Services d’infrastructure</td>
+<td>annuaire (Active Directory), DNS, DHCP, fichiers, impression, sauvegarde, supervision</td>
+<td>services communs dont tout le monde dépend</td>
+</tr>
+<tr class="even">
+<td>Applications métier</td>
+<td>ERP, logiciel de paie, site web, gestion d’entrepôt</td>
+<td>ce pour quoi l’entreprise paie l’informatique</td>
+</tr>
+<tr class="odd">
+<td>Sécurité (transverse)</td>
+<td>comptes, droits, pare-feu, mises à jour, journaux, sauvegardes</td>
+<td>protéger chaque couche</td>
+</tr>
+</tbody>
+</table></div>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-127427" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 609.234375px;" viewBox="0 0 609.234375 749" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-127427{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-127427 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-127427 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-127427 .error-icon{fill:#f5f6f8;}#mmd0-127427 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-127427 .edge-thickness-normal{stroke-width:1px;}#mmd0-127427 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-127427 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-127427 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-127427 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-127427 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-127427 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-127427 .marker.cross{stroke:#4a5563;}#mmd0-127427 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-127427 p{margin:0;}#mmd0-127427 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-127427 .cluster-label text{fill:#1f3a5f;}#mmd0-127427 .cluster-label span{color:#1f3a5f;}#mmd0-127427 .cluster-label span p{background-color:transparent;}#mmd0-127427 .label text,#mmd0-127427 span{fill:#1d2530;color:#1d2530;}#mmd0-127427 .node rect,#mmd0-127427 .node circle,#mmd0-127427 .node ellipse,#mmd0-127427 .node polygon,#mmd0-127427 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-127427 .rough-node .label text,#mmd0-127427 .node .label text,#mmd0-127427 .image-shape .label,#mmd0-127427 .icon-shape .label{text-anchor:middle;}#mmd0-127427 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-127427 .rough-node .label,#mmd0-127427 .node .label,#mmd0-127427 .image-shape .label,#mmd0-127427 .icon-shape .label{text-align:center;}#mmd0-127427 .node.clickable{cursor:pointer;}#mmd0-127427 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-127427 .arrowheadPath{fill:#000000;}#mmd0-127427 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-127427 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-127427 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-127427 .edgeLabel p{background-color:#ffffff;}#mmd0-127427 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-127427 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-127427 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-127427 .cluster text{fill:#1f3a5f;}#mmd0-127427 .cluster span{color:#1f3a5f;}#mmd0-127427 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-127427 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-127427 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-127427 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-127427 rect.text{fill:none;stroke-width:0;}#mmd0-127427 .icon-shape,#mmd0-127427 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-127427 .icon-shape p,#mmd0-127427 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-127427 .icon-shape .label rect,#mmd0-127427 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-127427 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-127427 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-127427 .node .neo-node{stroke:#1f3a5f;}#mmd0-127427 [data-look="neo"].node rect,#mmd0-127427 [data-look="neo"].cluster rect,#mmd0-127427 [data-look="neo"].node polygon{stroke:url(#mmd0-127427-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-127427 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-127427 [data-look="neo"].node path{stroke:url(#mmd0-127427-gradient);stroke-width:1px;}#mmd0-127427 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-127427 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-127427 [data-look="neo"].node circle{stroke:url(#mmd0-127427-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-127427 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-127427 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-127427-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-127427 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-127427-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-127427 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-127427_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-127427_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-127427_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-127427_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-127427_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-127427_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-127427_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-127427_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-127427_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-127427_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-127427_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-127427_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M131.32,78L131.32,124L134.829,145.054" id="mmd0-127427-L_U_A_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_U_A_0" data-points="W3sieCI6MTMxLjMyMDMxMjUsInkiOjc4fSx7IngiOjEzMS4zMjAzMTI1LCJ5IjoxMjR9LHsieCI6MTM1LjQ4Njk3OTE2NjY2NjY2LCJ5IjoxNDl9XQ==" data-look="classic" marker-end="url(#mmd0-127427_flowchart-v2-pointEnd)"></path><path d="M141.32,219L141.32,244L160.53,265.988" id="mmd0-127427-L_A_S_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A_S_0" data-points="W3sieCI6MTQxLjMyMDMxMjUsInkiOjIxOX0seyJ4IjoxNDEuMzIwMzEyNSwieSI6MjQ0fSx7IngiOjE2My4xNjIwNjc4MTkxNDg5NCwieSI6MjY5fV0=" data-look="classic" marker-end="url(#mmd0-127427_flowchart-v2-pointEnd)"></path><path d="M202.914,360L202.914,385L233.651,407.629" id="mmd0-127427-L_S_O_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_S_O_0" data-points="W3sieCI6MjAyLjkxNDA2MjUsInkiOjM2MH0seyJ4IjoyMDIuOTE0MDYyNSwieSI6Mzg1fSx7IngiOjIzNi44NzIzOTU4MzMzMzMzNCwieSI6NDEwfV0=" data-look="classic" marker-end="url(#mmd0-127427_flowchart-v2-pointEnd)"></path><path d="M284.414,480L284.414,505L284.414,526" id="mmd0-127427-L_O_V_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_O_V_0" data-points="W3sieCI6Mjg0LjQxNDA2MjUsInkiOjQ4MH0seyJ4IjoyODQuNDE0MDYyNSwieSI6NTA1fSx7IngiOjI4NC40MTQwNjI1LCJ5Ijo1MzB9XQ==" data-look="classic" marker-end="url(#mmd0-127427_flowchart-v2-pointEnd)"></path><path d="M284.414,600L284.414,625L305.804,647.124" id="mmd0-127427-L_V_M_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_V_M_0" data-points="W3sieCI6Mjg0LjQxNDA2MjUsInkiOjYwMH0seyJ4IjoyODQuNDE0MDYyNSwieSI6NjI1fSx7IngiOjMwOC41ODQzMzA2NzM3NTg4NywieSI6NjUwfV0=" data-look="classic" marker-end="url(#mmd0-127427_flowchart-v2-pointEnd)"></path><path d="M349.801,99L281.98,124L223.372,149" id="mmd0-127427-L_SEC_A_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_SEC_A_0" data-points="W3sieCI6MzQ5LjgwMTAwMjg4MTIwNTcsInkiOjk5fSx7IngiOjI4MS45ODA0Njg3NSwieSI6MTI0fSx7IngiOjIyMy4zNzIwNzAzMTI1LCJ5IjoxNDl9XQ==" data-look="classic"></path><path d="M396.007,99L353.574,124L353.574,184L353.574,244L300.149,269" id="mmd0-127427-L_SEC_S_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_SEC_S_0" data-points="W3sieCI6Mzk2LjAwNjg5ODI3MTI3NjYsInkiOjk5fSx7IngiOjM1My41NzQyMTg3NSwieSI6MTI0fSx7IngiOjM1My41NzQyMTg3NSwieSI6MTg0fSx7IngiOjM1My41NzQyMTg3NSwieSI6MjQ0fSx7IngiOjMwMC4xNDg2MzE0MjczMDQ5NiwieSI6MjY5fV0=" data-look="classic"></path><path d="M455.06,99L445.074,124L445.074,184L445.074,244L445.074,314.5L445.074,385L378.132,410" id="mmd0-127427-L_SEC_O_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_SEC_O_0" data-points="W3sieCI6NDU1LjA2MDA4OTc2MDYzODMsInkiOjk5fSx7IngiOjQ0NS4wNzQyMTg3NSwieSI6MTI0fSx7IngiOjQ0NS4wNzQyMTg3NSwieSI6MTg0fSx7IngiOjQ0NS4wNzQyMTg3NSwieSI6MjQ0fSx7IngiOjQ0NS4wNzQyMTg3NSwieSI6MzE0LjV9LHsieCI6NDQ1LjA3NDIxODc1LCJ5IjozODV9LHsieCI6Mzc4LjEzMjQ4Njk3OTE2NjcsInkiOjQxMH1d" data-look="classic"></path><path d="M511.958,99L533.234,124L533.234,184L533.234,244L533.234,314.5L533.234,385L533.234,445L533.234,505L533.234,565L533.234,625L469.17,650" id="mmd0-127427-L_SEC_M_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_SEC_M_0" data-points="W3sieCI6NTExLjk1Nzc3OTI1NTMxOTE3LCJ5Ijo5OX0seyJ4Ijo1MzMuMjM0Mzc1LCJ5IjoxMjR9LHsieCI6NTMzLjIzNDM3NSwieSI6MTg0fSx7IngiOjUzMy4yMzQzNzUsInkiOjI0NH0seyJ4Ijo1MzMuMjM0Mzc1LCJ5IjozMTQuNX0seyJ4Ijo1MzMuMjM0Mzc1LCJ5IjozODV9LHsieCI6NTMzLjIzNDM3NSwieSI6NDQ1fSx7IngiOjUzMy4yMzQzNzUsInkiOjUwNX0seyJ4Ijo1MzMuMjM0Mzc1LCJ5Ijo1NjV9LHsieCI6NTMzLjIzNDM3NSwieSI6NjI1fSx7IngiOjQ2OS4xNzA0ODk4MDQ5NjQ1LCJ5Ijo2NTB9XQ==" data-look="classic"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_U_A_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_A_S_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_S_O_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_O_V_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_V_M_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_SEC_A_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_SEC_S_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_SEC_O_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_SEC_M_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-127427-flowchart-U-0" data-look="classic" transform="translate(131.3203125, 53.5)"><rect class="basic label-container" style="" x="-123.3203125" y="-24.5" width="246.640625" height="49"></rect><g class="label" style="" transform="translate(-95.3203125, -10.5)"><rect></rect><foreignObject width="190.640625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Utilisateurs et postes de travail</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-127427-flowchart-A-1" data-look="classic" transform="translate(141.3203125, 184)"><rect class="basic label-container" style="" x="-88.1875" y="-35" width="176.375" height="70"></rect><g class="label" style="" transform="translate(-60.1875, -21)"><rect></rect><foreignObject width="120.375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Applications métier<br>ERP, paie, site web</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-127427-flowchart-S-2" data-look="classic" transform="translate(202.9140625, 314.5)"><rect class="basic label-container" style="" x="-128" y="-45.5" width="256" height="91"></rect><g class="label" style="" transform="translate(-100, -31.5)"><rect></rect><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Services d'infrastructure<br>annuaire, DNS, DHCP, fichiers, sauvegarde</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-127427-flowchart-O-3" data-look="classic" transform="translate(284.4140625, 445)"><rect class="basic label-container" style="" x="-101.3203125" y="-35" width="202.640625" height="70"></rect><g class="label" style="" transform="translate(-73.3203125, -21)"><rect></rect><foreignObject width="146.640625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Systèmes d'exploitation<br>Windows Server, Linux</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-127427-flowchart-V-4" data-look="classic" transform="translate(284.4140625, 565)"><rect class="basic label-container" style="" x="-67.953125" y="-35" width="135.90625" height="70"></rect><g class="label" style="" transform="translate(-39.953125, -21)"><rect></rect><foreignObject width="79.90625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Virtualisation<br>hyperviseurs</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-127427-flowchart-M-5" data-look="classic" transform="translate(352.57421875, 695.5)"><rect class="basic label-container" style="" x="-128" y="-45.5" width="256" height="91"></rect><g class="label" style="" transform="translate(-100, -31.5)"><rect></rect><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Matériel et réseau<br>serveurs, stockage, switchs, pare-feu</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-127427-flowchart-SEC-12" data-look="classic" transform="translate(473.234375, 53.5)"><rect class="basic label-container" style="" x="-128" y="-45.5" width="256" height="91"></rect><g class="label" style="" transform="translate(-100, -31.5)"><rect></rect><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Sécurité et exploitation<br>comptes, droits, journaux, mises à jour</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-127427-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-127427-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-127427-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<p>L’administrateur systèmes et réseaux travaille surtout sur les couches du milieu : systèmes, services d’infrastructure, réseau et sécurité. Son travail se résume en trois verbes : <strong>installer</strong>, <strong>maintenir en condition opérationnelle</strong> (MCO) et <strong>sécuriser</strong>.</p>
+<h3 id="le-fil-rouge-du-bloc-lentreprise-hexalog">Le fil rouge du bloc : l’entreprise Hexalog</h3>
+<p>Tout au long du bloc, vous travaillez pour <strong>Hexalog</strong>, une PME fictive de logistique d’une soixantaine de salariés. Elle compte cinq services : Direction, Ressources humaines, Comptabilité, Exploitation (entrepôt et transport) et Informatique.</p>
+<p>Son informatique a grandi sans plan : un vieux serveur sous le bureau du comptable, des fichiers partagés avec des droits « tout le monde en contrôle total », des mots de passe notés sur des post-it. La direction a embauché deux alternants en administration systèmes (vous) pour reconstruire une infrastructure propre : un annuaire, des serveurs Windows et Linux, des partages avec les bons droits, des accès d’administration sécurisés et tracés.</p>
+<p>Vous allez construire cette infrastructure dans un <strong>lab virtuel</strong> sur votre PC. La description complète est sur la page <a href="../lab.html">Le lab Hexalog</a>.</p>
+<h2 id="où-héberger-linfrastructure-les-modèles-de-déploiement">2. Où héberger l’infrastructure : les modèles de déploiement</h2>
+<h3 id="on-premise-sur-site">On-premise (sur site)</h3>
+<p>L’entreprise <strong>possède</strong> son matériel et l’installe dans ses propres locaux (salle serveur) ou dans une baie louée chez un hébergeur (colocation). Elle achète les serveurs, les licences, et s’occupe de tout : électricité, climatisation, remplacement des disques, mises à jour.</p>
+<ul>
+<li><strong>Avantages</strong> : maîtrise complète, données physiquement dans l’entreprise, pas de dépendance au lien Internet pour les services internes, coût prévisible une fois le matériel acheté.</li>
+<li><strong>Limites</strong> : investissement de départ élevé, matériel à renouveler tous les 5 à 7 ans, compétences nécessaires en interne, capacité fixe (on dimensionne pour le pic), plan de reprise en cas de sinistre à organiser soi-même.</li>
+</ul>
+<h3 id="cloud-public">Cloud public</h3>
+<p>L’entreprise <strong>loue</strong> des ressources informatiques à un fournisseur (AWS, Microsoft Azure, Google Cloud, OVHcloud, Scaleway, Outscale…) et y accède par Internet. Le NIST, organisme de normalisation américain, définit le cloud par cinq caractéristiques :</p>
+<ol type="1">
+<li><strong>libre-service à la demande</strong> : on crée une machine en quelques clics, sans appeler personne ;</li>
+<li><strong>accès par le réseau</strong> depuis n’importe où ;</li>
+<li><strong>mutualisation</strong> des ressources entre de nombreux clients ;</li>
+<li><strong>élasticité</strong> : on augmente ou on réduit la capacité rapidement ;</li>
+<li><strong>service mesuré</strong> : on paie ce qu’on consomme.</li>
+</ol>
+<ul>
+<li><strong>Avantages</strong> : pas d’investissement de départ, démarrage rapide, capacité quasi illimitée, services managés (bases de données, sauvegarde), présence dans plusieurs régions du monde.</li>
+<li><strong>Limites</strong> : coûts variables qui peuvent déraper (une VM oubliée est facturée tous les mois), dépendance au lien Internet, dépendance au fournisseur (<strong>lock-in</strong>), questions de <strong>souveraineté</strong> et de conformité (RGPD, localisation des données, lois extraterritoriales comme le Cloud Act américain).</li>
+</ul>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Souveraineté</strong></p>
+<p>En France, l’ANSSI délivre la qualification <strong>SecNumCloud</strong> aux offres cloud qui respectent un niveau de sécurité élevé et qui sont protégées des lois extraterritoriales. Elle est exigée pour certaines données sensibles du secteur public.</p>
+</div></div>
+<h3 id="cloud-privé">Cloud privé</h3>
+<p>Une infrastructure <strong>dédiée à une seule organisation</strong>, mais gérée « comme un cloud » : virtualisée, automatisée, en libre-service pour les équipes internes. Elle peut être installée sur site ou chez un hébergeur. Exemple : un cluster Proxmox ou VMware avec un portail de création de VM pour les développeurs.</p>
+<h3 id="hybride">Hybride</h3>
+<p>L’entreprise <strong>combine</strong> du on-premise et du cloud, reliés entre eux (VPN ou lien dédié) et gérés de manière cohérente. C’est aujourd’hui le cas le plus fréquent dans les PME.</p>
+<p>Exemples typiques :</p>
+<ul>
+<li>l’annuaire Active Directory et les fichiers restent sur site, la messagerie est dans Microsoft 365 ;</li>
+<li>l’application métier tourne sur site, les sauvegardes sont copiées dans le cloud (hors site) ;</li>
+<li>le site web public est dans le cloud, la base clients reste en interne.</li>
+</ul>
+<p>On parle de <strong>multicloud</strong> quand on utilise plusieurs fournisseurs cloud en parallèle.</p>
+<h3 id="comparatif">Comparatif</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Critère</th>
+<th>On-premise</th>
+<th>Cloud public</th>
+<th>Hybride</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Investissement de départ</td>
+<td>élevé</td>
+<td>faible</td>
+<td>moyen</td>
+</tr>
+<tr class="even">
+<td>Coût récurrent</td>
+<td>faible à moyen</td>
+<td>variable, à l’usage</td>
+<td>mixte</td>
+</tr>
+<tr class="odd">
+<td>Mise en service</td>
+<td>semaines</td>
+<td>minutes</td>
+<td>selon la partie</td>
+</tr>
+<tr class="even">
+<td>Évolutivité</td>
+<td>limitée par le matériel</td>
+<td>très forte</td>
+<td>forte sur la partie cloud</td>
+</tr>
+<tr class="odd">
+<td>Maîtrise des données</td>
+<td>totale</td>
+<td>partagée avec le fournisseur</td>
+<td>à définir par type de donnée</td>
+</tr>
+<tr class="even">
+<td>Compétences internes</td>
+<td>matériel, systèmes, réseau</td>
+<td>cloud, sécurité, maîtrise des coûts</td>
+<td>les deux</td>
+</tr>
+<tr class="odd">
+<td>Dépendance à Internet</td>
+<td>faible</td>
+<td>forte</td>
+<td>moyenne</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="capex-opex-et-tco">CAPEX, OPEX et TCO</h3>
+<ul>
+<li><strong>CAPEX</strong> (dépenses d’investissement) : achat d’un bien durable, amorti sur plusieurs années. Exemple : un serveur à 9 000 €.</li>
+<li><strong>OPEX</strong> (dépenses d’exploitation) : dépenses récurrentes. Exemple : un abonnement cloud à 300 € par mois, l’électricité, un contrat de maintenance.</li>
+<li><strong>TCO</strong> (coût total de possession) : tout ce que coûte une solution sur sa durée de vie, pas seulement le prix d’achat.</li>
+</ul>
+<div class="callout analogy"><div class="callout-body"><p class="callout-titre"><strong>Analogie : acheter ou louer une voiture</strong></p>
+<p>Acheter une voiture, c’est du CAPEX : grosse dépense au début, puis vous payez l’assurance, l’entretien, les pneus. La louer en longue durée, c’est de l’OPEX : un loyer mensuel, entretien compris. Le TCO permet de comparer honnêtement les deux sur cinq ans, en comptant tout.</p>
+</div></div>
+<p>Exemple simplifié sur 5 ans pour un serveur de fichiers :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Poste de coût</th>
+<th>On-premise</th>
+<th>Cloud IaaS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Achat serveur + disques</td>
+<td>9 000 €</td>
+<td>0 €</td>
+</tr>
+<tr class="even">
+<td>Licences système</td>
+<td>1 200 €</td>
+<td>incluses dans le prix horaire</td>
+</tr>
+<tr class="odd">
+<td>Électricité et climatisation</td>
+<td>60 € × 60 mois = 3 600 €</td>
+<td>0 €</td>
+</tr>
+<tr class="even">
+<td>Location VM + stockage</td>
+<td>0 €</td>
+<td>250 € × 60 mois = 15 000 €</td>
+</tr>
+<tr class="odd">
+<td>Temps d’administration</td>
+<td>2 j/an × 5 × 400 € = 4 000 €</td>
+<td>1 j/an × 5 × 400 € = 2 000 €</td>
+</tr>
+<tr class="even">
+<td><strong>TCO sur 5 ans</strong></td>
+<td><strong>17 800 €</strong></td>
+<td><strong>17 000 €</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Les chiffres sont des hypothèses de cours : ce qui compte, c’est la méthode. On ajoute souvent des coûts moins visibles : sauvegarde, sortie de données (le cloud facture souvent le trafic sortant), formation, risque d’indisponibilité.</p>
+<h2 id="qui-gère-quoi-iaas-paas-saas">3. Qui gère quoi : IaaS, PaaS, SaaS</h2>
+<p>Quand on passe au cloud, on ne délègue pas tout. Le <strong>modèle de service</strong> fixe la frontière entre ce que gère le fournisseur et ce que gère le client.</p>
+<ul>
+<li><strong>IaaS</strong> (Infrastructure as a Service) : on loue des <strong>machines virtuelles</strong>, du stockage et du réseau. Le fournisseur gère le matériel et la virtualisation ; le client gère le système d’exploitation, les mises à jour, les applications et les données. Exemples : Amazon EC2, Azure Virtual Machines, OVHcloud Public Cloud.</li>
+<li><strong>PaaS</strong> (Platform as a Service) : on loue une <strong>plateforme prête à l’emploi</strong> pour déployer son code ou sa base de données. Le client ne voit plus le système d’exploitation. Exemples : Azure App Service, Google App Engine, bases de données managées (Amazon RDS, Azure SQL).</li>
+<li><strong>SaaS</strong> (Software as a Service) : on utilise une <strong>application finie</strong> via un navigateur. Le client ne gère que ses données, ses utilisateurs et quelques paramètres. Exemples : Microsoft 365, Google Workspace, Salesforce, un logiciel de paie en ligne.</li>
+</ul>
+<div class="callout analogy"><div class="callout-body"><p class="callout-titre"><strong>Analogie : la pizza</strong></p>
+<p>Faire la pizza chez soi de A à Z, c’est l’on-premise. Acheter une pâte et des ingrédients prêts, puis cuire dans son four, c’est l’IaaS. Se faire livrer une pizza et mettre la table, c’est le PaaS. Aller au restaurant, c’est le SaaS : vous choisissez juste ce que vous mangez.</p>
+</div></div>
+<h3 id="la-matrice-de-responsabilité">La matrice de responsabilité</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Couche</th>
+<th>On-premise</th>
+<th>IaaS</th>
+<th>PaaS</th>
+<th>SaaS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Données et comptes utilisateurs</td>
+<td>Client</td>
+<td>Client</td>
+<td>Client</td>
+<td>Client</td>
+</tr>
+<tr class="even">
+<td>Application</td>
+<td>Client</td>
+<td>Client</td>
+<td>Client</td>
+<td>Fournisseur</td>
+</tr>
+<tr class="odd">
+<td>Environnement d’exécution, base de données</td>
+<td>Client</td>
+<td>Client</td>
+<td>Fournisseur</td>
+<td>Fournisseur</td>
+</tr>
+<tr class="even">
+<td>Système d’exploitation</td>
+<td>Client</td>
+<td>Client</td>
+<td>Fournisseur</td>
+<td>Fournisseur</td>
+</tr>
+<tr class="odd">
+<td>Virtualisation</td>
+<td>Client</td>
+<td>Fournisseur</td>
+<td>Fournisseur</td>
+<td>Fournisseur</td>
+</tr>
+<tr class="even">
+<td>Serveurs, stockage, réseau physique</td>
+<td>Client</td>
+<td>Fournisseur</td>
+<td>Fournisseur</td>
+<td>Fournisseur</td>
+</tr>
+<tr class="odd">
+<td>Datacenter (bâtiment, énergie)</td>
+<td>Client</td>
+<td>Fournisseur</td>
+<td>Fournisseur</td>
+<td>Fournisseur</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>Responsabilité partagée</strong></p>
+<p>Quel que soit le modèle, <strong>les données, les comptes et les droits d’accès restent la responsabilité du client</strong>. Si un salarié partage un dossier Microsoft 365 publiquement, ce n’est pas la faute de Microsoft. Si une VM IaaS n’a pas ses mises à jour, ce n’est pas la faute d’AWS.</p>
+</div></div>
+<p>On croise aussi d’autres sigles : <strong>CaaS</strong> (conteneurs), <strong>FaaS</strong> ou <em>serverless</em> (on dépose une fonction qui s’exécute à la demande), <strong>DaaS</strong> (poste de travail virtuel). Ils seront vus dans d’autres blocs.</p>
+<h2 id="la-virtualisation">4. La virtualisation</h2>
+<h3 id="définition">Définition</h3>
+<p><strong>Virtualiser</strong>, c’est faire croire à un système d’exploitation qu’il dispose d’une machine complète (processeur, mémoire, disque, carte réseau) alors qu’il partage en réalité une machine physique avec d’autres. Chaque système virtualisé est une <strong>machine virtuelle</strong> (VM). Le logiciel qui crée et fait tourner les VM s’appelle l’<strong>hyperviseur</strong>.</p>
+<p>Vocabulaire :</p>
+<ul>
+<li><strong>hôte</strong> (host) : la machine physique et, pour VirtualBox, le système installé dessus (votre Windows ou votre Linux) ;</li>
+<li><strong>invité</strong> (guest) : le système installé dans la VM ;</li>
+<li><strong>vCPU</strong>, <strong>RAM</strong>, <strong>disque virtuel</strong>, <strong>carte réseau virtuelle</strong> : les ressources attribuées à la VM.</li>
+</ul>
+<h3 id="hyperviseurs-de-type-1-et-de-type-2">Hyperviseurs de type 1 et de type 2</h3>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd1-464631" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 342px;" viewBox="0 0 342 1060" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd1-464631{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd1-464631 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd1-464631 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd1-464631 .error-icon{fill:#f5f6f8;}#mmd1-464631 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd1-464631 .edge-thickness-normal{stroke-width:1px;}#mmd1-464631 .edge-thickness-thick{stroke-width:3.5px;}#mmd1-464631 .edge-pattern-solid{stroke-dasharray:0;}#mmd1-464631 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd1-464631 .edge-pattern-dashed{stroke-dasharray:3;}#mmd1-464631 .edge-pattern-dotted{stroke-dasharray:2;}#mmd1-464631 .marker{fill:#4a5563;stroke:#4a5563;}#mmd1-464631 .marker.cross{stroke:#4a5563;}#mmd1-464631 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd1-464631 p{margin:0;}#mmd1-464631 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd1-464631 .cluster-label text{fill:#1f3a5f;}#mmd1-464631 .cluster-label span{color:#1f3a5f;}#mmd1-464631 .cluster-label span p{background-color:transparent;}#mmd1-464631 .label text,#mmd1-464631 span{fill:#1d2530;color:#1d2530;}#mmd1-464631 .node rect,#mmd1-464631 .node circle,#mmd1-464631 .node ellipse,#mmd1-464631 .node polygon,#mmd1-464631 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd1-464631 .rough-node .label text,#mmd1-464631 .node .label text,#mmd1-464631 .image-shape .label,#mmd1-464631 .icon-shape .label{text-anchor:middle;}#mmd1-464631 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd1-464631 .rough-node .label,#mmd1-464631 .node .label,#mmd1-464631 .image-shape .label,#mmd1-464631 .icon-shape .label{text-align:center;}#mmd1-464631 .node.clickable{cursor:pointer;}#mmd1-464631 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd1-464631 .arrowheadPath{fill:#000000;}#mmd1-464631 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd1-464631 .flowchart-link{stroke:#4a5563;fill:none;}#mmd1-464631 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd1-464631 .edgeLabel p{background-color:#ffffff;}#mmd1-464631 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd1-464631 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd1-464631 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd1-464631 .cluster text{fill:#1f3a5f;}#mmd1-464631 .cluster span{color:#1f3a5f;}#mmd1-464631 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd1-464631 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd1-464631 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd1-464631 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd1-464631 rect.text{fill:none;stroke-width:0;}#mmd1-464631 .icon-shape,#mmd1-464631 .image-shape{background-color:#ffffff;text-align:center;}#mmd1-464631 .icon-shape p,#mmd1-464631 .image-shape p{background-color:#ffffff;padding:2px;}#mmd1-464631 .icon-shape .label rect,#mmd1-464631 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd1-464631 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd1-464631 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd1-464631 .node .neo-node{stroke:#1f3a5f;}#mmd1-464631 [data-look="neo"].node rect,#mmd1-464631 [data-look="neo"].cluster rect,#mmd1-464631 [data-look="neo"].node polygon{stroke:url(#mmd1-464631-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-464631 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd1-464631 [data-look="neo"].node path{stroke:url(#mmd1-464631-gradient);stroke-width:1px;}#mmd1-464631 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-464631 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd1-464631 [data-look="neo"].node circle{stroke:url(#mmd1-464631-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-464631 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd1-464631 [data-look="neo"].icon-shape .icon{fill:url(#mmd1-464631-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-464631 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd1-464631-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-464631 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd1-464631_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-464631_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-464631_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-464631_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd1-464631_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-464631_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-464631_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-464631_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-464631_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-464631_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-464631_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd1-464631_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g class="root" transform="translate(0, 0)"><g class="clusters"><g class="cluster " id="mmd1-464631-T1" data-look="classic"><rect style="" x="8" y="8" width="326" height="414"></rect><g class="cluster-label " transform="translate(110.6875, 8)"><foreignObject width="120.625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Type 1 : bare-metal</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M171,115.5L171,153L171,186.5" id="mmd1-464631-L_v1_h1_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_v1_h1_0" data-points="W3sieCI6MTcxLCJ5IjoxMTUuNX0seyJ4IjoxNzEsInkiOjE1M30seyJ4IjoxNzEsInkiOjE5MC41fV0=" data-look="classic" marker-end="url(#mmd1-464631_flowchart-v2-pointEnd)"></path><path d="M171,260.5L171,298L171,331.5" id="mmd1-464631-L_h1_m1_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_h1_m1_0" data-points="W3sieCI6MTcxLCJ5IjoyNjAuNX0seyJ4IjoxNzEsInkiOjI5OH0seyJ4IjoxNzEsInkiOjMzNS41fV0=" data-look="classic" marker-end="url(#mmd1-464631_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_v1_h1_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_h1_m1_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd1-464631-flowchart-v1-8" data-look="classic" transform="translate(171, 80.5)"><rect class="basic label-container" style="" x="-128" y="-35" width="256" height="70"></rect><g class="label" style="" transform="translate(-100, -21)"><rect></rect><foreignObject width="200" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>VM Windows, VM Linux, VM Linux</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-464631-flowchart-h1-9" data-look="classic" transform="translate(171, 225.5)"><rect class="basic label-container" style="" x="-115.2734375" y="-35" width="230.546875" height="70"></rect><g class="label" style="" transform="translate(-87.2734375, -21)"><rect></rect><foreignObject width="174.546875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Hyperviseur<br>ESXi, Hyper-V, Proxmox VE</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-464631-flowchart-m1-10" data-look="classic" transform="translate(171, 360)"><rect class="basic label-container" style="" x="-82.4765625" y="-24.5" width="164.953125" height="49"></rect><g class="label" style="" transform="translate(-54.4765625, -10.5)"><rect></rect><foreignObject width="108.953125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Serveur physique</p></span></div></foreignObject></g></g></g></g><g class="root" transform="translate(0, 464)"><g class="clusters"><g class="cluster " id="mmd1-464631-T2" data-look="classic"><rect style="" x="8" y="8" width="326" height="580"></rect><g class="cluster-label " transform="translate(118.4609375, 8)"><foreignObject width="105.078125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Type 2 : hébergé</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M171,115.5L171,153L171,186.5" id="mmd1-464631-L_v2_h2_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_v2_h2_0" data-points="W3sieCI6MTcxLCJ5IjoxMTUuNX0seyJ4IjoxNzEsInkiOjE1M30seyJ4IjoxNzEsInkiOjE5MC41fV0=" data-look="classic" marker-end="url(#mmd1-464631_flowchart-v2-pointEnd)"></path><path d="M171,281.5L171,319L171,352.5" id="mmd1-464631-L_h2_o2_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_h2_o2_0" data-points="W3sieCI6MTcxLCJ5IjoyODEuNX0seyJ4IjoxNzEsInkiOjMxOX0seyJ4IjoxNzEsInkiOjM1Ni41fV0=" data-look="classic" marker-end="url(#mmd1-464631_flowchart-v2-pointEnd)"></path><path d="M171,426.5L171,464L171,497.5" id="mmd1-464631-L_o2_m2_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_o2_m2_0" data-points="W3sieCI6MTcxLCJ5Ijo0MjYuNX0seyJ4IjoxNzEsInkiOjQ2NH0seyJ4IjoxNzEsInkiOjUwMS41fV0=" data-look="classic" marker-end="url(#mmd1-464631_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_v2_h2_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_h2_o2_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_o2_m2_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd1-464631-flowchart-v2-0" data-look="classic" transform="translate(171, 80.5)"><rect class="basic label-container" style="" x="-128" y="-35" width="256" height="70"></rect><g class="label" style="" transform="translate(-100, -21)"><rect></rect><foreignObject width="200" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>VM Debian, VM Windows Server</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-464631-flowchart-h2-1" data-look="classic" transform="translate(171, 236)"><rect class="basic label-container" style="" x="-128" y="-45.5" width="256" height="91"></rect><g class="label" style="" transform="translate(-100, -31.5)"><rect></rect><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Hyperviseur<br>VirtualBox, VMware Workstation</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-464631-flowchart-o2-2" data-look="classic" transform="translate(171, 391.5)"><rect class="basic label-container" style="" x="-104.25" y="-35" width="208.5" height="70"></rect><g class="label" style="" transform="translate(-76.25, -21)"><rect></rect><foreignObject width="152.5" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Système hôte<br>Windows, Linux, macOS</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-464631-flowchart-m2-3" data-look="classic" transform="translate(171, 526)"><rect class="basic label-container" style="" x="-74.703125" y="-24.5" width="149.40625" height="49"></rect><g class="label" style="" transform="translate(-46.703125, -10.5)"><rect></rect><foreignObject width="93.40625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>PC ou portable</p></span></div></foreignObject></g></g></g></g></g></g></g><defs><filter id="mmd1-464631-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd1-464631-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd1-464631-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th></th>
+<th>Type 1 (bare-metal)</th>
+<th>Type 2 (hébergé)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Installation</td>
+<td>directement sur le matériel</td>
+<td>comme un logiciel, sur un système existant</td>
+</tr>
+<tr class="even">
+<td>Exemples</td>
+<td>VMware ESXi, Microsoft Hyper-V, Proxmox VE (KVM), Xen</td>
+<td>Oracle VirtualBox, VMware Workstation, Parallels</td>
+</tr>
+<tr class="odd">
+<td>Performances</td>
+<td>proches du matériel</td>
+<td>un peu moindres (le système hôte consomme aussi)</td>
+</tr>
+<tr class="even">
+<td>Usage</td>
+<td>production en entreprise, datacenters, cloud</td>
+<td>poste de l’administrateur, formation, tests</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="pourquoi-virtualiser">Pourquoi virtualiser</h3>
+<ul>
+<li><strong>Consolidation</strong> : un serveur physique récent peut porter 10 à 30 serveurs virtuels, d’où moins de matériel, d’électricité et de place.</li>
+<li><strong>Isolation</strong> : une VM qui plante n’emporte pas les autres.</li>
+<li><strong>Souplesse</strong> : on crée une VM en quelques minutes, on la déplace d’un hôte à un autre.</li>
+<li><strong>Snapshots</strong> : on photographie l’état d’une VM avant une opération risquée et on revient en arrière si besoin.</li>
+<li><strong>Laboratoire</strong> : on reproduit une infrastructure complète sur un seul PC, sans risque pour la production.</li>
+</ul>
+<h3 id="une-vm-ce-sont-des-fichiers">Une VM, ce sont des fichiers</h3>
+<p>Pour VirtualBox, une VM est un dossier contenant :</p>
+<ul>
+<li>un fichier <strong><code>.vbox</code></strong> : la configuration (XML) : nombre de vCPU, RAM, cartes réseau, disques ;</li>
+<li>un ou plusieurs fichiers <strong><code>.vdi</code></strong> : le disque virtuel ;</li>
+<li>un dossier <strong><code>Snapshots</code></strong> et un dossier <strong><code>Logs</code></strong>.</li>
+</ul>
+<p>Un disque <strong>dynamique</strong> grossit au fur et à mesure qu’on écrit dedans (un disque de 20 Go peut n’occuper que 2 Go au départ). Un disque <strong>fixe</strong> occupe tout son espace dès la création, avec des performances un peu meilleures.</p>
+<h3 id="ce-quil-faut-sur-le-pc-hôte">Ce qu’il faut sur le PC hôte</h3>
+<ul>
+<li>Un processeur 64 bits avec la <strong>virtualisation matérielle</strong> activée dans le BIOS/UEFI : <strong>Intel VT-x</strong> ou <strong>AMD-V</strong> (souvent appelée « SVM » chez AMD).</li>
+<li>De la mémoire : la RAM des VM allumées s’ajoute à celle du système hôte. Pour ce bloc, 16 Go sont confortables, 8 Go sont un minimum.</li>
+<li>De l’espace disque : prévoyez 80 à 100 Go libres.</li>
+</ul>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>Windows et Hyper-V</strong></p>
+<p>Sur un hôte Windows, si Hyper-V, la « plateforme de machine virtuelle », WSL 2 ou l’intégrité de la mémoire (isolation du noyau) sont actifs, VirtualBox doit passer par l’hyperviseur de Microsoft. Les VM fonctionnent, mais lentement : une petite tortue verte apparaît en bas de la fenêtre de la VM. Voir le dépannage du TP.</p>
+</div></div>
+<div class="callout tip"><div class="callout-body"><p class="callout-titre"><strong>Et les conteneurs ?</strong></p>
+<p>Docker et les conteneurs isolent des applications en partageant le noyau de l’hôte, sans système complet par conteneur. C’est un autre outil, complémentaire des VM, étudié dans un autre bloc.</p>
+</div></div>
+<h2 id="le-lab-du-bloc">5. Le lab du bloc</h2>
+<p>Vous allez construire progressivement l’infrastructure d’Hexalog dans VirtualBox :</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd2-989741" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 662.953125px;" viewBox="0 0 662.953125 684" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd2-989741{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd2-989741 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd2-989741 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd2-989741 .error-icon{fill:#f5f6f8;}#mmd2-989741 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd2-989741 .edge-thickness-normal{stroke-width:1px;}#mmd2-989741 .edge-thickness-thick{stroke-width:3.5px;}#mmd2-989741 .edge-pattern-solid{stroke-dasharray:0;}#mmd2-989741 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd2-989741 .edge-pattern-dashed{stroke-dasharray:3;}#mmd2-989741 .edge-pattern-dotted{stroke-dasharray:2;}#mmd2-989741 .marker{fill:#4a5563;stroke:#4a5563;}#mmd2-989741 .marker.cross{stroke:#4a5563;}#mmd2-989741 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd2-989741 p{margin:0;}#mmd2-989741 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd2-989741 .cluster-label text{fill:#1f3a5f;}#mmd2-989741 .cluster-label span{color:#1f3a5f;}#mmd2-989741 .cluster-label span p{background-color:transparent;}#mmd2-989741 .label text,#mmd2-989741 span{fill:#1d2530;color:#1d2530;}#mmd2-989741 .node rect,#mmd2-989741 .node circle,#mmd2-989741 .node ellipse,#mmd2-989741 .node polygon,#mmd2-989741 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd2-989741 .rough-node .label text,#mmd2-989741 .node .label text,#mmd2-989741 .image-shape .label,#mmd2-989741 .icon-shape .label{text-anchor:middle;}#mmd2-989741 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd2-989741 .rough-node .label,#mmd2-989741 .node .label,#mmd2-989741 .image-shape .label,#mmd2-989741 .icon-shape .label{text-align:center;}#mmd2-989741 .node.clickable{cursor:pointer;}#mmd2-989741 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd2-989741 .arrowheadPath{fill:#000000;}#mmd2-989741 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd2-989741 .flowchart-link{stroke:#4a5563;fill:none;}#mmd2-989741 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd2-989741 .edgeLabel p{background-color:#ffffff;}#mmd2-989741 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd2-989741 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd2-989741 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd2-989741 .cluster text{fill:#1f3a5f;}#mmd2-989741 .cluster span{color:#1f3a5f;}#mmd2-989741 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd2-989741 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd2-989741 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd2-989741 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd2-989741 rect.text{fill:none;stroke-width:0;}#mmd2-989741 .icon-shape,#mmd2-989741 .image-shape{background-color:#ffffff;text-align:center;}#mmd2-989741 .icon-shape p,#mmd2-989741 .image-shape p{background-color:#ffffff;padding:2px;}#mmd2-989741 .icon-shape .label rect,#mmd2-989741 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd2-989741 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd2-989741 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd2-989741 .node .neo-node{stroke:#1f3a5f;}#mmd2-989741 [data-look="neo"].node rect,#mmd2-989741 [data-look="neo"].cluster rect,#mmd2-989741 [data-look="neo"].node polygon{stroke:url(#mmd2-989741-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd2-989741 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd2-989741 [data-look="neo"].node path{stroke:url(#mmd2-989741-gradient);stroke-width:1px;}#mmd2-989741 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd2-989741 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd2-989741 [data-look="neo"].node circle{stroke:url(#mmd2-989741-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd2-989741 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd2-989741 [data-look="neo"].icon-shape .icon{fill:url(#mmd2-989741-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd2-989741 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd2-989741-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd2-989741 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd2-989741_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd2-989741_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd2-989741_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd2-989741_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd2-989741_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd2-989741_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd2-989741_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd2-989741_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd2-989741_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd2-989741_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd2-989741_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd2-989741_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd2-989741-NAT" data-look="classic"><rect style="" x="291.8046875" y="8" width="288.40625" height="668"></rect><g class="cluster-label " transform="translate(295.8046875, 8)"><foreignObject width="280.40625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Réseau NAT LAB-HEXALOG (10.10.10.0/24)</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M158.703,423L243.625,423L328.547,423L364.711,423" id="mmd2-989741-L_PC_B_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_B_0" data-points="W3sieCI6MTU4LjcwMzEyNSwieSI6NDIzfSx7IngiOjI0My42MjUsInkiOjQyM30seyJ4IjozMjguNTQ2ODc1LCJ5Ijo0MjN9LHsieCI6MzY4LjcxMDkzNzUsInkiOjQyM31d" data-look="classic" marker-end="url(#mmd2-989741_flowchart-v2-pointEnd)"></path><path d="M580.211,99L589.469,99" id="mmd2-989741-L_NAT_I_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_NAT_I_0" data-points="W3sieCI6NTgwLjIxMDkzNzUsInkiOjE1LjkxNTM3NjIyNjgyNjU5NX0seyJ4Ijo1NDMuNDY4NzUsInkiOjk5fSx7IngiOjU2OC40Njg3NSwieSI6OTl9LHsieCI6NTkzLjQ2ODc1LCJ5Ijo5OX1d" data-look="classic" marker-end="url(#mmd2-989741_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(243.625, 423)"><g class="label" data-id="L_PC_B_0" transform="translate(-59.921875, -10.5)"><foreignObject width="119.84375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>redirection de ports</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_NAT_I_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd2-989741-flowchart-PC-0" data-look="classic" transform="translate(83.3515625, 423)"><rect class="basic label-container" style="" x="-75.3515625" y="-35" width="150.703125" height="70"></rect><g class="label" style="" transform="translate(-47.3515625, -21)"><rect></rect><foreignObject width="94.703125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Votre PC<br>hôte VirtualBox</p></span></div></foreignObject></g></g><g class="node default  " id="mmd2-989741-flowchart-DC-1" data-look="classic" transform="translate(436.0078125, 99)"><rect class="basic label-container" style="" x="-82.4609375" y="-56" width="164.921875" height="112"></rect><g class="label" style="" transform="translate(-54.4609375, -42)"><rect></rect><foreignObject width="108.921875" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>SRV-WIN-01<br>Windows Server<br>AD, DNS, fichiers<br>10.10.10.10</p></span></div></foreignObject></g></g><g class="node default  " id="mmd2-989741-flowchart-L1-2" data-look="classic" transform="translate(436.0078125, 261)"><rect class="basic label-container" style="" x="-67.953125" y="-56" width="135.90625" height="112"></rect><g class="label" style="" transform="translate(-39.953125, -42)"><rect></rect><foreignObject width="79.90625" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>SRV-LNX-01<br>Debian<br>web, SSH<br>10.10.10.20</p></span></div></foreignObject></g></g><g class="node default  " id="mmd2-989741-flowchart-B-3" data-look="classic" transform="translate(436.0078125, 423)"><rect class="basic label-container" style="" x="-67.296875" y="-56" width="134.59375" height="112"></rect><g class="label" style="" transform="translate(-39.296875, -42)"><rect></rect><foreignObject width="78.59375" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>BST-LNX-01<br>Debian<br>bastion<br>10.10.10.30</p></span></div></foreignObject></g></g><g class="node default  " id="mmd2-989741-flowchart-C-4" data-look="classic" transform="translate(436.0078125, 585)"><rect class="basic label-container" style="" x="-68.875" y="-56" width="137.75" height="112"></rect><g class="label" style="" transform="translate(-40.875, -42)"><rect></rect><foreignObject width="81.75" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>CLI-LNX-01<br>Debian<br>poste de test<br>10.10.10.101</p></span></div></foreignObject></g></g><g class="node default  " id="mmd2-989741-flowchart-I-5" data-look="classic" transform="translate(624.2109375, 99)"><circle class="basic label-container" style="" r="30.7421875" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-23.7421875, -10.5)"><rect></rect><foreignObject width="47.484375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Internet</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd2-989741-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd2-989741-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd2-989741-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<p>Chaque séance ajoute une brique. Aujourd’hui : le <strong>modèle Debian</strong> (TPL-DEB13) qui servira à créer tous les serveurs Linux.</p>
+<p>Tenez un <strong>journal de bord</strong> dès cette séance (modèle sur la page <a href="../modeles.html">Modèles de livrables</a>) : ce que vous avez fait, les commandes, les problèmes rencontrés et comment vous les avez résolus. C’est une pratique professionnelle et c’est évalué.</p>
+<h2 id="à-retenir">6. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Une infrastructure, ce sont des couches : matériel, réseau, virtualisation, systèmes, services, applications, avec la sécurité partout.</li>
+<li>On-premise : on possède et on gère tout. Cloud public : on loue à la demande. Hybride : on combine les deux.</li>
+<li>CAPEX = investissement, OPEX = dépense récurrente, TCO = coût complet sur la durée de vie.</li>
+<li>IaaS : je gère à partir du système. PaaS : je gère mon code et mes données. SaaS : je gère mes données et mes utilisateurs.</li>
+<li>Les données et les accès restent toujours sous la responsabilité du client.</li>
+<li>Hyperviseur de type 1 : sur le matériel (production). Type 2 : sur un système hôte (poste, lab).</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Une PME achète deux serveurs et une baie de stockage. Est-ce du CAPEX ou de l’OPEX ?</li>
+<li>Citez les cinq caractéristiques du cloud selon le NIST.</li>
+<li>Hexalog utilise Microsoft 365 pour la messagerie et garde son annuaire sur site. Quel modèle de déploiement ?</li>
+<li>Dans une VM IaaS, qui doit installer les mises à jour de sécurité du système d’exploitation ?</li>
+<li>Un logiciel de paie utilisé dans un navigateur, sans rien installer : IaaS, PaaS ou SaaS ?</li>
+<li>Qui est responsable d’un partage de fichier rendu public par erreur dans un service SaaS ?</li>
+<li>VirtualBox est-il un hyperviseur de type 1 ou de type 2 ? Et Proxmox VE ?</li>
+<li>Que contient le fichier <code>.vbox</code> d’une VM ?</li>
+<li>Un disque dynamique de 20 Go occupe 3 Go sur le PC. Pourquoi ?</li>
+<li>Quelle fonction du processeur doit être activée dans le BIOS pour utiliser VirtualBox correctement ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>CAPEX : achat de matériel durable, amorti sur plusieurs années.</li>
+<li>Libre-service à la demande, accès par le réseau, mutualisation des ressources, élasticité, service mesuré (paiement à l’usage).</li>
+<li>Hybride.</li>
+<li>Le client. En IaaS, le fournisseur s’arrête à la virtualisation.</li>
+<li>SaaS.</li>
+<li>Le client : données et droits d’accès restent de sa responsabilité (responsabilité partagée).</li>
+<li>VirtualBox : type 2. Proxmox VE : type 1.</li>
+<li>La configuration de la VM au format XML : vCPU, RAM, disques, cartes réseau, etc.</li>
+<li>Un disque dynamique ne grossit qu’au fur et à mesure des écritures ; le système installé n’occupe que 3 Go.</li>
+<li>La virtualisation matérielle : Intel VT-x ou AMD-V (SVM).</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../lab.html"><span class="dir">‹ Page précédente</span><span class="titre">Le lab Hexalog</span></a><a class="next" href="../tp/tp01-environnements.html" data-seance="1"><span class="dir">Page suivante ›</span><span class="titre">TP 1 : Installer VirtualBox et une première VM Debian</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>

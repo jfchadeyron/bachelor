@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 1 : Installer VirtualBox et une première VM Debian | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Vous préparez votre poste d'administrateur : installation de VirtualBox, création d'une machine virtuelle et installation d'un serveur Debian 13 minimal qui servira de modèle à tous les serveurs Linux">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item active" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp active" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module A : Environnements et lab</span><span class="sep">›</span><a href="../cours/s01-environnements.html" data-seance="1">Séance 1</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 1</span>
+  <h1>TP 1 : Installer VirtualBox et une première VM Debian</h1>
+  <p class="lead">Vous préparez votre poste d'administrateur : installation de VirtualBox, création d'une machine virtuelle et installation d'un serveur Debian 13 minimal qui servira de modèle à tous les serveurs Linux du lab.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>2 h</td></tr><tr><th>Machines virtuelles</th><td>TPL-DEB13</td></tr><tr><th>Cours associé</th><td><a href="../cours/s01-environnements.html" data-seance="1">Séance 1 : Environnements et premier lab</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#objectifs">Objectifs</a></li><li><a href="#prérequis">Prérequis</a></li><li><a href="#architecture-visée">Architecture visée</a></li><li><a href="#étape-1.-vérifier-la-virtualisation-matérielle">Étape 1. Vérifier la virtualisation matérielle</a></li><li><a href="#étape-2.-installer-virtualbox">Étape 2. Installer VirtualBox</a></li><li><a href="#étape-3.-créer-la-machine-virtuelle">Étape 3. Créer la machine virtuelle</a></li><li><a href="#étape-4.-installer-debian-13">Étape 4. Installer Debian 13</a></li><li><a href="#étape-5.-premières-commandes">Étape 5. Premières commandes</a></li><li><a href="#étape-6.-arrêter-proprement-et-prendre-un-snapshot">Étape 6. Arrêter proprement et prendre un snapshot</a></li><li><a href="#étape-7.-regarder-la-vm-de-lextérieur">Étape 7. Regarder la VM de l’extérieur</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#livrables">Livrables</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Votre responsable chez Hexalog vous demande de préparer un environnement de test sur votre poste avant de toucher aux serveurs de l’entreprise. Première étape : un hyperviseur et un serveur Linux « propre », à jour, qui servira de <strong>modèle</strong> (on dit aussi <em>template</em>) pour créer rapidement d’autres serveurs.</p>
+<h2 id="objectifs">Objectifs</h2>
+<ul>
+<li>Vérifier que le PC hôte supporte la virtualisation.</li>
+<li>Installer et configurer VirtualBox.</li>
+<li>Créer une VM en choisissant ses ressources en connaissance de cause.</li>
+<li>Installer Debian 13 en mode serveur, sans interface graphique.</li>
+<li>Réaliser les premières commandes d’administration et un <strong>snapshot</strong>.</li>
+</ul>
+<h2 id="prérequis">Prérequis</h2>
+<ul>
+<li>Un PC avec processeur 64 bits, 8 Go de RAM minimum (16 Go conseillés) et 80 Go d’espace libre.</li>
+<li>Des droits administrateur sur le PC (pour installer VirtualBox).</li>
+<li>L’image ISO <strong>Debian 13 netinst amd64</strong> (fournie par l’enseignant ou téléchargée sur <code>debian.org</code>).</li>
+</ul>
+<h2 id="architecture-visée">Architecture visée</h2>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-908754" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 665.765625px;" viewBox="0 0 665.765625 252" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-908754{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-908754 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-908754 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-908754 .error-icon{fill:#f5f6f8;}#mmd0-908754 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-908754 .edge-thickness-normal{stroke-width:1px;}#mmd0-908754 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-908754 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-908754 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-908754 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-908754 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-908754 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-908754 .marker.cross{stroke:#4a5563;}#mmd0-908754 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-908754 p{margin:0;}#mmd0-908754 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-908754 .cluster-label text{fill:#1f3a5f;}#mmd0-908754 .cluster-label span{color:#1f3a5f;}#mmd0-908754 .cluster-label span p{background-color:transparent;}#mmd0-908754 .label text,#mmd0-908754 span{fill:#1d2530;color:#1d2530;}#mmd0-908754 .node rect,#mmd0-908754 .node circle,#mmd0-908754 .node ellipse,#mmd0-908754 .node polygon,#mmd0-908754 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-908754 .rough-node .label text,#mmd0-908754 .node .label text,#mmd0-908754 .image-shape .label,#mmd0-908754 .icon-shape .label{text-anchor:middle;}#mmd0-908754 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-908754 .rough-node .label,#mmd0-908754 .node .label,#mmd0-908754 .image-shape .label,#mmd0-908754 .icon-shape .label{text-align:center;}#mmd0-908754 .node.clickable{cursor:pointer;}#mmd0-908754 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-908754 .arrowheadPath{fill:#000000;}#mmd0-908754 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-908754 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-908754 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-908754 .edgeLabel p{background-color:#ffffff;}#mmd0-908754 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-908754 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-908754 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-908754 .cluster text{fill:#1f3a5f;}#mmd0-908754 .cluster span{color:#1f3a5f;}#mmd0-908754 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-908754 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-908754 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-908754 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-908754 rect.text{fill:none;stroke-width:0;}#mmd0-908754 .icon-shape,#mmd0-908754 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-908754 .icon-shape p,#mmd0-908754 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-908754 .icon-shape .label rect,#mmd0-908754 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-908754 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-908754 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-908754 .node .neo-node{stroke:#1f3a5f;}#mmd0-908754 [data-look="neo"].node rect,#mmd0-908754 [data-look="neo"].cluster rect,#mmd0-908754 [data-look="neo"].node polygon{stroke:url(#mmd0-908754-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-908754 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-908754 [data-look="neo"].node path{stroke:url(#mmd0-908754-gradient);stroke-width:1px;}#mmd0-908754 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-908754 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-908754 [data-look="neo"].node circle{stroke:url(#mmd0-908754-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-908754 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-908754 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-908754-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-908754 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-908754-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-908754 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-908754_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-908754_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-908754_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-908754_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-908754_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-908754_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-908754_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-908754_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-908754_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-908754_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-908754_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-908754_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-908754-PC" data-look="classic"><rect style="" x="8" y="8" width="468.5" height="236"></rect><g class="cluster-label " transform="translate(168.7109375, 8)"><foreignObject width="147.078125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Votre PC, système hôte</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M152.563,126L177.563,126L202.563,126" id="mmd0-908754-L_VB_VM_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_VB_VM_0" data-points="W3sieCI6MTUyLjU2MjUsInkiOjEyNn0seyJ4IjoxNzcuNTYyNSwieSI6MTI2fSx7IngiOjIwMi41NjI1LCJ5IjoxMjZ9XQ==" data-look="classic"></path><path d="M451.5,126L476.5,126L514.984,126L549.469,126" id="mmd0-908754-L_VM_I_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_VM_I_0" data-points="W3sieCI6NDUxLjUsInkiOjEyNn0seyJ4Ijo0NzYuNSwieSI6MTI2fSx7IngiOjUxNC45ODQzNzUsInkiOjEyNn0seyJ4Ijo1NTMuNDY4NzUsInkiOjEyNn1d" data-look="classic" marker-end="url(#mmd0-908754_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_VB_VM_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(514.984375, 126)"><g class="label" data-id="L_VM_I_0" transform="translate(-13.484375, -10.5)"><foreignObject width="26.96875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>NAT</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="root" transform="translate(194.5625, 35)"><g class="clusters"><g class="cluster " id="mmd0-908754-VM" data-look="classic"><rect style="" x="8" y="8" width="248.9375" height="166"></rect><g class="cluster-label " transform="translate(82.796875, 8)"><foreignObject width="99.34375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>VM TPL-DEB13</p></span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g class="node default  " id="mmd0-908754-flowchart-D-1" data-look="classic" transform="translate(132.46875, 91)"><rect class="basic label-container" style="" x="-89.46875" y="-45.5" width="178.9375" height="91"></rect><g class="label" style="" transform="translate(-61.46875, -31.5)"><rect></rect><foreignObject width="122.9375" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Debian 13<br>utilisateur sysadmin<br>carte 1 : NAT</p></span></div></foreignObject></g></g></g></g><g class="node default  " id="mmd0-908754-flowchart-VB-0" data-look="classic" transform="translate(92.78125, 126)"><rect class="basic label-container" style="" x="-59.78125" y="-24.5" width="119.5625" height="49"></rect><g class="label" style="" transform="translate(-31.78125, -10.5)"><rect></rect><foreignObject width="63.5625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>VirtualBox</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-908754-flowchart-I-5" data-look="classic" transform="translate(605.6171875, 126)"><circle class="basic label-container" style="" r="52.1484375" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-45.1484375, -21)"><rect></rect><foreignObject width="90.296875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Internet<br>dépôts Debian</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-908754-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-908754-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-908754-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<h2 id="étape-1.-vérifier-la-virtualisation-matérielle">Étape 1. Vérifier la virtualisation matérielle</h2>
+<p>Sur un <strong>hôte Windows</strong> : ouvrez le Gestionnaire des tâches, onglet <strong>Performances</strong>, puis <strong>Processeur</strong>. La ligne <strong>Virtualisation</strong> doit indiquer <strong>Activé</strong>.</p>
+<p>Vérifiez aussi qu’Hyper-V n’est pas actif (sinon VirtualBox sera lent) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC hôte Windows (PowerShell)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="co"># "Un hyperviseur a été détecté" en bas de la liste = Hyper-V ou VBS est actif</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a>systeminfo <span class="op">|</span> <span class="fu">Select-String</span> <span class="st">"Hyper-V"</span></span></code></pre></div></div>
+<p>Sur un <strong>hôte Linux</strong> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC hôte Linux</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="co"># un nombre supérieur à 0 = virtualisation disponible (vmx pour Intel, svm pour AMD)</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-Ec</span> <span class="st">'(vmx|svm)'</span> /proc/cpuinfo</span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="ex">lscpu</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-i</span> virtuali</span></code></pre></div></div>
+<div class="callout warn"><div class="callout-body">
+<p>Si la virtualisation est désactivée, il faut l’activer dans le BIOS/UEFI (menu souvent nommé <em>Intel Virtualization Technology</em>, <em>VT-x</em> ou <em>SVM Mode</em>). Demandez à l’enseignant avant de modifier les réglages d’un PC de l’établissement.</p>
+</div></div>
+<h2 id="étape-2.-installer-virtualbox">Étape 2. Installer VirtualBox</h2>
+<ol type="1">
+<li>Téléchargez la dernière version 7.x de VirtualBox pour votre système depuis <code>virtualbox.org</code> (ou utilisez l’installeur fourni).</li>
+<li><strong>Windows</strong> : lancez l’installeur, acceptez les options par défaut. L’installation coupe brièvement le réseau (création d’une carte réseau virtuelle) et peut demander d’installer le <em>Microsoft Visual C++ Redistributable</em>.</li>
+<li><strong>Linux (Debian, Ubuntu, Mint)</strong> : installez le paquet <code>.deb</code> fourni par Oracle, puis ajoutez votre utilisateur au groupe <code>vboxusers</code> et reconnectez-vous.</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC hôte Linux</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">sudo</span> apt install ./virtualbox-7.<span class="pp">*</span>.deb</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> vboxusers <span class="va">$USER</span></span></code></pre></div></div>
+<p>L’<em>Extension Pack</em> n’est pas nécessaire pour ce bloc.</p>
+<ol start="4" type="1">
+<li>Ouvrez VirtualBox, menu <strong>Fichier → Paramètres</strong> (ou <strong>Préférences</strong>) :
+<ul>
+<li><strong>Général → Dossier par défaut des machines</strong> : vérifiez qu’il est sur un disque avec assez d’espace ;</li>
+<li><strong>Entrée → Machine virtuelle → Touche hôte</strong> : notez-la (par défaut <strong>Ctrl droit</strong>). Elle sert à libérer la souris et le clavier capturés par une VM.</li>
+</ul></li>
+</ol>
+<h2 id="étape-3.-créer-la-machine-virtuelle">Étape 3. Créer la machine virtuelle</h2>
+<p>Cliquez sur <strong>Nouvelle</strong> et renseignez :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nom</td>
+<td><code>TPL-DEB13</code></td>
+<td>convention de nommage du lab : TPL = modèle</td>
+</tr>
+<tr class="even">
+<td>Image ISO</td>
+<td><code>debian-13.x.x-amd64-netinst.iso</code></td>
+<td>le programme d’installation</td>
+</tr>
+<tr class="odd">
+<td>Type / sous-type / version</td>
+<td>Linux / Debian / Debian (64-bit)</td>
+<td>VirtualBox adapte les réglages par défaut</td>
+</tr>
+<tr class="even">
+<td>Ignorer l’installation automatique (<em>Skip Unattended Installation</em>)</td>
+<td><strong>coché</strong></td>
+<td>on veut faire l’installation soi-même</td>
+</tr>
+<tr class="odd">
+<td>Mémoire vive</td>
+<td>1024 Mo</td>
+<td>suffisant pour un serveur sans interface graphique</td>
+</tr>
+<tr class="even">
+<td>Processeurs</td>
+<td>1</td>
+<td>suffisant pour ce TP</td>
+</tr>
+<tr class="odd">
+<td>Disque dur</td>
+<td>créer un disque virtuel <strong>VDI</strong>, <strong>20 Go</strong>, taille dynamique</td>
+<td>de la marge pour les TP suivants</td>
+</tr>
+</tbody>
+</table></div>
+<p>Avant de démarrer, ouvrez <strong>Configuration</strong> et vérifiez :</p>
+<ul>
+<li><strong>Réseau → Adaptateur 1</strong> : activé, mode d’accès <strong>NAT</strong> (par défaut) ;</li>
+<li><strong>Système → Carte mère</strong> : ordre d’amorçage avec le disque optique avant le disque dur ;</li>
+<li><strong>Stockage</strong> : l’ISO est bien insérée dans le lecteur optique.</li>
+</ul>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Pourquoi le NAT ?</strong></p>
+<p>En mode NAT, la VM sort sur Internet en utilisant la connexion de votre PC, comme un appareil derrière une box. Elle peut télécharger ses paquets, mais personne ne peut la joindre depuis l’extérieur. Les autres modes réseau sont étudiés à la séance 2.</p>
+</div></div>
+<h2 id="étape-4.-installer-debian-13">Étape 4. Installer Debian 13</h2>
+<p>Démarrez la VM. Dans le menu d’installation, choisissez <strong>Install</strong> (mode texte) ou <strong>Graphical install</strong>. Déplacez-vous avec les flèches et <code>Tab</code>, validez avec <code>Entrée</code>, cochez avec <code>Espace</code>.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Écran</th>
+<th>Réponse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Langue / pays / clavier</td>
+<td>Français / France / Français (azerty)</td>
+</tr>
+<tr class="even">
+<td>Nom de machine</td>
+<td><code>tpl-deb13</code></td>
+</tr>
+<tr class="odd">
+<td>Domaine</td>
+<td><code>hexalog.lan</code></td>
+</tr>
+<tr class="even">
+<td>Mot de passe du superutilisateur (root)</td>
+<td><strong>laisser vide</strong> (deux fois)</td>
+</tr>
+<tr class="odd">
+<td>Nom complet du nouvel utilisateur</td>
+<td><code>Administrateur systeme</code></td>
+</tr>
+<tr class="even">
+<td>Identifiant</td>
+<td><code>sysadmin</code></td>
+</tr>
+<tr class="odd">
+<td>Mot de passe</td>
+<td>le mot de passe de lab donné par l’enseignant</td>
+</tr>
+<tr class="even">
+<td>Partitionnement</td>
+<td>Assisté, utiliser un disque entier → le disque de 20 Go → tout dans une seule partition → terminer et appliquer → Oui</td>
+</tr>
+<tr class="odd">
+<td>Analyser d’autres supports</td>
+<td>Non</td>
+</tr>
+<tr class="even">
+<td>Miroir de l’archive</td>
+<td>France → <code>deb.debian.org</code></td>
+</tr>
+<tr class="odd">
+<td>Mandataire HTTP (proxy)</td>
+<td>vide, sauf si l’enseignant en indique un</td>
+</tr>
+<tr class="even">
+<td>Étude statistique</td>
+<td>Non</td>
+</tr>
+<tr class="odd">
+<td>Sélection des logiciels</td>
+<td><strong>décocher</strong> « environnement de bureau Debian » et « GNOME » ; <strong>cocher</strong> « serveur SSH » et « utilitaires usuels du système »</td>
+</tr>
+<tr class="even">
+<td>Installer GRUB</td>
+<td>Oui, sur <code>/dev/sda</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Pourquoi laisser le mot de passe root vide ?</strong></p>
+<p>Dans ce cas, Debian <strong>verrouille le compte root</strong>, installe <code>sudo</code> et donne les droits d’administration au premier utilisateur (<code>sysadmin</code>) via le groupe <code>sudo</code>. On administre alors avec son propre compte et <code>sudo</code>, ce qui laisse une trace de qui a fait quoi. C’est la bonne pratique.</p>
+</div></div>
+<p>À la fin, l’installeur demande de retirer le support : VirtualBox éjecte normalement l’ISO tout seul. Validez, la VM redémarre sur le disque.</p>
+<h2 id="étape-5.-premières-commandes">Étape 5. Premières commandes</h2>
+<p>Connectez-vous avec <code>sysadmin</code> sur la console de la VM. Tapez chaque commande, lisez le résultat et notez l’essentiel dans votre journal.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : TPL-DEB13 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">cat</span> /etc/os-release        <span class="co"># quelle distribution et quelle version ?</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="ex">hostnamectl</span>                <span class="co"># nom de la machine, noyau, virtualisation détectée</span></span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="fu">whoami</span>                     <span class="co"># sous quel compte suis-je ?</span></span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="fu">id</span>                         <span class="co"># mon UID, mes groupes (repérez le groupe sudo)</span></span>
+<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a><span class="ex">ip</span> <span class="at">-br</span> a                   <span class="co"># interfaces réseau et adresses IP (format court)</span></span>
+<span id="cb5-6"><a aria-hidden="true" href="#cb5-6" tabindex="-1"></a><span class="ex">ip</span> route                   <span class="co"># table de routage : repérez la passerelle par défaut</span></span>
+<span id="cb5-7"><a aria-hidden="true" href="#cb5-7" tabindex="-1"></a><span class="fu">cat</span> /etc/resolv.conf       <span class="co"># serveur DNS utilisé</span></span>
+<span id="cb5-8"><a aria-hidden="true" href="#cb5-8" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 3 deb.debian.org   <span class="co"># la VM sort-elle sur Internet ?</span></span>
+<span id="cb5-9"><a aria-hidden="true" href="#cb5-9" tabindex="-1"></a><span class="fu">free</span> <span class="at">-h</span>                    <span class="co"># mémoire</span></span>
+<span id="cb5-10"><a aria-hidden="true" href="#cb5-10" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span>                      <span class="co"># espace disque par système de fichiers</span></span>
+<span id="cb5-11"><a aria-hidden="true" href="#cb5-11" tabindex="-1"></a><span class="ex">lsblk</span>                      <span class="co"># disques et partitions</span></span></code></pre></div></div>
+<p>Mettez le système à jour et installez quelques outils utiles pour la suite :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : TPL-DEB13 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> apt update                 <span class="co"># rafraîchit la liste des paquets disponibles</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="fu">sudo</span> apt full-upgrade <span class="at">-y</span>        <span class="co"># installe les mises à jour</span></span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> curl bind9-dnsutils traceroute tcpdump</span></code></pre></div></div>
+<p>Le premier <code>sudo</code> demande <strong>votre</strong> mot de passe (celui de <code>sysadmin</code>), pas celui de root.</p>
+<h2 id="étape-6.-arrêter-proprement-et-prendre-un-snapshot">Étape 6. Arrêter proprement et prendre un snapshot</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : TPL-DEB13 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> poweroff</span></code></pre></div></div>
+<p>Dans VirtualBox, sélectionnez la VM, ouvrez l’outil <strong>Instantanés</strong> (icône en forme de liste à côté du nom de la VM), puis <strong>Prendre</strong> :</p>
+<ul>
+<li>nom : <code>01-installation-propre</code> ;</li>
+<li>description : « Debian 13 installé, à jour, outils réseau, utilisateur sysadmin ».</li>
+</ul>
+<p>Un <strong>snapshot</strong> mémorise l’état exact de la VM à un instant. Si vous cassez quelque chose plus tard, vous pouvez revenir à cet état en quelques secondes.</p>
+<h2 id="étape-7.-regarder-la-vm-de-lextérieur">Étape 7. Regarder la VM de l’extérieur</h2>
+<p>Ouvrez le dossier des machines virtuelles sur votre PC (par défaut <code>VirtualBox VMs/TPL-DEB13</code>) et observez :</p>
+<ul>
+<li>le fichier <code>TPL-DEB13.vbox</code> : ouvrez-le avec un éditeur de texte, retrouvez la quantité de RAM et le type de carte réseau ;</li>
+<li>le fichier <code>.vdi</code> : quelle est sa taille réelle sur le disque comparée aux 20 Go annoncés ?</li>
+<li>les dossiers <code>Logs</code> et <code>Snapshots</code>.</li>
+</ul>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">La VM <code>TPL-DEB13</code> démarre sans message d’erreur ni tortue verte.</label></li>
+<li><label><input type="checkbox"><code>cat /etc/os-release</code> affiche Debian 13.</label></li>
+<li><label><input type="checkbox"><code>id</code> montre que <code>sysadmin</code> appartient au groupe <code>sudo</code>.</label></li>
+<li><label><input type="checkbox"><code>ping -c 3 deb.debian.org</code> répond.</label></li>
+<li><label><input type="checkbox"><code>sudo apt update</code> ne signale aucune erreur.</label></li>
+<li><label><input type="checkbox">Le snapshot <code>01-installation-propre</code> existe.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Quelle adresse IP la VM a-t-elle obtenue ? Qui la lui a attribuée ?</li>
+<li>Quelle est la passerelle par défaut de la VM ? À quoi sert-elle ?</li>
+<li>Depuis votre PC hôte, pouvez-vous faire un <code>ping</code> vers l’adresse IP de la VM ? Essayez et expliquez.</li>
+<li>Pourquoi le fichier <code>.vdi</code> est-il beaucoup plus petit que 20 Go ?</li>
+<li>Quelle différence faites-vous entre un snapshot et une sauvegarde ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Cause probable</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>« VT-x is disabled in the BIOS » ou impossible de choisir un système 64 bits</td>
+<td>virtualisation désactivée</td>
+<td>l’activer dans le BIOS/UEFI</td>
+</tr>
+<tr class="even">
+<td>Tortue verte en bas de la fenêtre, VM très lente</td>
+<td>Hyper-V, WSL 2 ou l’intégrité de la mémoire actifs sous Windows</td>
+<td>voir avec l’enseignant pour les désactiver</td>
+</tr>
+<tr class="odd">
+<td>« Kernel driver not installed (rc=-1908) » sur hôte Linux</td>
+<td>module noyau VirtualBox non chargé, souvent à cause du Secure Boot</td>
+<td>réinstaller le paquet, signer les modules ou désactiver le Secure Boot</td>
+</tr>
+<tr class="even">
+<td>Le clavier tape <code>q</code> au lieu de <code>a</code></td>
+<td>disposition clavier mal choisie à l’installation</td>
+<td><code>sudo dpkg-reconfigure keyboard-configuration</code> puis redémarrer</td>
+</tr>
+<tr class="odd">
+<td>La souris reste bloquée dans la VM</td>
+<td>capture de la souris</td>
+<td>appuyer sur la touche hôte (Ctrl droit)</td>
+</tr>
+<tr class="even">
+<td>L’installation n’arrive pas à joindre le miroir</td>
+<td>pas d’accès Internet, proxy de l’établissement</td>
+<td>vérifier l’adaptateur NAT, renseigner le proxy indiqué par l’enseignant</td>
+</tr>
+<tr class="odd">
+<td>La VM redémarre sur l’installeur</td>
+<td>l’ISO est toujours insérée</td>
+<td>Périphériques → Lecteurs optiques → retirer le disque</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="livrables">Livrables</h2>
+<ul>
+<li>Votre journal de bord de la séance (modèle sur <a href="../modeles.html">Modèles de livrables</a>).</li>
+<li>Captures : récapitulatif de la configuration de la VM, <code>cat /etc/os-release</code>, <code>ip -br a</code> et <code>ip route</code>, liste des snapshots.</li>
+<li>Réponses aux questions.</li>
+</ul>
+<h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<p>VirtualBox se pilote aussi en ligne de commande avec <code>VBoxManage</code>, ce qui permet d’automatiser :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC hôte (terminal ou PowerShell)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="ex">VBoxManage</span> list vms                       <span class="co"># toutes les VM</span></span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="ex">VBoxManage</span> list runningvms                <span class="co"># VM démarrées</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="ex">VBoxManage</span> showvminfo TPL-DEB13           <span class="co"># configuration détaillée</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a><span class="ex">VBoxManage</span> snapshot TPL-DEB13 list        <span class="co"># snapshots</span></span></code></pre></div></div>
+<p>Sous Windows, si la commande n’est pas trouvée, lancez-la depuis <code>C:\Program Files\Oracle\VirtualBox\</code>.</p>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s01-environnements.html" data-seance="1"><span class="dir">‹ Page précédente</span><span class="titre">Séance 1 : Environnements et premier lab</span></a><a class="next" href="../cours/s02-virtualbox.html" data-seance="2"><span class="dir">Page suivante ›</span><span class="titre">Séance 2 : VirtualBox : snapshots, clones, réseaux</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>
