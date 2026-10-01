@@ -2,9 +2,15 @@ name: Publication BLOC 1
 
 # Met en ligne chaque matin le cours et le TP des séances dont la date est arrivée
 # (dates dans .github/bloc1/calendrier.json).
+# Heures en UTC. GitHub retarde souvent les tâches planifiées de plusieurs heures :
+# la première tentative a lieu juste après minuit (heure de Paris) pour que la séance
+# soit en ligne avant 8 h même avec un fort retard ; les suivantes servent de secours.
 
 on:
   schedule:
+    - cron: "17 22 * * *"
+    - cron: "17 23 * * *"
+    - cron: "17 1 * * *"
     - cron: "17 3 * * *"
     - cron: "17 5 * * *"
   workflow_dispatch:
