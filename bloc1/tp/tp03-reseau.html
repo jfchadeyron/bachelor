@@ -1,0 +1,333 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 3 : Exposer un service et diagnostiquer le réseau | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Vous passez les machines du lab en adresses fixes, vous publiez un petit site web interne, vous le rendez accessible depuis votre PC par redirection de ports, puis vous montez un réseau de test avec s">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item active" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp active" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module A : Environnements et lab</span><span class="sep">›</span><a href="../cours/s03-reseau.html" data-seance="3">Séance 3</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 3</span>
+  <h1>TP 3 : Exposer un service et diagnostiquer le réseau</h1>
+  <p class="lead">Vous passez les machines du lab en adresses fixes, vous publiez un petit site web interne, vous le rendez accessible depuis votre PC par redirection de ports, puis vous montez un réseau de test avec son propre serveur DHCP et DNS. Pour finir, un défi de diagnostic en binôme.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>2 h 30</td></tr><tr><th>Machines virtuelles</th><td>SRV-LNX-01, CLI-LNX-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s03-reseau.html" data-seance="3">Séance 3 : Réseau IP, NAT, DNS et DHCP</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#objectifs">Objectifs</a></li><li><a href="#plan-dadressage-du-lab">Plan d’adressage du lab</a></li><li><a href="#étape-1.-relever-la-configuration-dhcp">Étape 1. Relever la configuration DHCP</a></li><li><a href="#étape-2.-adresse-fixe-sur-srv-lnx-01">Étape 2. Adresse fixe sur SRV-LNX-01</a></li><li><a href="#étape-3.-un-intranet-sur-srv-lnx-01">Étape 3. Un intranet sur SRV-LNX-01</a></li><li><a href="#étape-4.-redirections-de-ports">Étape 4. Redirections de ports</a></li><li><a href="#étape-5.-un-réseau-de-test-avec-dhcp-et-dns">Étape 5. Un réseau de test avec DHCP et DNS</a></li><li><a href="#étape-6.-défi-de-diagnostic-en-binôme">Étape 6. Défi de diagnostic en binôme</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#livrables">Livrables</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Hexalog veut un intranet minimal sur <code>SRV-LNX-01</code>. Les serveurs doivent avoir des adresses fixes et documentées. L’équipe veut aussi comprendre comment un poste obtient automatiquement son adresse et comment les noms sont résolus, sur un réseau de test isolé.</p>
+<h2 id="objectifs">Objectifs</h2>
+<ul>
+<li>Relever une configuration fournie par DHCP puis configurer une adresse fixe.</li>
+<li>Installer un service web et vérifier qu’il écoute.</li>
+<li>Créer des redirections de ports et les tester depuis l’hôte.</li>
+<li>Mettre en place un serveur DHCP et DNS de test (dnsmasq) et observer l’échange DORA.</li>
+<li>Diagnostiquer une panne réseau avec méthode.</li>
+</ul>
+<h2 id="plan-dadressage-du-lab">Plan d’adressage du lab</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Machine</th>
+<th>Adresse</th>
+<th>Passerelle</th>
+<th>DNS (pour l’instant)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Passerelle NAT VirtualBox</td>
+<td>10.10.10.1</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>SRV-WIN-01 (séance 5)</td>
+<td>10.10.10.10</td>
+<td>10.10.10.1</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>SRV-LNX-01</td>
+<td>10.10.10.20</td>
+<td>10.10.10.1</td>
+<td>celui relevé à l’étape 1</td>
+</tr>
+<tr class="even">
+<td>BST-LNX-01 (séance 12)</td>
+<td>10.10.10.30</td>
+<td>10.10.10.1</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>CLI-LNX-01</td>
+<td>10.10.10.101</td>
+<td>10.10.10.1</td>
+<td>celui relevé à l’étape 1</td>
+</tr>
+</tbody>
+</table></div>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-867163" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 801.46875px;" viewBox="0 0 801.46875 643.734375" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-867163{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-867163 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-867163 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-867163 .error-icon{fill:#f5f6f8;}#mmd0-867163 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-867163 .edge-thickness-normal{stroke-width:1px;}#mmd0-867163 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-867163 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-867163 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-867163 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-867163 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-867163 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-867163 .marker.cross{stroke:#4a5563;}#mmd0-867163 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-867163 p{margin:0;}#mmd0-867163 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-867163 .cluster-label text{fill:#1f3a5f;}#mmd0-867163 .cluster-label span{color:#1f3a5f;}#mmd0-867163 .cluster-label span p{background-color:transparent;}#mmd0-867163 .label text,#mmd0-867163 span{fill:#1d2530;color:#1d2530;}#mmd0-867163 .node rect,#mmd0-867163 .node circle,#mmd0-867163 .node ellipse,#mmd0-867163 .node polygon,#mmd0-867163 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-867163 .rough-node .label text,#mmd0-867163 .node .label text,#mmd0-867163 .image-shape .label,#mmd0-867163 .icon-shape .label{text-anchor:middle;}#mmd0-867163 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-867163 .rough-node .label,#mmd0-867163 .node .label,#mmd0-867163 .image-shape .label,#mmd0-867163 .icon-shape .label{text-align:center;}#mmd0-867163 .node.clickable{cursor:pointer;}#mmd0-867163 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-867163 .arrowheadPath{fill:#000000;}#mmd0-867163 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-867163 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-867163 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-867163 .edgeLabel p{background-color:#ffffff;}#mmd0-867163 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-867163 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-867163 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-867163 .cluster text{fill:#1f3a5f;}#mmd0-867163 .cluster span{color:#1f3a5f;}#mmd0-867163 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-867163 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-867163 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-867163 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-867163 rect.text{fill:none;stroke-width:0;}#mmd0-867163 .icon-shape,#mmd0-867163 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-867163 .icon-shape p,#mmd0-867163 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-867163 .icon-shape .label rect,#mmd0-867163 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-867163 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-867163 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-867163 .node .neo-node{stroke:#1f3a5f;}#mmd0-867163 [data-look="neo"].node rect,#mmd0-867163 [data-look="neo"].cluster rect,#mmd0-867163 [data-look="neo"].node polygon{stroke:url(#mmd0-867163-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-867163 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-867163 [data-look="neo"].node path{stroke:url(#mmd0-867163-gradient);stroke-width:1px;}#mmd0-867163 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-867163 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-867163 [data-look="neo"].node circle{stroke:url(#mmd0-867163-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-867163 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-867163 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-867163-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-867163 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-867163-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-867163 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-867163_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-867163_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-867163_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-867163_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-867163_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-867163_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-867163_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-867163_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-867163_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-867163_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-867163_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-867163_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-867163-LAB" data-look="classic"><rect style="" x="403.5" y="258.25" width="389.96875" height="281"></rect><g class="cluster-label " transform="translate(499.6484375, 258.25)"><foreignObject width="197.671875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>LAB-HEXALOG (10.10.10.0/24)</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M246.523,404L342.313,404L403.5,404L424.5,404" id="mmd0-867163-L_PC_GW_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_GW_0" data-points="W3sieCI6MjQ2LjUyMzQzNzUsInkiOjQwNH0seyJ4IjozNDIuMzEyNSwieSI6NDA0fSx7IngiOjQwMy41LCJ5Ijo0MDR9LHsieCI6NDI4LjUsInkiOjQwNH1d" data-look="classic" marker-end="url(#mmd0-867163_flowchart-v2-pointEnd)"></path><path d="M558.844,369L605.719,338.75L627.641,338.75" id="mmd0-867163-L_GW_S_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_GW_S_0" data-points="W3sieCI6NTU4Ljg0NDI4ODc5MzEwMzUsInkiOjM2OX0seyJ4Ijo2MDUuNzE4NzUsInkiOjMzOC43NX0seyJ4Ijo2MzEuNjQwNjI1LCJ5IjozMzguNzV9XQ==" data-look="classic" marker-end="url(#mmd0-867163_flowchart-v2-pointEnd)"></path><path d="M543.821,439L605.719,494.25L677.129,578.491" id="mmd0-867163-L_GW_I_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_GW_I_0" data-points="W3sieCI6NTQzLjgyMDc2Njk2Njc1OSwieSI6NDM5fSx7IngiOjYwNS43MTg3NSwieSI6NDk0LjI1fSx7IngiOjY3OS43MTUwOTMwMjYzMTU3LCJ5Ijo1ODEuNTQxNzkxMTQ0OTc1NX1d" data-look="classic" marker-end="url(#mmd0-867163_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(342.3125, 404)"><g class="label" data-id="L_PC_GW_0" transform="translate(-36.1875, -10.5)"><foreignObject width="72.375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>redirections</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_GW_S_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_GW_I_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="root" transform="translate(0.7421875, 0)"><g class="clusters"><g class="cluster " id="mmd0-867163-TEST" data-look="classic"><rect style="" x="7.2578125" y="8" width="273.125" height="311"></rect><g class="cluster-label " transform="translate(11.2578125, 8)"><foreignObject width="265.125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Réseau interne LAN-TEST (10.20.20.0/24)</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M143.82,136.5L143.82,174L143.82,211.5" id="mmd0-867163-L_S2_C2_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_S2_C2_0" data-points="W3sieCI6MTQzLjgyMDMxMjUsInkiOjEzNi41fSx7IngiOjE0My44MjAzMTI1LCJ5IjoxNzR9LHsieCI6MTQzLjgyMDMxMjUsInkiOjIxMS41fV0=" data-look="classic"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_S2_C2_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-867163-flowchart-S2-4" data-look="classic" transform="translate(143.8203125, 91)"><rect class="basic label-container" style="" x="-100.8203125" y="-45.5" width="201.640625" height="91"></rect><g class="label" style="" transform="translate(-72.8203125, -31.5)"><rect></rect><foreignObject width="145.640625" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>SRV-LNX-01 carte 2<br>10.20.20.1<br>dnsmasq DHCP + DNS</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-867163-flowchart-C2-5" data-look="classic" transform="translate(143.8203125, 246.5)"><rect class="basic label-container" style="" x="-86.75" y="-35" width="173.5" height="70"></rect><g class="label" style="" transform="translate(-58.75, -21)"><rect></rect><foreignObject width="117.5" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>CLI-LNX-01<br>adresse par DHCP</p></span></div></foreignObject></g></g></g></g><g class="node default  " id="mmd0-867163-flowchart-PC-0" data-look="classic" transform="translate(144.5625, 404)"><rect class="basic label-container" style="" x="-101.9609375" y="-35" width="203.921875" height="70"></rect><g class="label" style="" transform="translate(-73.9609375, -21)"><rect></rect><foreignObject width="147.921875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>PC hôte<br>127.0.0.1:8080 et :2222</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-867163-flowchart-GW-1" data-look="classic" transform="translate(504.609375, 404)"><rect class="basic label-container" style="" x="-76.109375" y="-35" width="152.21875" height="70"></rect><g class="label" style="" transform="translate(-48.109375, -21)"><rect></rect><foreignObject width="96.21875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Passerelle NAT<br>10.10.10.1</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-867163-flowchart-S-2" data-look="classic" transform="translate(699.59375, 338.75)"><rect class="basic label-container" style="" x="-67.953125" y="-45.5" width="135.90625" height="91"></rect><g class="label" style="" transform="translate(-39.953125, -31.5)"><rect></rect><foreignObject width="79.90625" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>SRV-LNX-01<br>10.10.10.20<br>nginx, SSH</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-867163-flowchart-C-3" data-look="classic" transform="translate(699.59375, 469.25)"><rect class="basic label-container" style="" x="-68.875" y="-35" width="137.75" height="70"></rect><g class="label" style="" transform="translate(-40.875, -21)"><rect></rect><foreignObject width="81.75" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>CLI-LNX-01<br>10.10.10.101</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-867163-flowchart-I-10" data-look="classic" transform="translate(699.59375, 604.9921875)"><circle class="basic label-container" style="" r="30.7421875" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-23.7421875, -10.5)"><rect></rect><foreignObject width="47.484375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Internet</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-867163-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-867163-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-867163-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<h2 id="étape-1.-relever-la-configuration-dhcp">Étape 1. Relever la configuration DHCP</h2>
+<p>Sur <code>SRV-LNX-01</code>, avant de toucher à quoi que ce soit :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="ex">ip</span> <span class="at">-br</span> a</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="ex">ip</span> route</span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="fu">cat</span> /etc/resolv.conf</span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="fu">cat</span> /etc/network/interfaces</span></code></pre></div></div>
+<p>Notez dans votre journal : adresse obtenue, passerelle, <strong>serveur(s) DNS</strong> (ligne <code>nameserver</code>). Vous réutiliserez ce DNS dans la configuration fixe. La ligne <code>iface enp0s3 inet dhcp</code> indique que l’adresse vient du DHCP.</p>
+<h2 id="étape-2.-adresse-fixe-sur-srv-lnx-01">Étape 2. Adresse fixe sur SRV-LNX-01</h2>
+<p>Faites un snapshot <code>03-avant-ip-fixe</code>, puis éditez la configuration :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> cp /etc/network/interfaces /etc/network/interfaces.bak</span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/network/interfaces</span></code></pre></div></div>
+<p>Remplacez le bloc de <code>enp0s3</code> par :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/network/interfaces</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="co"># Carte 1 : réseau LAB-HEXALOG</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="dt">auto enp0s3</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="dt">iface enp0s3 inet static</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="dt">    address 10.10.10.20/24</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="dt">    gateway 10.10.10.1</span></span></code></pre></div></div>
+<p>Puis le DNS (remplacez <code>X.X.X.X</code> par la valeur relevée à l’étape 1) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/resolv.conf</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/resolv.conf</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="dt">search hexalog.lan</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="dt">nameserver X.X.X.X</span></span></code></pre></div></div>
+<p>Redémarrez et vérifiez :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> reboot</span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="co"># après redémarrage</span></span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="ex">ip</span> <span class="at">-br</span> a                    <span class="co"># 10.10.10.20/24</span></span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a><span class="ex">ip</span> route                    <span class="co"># default via 10.10.10.1</span></span>
+<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 2 10.10.10.1</span>
+<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 2 9.9.9.9</span>
+<span id="cb7-7"><a aria-hidden="true" href="#cb7-7" tabindex="-1"></a><span class="ex">dig</span> +short deb.debian.org</span></code></pre></div></div>
+<div class="callout tip"><div class="callout-body">
+<p>Si le ping vers <code>9.9.9.9</code> échoue alors que <code>curl -I https://deb.debian.org</code> fonctionne, c’est que le réseau de l’établissement filtre le protocole ICMP (ping). Ce n’est pas une panne de votre configuration.</p>
+</div></div>
+<h2 id="étape-3.-un-intranet-sur-srv-lnx-01">Étape 3. Un intranet sur SRV-LNX-01</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> nginx netcat-openbsd</span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="ex">systemctl</span> status nginx <span class="at">--no-pager</span>           <span class="co"># active (running) ?</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="fu">sudo</span> ss <span class="at">-tlnp</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">':80'</span>                  <span class="co"># nginx écoute-t-il sur le port 80 ?</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'&lt;h1&gt;Intranet Hexalog&lt;/h1&gt;&lt;p&gt;Servi par srv-lnx-01&lt;/p&gt;'</span> <span class="kw">|</span> <span class="fu">sudo</span> tee /var/www/html/index.html</span>
+<span id="cb8-5"><a aria-hidden="true" href="#cb8-5" tabindex="-1"></a><span class="ex">curl</span> http://127.0.0.1                        <span class="co"># test local</span></span></code></pre></div></div>
+<p>Depuis <code>CLI-LNX-01</code> (encore en DHCP sur LAB-HEXALOG) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : CLI-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> netcat-openbsd</span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 2 10.10.10.20</span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="ex">nc</span> <span class="at">-zv</span> 10.10.10.20 80</span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="ex">curl</span> http://10.10.10.20</span></code></pre></div></div>
+<h2 id="étape-4.-redirections-de-ports">Étape 4. Redirections de ports</h2>
+<p>Dans <strong>Fichier → Outils → Gestionnaire de réseau → Réseaux NAT → LAB-HEXALOG → Redirection de ports</strong>, onglet IPv4, ajoutez :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Nom</th>
+<th>Protocole</th>
+<th>IP hôte</th>
+<th>Port hôte</th>
+<th>IP invité</th>
+<th>Port invité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>web-srv</td>
+<td>TCP</td>
+<td>127.0.0.1</td>
+<td>8080</td>
+<td>10.10.10.20</td>
+<td>80</td>
+</tr>
+<tr class="even">
+<td>ssh-srv</td>
+<td>TCP</td>
+<td>127.0.0.1</td>
+<td>2222</td>
+<td>10.10.10.20</td>
+<td>22</td>
+</tr>
+</tbody>
+</table></div>
+<p>Équivalent en ligne de commande :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC hôte</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="ex">VBoxManage</span> natnetwork modify <span class="at">--netname</span> LAB-HEXALOG <span class="at">--port-forward-4</span> <span class="st">"web-srv:tcp:[127.0.0.1]:8080:[10.10.10.20]:80"</span></span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="ex">VBoxManage</span> natnetwork modify <span class="at">--netname</span> LAB-HEXALOG <span class="at">--port-forward-4</span> <span class="st">"ssh-srv:tcp:[127.0.0.1]:2222:[10.10.10.20]:22"</span></span></code></pre></div></div>
+<p>Testez depuis le <strong>PC hôte</strong> :</p>
+<ul>
+<li>navigateur : <code>http://127.0.0.1:8080</code> ;</li>
+<li>terminal ou PowerShell :</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC hôte Windows (PowerShell)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="fu">curl</span><span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>I http<span class="op">://</span>127<span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">1</span><span class="op">:</span>8080</span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a>Test<span class="op">-</span>NetConnection 127<span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">1</span> <span class="op">-</span>Port 2222</span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a>ssh <span class="op">-</span>p 2222 sysadmin@127<span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">1</span>          <span class="co"># acceptez l'empreinte (yes), puis mot de passe</span></span></code></pre></div></div>
+<p>Sur un hôte Linux, utilisez <code>curl -I</code>, <code>nc -zv 127.0.0.1 2222</code> et <code>ssh -p 2222 sysadmin@127.0.0.1</code>.</p>
+<p>Une fois connecté en SSH, regardez qui a consulté l’intranet :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (via SSH)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class="fu">sudo</span> tail <span class="at">-n</span> 5 /var/log/nginx/access.log</span></code></pre></div></div>
+<p>Quelle adresse source apparaît pour les requêtes venues de votre PC ? Expliquez.</p>
+<h2 id="étape-5.-un-réseau-de-test-avec-dhcp-et-dns">Étape 5. Un réseau de test avec DHCP et DNS</h2>
+<p>On crée un réseau interne isolé <code>LAN-TEST</code> (<code>10.20.20.0/24</code>) où <code>SRV-LNX-01</code> joue le rôle de serveur DHCP et DNS grâce à <strong>dnsmasq</strong>.</p>
+<h3 id="deuxième-carte-sur-srv-lnx-01">5.1, Deuxième carte sur SRV-LNX-01</h3>
+<p>Éteignez <code>SRV-LNX-01</code>. Dans <strong>Configuration → Réseau → Adaptateur 2</strong> : activer, <strong>Réseau interne</strong>, nom <code>LAN-TEST</code>. Démarrez, puis ajoutez la configuration de la carte <code>enp0s8</code> à la fin de <code>/etc/network/interfaces</code> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/network/interfaces (ajout)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb13"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb13-1"><a aria-hidden="true" href="#cb13-1" tabindex="-1"></a><span class="co"># Carte 2 : réseau de test LAN-</span><span class="al">TEST</span></span>
+<span id="cb13-2"><a aria-hidden="true" href="#cb13-2" tabindex="-1"></a><span class="dt">auto enp0s8</span></span>
+<span id="cb13-3"><a aria-hidden="true" href="#cb13-3" tabindex="-1"></a><span class="dt">iface enp0s8 inet static</span></span>
+<span id="cb13-4"><a aria-hidden="true" href="#cb13-4" tabindex="-1"></a><span class="dt">    address 10.20.20.1/24</span></span></code></pre></div></div>
+<p>Pas de ligne <code>gateway</code> : une machine n’a qu’<strong>une</strong> route par défaut, et elle passe par la carte 1.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a aria-hidden="true" href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> ifup enp0s8</span>
+<span id="cb14-2"><a aria-hidden="true" href="#cb14-2" tabindex="-1"></a><span class="ex">ip</span> <span class="at">-br</span> a</span>
+<span id="cb14-3"><a aria-hidden="true" href="#cb14-3" tabindex="-1"></a><span class="ex">ip</span> route</span></code></pre></div></div>
+<h3 id="installer-et-configurer-dnsmasq">5.2, Installer et configurer dnsmasq</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a aria-hidden="true" href="#cb15-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> dnsmasq tcpdump</span>
+<span id="cb15-2"><a aria-hidden="true" href="#cb15-2" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/dnsmasq.d/lan-test.conf</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/dnsmasq.d/lan-test.conf</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb16"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb16-1"><a aria-hidden="true" href="#cb16-1" tabindex="-1"></a><span class="co"># N'écouter que sur la carte du réseau de test</span></span>
+<span id="cb16-2"><a aria-hidden="true" href="#cb16-2" tabindex="-1"></a><span class="dt">interface</span><span class="ot">=</span><span class="st">enp0s8</span></span>
+<span id="cb16-3"><a aria-hidden="true" href="#cb16-3" tabindex="-1"></a><span class="dt">bind-interfaces</span></span>
+<span id="cb16-4"><a aria-hidden="true" href="#cb16-4" tabindex="-1"></a></span>
+<span id="cb16-5"><a aria-hidden="true" href="#cb16-5" tabindex="-1"></a><span class="co"># DHCP : plage d'adresses et durée du bail</span></span>
+<span id="cb16-6"><a aria-hidden="true" href="#cb16-6" tabindex="-1"></a><span class="dt">dhcp-range</span><span class="ot">=</span><span class="st">10.20.20.100,10.20.20.150,255.255.255.0,12h</span></span>
+<span id="cb16-7"><a aria-hidden="true" href="#cb16-7" tabindex="-1"></a><span class="co"># Options transmises aux clients : passerelle et DNS</span></span>
+<span id="cb16-8"><a aria-hidden="true" href="#cb16-8" tabindex="-1"></a><span class="dt">dhcp-option</span><span class="ot">=</span><span class="st">option:router,10.20.20.1</span></span>
+<span id="cb16-9"><a aria-hidden="true" href="#cb16-9" tabindex="-1"></a><span class="dt">dhcp-option</span><span class="ot">=</span><span class="st">option:dns-server,10.20.20.1</span></span>
+<span id="cb16-10"><a aria-hidden="true" href="#cb16-10" tabindex="-1"></a></span>
+<span id="cb16-11"><a aria-hidden="true" href="#cb16-11" tabindex="-1"></a><span class="co"># DNS : domaine local, géré ici sans interroger l'extérieur</span></span>
+<span id="cb16-12"><a aria-hidden="true" href="#cb16-12" tabindex="-1"></a><span class="dt">domain</span><span class="ot">=</span><span class="st">test.hexalog.lan</span></span>
+<span id="cb16-13"><a aria-hidden="true" href="#cb16-13" tabindex="-1"></a><span class="dt">local</span><span class="ot">=</span><span class="st">/test.hexalog.lan/</span></span>
+<span id="cb16-14"><a aria-hidden="true" href="#cb16-14" tabindex="-1"></a><span class="dt">no-hosts</span></span>
+<span id="cb16-15"><a aria-hidden="true" href="#cb16-15" tabindex="-1"></a><span class="dt">host-record</span><span class="ot">=</span><span class="st">srv-lnx-01.test.hexalog.lan,10.20.20.1</span></span>
+<span id="cb16-16"><a aria-hidden="true" href="#cb16-16" tabindex="-1"></a><span class="dt">cname</span><span class="ot">=</span><span class="st">intranet.test.hexalog.lan,srv-lnx-01.test.hexalog.lan</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a aria-hidden="true" href="#cb17-1" tabindex="-1"></a><span class="fu">sudo</span> dnsmasq <span class="at">--test</span>                      <span class="co"># vérifie la syntaxe</span></span>
+<span id="cb17-2"><a aria-hidden="true" href="#cb17-2" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart dnsmasq</span>
+<span id="cb17-3"><a aria-hidden="true" href="#cb17-3" tabindex="-1"></a><span class="ex">systemctl</span> status dnsmasq <span class="at">--no-pager</span></span>
+<span id="cb17-4"><a aria-hidden="true" href="#cb17-4" tabindex="-1"></a><span class="fu">sudo</span> ss <span class="at">-ulnp</span> <span class="kw">|</span> <span class="fu">grep</span> dnsmasq             <span class="co"># ports 53 (DNS) et 67 (DHCP)</span></span></code></pre></div></div>
+<h3 id="observer-léchange-dhcp">5.3, Observer l’échange DHCP</h3>
+<p>Sur <code>SRV-LNX-01</code>, lancez une capture et laissez-la tourner :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a aria-hidden="true" href="#cb18-1" tabindex="-1"></a><span class="fu">sudo</span> tcpdump <span class="at">-ni</span> enp0s8 port 67 or port 68</span></code></pre></div></div>
+<p>Sur <code>CLI-LNX-01</code> (toujours configurée en DHCP), passez l’adaptateur 1 sur <strong>Réseau interne → LAN-TEST</strong>, puis :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : CLI-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a aria-hidden="true" href="#cb19-1" tabindex="-1"></a><span class="fu">sudo</span> ifdown enp0s3 <span class="kw">;</span> <span class="fu">sudo</span> ifup enp0s3</span>
+<span id="cb19-2"><a aria-hidden="true" href="#cb19-2" tabindex="-1"></a><span class="ex">ip</span> <span class="at">-br</span> a                          <span class="co"># adresse entre .100 et .150 ?</span></span>
+<span id="cb19-3"><a aria-hidden="true" href="#cb19-3" tabindex="-1"></a><span class="ex">ip</span> route                          <span class="co"># passerelle 10.20.20.1 ?</span></span>
+<span id="cb19-4"><a aria-hidden="true" href="#cb19-4" tabindex="-1"></a><span class="fu">cat</span> /etc/resolv.conf              <span class="co"># DNS 10.20.20.1 ?</span></span></code></pre></div></div>
+<p>Dans la capture, repérez les quatre messages DORA. Arrêtez la capture avec <code>Ctrl+C</code>. Consultez aussi les journaux :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a aria-hidden="true" href="#cb20-1" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-u</span> dnsmasq <span class="at">--no-pager</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 20</span>
+<span id="cb20-2"><a aria-hidden="true" href="#cb20-2" tabindex="-1"></a><span class="fu">cat</span> /var/lib/misc/dnsmasq.leases      <span class="co"># baux attribués</span></span></code></pre></div></div>
+<h3 id="tester-le-dns">5.4, Tester le DNS</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : CLI-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a aria-hidden="true" href="#cb21-1" tabindex="-1"></a><span class="ex">dig</span> srv-lnx-01.test.hexalog.lan          <span class="co"># enregistrement A</span></span>
+<span id="cb21-2"><a aria-hidden="true" href="#cb21-2" tabindex="-1"></a><span class="ex">dig</span> intranet.test.hexalog.lan            <span class="co"># alias CNAME puis A</span></span>
+<span id="cb21-3"><a aria-hidden="true" href="#cb21-3" tabindex="-1"></a><span class="ex">dig</span> cli-lnx-01.test.hexalog.lan          <span class="co"># le client a transmis son nom au DHCP : dnsmasq l'a enregistré</span></span>
+<span id="cb21-4"><a aria-hidden="true" href="#cb21-4" tabindex="-1"></a><span class="ex">dig</span> +short deb.debian.org                <span class="co"># dnsmasq relaie vers le DNS de SRV-LNX-01</span></span>
+<span id="cb21-5"><a aria-hidden="true" href="#cb21-5" tabindex="-1"></a><span class="ex">curl</span> http://intranet.test.hexalog.lan    <span class="co"># l'intranet par son nom</span></span>
+<span id="cb21-6"><a aria-hidden="true" href="#cb21-6" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 2 9.9.9.9                        <span class="co"># échoue : pourquoi ?</span></span></code></pre></div></div>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Pourquoi pas d'Internet sur LAN-TEST ?</strong></p>
+<p>Le client a bien une passerelle (<code>10.20.20.1</code>), mais <code>SRV-LNX-01</code> n’est pas configuré pour <strong>router</strong> les paquets d’une carte à l’autre ni pour faire du NAT. Un serveur Linux ne relaie pas le trafic par défaut : c’est une sécurité. Voir « Pour aller plus loin ».</p>
+</div></div>
+<h3 id="remettre-le-lab-en-état">5.5, Remettre le lab en état</h3>
+<ol type="1">
+<li>Sur <code>SRV-LNX-01</code> : <code>sudo systemctl disable --now dnsmasq</code>, puis éteignez la VM et <strong>désactivez l’adaptateur 2</strong> (on garde sa configuration pour plus tard).</li>
+<li>Sur <code>CLI-LNX-01</code> : repassez l’adaptateur 1 sur <strong>Réseau NAT → LAB-HEXALOG</strong>, puis configurez l’adresse fixe <code>10.10.10.101/24</code> comme à l’étape 2 (même passerelle, même DNS).</li>
+<li>Dans le Gestionnaire de réseau, <strong>désactivez le DHCP de LAB-HEXALOG</strong> : toutes les machines du lab ont maintenant une adresse fixe.</li>
+<li>Snapshots <code>03-ip-fixe</code> sur les deux VM. Mettez à jour l’inventaire.</li>
+</ol>
+<h2 id="étape-6.-défi-de-diagnostic-en-binôme">Étape 6. Défi de diagnostic en binôme</h2>
+<p>Chacun introduit <strong>une</strong> panne sur le lab de son voisin (en son absence), dans la liste suivante, puis l’autre diagnostique avec la méthode du cours :</p>
+<ol type="1">
+<li>passerelle erronée dans <code>/etc/network/interfaces</code> de CLI-LNX-01 (puis redémarrage) ;</li>
+<li>mauvais serveur DNS dans <code>/etc/resolv.conf</code> de CLI-LNX-01 ;</li>
+<li>service nginx arrêté sur SRV-LNX-01 (<code>sudo systemctl stop nginx</code>) ;</li>
+<li>règle <code>web-srv</code> modifiée pour pointer vers <code>10.10.10.21</code> ;</li>
+<li>câble de l’adaptateur 1 de CLI-LNX-01 débranché dans VirtualBox.</li>
+</ol>
+<p>Remplissez une <strong>fiche de diagnostic</strong> : symptôme observé, hypothèses, tests réalisés et résultats, cause trouvée, correction, vérification. Interdiction de regarder directement le fichier modifié avant d’avoir localisé la couche en panne par des tests.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">SRV-LNX-01 en <code>10.10.10.20/24</code> et CLI-LNX-01 en <code>10.10.10.101/24</code>, passerelle <code>10.10.10.1</code>, résolution DNS fonctionnelle.</label></li>
+<li><label><input type="checkbox">L’intranet s’affiche depuis CLI-LNX-01 (<code>curl http://10.10.10.20</code>) et depuis l’hôte (<code>http://127.0.0.1:8080</code>).</label></li>
+<li><label><input type="checkbox">Connexion SSH depuis l’hôte avec <code>ssh -p 2222 sysadmin@127.0.0.1</code>.</label></li>
+<li><label><input type="checkbox">Échange DORA capturé et expliqué, résolution des noms <code>test.hexalog.lan</code> démontrée.</label></li>
+<li><label><input type="checkbox">dnsmasq désactivé, DHCP de LAB-HEXALOG désactivé, inventaire à jour.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Pourquoi les serveurs ont-ils une adresse fixe alors que les postes utilisent le DHCP ?</li>
+<li>Pourquoi ne faut-il pas de ligne <code>gateway</code> sur la carte <code>enp0s8</code> ?</li>
+<li>Quelle adresse source voit nginx pour les requêtes venues de votre PC ? Pourquoi ?</li>
+<li>Que se passerait-il si vous branchiez dnsmasq sur le réseau de l’établissement ?</li>
+<li>Dans votre fiche de diagnostic, à quelle étape de la méthode avez-vous localisé la panne ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Plus de réseau après la configuration fixe</td>
+<td>faute de frappe dans <code>/etc/network/interfaces</code> : <code>sudo ifup enp0s3</code> affiche l’erreur ; restaurer <code>interfaces.bak</code></td>
+</tr>
+<tr class="even">
+<td><code>ping 10.10.10.1</code> fonctionne mais pas les noms</td>
+<td><code>/etc/resolv.conf</code> : DNS relevé à l’étape 1 bien recopié ?</td>
+</tr>
+<tr class="odd">
+<td>La page ne s’affiche pas depuis l’hôte</td>
+<td>règle de redirection : bonne IP invité, bon port ? nginx écoute-t-il (<code>ss -tlnp</code>) ?</td>
+</tr>
+<tr class="even">
+<td><code>ssh: connect to host 127.0.0.1 port 2222: Connection refused</code></td>
+<td>règle <code>ssh-srv</code> absente ou erronée</td>
+</tr>
+<tr class="odd">
+<td>dnsmasq refuse de démarrer</td>
+<td><code>sudo dnsmasq --test</code> et <code>journalctl -u dnsmasq</code> ; carte <code>enp0s8</code> bien configurée ?</td>
+</tr>
+<tr class="even">
+<td>Le client ne reçoit pas d’adresse sur LAN-TEST</td>
+<td>même nom exact de réseau interne sur les deux VM (<code>LAN-TEST</code>), dnsmasq actif, capture tcpdump</td>
+</tr>
+<tr class="odd">
+<td>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED</td>
+<td>la machine derrière <code>127.0.0.1:2222</code> a changé (clone, réinstallation) : <code>ssh-keygen -R "[127.0.0.1]:2222"</code> sur l’hôte</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="livrables">Livrables</h2>
+<ul>
+<li>Journal de bord, plan d’adressage et inventaire à jour.</li>
+<li>Captures : <code>ip -br a</code> et <code>ip route</code> des deux VM, intranet affiché depuis l’hôte, règles de redirection, capture DORA commentée, résultats <code>dig</code>.</li>
+<li>La fiche de diagnostic du défi.</li>
+</ul>
+<h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<p>Transformer <code>SRV-LNX-01</code> en routeur pour donner Internet au réseau LAN-TEST :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a aria-hidden="true" href="#cb22-1" tabindex="-1"></a><span class="co"># 1. autoriser le routage entre cartes</span></span>
+<span id="cb22-2"><a aria-hidden="true" href="#cb22-2" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'net.ipv4.ip_forward=1'</span> <span class="kw">|</span> <span class="fu">sudo</span> tee /etc/sysctl.d/99-routage.conf</span>
+<span id="cb22-3"><a aria-hidden="true" href="#cb22-3" tabindex="-1"></a><span class="fu">sudo</span> sysctl <span class="at">--system</span></span>
+<span id="cb22-4"><a aria-hidden="true" href="#cb22-4" tabindex="-1"></a><span class="co"># 2. NAT des adresses 10.20.20.0/24 à la sortie par enp0s3</span></span>
+<span id="cb22-5"><a aria-hidden="true" href="#cb22-5" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> nftables</span>
+<span id="cb22-6"><a aria-hidden="true" href="#cb22-6" tabindex="-1"></a><span class="fu">sudo</span> nft add table ip nat</span>
+<span id="cb22-7"><a aria-hidden="true" href="#cb22-7" tabindex="-1"></a><span class="fu">sudo</span> nft add chain ip nat postrouting <span class="st">'{ type nat hook postrouting priority 100 ; }'</span></span>
+<span id="cb22-8"><a aria-hidden="true" href="#cb22-8" tabindex="-1"></a><span class="fu">sudo</span> nft add rule ip nat postrouting ip saddr 10.20.20.0/24 oifname <span class="st">"enp0s3"</span> masquerade</span></code></pre></div></div>
+<p>Ces règles <code>nft</code> disparaissent au redémarrage : c’est voulu pour un essai. Vous venez de reproduire ce que fait une box Internet.</p>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s03-reseau.html" data-seance="3"><span class="dir">‹ Page précédente</span><span class="titre">Séance 3 : Réseau IP, NAT, DNS et DHCP</span></a><a class="next" href="../cours/s04-cloud.html" data-seance="4"><span class="dir">Page suivante ›</span><span class="titre">Séance 4 : Cloud : lire une architecture IaaS/PaaS</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>
