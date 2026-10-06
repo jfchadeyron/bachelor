@@ -1,0 +1,467 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 4 : Cloud : lire une architecture IaaS/PaaS | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Un schéma d'architecture cloud n'est qu'une infrastructure classique dessinée avec d'autres mots : réseaux virtuels, sous-réseaux, groupes de sécurité, adresses publiques. Cette séance vous apprend à ">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="../tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="../tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="../tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item active" data-seance="4"><a class="nav-link" href="s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="../tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="../tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="../tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="../tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="../tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="../tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="../tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="../tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="../tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="../tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="../tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module A : Environnements et lab</span><span class="sep">›</span><span>Séance 4</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 4</span>
+  <h1>Cloud : lire une architecture IaaS et PaaS</h1>
+  <p class="lead">Un schéma d'architecture cloud n'est qu'une infrastructure classique dessinée avec d'autres mots : réseaux virtuels, sous-réseaux, groupes de sécurité, adresses publiques. Cette séance vous apprend à le lire, à le relier à ce que vous avez construit dans VirtualBox et à argumenter un choix entre IaaS et PaaS.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 1 à 3</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp04-cloud.html" data-seance="4">TP 4 : Du schéma cloud au lab</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#les-briques-dune-architecture-iaas">1. Les briques d’une architecture IaaS</a></li><li><a href="#lire-un-schéma-darchitecture">2. Lire un schéma d’architecture</a></li><li><a href="#les-groupes-de-sécurité">3. Les groupes de sécurité</a></li><li><a href="#du-cloud-au-lab-les-correspondances">4. Du cloud au lab : les correspondances</a></li><li><a href="#iaas-ou-paas-comment-choisir">5. IaaS ou PaaS : comment choisir</a></li><li><a href="#se-connecter-à-une-vm-cloud">6. Se connecter à une VM cloud</a></li><li><a href="#à-retenir">7. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Identifier les briques d’une architecture IaaS : région, réseau virtuel, sous-réseaux, groupes de sécurité, VM, adresses publiques, bastion, répartiteur de charge.</li>
+<li>Faire correspondre chaque brique cloud à son équivalent dans le lab VirtualBox.</li>
+<li>Lire et critiquer les règles d’un groupe de sécurité.</li>
+<li>Comparer IaaS et PaaS selon le coût, l’exploitation, la disponibilité et la dépendance au fournisseur.</li>
+<li>Connaître les bonnes pratiques pour se connecter à une VM cloud (SSH, RDP).</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 h 15</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>2 h 30</td>
+<td><a data-seance="4" href="../tp/tp04-cloud.html">TP 4 : Du schéma cloud au lab</a> : lecture d’architecture, fiche de choix, reproduction dans le lab</td>
+</tr>
+<tr class="odd">
+<td>15 min</td>
+<td>Quiz</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="les-briques-dune-architecture-iaas">1. Les briques d’une architecture IaaS</h2>
+<h3 id="région-et-zone-de-disponibilité">Région et zone de disponibilité</h3>
+<p>Un fournisseur cloud possède des datacenters regroupés en <strong>régions</strong> (Paris, Francfort, Irlande…). Chaque région contient plusieurs <strong>zones de disponibilité</strong> : des datacenters distincts, avec leur propre alimentation et leur propre réseau, reliés entre eux par des liens rapides. Répartir ses VM sur deux zones protège contre la panne d’un datacenter entier.</p>
+<p>On choisit la région selon la <strong>latence</strong> (proche des utilisateurs), la <strong>réglementation</strong> (données en France ou dans l’Union européenne) et le <strong>prix</strong> (il varie d’une région à l’autre).</p>
+<h3 id="réseau-virtuel-et-sous-réseaux">Réseau virtuel et sous-réseaux</h3>
+<p>Le <strong>réseau virtuel</strong> (VPC chez AWS et Google, VNet chez Azure) est un réseau privé isolé, dans lequel on choisit sa plage d’adresses (par exemple <code>10.0.0.0/16</code>). On le découpe en <strong>sous-réseaux</strong> :</p>
+<ul>
+<li><strong>sous-réseau public</strong> : ses machines peuvent recevoir une adresse IP publique et être jointes depuis Internet (serveur web, bastion) ;</li>
+<li><strong>sous-réseau privé</strong> : ses machines n’ont pas d’adresse publique ; elles sortent éventuellement sur Internet par une <strong>passerelle NAT</strong>, mais personne ne peut les joindre de l’extérieur (bases de données, serveurs applicatifs).</li>
+</ul>
+<h3 id="les-autres-briques">Les autres briques</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Brique</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Instance (VM)</td>
+<td>la machine virtuelle, choisie dans un <strong>gabarit</strong> (nombre de vCPU et de Go de RAM)</td>
+</tr>
+<tr class="even">
+<td>Image</td>
+<td>le système de départ (Debian, Ubuntu, Windows Server…), équivalent d’un modèle</td>
+</tr>
+<tr class="odd">
+<td>Disque</td>
+<td>disque réseau attaché à la VM, facturé au Go par mois</td>
+</tr>
+<tr class="even">
+<td>Adresse IP publique</td>
+<td>adresse joignable depuis Internet, associée à une VM ou à un répartiteur</td>
+</tr>
+<tr class="odd">
+<td>Passerelle Internet</td>
+<td>permet au réseau virtuel de communiquer avec Internet</td>
+</tr>
+<tr class="even">
+<td>Passerelle NAT</td>
+<td>permet aux sous-réseaux privés de <strong>sortir</strong> sur Internet sans être joignables</td>
+</tr>
+<tr class="odd">
+<td>Groupe de sécurité</td>
+<td>pare-feu <strong>stateful</strong> appliqué à une VM ou à un sous-réseau</td>
+</tr>
+<tr class="even">
+<td>Bastion</td>
+<td>seule machine d’administration exposée, par laquelle on rebondit vers les autres</td>
+</tr>
+<tr class="odd">
+<td>Répartiteur de charge</td>
+<td>répartit les requêtes entre plusieurs VM, point d’entrée unique</td>
+</tr>
+<tr class="even">
+<td>Paire de clés</td>
+<td>clé SSH publique injectée dans la VM à sa création</td>
+</tr>
+<tr class="odd">
+<td>IAM</td>
+<td>gestion des identités et des droits <strong>sur la console cloud</strong> elle-même</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="correspondances-entre-fournisseurs">Correspondances entre fournisseurs</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Notion</th>
+<th>AWS</th>
+<th>Microsoft Azure</th>
+<th>Google Cloud</th>
+<th>OVHcloud Public Cloud</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Réseau virtuel</td>
+<td>VPC</td>
+<td>VNet</td>
+<td>VPC</td>
+<td>réseau privé (vRack)</td>
+</tr>
+<tr class="even">
+<td>VM</td>
+<td>EC2</td>
+<td>Virtual Machines</td>
+<td>Compute Engine</td>
+<td>instances</td>
+</tr>
+<tr class="odd">
+<td>Pare-feu de VM</td>
+<td>Security Group</td>
+<td>Network Security Group (NSG)</td>
+<td>règles de pare-feu VPC</td>
+<td>groupes de sécurité</td>
+</tr>
+<tr class="even">
+<td>Disque</td>
+<td>EBS</td>
+<td>Managed Disks</td>
+<td>Persistent Disk</td>
+<td>Block Storage</td>
+</tr>
+<tr class="odd">
+<td>Stockage objet</td>
+<td>S3</td>
+<td>Blob Storage</td>
+<td>Cloud Storage</td>
+<td>Object Storage</td>
+</tr>
+<tr class="even">
+<td>Base managée (PaaS)</td>
+<td>RDS</td>
+<td>Azure SQL, Azure Database for MySQL</td>
+<td>Cloud SQL</td>
+<td>Public Cloud Databases</td>
+</tr>
+<tr class="odd">
+<td>Hébergement d’appli (PaaS)</td>
+<td>Elastic Beanstalk</td>
+<td>App Service</td>
+<td>App Engine, Cloud Run</td>
+<td>Web PaaS</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="lire-un-schéma-darchitecture">2. Lire un schéma d’architecture</h2>
+<p>Voici l’architecture qu’un prestataire propose à Hexalog pour son application de suivi des colis, en IaaS :</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-508704" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1081.25px;" viewBox="0 0 1081.25 585.421630859375" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-508704{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-508704 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-508704 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-508704 .error-icon{fill:#f5f6f8;}#mmd0-508704 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-508704 .edge-thickness-normal{stroke-width:1px;}#mmd0-508704 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-508704 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-508704 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-508704 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-508704 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-508704 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-508704 .marker.cross{stroke:#4a5563;}#mmd0-508704 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-508704 p{margin:0;}#mmd0-508704 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-508704 .cluster-label text{fill:#1f3a5f;}#mmd0-508704 .cluster-label span{color:#1f3a5f;}#mmd0-508704 .cluster-label span p{background-color:transparent;}#mmd0-508704 .label text,#mmd0-508704 span{fill:#1d2530;color:#1d2530;}#mmd0-508704 .node rect,#mmd0-508704 .node circle,#mmd0-508704 .node ellipse,#mmd0-508704 .node polygon,#mmd0-508704 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-508704 .rough-node .label text,#mmd0-508704 .node .label text,#mmd0-508704 .image-shape .label,#mmd0-508704 .icon-shape .label{text-anchor:middle;}#mmd0-508704 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-508704 .rough-node .label,#mmd0-508704 .node .label,#mmd0-508704 .image-shape .label,#mmd0-508704 .icon-shape .label{text-align:center;}#mmd0-508704 .node.clickable{cursor:pointer;}#mmd0-508704 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-508704 .arrowheadPath{fill:#000000;}#mmd0-508704 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-508704 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-508704 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-508704 .edgeLabel p{background-color:#ffffff;}#mmd0-508704 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-508704 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-508704 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-508704 .cluster text{fill:#1f3a5f;}#mmd0-508704 .cluster span{color:#1f3a5f;}#mmd0-508704 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-508704 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-508704 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-508704 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-508704 rect.text{fill:none;stroke-width:0;}#mmd0-508704 .icon-shape,#mmd0-508704 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-508704 .icon-shape p,#mmd0-508704 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-508704 .icon-shape .label rect,#mmd0-508704 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-508704 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-508704 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-508704 .node .neo-node{stroke:#1f3a5f;}#mmd0-508704 [data-look="neo"].node rect,#mmd0-508704 [data-look="neo"].cluster rect,#mmd0-508704 [data-look="neo"].node polygon{stroke:url(#mmd0-508704-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-508704 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-508704 [data-look="neo"].node path{stroke:url(#mmd0-508704-gradient);stroke-width:1px;}#mmd0-508704 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-508704 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-508704 [data-look="neo"].node circle{stroke:url(#mmd0-508704-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-508704 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-508704 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-508704-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-508704 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-508704-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-508704 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-508704_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-508704_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-508704_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-508704_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-508704_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-508704_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-508704_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-508704_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-508704_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-508704_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-508704_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-508704_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-508704-VPC" data-look="classic"><rect style="" x="185.625" y="8" width="887.625" height="569.4216594696045"></rect><g class="cluster-label " transform="translate(506.46875, 8)"><foreignObject width="245.9375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Réseau virtuel 10.0.0.0/16, région Paris</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-508704-PRIV" data-look="classic"><rect style="" x="602.3125" y="28" width="445.9375" height="235.0466594696045"></rect><g class="cluster-label " transform="translate(731.4921875, 28)"><foreignObject width="187.578125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Sous-réseau privé 10.0.2.0/24</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-508704-PUB" data-look="classic"><rect style="" x="210.625" y="283.0466594696045" width="837.625" height="274.375"></rect><g class="cluster-label " transform="translate(532.53125, 283.0466594696045)"><foreignObject width="193.8125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Sous-réseau public 10.0.1.0/24</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M90.875,486.672L148.945,486.672L185.625,486.672L210.625,486.672L231.625,486.672" id="mmd0-508704-L_U_LB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_U_LB_0" data-points="W3sieCI6OTAuODc1LCJ5Ijo0ODYuNjcxNjU5NDY5NjA0NX0seyJ4IjoxNDguOTQ1MzEyNSwieSI6NDg2LjY3MTY1OTQ2OTYwNDV9LHsieCI6MTg1LjYyNSwieSI6NDg2LjY3MTY1OTQ2OTYwNDV9LHsieCI6MjEwLjYyNSwieSI6NDg2LjY3MTY1OTQ2OTYwNDV9LHsieCI6MjM1LjYyNSwieSI6NDg2LjY3MTY1OTQ2OTYwNDV9XQ==" data-look="classic" marker-end="url(#mmd0-508704_flowchart-v2-pointEnd)"></path><path d="M112.266,353.797L148.945,353.797L185.625,353.797L210.625,353.797L275.211,353.797" id="mmd0-508704-L_A_BST_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A_BST_0" data-points="W3sieCI6MTEyLjI2NTYyNSwieSI6MzUzLjc5NjY1OTQ2OTYwNDV9LHsieCI6MTQ4Ljk0NTMxMjUsInkiOjM1My43OTY2NTk0Njk2MDQ1fSx7IngiOjE4NS42MjUsInkiOjM1My43OTY2NTk0Njk2MDQ1fSx7IngiOjIxMC42MjUsInkiOjM1My43OTY2NTk0Njk2MDQ1fSx7IngiOjI3OS4yMTA5Mzc1LCJ5IjozNTMuNzk2NjU5NDY5NjA0NX1d" data-look="classic" marker-end="url(#mmd0-508704_flowchart-v2-pointEnd)"></path><path d="M427.047,487.063L514.68,487.422L602.313,487.422L678.212,225.888" id="mmd0-508704-L_LB_W1_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_LB_W1_0" data-points="W3sieCI6NDI3LjA0Njg3NSwieSI6NDg3LjA2MzE4MTk2ODMyNjE1fSx7IngiOjUxNC42Nzk2ODc1LCJ5Ijo0ODcuNDIxNjU5NDY5NjA0NX0seyJ4Ijo2MDIuMzEyNSwieSI6NDg3LjQyMTY1OTQ2OTYwNDV9LHsieCI6Njc5LjMyNzMyMzE5OTY1NSwieSI6MjIyLjA0NjY1OTQ2OTYwNDV9XQ==" data-look="classic" marker-end="url(#mmd0-508704_flowchart-v2-pointEnd)"></path><path d="M368.402,451.672L514.68,313.547L602.313,313.547L675.394,126.772" id="mmd0-508704-L_LB_W2_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_LB_W2_0" data-points="W3sieCI6MzY4LjQwMTgyMTk3NjUzNDMsInkiOjQ1MS42NzE2NTk0Njk2MDQ1fSx7IngiOjUxNC42Nzk2ODc1LCJ5IjozMTMuNTQ2NjU5NDY5NjA0NX0seyJ4Ijo2MDIuMzEyNSwieSI6MzEzLjU0NjY1OTQ2OTYwNDV9LHsieCI6Njc2Ljg1MTE2Mjc5MDY5NzcsInkiOjEyMy4wNDY2NTk0Njk2MDQ0OX1d" data-look="classic" marker-end="url(#mmd0-508704_flowchart-v2-pointEnd)"></path><path d="M745.563,183.476L808.297,168.547L881.881,142.313" id="mmd0-508704-L_W1_DB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_W1_DB_0" data-points="W3sieCI6NzQ1LjU2MjUsInkiOjE4My40NzYxMzc2MDc4MjczNX0seyJ4Ijo4MDguMjk2ODc1LCJ5IjoxNjguNTQ2NjU5NDY5NjA0NX0seyJ4Ijo4ODUuNjQ4NDM3NSwieSI6MTQwLjk2OTYwMDA1MDI5MzIyfV0=" data-look="classic" marker-end="url(#mmd0-508704_flowchart-v2-pointEnd)"></path><path d="M745.563,98.547L808.297,98.547L881.691,109.383" id="mmd0-508704-L_W2_DB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_W2_DB_0" data-points="W3sieCI6NzQ1LjU2MjUsInkiOjk4LjU0NjY1OTQ2OTYwNDQ5fSx7IngiOjgwOC4yOTY4NzUsInkiOjk4LjU0NjY1OTQ2OTYwNDQ5fSx7IngiOjg4NS42NDg0Mzc1LCJ5IjoxMDkuOTY3NDYxODU1Mzc5ODd9XQ==" data-look="classic" marker-end="url(#mmd0-508704_flowchart-v2-pointEnd)"></path><path d="M383.461,354.01L514.68,354.547L602.313,354.547L649.452,266.572" id="mmd0-508704-L_BST_PRIV_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_BST_PRIV_0" data-points="W3sieCI6MzgzLjQ2MDkzNzUsInkiOjM1NC4wMDk4ODU5OTA4MjQ5fSx7IngiOjUxNC42Nzk2ODc1LCJ5IjozNTQuNTQ2NjU5NDY5NjA0NX0seyJ4Ijo2MDIuMzEyNSwieSI6MzU0LjU0NjY1OTQ2OTYwNDV9LHsieCI6Njk5LjkxNzEwOTE5OTU4MDUsInkiOjI2My4wNDY2NjA0MjMyNzg4fV0=" data-look="classic" marker-end="url(#mmd0-508704_flowchart-v2-pointEnd)"></path><path d="M899.414,263.047L929.409,391.838" id="mmd0-508704-L_PRIV_NAT_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PRIV_NAT_0" data-points="W3sieCI6Nzk3Ljc1ODI0MDEzNTk4NjEsInkiOjI2My4wNDY2NjA0MjMyNzg4fSx7IngiOjgwOC4yOTY4NzUsInkiOjIxOC4wNDY2NTk0Njk2MDQ1fSx7IngiOjkzMC4zMTYyODE4Nzc4OTgsInkiOjM5NS43MzQxNTk0Njk2MDQ1fV0=" data-look="classic" marker-end="url(#mmd0-508704_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(148.9453125, 486.6716594696045)"><g class="label" data-id="L_U_LB_0" transform="translate(-11.6796875, -10.5)"><foreignObject width="23.359375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>443</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(148.9453125, 353.7966594696045)"><g class="label" data-id="L_A_BST_0" transform="translate(-7.7890625, -10.5)"><foreignObject width="15.578125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>22</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(514.6796875, 487.4216594696045)"><g class="label" data-id="L_LB_W1_0" transform="translate(-7.7890625, -10.5)"><foreignObject width="15.578125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>80</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(514.6796875, 313.5466594696045)"><g class="label" data-id="L_LB_W2_0" transform="translate(-7.7890625, -10.5)"><foreignObject width="15.578125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>80</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(808.296875, 168.5466594696045)"><g class="label" data-id="L_W1_DB_0" transform="translate(-15.578125, -10.5)"><foreignObject width="31.15625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>3306</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(808.296875, 98.54665946960449)"><g class="label" data-id="L_W2_DB_0" transform="translate(-15.578125, -10.5)"><foreignObject width="31.15625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>3306</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(544.78998, 354.54666)"><g class="label" data-id="L_BST_PRIV_0" transform="translate(-62.6328125, -10.5)"><foreignObject width="125.265625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>SSH 22 vers les VM</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(914.86535, 329.39041)"><g class="label" data-id="L_PRIV_NAT_0" transform="translate(-37.734375, -10.5)"><foreignObject width="75.46875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>mises à jour</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-508704-flowchart-U-0" data-look="classic" transform="translate(60.1328125, 486.6716594696045)"><circle class="basic label-container" style="" r="30.7421875" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-23.7421875, -21)"><rect></rect><foreignObject width="47.484375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Clients<br>Internet</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-508704-flowchart-A-1" data-look="classic" transform="translate(60.1328125, 353.7966594696045)"><circle class="basic label-container" style="" r="52.1328125" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-45.1328125, -21)"><rect></rect><foreignObject width="90.265625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Administrateur<br>203.0.113.50</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-508704-flowchart-LB-2" data-look="classic" transform="translate(331.3359375, 486.6716594696045)"><rect class="basic label-container" style="" x="-95.7109375" y="-35" width="191.421875" height="70"></rect><g class="label" style="" transform="translate(-67.7109375, -21)"><rect></rect><foreignObject width="135.421875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Répartiteur de charge<br>HTTPS 443</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-508704-flowchart-BST-3" data-look="classic" transform="translate(331.3359375, 353.7966594696045)"><rect class="basic label-container" style="" x="-52.125" y="-35" width="104.25" height="70"></rect><g class="label" style="" transform="translate(-24.125, -21)"><rect></rect><foreignObject width="48.25" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Bastion<br>SSH 22</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-508704-flowchart-NAT-4" data-look="classic" transform="translate(947.140625, 420.2341594696045)"><rect class="basic label-container" style="" x="-76.109375" y="-24.5" width="152.21875" height="49"></rect><g class="label" style="" transform="translate(-48.109375, -10.5)"><rect></rect><foreignObject width="96.21875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Passerelle NAT</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-508704-flowchart-W1-5" data-look="classic" transform="translate(686.4375, 197.5466594696045)"><rect class="basic label-container" style="" x="-59.125" y="-24.5" width="118.25" height="49"></rect><g class="label" style="" transform="translate(-31.125, -10.5)"><rect></rect><foreignObject width="62.25" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>VM web 1</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-508704-flowchart-W2-6" data-look="classic" transform="translate(686.4375, 98.54665946960449)"><rect class="basic label-container" style="" x="-59.125" y="-24.5" width="118.25" height="49"></rect><g class="label" style="" transform="translate(-31.125, -10.5)"><rect></rect><foreignObject width="62.25" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>VM web 2</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-508704-flowchart-DB-7" data-look="classic" transform="translate(947.140625, 119.04665946960449)"><path d="M0,12.398399596748789 a61.4921875,12.398399596748789 0,0,0 122.984375,0 a61.4921875,12.398399596748789 0,0,0 -122.984375,0 l0,68.39839959674879 a61.4921875,12.398399596748789 0,0,0 122.984375,0 l0,-68.39839959674879" class="basic label-container outer-path" style="" label-offset-y="12.398399596748789" transform="translate(-61.4921875, -46.59759939512318)"></path><g class="label" style="" transform="translate(-54.4921875, -11.666666666666666)"><rect></rect><foreignObject width="108.984375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Base de données<br>MariaDB 3306</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-508704-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-508704-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-508704-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<p>Pour lire un schéma, posez-vous toujours les mêmes questions :</p>
+<ol type="1">
+<li><strong>Qui entre, par où ?</strong> Les clients arrivent en HTTPS sur le répartiteur, l’administrateur en SSH sur le bastion. Rien d’autre n’est exposé.</li>
+<li><strong>Quels flux internes ?</strong> Répartiteur vers web (port 80), web vers base (port 3306), bastion vers tout le monde (port 22).</li>
+<li><strong>Qu’est-ce qui est isolé ?</strong> Les VM web et la base sont dans le sous-réseau privé, sans adresse publique.</li>
+<li><strong>Où sont les points uniques de défaillance ?</strong> Deux VM web : la perte de l’une n’arrête pas le service. Une seule base : si elle tombe, tout s’arrête.</li>
+<li><strong>Comment sortent-elles pour leurs mises à jour ?</strong> Par la passerelle NAT.</li>
+</ol>
+<h2 id="les-groupes-de-sécurité">3. Les groupes de sécurité</h2>
+<p>Un <strong>groupe de sécurité</strong> est une liste de règles qui autorisent des flux. Tout ce qui n’est pas autorisé est bloqué. Il est <strong>stateful</strong> : si une connexion entrante est autorisée, la réponse sort automatiquement, sans règle supplémentaire.</p>
+<p>Groupe de sécurité de la base de données :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Sens</th>
+<th>Protocole</th>
+<th>Port</th>
+<th>Source</th>
+<th>Commentaire</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Entrant</td>
+<td>TCP</td>
+<td>3306</td>
+<td>groupe « web »</td>
+<td>seules les VM web interrogent la base</td>
+</tr>
+<tr class="even">
+<td>Entrant</td>
+<td>TCP</td>
+<td>22</td>
+<td>groupe « bastion »</td>
+<td>administration uniquement via le bastion</td>
+</tr>
+<tr class="odd">
+<td>Sortant</td>
+<td>tout</td>
+<td>tout</td>
+<td>0.0.0.0/0</td>
+<td>par défaut, sorties autorisées</td>
+</tr>
+</tbody>
+</table></div>
+<p>La source peut être une adresse, une plage (<code>10.0.1.0/24</code>), tout Internet (<code>0.0.0.0/0</code>) ou <strong>un autre groupe de sécurité</strong>, ce qui évite de manipuler des adresses qui changent.</p>
+<div class="callout danger"><div class="callout-body"><p class="callout-titre"><strong>L'erreur la plus fréquente</strong></p>
+<p>Une règle « TCP 22 (SSH) ou 3389 (RDP) depuis <code>0.0.0.0/0</code> » expose l’administration de la VM au monde entier. Des robots scannent Internet en permanence et tentent des milliers de mots de passe dans l’heure qui suit la création d’une VM. On restreint toujours l’administration à une adresse connue ou on passe par un bastion.</p>
+</div></div>
+<p>Le groupe de sécurité n’empêche pas d’activer <strong>aussi</strong> le pare-feu du système (UFW sous Linux, pare-feu Windows) : c’est la <strong>défense en profondeur</strong>. Si une couche est mal configurée, l’autre protège encore.</p>
+<h3 id="premier-contact-avec-ufw">Premier contact avec UFW</h3>
+<p>UFW (<em>Uncomplicated Firewall</em>) est l’outil le plus simple pour gérer le pare-feu d’un serveur Debian ou Ubuntu. Il sera approfondi aux séances 10 et 12.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> ufw</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="fu">sudo</span> ufw default deny incoming                              <span class="co"># tout refuser en entrée par défaut</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="fu">sudo</span> ufw default allow outgoing                             <span class="co"># autoriser les sorties</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 80/tcp                                       <span class="co"># web ouvert à tous</span></span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a><span class="fu">sudo</span> ufw allow from 10.10.10.0/24 to any port 22 proto tcp  <span class="co"># SSH depuis le réseau du lab seulement</span></span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a><span class="fu">sudo</span> ufw enable</span>
+<span id="cb2-7"><a aria-hidden="true" href="#cb2-7" tabindex="-1"></a><span class="fu">sudo</span> ufw status numbered</span></code></pre></div></div>
+<div class="callout warn"><div class="callout-body">
+<p>Toujours autoriser SSH <strong>avant</strong> <code>ufw enable</code> quand on est connecté à distance, sinon on se coupe l’accès.</p>
+</div></div>
+<h2 id="du-cloud-au-lab-les-correspondances">4. Du cloud au lab : les correspondances</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Dans le cloud</th>
+<th>Dans le lab VirtualBox</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Région, datacenter</td>
+<td>votre PC</td>
+</tr>
+<tr class="even">
+<td>Réseau virtuel (VPC, VNet)</td>
+<td>le Réseau NAT <code>LAB-HEXALOG</code></td>
+</tr>
+<tr class="odd">
+<td>Sous-réseau privé</td>
+<td>un Réseau interne (<code>LAN-TEST</code>)</td>
+</tr>
+<tr class="even">
+<td>Passerelle Internet + NAT</td>
+<td>le NAT de VirtualBox (<code>10.10.10.1</code>)</td>
+</tr>
+<tr class="odd">
+<td>Adresse IP publique, répartiteur</td>
+<td>une redirection de ports sur l’hôte</td>
+</tr>
+<tr class="even">
+<td>Groupe de sécurité</td>
+<td>les redirections de ports (ce qui est exposé) + UFW ou le pare-feu Windows</td>
+</tr>
+<tr class="odd">
+<td>Image</td>
+<td>le modèle <code>TPL-DEB13</code> ou un fichier OVA</td>
+</tr>
+<tr class="even">
+<td>Instance</td>
+<td>une VM VirtualBox</td>
+</tr>
+<tr class="odd">
+<td>Snapshot de disque</td>
+<td>un snapshot VirtualBox</td>
+</tr>
+<tr class="even">
+<td>Paire de clés SSH</td>
+<td>clé publique dans <code>~/.ssh/authorized_keys</code> (séance 10)</td>
+</tr>
+<tr class="odd">
+<td>Bastion</td>
+<td><code>BST-LNX-01</code> (séance 12)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Autrement dit : ce que vous apprenez dans le lab est directement transposable. Le cloud ajoute surtout l’automatisation, la facturation et la gestion des droits sur la console.</p>
+<h2 id="iaas-ou-paas-comment-choisir">5. IaaS ou PaaS : comment choisir</h2>
+<h3 id="les-critères">Les critères</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Critère</th>
+<th>IaaS</th>
+<th>PaaS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Contrôle</td>
+<td>total sur le système, les versions, les réglages</td>
+<td>limité aux options proposées</td>
+</tr>
+<tr class="even">
+<td>Exploitation</td>
+<td>mises à jour du système, sauvegardes, supervision à votre charge</td>
+<td>assurées par le fournisseur</td>
+</tr>
+<tr class="odd">
+<td>Compétences</td>
+<td>administration système nécessaire</td>
+<td>surtout développement et paramétrage</td>
+</tr>
+<tr class="even">
+<td>Disponibilité</td>
+<td>à construire (plusieurs VM, répartiteur, réplication)</td>
+<td>souvent incluse ou activable (option haute disponibilité)</td>
+</tr>
+<tr class="odd">
+<td>Coût affiché</td>
+<td>souvent plus bas</td>
+<td>souvent plus élevé</td>
+</tr>
+<tr class="even">
+<td>Coût complet (TCO)</td>
+<td>temps d’administration à ajouter</td>
+<td>temps d’administration réduit</td>
+</tr>
+<tr class="odd">
+<td>Portabilité</td>
+<td>une VM Debian se déplace facilement</td>
+<td>dépendance plus forte au fournisseur (lock-in)</td>
+</tr>
+<tr class="even">
+<td>Cas typique</td>
+<td>logiciel avec besoins particuliers, migration d’un serveur existant (<em>lift and shift</em>)</td>
+<td>application web standard, base de données classique</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="le-sla">Le SLA</h3>
+<p>Le <strong>SLA</strong> (<em>Service Level Agreement</em>) est l’engagement de disponibilité du fournisseur, avec des pénalités s’il n’est pas tenu. Pour un mois de 30 jours (43 200 minutes) :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>SLA</th>
+<th>Indisponibilité maximale par mois</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>99 %</td>
+<td>7 h 12 min</td>
+</tr>
+<tr class="even">
+<td>99,9 %</td>
+<td>43 min</td>
+</tr>
+<tr class="odd">
+<td>99,95 %</td>
+<td>21 min 36 s</td>
+</tr>
+<tr class="even">
+<td>99,99 %</td>
+<td>4 min 19 s</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le SLA d’une VM IaaS isolée est souvent plus faible que celui d’un service PaaS avec haute disponibilité. Pour atteindre le même niveau en IaaS, il faut plusieurs VM dans plusieurs zones.</p>
+<h3 id="les-coûts-du-cloud">Les coûts du cloud</h3>
+<ul>
+<li><strong>À la demande</strong> : payé à la seconde ou à l’heure, sans engagement. Le plus cher à l’heure, le plus souple.</li>
+<li><strong>Engagement</strong> (instances réservées, plans d’économie) : 1 à 3 ans d’engagement contre une remise importante.</li>
+<li><strong>Capacité excédentaire</strong> (spot) : très bon marché, mais la VM peut être arrêtée à tout moment.</li>
+</ul>
+<p>Ce qui est facturé : le temps de calcul, le stockage (Go par mois, y compris les snapshots), le <strong>trafic sortant</strong>, les adresses IP publiques, les services managés. Les pièges classiques : une VM de test oubliée, des snapshots jamais supprimés, des disques orphelins après suppression d’une VM. Les fournisseurs proposent des calculateurs de prix, des alertes de budget et des <strong>étiquettes</strong> (tags) pour savoir qui consomme quoi.</p>
+<h2 id="se-connecter-à-une-vm-cloud">6. Se connecter à une VM cloud</h2>
+<ul>
+<li><strong>Linux</strong> : pas de mot de passe. À la création, on fournit une <strong>clé SSH publique</strong> que le fournisseur injecte dans la VM (outil <em>cloud-init</em>). On se connecte avec l’utilisateur prévu par l’image (<code>debian</code>, <code>ubuntu</code>, <code>ec2-user</code>, <code>azureuser</code>…) et sa clé privée : <code>ssh -i ma-cle debian@IP-publique</code>.</li>
+<li><strong>Windows</strong> : connexion RDP avec le compte administrateur défini à la création (ou dont le mot de passe est récupéré sur la console).</li>
+<li><strong>Bonnes pratiques</strong> : n’ouvrir SSH ou RDP que depuis son adresse, ou passer par un bastion ; certains fournisseurs proposent un bastion managé (Azure Bastion) ou un accès sans port ouvert (AWS Systems Manager Session Manager).</li>
+<li><strong>Toujours supprimer</strong> ce qu’on a créé pour un test : VM, disques, adresses IP, snapshots.</li>
+</ul>
+<div class="callout tip"><div class="callout-body"><p class="callout-titre"><strong>Ressources du site</strong></p>
+<p>Le site du Bachelor propose aussi des supports sur <a href="../../aws.html">AWS</a>, <a href="../../google-cloud.html">Google Cloud</a> et une <a href="../../etude.html">étude comparative OVHcloud et AWS</a>.</p>
+</div></div>
+<h2 id="à-retenir">7. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Région et zones de disponibilité, réseau virtuel, sous-réseaux publics et privés, passerelle NAT, groupes de sécurité, adresses publiques, bastion, répartiteur de charge.</li>
+<li>Un groupe de sécurité est un pare-feu stateful : on n’autorise que les flux nécessaires, jamais SSH ou RDP depuis <code>0.0.0.0/0</code>.</li>
+<li>Chaque brique cloud a un équivalent dans le lab : le lab est un petit cloud privé.</li>
+<li>IaaS = plus de contrôle, plus d’exploitation. PaaS = moins d’exploitation, plus de dépendance. On compare avec le TCO, pas avec le prix affiché.</li>
+<li>99,9 % de disponibilité autorise environ 43 minutes de panne par mois.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Quelle est la différence entre une région et une zone de disponibilité ?</li>
+<li>Pourquoi placer une base de données dans un sous-réseau privé ?</li>
+<li>Comment une VM d’un sous-réseau privé fait-elle ses mises à jour ?</li>
+<li>Que signifie « groupe de sécurité stateful » ?</li>
+<li>Qu’est-ce qui ne va pas dans la règle « entrant, TCP 3389, source 0.0.0.0/0 » ?</li>
+<li>Quel est l’équivalent, dans le lab, d’une adresse IP publique associée à une VM ?</li>
+<li>Un SLA de 99,9 % sur un mois de 30 jours autorise combien de minutes d’indisponibilité ?</li>
+<li>Citez deux coûts cloud souvent oubliés.</li>
+<li>Donnez un argument pour l’IaaS et un argument pour le PaaS.</li>
+<li>Comment se connecte-t-on à une VM Linux dans le cloud ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Une région est une zone géographique ; elle contient plusieurs zones de disponibilité, qui sont des datacenters indépendants.</li>
+<li>Pour qu’elle ne soit pas joignable depuis Internet : seules les VM autorisées du réseau virtuel peuvent l’interroger.</li>
+<li>Par une passerelle NAT : elle sort sur Internet sans pouvoir être jointe de l’extérieur.</li>
+<li>Il suit les connexions : la réponse à une connexion autorisée est automatiquement autorisée.</li>
+<li>Le bureau à distance est ouvert au monde entier : risque d’attaques par mot de passe. Il faut limiter la source ou passer par un bastion.</li>
+<li>Une redirection de ports sur le réseau NAT (port de l’hôte vers la VM).</li>
+<li>Environ 43 minutes (0,1 % de 43 200 minutes).</li>
+<li>Le trafic sortant, les snapshots, les disques orphelins, les adresses IP publiques, une VM oubliée allumée.</li>
+<li>IaaS : contrôle total, portabilité, besoins particuliers possibles. PaaS : moins d’exploitation, sauvegardes et haute disponibilité incluses.</li>
+<li>En SSH avec une clé : la clé publique est injectée à la création, on utilise l’utilisateur de l’image et sa clé privée.</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp03-reseau.html" data-seance="3"><span class="dir">‹ Page précédente</span><span class="titre">TP 3 : Exposer un service et diagnostiquer le réseau</span></a><a class="next" href="../tp/tp04-cloud.html" data-seance="4"><span class="dir">Page suivante ›</span><span class="titre">TP 4 : Du schéma cloud au lab</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 4 : Du schéma cloud au lab | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Trois exercices qui s'enchaînent : critiquer une architecture cloud mal sécurisée, argumenter un choix entre IaaS et PaaS chiffres à l'appui, puis reproduire dans le lab le principe des sous-réseaux p">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item active" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp active" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module A : Environnements et lab</span><span class="sep">›</span><a href="../cours/s04-cloud.html" data-seance="4">Séance 4</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 4</span>
+  <h1>TP 4 : Du schéma cloud au lab</h1>
+  <p class="lead">Trois exercices qui s'enchaînent : critiquer une architecture cloud mal sécurisée, argumenter un choix entre IaaS et PaaS chiffres à l'appui, puis reproduire dans le lab le principe des sous-réseaux publics et privés et des groupes de sécurité.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>2 h 30</td></tr><tr><th>Machines virtuelles</th><td>SRV-LNX-01, CLI-LNX-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s04-cloud.html" data-seance="4">Séance 4 : Cloud : lire une architecture IaaS/PaaS</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-critiquer-une-architecture-45-min">Partie A. Critiquer une architecture (45 min)</a></li><li><a href="#partie-b.-fiche-de-choix-iaas-ou-paas-45-min">Partie B. Fiche de choix IaaS ou PaaS (45 min)</a></li><li><a href="#partie-c.-maquette-dans-le-lab-1-h">Partie C. Maquette dans le lab (1 h)</a></li><li><a href="#partie-d.-dans-un-vrai-cloud-optionnel">Partie D. Dans un vrai cloud (optionnel)</a></li><li><a href="#livrables">Livrables</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Hexalog veut ouvrir à ses clients une application web de <strong>suivi des colis</strong> (PHP + base MariaDB). Un prestataire a envoyé une proposition d’architecture et deux devis. Votre responsable vous demande un avis argumenté, puis une maquette dans le lab.</p>
+<h2 id="partie-a.-critiquer-une-architecture-45-min">Partie A. Critiquer une architecture (45 min)</h2>
+<p>Le prestataire propose le schéma suivant :</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-632850" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 427.04296875px;" viewBox="0 0 427.04296875 489.46539306640625" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-632850{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-632850 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-632850 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-632850 .error-icon{fill:#f5f6f8;}#mmd0-632850 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-632850 .edge-thickness-normal{stroke-width:1px;}#mmd0-632850 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-632850 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-632850 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-632850 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-632850 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-632850 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-632850 .marker.cross{stroke:#4a5563;}#mmd0-632850 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-632850 p{margin:0;}#mmd0-632850 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-632850 .cluster-label text{fill:#1f3a5f;}#mmd0-632850 .cluster-label span{color:#1f3a5f;}#mmd0-632850 .cluster-label span p{background-color:transparent;}#mmd0-632850 .label text,#mmd0-632850 span{fill:#1d2530;color:#1d2530;}#mmd0-632850 .node rect,#mmd0-632850 .node circle,#mmd0-632850 .node ellipse,#mmd0-632850 .node polygon,#mmd0-632850 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-632850 .rough-node .label text,#mmd0-632850 .node .label text,#mmd0-632850 .image-shape .label,#mmd0-632850 .icon-shape .label{text-anchor:middle;}#mmd0-632850 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-632850 .rough-node .label,#mmd0-632850 .node .label,#mmd0-632850 .image-shape .label,#mmd0-632850 .icon-shape .label{text-align:center;}#mmd0-632850 .node.clickable{cursor:pointer;}#mmd0-632850 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-632850 .arrowheadPath{fill:#000000;}#mmd0-632850 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-632850 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-632850 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-632850 .edgeLabel p{background-color:#ffffff;}#mmd0-632850 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-632850 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-632850 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-632850 .cluster text{fill:#1f3a5f;}#mmd0-632850 .cluster span{color:#1f3a5f;}#mmd0-632850 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-632850 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-632850 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-632850 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-632850 rect.text{fill:none;stroke-width:0;}#mmd0-632850 .icon-shape,#mmd0-632850 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-632850 .icon-shape p,#mmd0-632850 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-632850 .icon-shape .label rect,#mmd0-632850 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-632850 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-632850 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-632850 .node .neo-node{stroke:#1f3a5f;}#mmd0-632850 [data-look="neo"].node rect,#mmd0-632850 [data-look="neo"].cluster rect,#mmd0-632850 [data-look="neo"].node polygon{stroke:url(#mmd0-632850-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-632850 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-632850 [data-look="neo"].node path{stroke:url(#mmd0-632850-gradient);stroke-width:1px;}#mmd0-632850 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-632850 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-632850 [data-look="neo"].node circle{stroke:url(#mmd0-632850-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-632850 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-632850 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-632850-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-632850 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-632850-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-632850 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-632850_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-632850_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-632850_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-632850_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-632850_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-632850_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-632850_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-632850_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-632850_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-632850_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-632850_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-632850_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-632850-VPC" data-look="classic"><rect style="" x="8" y="119.484375" width="411.04296875" height="361.9810256958008"></rect><g class="cluster-label " transform="translate(39.185546875, 119.484375)"><foreignObject width="348.671875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Réseau virtuel 10.0.0.0/16, région Paris, une seule zone</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-632850-PUB" data-look="classic"><rect style="" x="28" y="144.484375" width="371.04296875" height="311.9810256958008"></rect><g class="cluster-label " transform="translate(116.615234375, 144.484375)"><foreignObject width="193.8125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Sous-réseau public 10.0.1.0/24</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M206.465,57.511L254.426,94.484L254.426,119.484L254.426,144.484L254.426,165.484" id="mmd0-632850-L_U_W_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_U_W_0" data-points="W3sieCI6MjA2LjQ2NDYxMTIzNjQxODcsInkiOjU3LjUxMTQ0NTYwMTU5ODc4fSx7IngiOjI1NC40MjU3ODEyNSwieSI6OTQuNDg0Mzc1fSx7IngiOjI1NC40MjU3ODEyNSwieSI6MTE5LjQ4NDM3NX0seyJ4IjoyNTQuNDI1NzgxMjUsInkiOjE0NC40ODQzNzV9LHsieCI6MjU0LjQyNTc4MTI1LCJ5IjoxNjkuNDg0Mzc1fV0=" data-look="classic" marker-end="url(#mmd0-632850_flowchart-v2-pointEnd)"></path><path d="M157.77,57.511L109.809,94.484L109.809,119.484L109.809,144.484L109.809,214.984L109.809,285.484L128.526,309.996" id="mmd0-632850-L_U_DB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_U_DB_0" data-points="W3sieCI6MTU3Ljc2OTc2Mzc2MzU4MTMsInkiOjU3LjUxMTQ0NTYwMTU5ODc4fSx7IngiOjEwOS44MDg1OTM3NSwieSI6OTQuNDg0Mzc1fSx7IngiOjEwOS44MDg1OTM3NSwieSI6MTE5LjQ4NDM3NX0seyJ4IjoxMDkuODA4NTkzNzUsInkiOjE0NC40ODQzNzV9LHsieCI6MTA5LjgwODU5Mzc1LCJ5IjoyMTQuOTg0Mzc1fSx7IngiOjEwOS44MDg1OTM3NSwieSI6Mjg1LjQ4NDM3NX0seyJ4IjoxMzAuOTUzODAzNzA5OTE4OTMsInkiOjMxMy4xNzQ2MjQ0NDk0ODM5M31d" data-look="classic" marker-end="url(#mmd0-632850_flowchart-v2-pointEnd)"></path><path d="M254.426,260.484L254.426,285.484L235.708,309.996" id="mmd0-632850-L_W_DB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_W_DB_0" data-points="W3sieCI6MjU0LjQyNTc4MTI1LCJ5IjoyNjAuNDg0Mzc1fSx7IngiOjI1NC40MjU3ODEyNSwieSI6Mjg1LjQ4NDM3NX0seyJ4IjoyMzMuMjgwNTcxMjkwMDgxMDcsInkiOjMxMy4xNzQ2MjQ0NDk0ODM5M31d" data-look="classic" marker-end="url(#mmd0-632850_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_U_W_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_U_DB_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_W_DB_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-632850-flowchart-U-0" data-look="classic" transform="translate(182.1171875, 38.7421875)"><circle class="basic label-container" style="" r="30.7421875" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-23.7421875, -10.5)"><rect></rect><foreignObject width="47.484375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Internet</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-632850-flowchart-W-1" data-look="classic" transform="translate(254.42578125, 214.984375)"><rect class="basic label-container" style="" x="-109.6171875" y="-45.5" width="219.234375" height="91"></rect><g class="label" style="" transform="translate(-81.6171875, -31.5)"><rect></rect><foreignObject width="163.234375" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>VM web<br>IP publique 198.51.100.20<br>Apache + PHP</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-632850-flowchart-DB-2" data-look="classic" transform="translate(182.1171875, 370.9748878479004)"><path d="M0,14.660342242671767 a88.6171875,14.660342242671767 0,0,0 177.234375,0 a88.6171875,14.660342242671767 0,0,0 -177.234375,0 l0,91.66034224267176 a88.6171875,14.660342242671767 0,0,0 177.234375,0 l0,-91.66034224267176" class="basic label-container outer-path" style="" label-offset-y="14.660342242671767" transform="translate(-88.6171875, -60.49051336400765)"></path><g class="label" style="" transform="translate(-81.6171875, -22.166666666666664)"><rect></rect><foreignObject width="163.234375" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>VM base de données<br>IP publique 198.51.100.21<br>MariaDB</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-632850-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-632850-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-632850-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<p>Et les règles de groupe de sécurité (identiques pour les deux VM) :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Sens</th>
+<th>Protocole</th>
+<th>Port</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Entrant</td>
+<td>TCP</td>
+<td>22</td>
+<td>0.0.0.0/0</td>
+</tr>
+<tr class="even">
+<td>Entrant</td>
+<td>TCP</td>
+<td>80</td>
+<td>0.0.0.0/0</td>
+</tr>
+<tr class="odd">
+<td>Entrant</td>
+<td>TCP</td>
+<td>3306</td>
+<td>0.0.0.0/0</td>
+</tr>
+<tr class="even">
+<td>Entrant</td>
+<td>TCP</td>
+<td>3389</td>
+<td>0.0.0.0/0</td>
+</tr>
+<tr class="odd">
+<td>Sortant</td>
+<td>tout</td>
+<td>tout</td>
+<td>0.0.0.0/0</td>
+</tr>
+</tbody>
+</table></div>
+<p>Travail demandé :</p>
+<ol type="1">
+<li>Décrivez les flux <strong>nécessaires</strong> au fonctionnement de l’application (qui parle à qui, sur quel port).</li>
+<li>Listez <strong>au moins cinq</strong> problèmes de sécurité ou de disponibilité dans cette proposition.</li>
+<li>Proposez une architecture corrigée : schéma (papier, diagrams.net ou Mermaid) et, pour <strong>chaque</strong> VM, un tableau de règles de groupe de sécurité réduit au strict nécessaire.</li>
+<li>Indiquez où placer un bastion et comment l’administrateur (IP fixe <code>203.0.113.50</code>) se connecte.</li>
+</ol>
+<h2 id="partie-b.-fiche-de-choix-iaas-ou-paas-45-min">Partie B. Fiche de choix IaaS ou PaaS (45 min)</h2>
+<p>Le prestataire chiffre deux options. Les montants sont des <strong>hypothèses de TD</strong>, pas des tarifs réels.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Poste mensuel</th>
+<th>Option IaaS</th>
+<th>Option PaaS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hébergement de l’application</td>
+<td>VM web 2 vCPU / 4 Go : 45 €</td>
+<td>plateforme d’application web : 60 €</td>
+</tr>
+<tr class="even">
+<td>Base de données</td>
+<td>VM base 2 vCPU / 8 Go : 70 €</td>
+<td>base MariaDB managée, sauvegardes incluses : 110 €</td>
+</tr>
+<tr class="odd">
+<td>Disques</td>
+<td>2 × 5 €</td>
+<td>inclus</td>
+</tr>
+<tr class="even">
+<td>Adresse IP publique</td>
+<td>4 €</td>
+<td>incluse</td>
+</tr>
+<tr class="odd">
+<td>Sauvegardes</td>
+<td>8 €</td>
+<td>incluses</td>
+</tr>
+<tr class="even">
+<td>Trafic sortant</td>
+<td>2 €</td>
+<td>2 €</td>
+</tr>
+<tr class="odd">
+<td>Temps d’administration (45 €/h)</td>
+<td>4 h par mois</td>
+<td>1 h par mois</td>
+</tr>
+<tr class="even">
+<td>Disponibilité annoncée</td>
+<td>99,5 % (une VM par rôle)</td>
+<td>99,95 %</td>
+</tr>
+</tbody>
+</table></div>
+<p>Travail demandé, sur la fiche de choix (modèle sur <a href="../modeles.html#fiche-de-choix-dune-solution">la page des modèles</a>) :</p>
+<ol type="1">
+<li>Calculez le coût mensuel d’hébergement, puis le coût mensuel <strong>complet</strong> (avec le temps d’administration) de chaque option.</li>
+<li>Calculez le <strong>TCO sur 3 ans</strong> de chaque option.</li>
+<li>Convertissez les deux SLA en durée d’indisponibilité maximale par mois.</li>
+<li>Comparez les options sur au moins cinq critères du cours (contrôle, exploitation, compétences, disponibilité, coût, dépendance…).</li>
+<li>Rédigez une recommandation argumentée de 10 lignes maximum pour la direction.</li>
+<li>Question de réflexion : votre recommandation change-t-elle si l’application a besoin d’un module PHP que la plateforme PaaS ne propose pas ?</li>
+</ol>
+<h2 id="partie-c.-maquette-dans-le-lab-1-h">Partie C. Maquette dans le lab (1 h)</h2>
+<p>On reproduit le principe « service public exposé, données privées, administration restreinte » :</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd1-161197" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 868.078125px;" viewBox="0 0 868.078125 446.7390441894531" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd1-161197{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd1-161197 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd1-161197 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd1-161197 .error-icon{fill:#f5f6f8;}#mmd1-161197 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd1-161197 .edge-thickness-normal{stroke-width:1px;}#mmd1-161197 .edge-thickness-thick{stroke-width:3.5px;}#mmd1-161197 .edge-pattern-solid{stroke-dasharray:0;}#mmd1-161197 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd1-161197 .edge-pattern-dashed{stroke-dasharray:3;}#mmd1-161197 .edge-pattern-dotted{stroke-dasharray:2;}#mmd1-161197 .marker{fill:#4a5563;stroke:#4a5563;}#mmd1-161197 .marker.cross{stroke:#4a5563;}#mmd1-161197 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd1-161197 p{margin:0;}#mmd1-161197 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd1-161197 .cluster-label text{fill:#1f3a5f;}#mmd1-161197 .cluster-label span{color:#1f3a5f;}#mmd1-161197 .cluster-label span p{background-color:transparent;}#mmd1-161197 .label text,#mmd1-161197 span{fill:#1d2530;color:#1d2530;}#mmd1-161197 .node rect,#mmd1-161197 .node circle,#mmd1-161197 .node ellipse,#mmd1-161197 .node polygon,#mmd1-161197 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd1-161197 .rough-node .label text,#mmd1-161197 .node .label text,#mmd1-161197 .image-shape .label,#mmd1-161197 .icon-shape .label{text-anchor:middle;}#mmd1-161197 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd1-161197 .rough-node .label,#mmd1-161197 .node .label,#mmd1-161197 .image-shape .label,#mmd1-161197 .icon-shape .label{text-align:center;}#mmd1-161197 .node.clickable{cursor:pointer;}#mmd1-161197 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd1-161197 .arrowheadPath{fill:#000000;}#mmd1-161197 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd1-161197 .flowchart-link{stroke:#4a5563;fill:none;}#mmd1-161197 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd1-161197 .edgeLabel p{background-color:#ffffff;}#mmd1-161197 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd1-161197 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd1-161197 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd1-161197 .cluster text{fill:#1f3a5f;}#mmd1-161197 .cluster span{color:#1f3a5f;}#mmd1-161197 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd1-161197 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd1-161197 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd1-161197 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd1-161197 rect.text{fill:none;stroke-width:0;}#mmd1-161197 .icon-shape,#mmd1-161197 .image-shape{background-color:#ffffff;text-align:center;}#mmd1-161197 .icon-shape p,#mmd1-161197 .image-shape p{background-color:#ffffff;padding:2px;}#mmd1-161197 .icon-shape .label rect,#mmd1-161197 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd1-161197 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd1-161197 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd1-161197 .node .neo-node{stroke:#1f3a5f;}#mmd1-161197 [data-look="neo"].node rect,#mmd1-161197 [data-look="neo"].cluster rect,#mmd1-161197 [data-look="neo"].node polygon{stroke:url(#mmd1-161197-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-161197 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd1-161197 [data-look="neo"].node path{stroke:url(#mmd1-161197-gradient);stroke-width:1px;}#mmd1-161197 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-161197 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd1-161197 [data-look="neo"].node circle{stroke:url(#mmd1-161197-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-161197 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd1-161197 [data-look="neo"].icon-shape .icon{fill:url(#mmd1-161197-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-161197 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd1-161197-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-161197 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd1-161197_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-161197_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-161197_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-161197_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd1-161197_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-161197_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-161197_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-161197_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-161197_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-161197_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-161197_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd1-161197_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd1-161197-LAB" data-look="classic"><rect style="" x="8" y="113" width="852.078125" height="325.7390594482422"></rect><g class="cluster-label " transform="translate(334.6328125, 113)"><foreignObject width="198.8125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>LAB-HEXALOG = réseau virtuel</p></span></div></foreignObject></g></g><g class="cluster " id="mmd1-161197-SRV" data-look="classic"><rect style="" x="409.421875" y="133" width="425.65625" height="285.7390594482422"></rect><g class="cluster-label " transform="translate(582.296875, 133)"><foreignObject width="79.90625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>SRV-LNX-01</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M172.375,78L317.086,194.435L409.422,194.435L430.554,199.998" id="mmd1-161197-L_PC_NG_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_NG_0" data-points="W3sieCI6MTcyLjM3NDgwNTQ2NzM5Mjc4LCJ5Ijo3OH0seyJ4IjozMTcuMDg1OTM3NSwieSI6MTk0LjQzNDc2NDg2MjA2MDU1fSx7IngiOjQwOS40MjE4NzUsInkiOjE5NC40MzQ3NjQ4NjIwNjA1NX0seyJ4Ijo0MzQuNDIxODc1LCJ5IjoyMDEuMDE2Nzg2NTA2NjgxNH1d" data-look="classic" marker-end="url(#mmd1-161197_flowchart-v2-pointEnd)"></path><path d="M547.25,215.87L586.648,215.87L643.625,215.87" id="mmd1-161197-L_NG_MDB_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_NG_MDB_0" data-points="W3sieCI6NTQ3LjI1LCJ5IjoyMTUuODY5NTI5NzI0MTIxMX0seyJ4Ijo1ODYuNjQ4NDM3NSwieSI6MjE1Ljg2OTUyOTcyNDEyMTF9LHsieCI6NjQ3LjYyNSwieSI6MjE1Ljg2OTUyOTcyNDEyMTF9XQ==" data-look="classic" marker-end="url(#mmd1-161197_flowchart-v2-pointEnd)"></path><path d="M224.75,292.304L317.086,292.304L405.422,292.304" id="mmd1-161197-L_C_SRV_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C_SRV_0" data-points="W3sieCI6MjI0Ljc1LCJ5IjoyOTIuMzA0Mjk0NTg2MTgxNjR9LHsieCI6MzE3LjA4NTkzNzUsInkiOjI5Mi4zMDQyOTQ1ODYxODE2NH0seyJ4Ijo0MDkuNDIxODc1LCJ5IjoyOTIuMzA0Mjk0NTg2MTgxNjR9LHsieCI6NDA5LjQyMTg3NSwieSI6MjkyLjMwNDI5NDU4NjE4MTY0fV0=" data-look="classic" marker-end="url(#mmd1-161197_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(317.0859375, 194.43476486206055)"><g class="label" data-id="L_PC_NG_0" transform="translate(-67.3359375, -10.5)"><foreignObject width="134.671875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>127.0.0.1:8080 → :80</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(586.6484375, 215.8695297241211)"><g class="label" data-id="L_NG_MDB_0" transform="translate(-14.3984375, -10.5)"><foreignObject width="28.796875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>local</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(317.0859375, 292.30429458618164)"><g class="label" data-id="L_C_SRV_0" transform="translate(-24.125, -10.5)"><foreignObject width="48.25" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>SSH 22</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd1-161197-flowchart-PC-0" data-look="classic" transform="translate(128.875, 43)"><rect class="basic label-container" style="" x="-57.7734375" y="-35" width="115.546875" height="70"></rect><g class="label" style="" transform="translate(-29.7734375, -21)"><rect></rect><foreignObject width="59.546875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>PC hôte<br>= Internet</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-161197-flowchart-NG-1" data-look="classic" transform="translate(490.8359375, 215.8695297241211)"><rect class="basic label-container" style="" x="-56.4140625" y="-35" width="112.828125" height="70"></rect><g class="label" style="" transform="translate(-28.4140625, -21)"><rect></rect><foreignObject width="56.828125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>nginx :80<br>public</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-161197-flowchart-MDB-2" data-look="classic" transform="translate(718.0625, 215.8695297241211)"><path d="M0,13.246356370474848 a70.4375,13.246356370474848 0,0,0 140.875,0 a70.4375,13.246356370474848 0,0,0 -140.875,0 l0,69.24635637047484 a70.4375,13.246356370474848 0,0,0 140.875,0 l0,-69.24635637047484" class="basic label-container outer-path" style="" label-offset-y="13.246356370474848" transform="translate(-70.4375, -47.86953455571227)"></path><g class="label" style="" transform="translate(-63.4375, -11.666666666666666)"><rect></rect><foreignObject width="126.875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>MariaDB :3306<br>127.0.0.1 seulement</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-161197-flowchart-FW-3" data-look="classic" transform="translate(718.0625, 348.7390594482422)"><rect class="basic label-container" style="" x="-92.015625" y="-35" width="184.03125" height="70"></rect><g class="label" style="" transform="translate(-64.015625, -21)"><rect></rect><foreignObject width="128.03125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>UFW<br>= groupe de sécurité</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-161197-flowchart-C-4" data-look="classic" transform="translate(128.875, 292.30429458618164)"><rect class="basic label-container" style="" x="-95.875" y="-35" width="191.75" height="70"></rect><g class="label" style="" transform="translate(-67.875, -21)"><rect></rect><foreignObject width="135.75" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>CLI-LNX-01<br>poste d'administration</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd1-161197-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd1-161197-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd1-161197-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<h3 id="c.1-la-base-de-données-privée">C.1, La base de données « privée »</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> mariadb-server</span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="ex">systemctl</span> status mariadb <span class="at">--no-pager</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="fu">sudo</span> ss <span class="at">-tlnp</span> <span class="kw">|</span> <span class="fu">grep</span> 3306</span></code></pre></div></div>
+<p>Par défaut, MariaDB n’écoute que sur <code>127.0.0.1</code> : elle est joignable par les programmes de la machine, pas par le réseau. C’est l’équivalent d’une base dans un sous-réseau privé. Vérifiez depuis <code>CLI-LNX-01</code> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : CLI-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="ex">nc</span> <span class="at">-zv</span> <span class="at">-w</span> 3 10.10.10.20 3306       <span class="co"># doit échouer</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="ex">nc</span> <span class="at">-zv</span> <span class="at">-w</span> 3 10.10.10.20 80         <span class="co"># doit réussir</span></span></code></pre></div></div>
+<h3 id="c.2-le-groupe-de-sécurité-avec-ufw">C.2, Le « groupe de sécurité » avec UFW</h3>
+<p>Rédigez d’abord, dans votre journal, la politique souhaitée pour SRV-LNX-01 sous forme de tableau (sens, protocole, port, source, justification) : web ouvert à tous, SSH réservé au réseau du lab, tout le reste refusé. Puis appliquez-la :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> ufw</span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> ufw default deny incoming</span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="fu">sudo</span> ufw default allow outgoing</span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 80/tcp comment <span class="st">'intranet public'</span></span>
+<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a><span class="fu">sudo</span> ufw allow from 10.10.10.0/24 to any port 22 proto tcp comment <span class="st">'administration depuis le lab'</span></span>
+<span id="cb5-6"><a aria-hidden="true" href="#cb5-6" tabindex="-1"></a><span class="fu">sudo</span> ufw enable</span>
+<span id="cb5-7"><a aria-hidden="true" href="#cb5-7" tabindex="-1"></a><span class="fu">sudo</span> ufw status verbose</span></code></pre></div></div>
+<h3 id="c.3-tester-la-politique">C.3, Tester la politique</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>Depuis</th>
+<th>Commande</th>
+<th>Résultat attendu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Web</td>
+<td>PC hôte</td>
+<td>navigateur <code>http://127.0.0.1:8080</code></td>
+<td>page affichée</td>
+</tr>
+<tr class="even">
+<td>Web</td>
+<td>CLI-LNX-01</td>
+<td><code>curl -I http://10.10.10.20</code></td>
+<td><code>HTTP/1.1 200 OK</code></td>
+</tr>
+<tr class="odd">
+<td>SSH</td>
+<td>CLI-LNX-01</td>
+<td><code>nc -zv 10.10.10.20 22</code></td>
+<td>succeeded</td>
+</tr>
+<tr class="even">
+<td>SSH</td>
+<td>PC hôte</td>
+<td><code>ssh -p 2222 sysadmin@127.0.0.1</code></td>
+<td>à tester et expliquer</td>
+</tr>
+<tr class="odd">
+<td>Base</td>
+<td>CLI-LNX-01</td>
+<td><code>nc -zv -w 3 10.10.10.20 3306</code></td>
+<td>échec</td>
+</tr>
+<tr class="even">
+<td>Port non autorisé</td>
+<td>CLI-LNX-01</td>
+<td><code>nc -zv -w 3 10.10.10.20 8081</code></td>
+<td>échec (délai dépassé)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Recopiez le tableau dans votre journal avec les résultats <strong>obtenus</strong>. Pour le test SSH depuis l’hôte, regardez dans <code>sudo journalctl -u ssh -n 5</code> quelle adresse source voit le serveur et déduisez pourquoi la règle l’autorise ou non.</p>
+<p>Observez les paquets refusés par UFW :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-k</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'UFW BLOCK'</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5</span></code></pre></div></div>
+<p>Faites un snapshot <code>04-ufw-maquette</code> et mettez à jour l’inventaire (services et ports ouverts).</p>
+<h2 id="partie-d.-dans-un-vrai-cloud-optionnel">Partie D. Dans un vrai cloud (optionnel)</h2>
+<p>Si un compte cloud étudiant est disponible (Azure for Students, AWS Academy, Google Cloud) :</p>
+<ol type="1">
+<li>créez une VM Debian du plus petit gabarit, avec votre <strong>clé SSH publique</strong> (voir <a data-seance="10" href="../cours/s10-ssh.html">Séance 10 : SSH : accès sécurisé par clés</a> ou utilisez <code>ssh-keygen -t ed25519</code> sur votre PC) ;</li>
+<li>restreignez le groupe de sécurité : SSH depuis <strong>votre adresse publique uniquement</strong> ;</li>
+<li>connectez-vous, lancez <code>hostnamectl</code> et <code>ip -br a</code> : que remarquez-vous sur l’adresse de la carte réseau ?</li>
+<li><strong>supprimez toutes les ressources</strong> créées (VM, disque, adresse IP) et faites une capture de la liste vide.</li>
+</ol>
+<p>Les supports <a href="../../aws.html">AWS</a> et <a href="../../google-cloud.html">Google Cloud</a> du site détaillent les étapes.</p>
+<h2 id="livrables">Livrables</h2>
+<ul>
+<li>Partie A : liste des problèmes, schéma corrigé, tableaux de règles par VM.</li>
+<li>Partie B : fiche de choix complète avec calculs et recommandation.</li>
+<li>Partie C : politique de filtrage rédigée, <code>ufw status verbose</code>, tableau de tests avec résultats obtenus.</li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Dans la maquette, qu’est-ce qui joue le rôle de l’adresse IP publique ? Et du groupe de sécurité ?</li>
+<li>Pourquoi est-il préférable qu’une base de données n’écoute pas sur toutes les interfaces, même derrière un pare-feu ?</li>
+<li>Quelle est la différence entre un refus immédiat (<code>Connection refused</code>) et un délai dépassé (<code>timed out</code>) lors de vos tests ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Connexion SSH coupée après <code>ufw enable</code></td>
+<td>la règle SSH n’était pas en place ou pas pour le bon réseau : console VirtualBox, <code>sudo ufw status numbered</code>, corriger</td>
+</tr>
+<tr class="even">
+<td>Tout est bloqué</td>
+<td><code>sudo ufw disable</code>, vérifier les règles, réactiver</td>
+</tr>
+<tr class="odd">
+<td><code>mariadb-server</code> ne s’installe pas</td>
+<td><code>sudo apt update</code> d’abord ; espace disque (<code>df -h</code>)</td>
+</tr>
+<tr class="even">
+<td>Aucune ligne <code>UFW BLOCK</code></td>
+<td>la journalisation est peut-être désactivée : <code>sudo ufw logging low</code></td>
+</tr>
+</tbody>
+</table></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s04-cloud.html" data-seance="4"><span class="dir">‹ Page précédente</span><span class="titre">Séance 4 : Cloud : lire une architecture IaaS/PaaS</span></a><a class="next" href="../cours/s05-windows-server.html" data-seance="5"><span class="dir">Page suivante ›</span><span class="titre">Séance 5 : Windows Server : les fondamentaux</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>
