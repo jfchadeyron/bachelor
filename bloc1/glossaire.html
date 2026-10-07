@@ -114,6 +114,10 @@ Serveur qui héberge une copie de l’annuaire Active Directory et authentifie l
 <dd>
 Protocole d’attribution automatique d’adresse IP, masque, passerelle et DNS (échange DORA). (S3)
 </dd>
+<dt>DMZ (zone démilitarisée)</dt>
+<dd>
+Sous-réseau séparé du réseau interne, qui accueille les serveurs joignables depuis Internet : le pare-feu contrôle les flux entre Internet, la DMZ et le réseau des postes. (S3)
+</dd>
 <dt>DN (nom distinctif)</dt>
 <dd>
 Chemin complet d’un objet dans l’annuaire : <code>CN=Alice Martin,OU=Comptabilite,…,DC=hexalog,DC=lan</code>. (S6)
@@ -121,6 +125,10 @@ Chemin complet d’un objet dans l’annuaire : <code>CN=Alice Martin,OU=Comptab
 <dt>DNS</dt>
 <dd>
 Système de résolution des noms en adresses IP (enregistrements A, CNAME, PTR, SRV…). (S3)
+</dd>
+<dt>DNS interne et externe (split-horizon)</dt>
+<dd>
+Un même nom reçoit deux réponses : l’adresse publique pour les clients d’Internet, l’adresse privée pour les postes du réseau interne. (S3, S6)
 </dd>
 <dt>Domaine</dt>
 <dd>
@@ -244,6 +252,10 @@ Principe selon lequel chacun ne reçoit que les droits strictement nécessaires 
 <dd>
 Traduction d’adresses : des machines privées sortent sur Internet avec l’adresse du routeur. (S3)
 </dd>
+<dt>NAT en épingle (hairpin NAT)</dt>
+<dd>
+Détour d’un poste interne qui joint un service interne par l’adresse publique : le routeur doit renvoyer le trafic vers l’intérieur, ce que beaucoup de box refusent. Le DNS interne l’évite. (S3)
+</dd>
 <dt>NLA</dt>
 <dd>
 Authentification au niveau du réseau pour le bureau à distance : l’utilisateur s’authentifie avant la création de la session. (S12)
@@ -282,6 +294,10 @@ Platform as a Service : plateforme managée pour déployer code et bases de donn
 <dd>
 Chaîne de modules d’authentification de Linux (<code>/etc/pam.d/</code>). (S11)
 </dd>
+<dt>PAT</dt>
+<dd>
+Traduction d’adresses qui porte aussi sur les ports : en sortie, plusieurs machines partagent une adresse publique ; en entrée, un port public est envoyé vers une machine interne (redirection de ports). (S3)
+</dd>
 <dt>Passerelle par défaut</dt>
 <dd>
 Routeur vers lequel une machine envoie tout ce qui n’est pas sur son réseau local. (S3)
@@ -293,6 +309,10 @@ Page web d’authentification imposée par un pare-feu avant tout accès à Inte
 <dt>Port</dt>
 <dd>
 Numéro qui désigne un service sur une machine (22 SSH, 80 HTTP, 445 SMB, 3389 RDP…). (S3)
+</dd>
+<dt>Proxy (mandataire)</dt>
+<dd>
+Serveur intermédiaire par lequel les postes clients sortent sur Internet (filtrage, cache, journalisation). À ne pas confondre avec le reverse proxy. (S3)
 </dd>
 <dt>ProxyJump</dt>
 <dd>
@@ -320,6 +340,10 @@ Règle NAT qui rend joignable depuis l’extérieur un service d’une machine i
 <dt>Réseau NAT</dt>
 <dd>
 Mode réseau VirtualBox où plusieurs VM partagent un routeur NAT : elles se voient et sortent sur Internet. (S2)
+</dd>
+<dt>Reverse proxy (proxy inverse)</dt>
+<dd>
+Serveur placé devant des serveurs web internes : il reçoit les requêtes (en général sur le port 443), lit le nom demandé et les transmet au bon serveur ; il centralise le HTTPS. (S3)
 </dd>
 <dt>Revue d’accès</dt>
 <dd>
