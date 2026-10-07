@@ -1,0 +1,318 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 7 : Le serveur de fichiers Hexalog | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="À partir d'une matrice des droits validée par la direction, vous créez l'arborescence des partages sur le volume DATA, les groupes de domaine local, les permissions NTFS et le partage. Puis vous prouv">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item active" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp active" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module B : Windows Server</span><span class="sep">›</span><a href="../cours/s07-ntfs-partages.html" data-seance="7">Séance 7</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 7</span>
+  <h1>TP 7 : Le serveur de fichiers Hexalog</h1>
+  <p class="lead">À partir d'une matrice des droits validée par la direction, vous créez l'arborescence des partages sur le volume DATA, les groupes de domaine local, les permissions NTFS et le partage. Puis vous prouvez, compte par compte, que chacun accède à ce qu'il doit, et à rien d'autre.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>2 h 30</td></tr><tr><th>Machines virtuelles</th><td>SRV-WIN-01, CLI-LNX-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s07-ntfs-partages.html" data-seance="7">Séance 7 : Permissions NTFS et partages</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#la-matrice-des-droits">La matrice des droits</a></li><li><a href="#architecture-visée">Architecture visée</a></li><li><a href="#étape-1.-les-groupes-de-domaine-local">Étape 1. Les groupes de domaine local</a></li><li><a href="#étape-2.-larborescence-et-les-permissions-ntfs">Étape 2. L’arborescence et les permissions NTFS</a></li><li><a href="#étape-3.-le-partage">Étape 3. Le partage</a></li><li><a href="#étape-4.-les-tests">Étape 4. Les tests</a></li><li><a href="#étape-5.-quotas">Étape 5. Quotas</a></li><li><a href="#étape-6.-sauvegarder-et-documenter">Étape 6. Sauvegarder et documenter</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#livrables">Livrables</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Aujourd’hui, chez Hexalog, tout le monde peut tout lire sur l’ancien serveur, y compris les bulletins de paie. La direction a validé la matrice ci-dessous. Votre mission : l’implémenter sur <code>SRV-WIN-01</code> selon la méthode AGDLP, puis fournir la preuve qu’elle est respectée.</p>
+<h2 id="la-matrice-des-droits">La matrice des droits</h2>
+<div class="table-wrap"><table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>Dossier</th>
+<th>Direction</th>
+<th>RH</th>
+<th>Comptabilité</th>
+<th>Exploitation</th>
+<th>Informatique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Commun</td>
+<td>lecture-écriture</td>
+<td>lecture-écriture</td>
+<td>lecture-écriture</td>
+<td>lecture-écriture</td>
+<td>lecture-écriture</td>
+</tr>
+<tr class="even">
+<td>Direction</td>
+<td>lecture-écriture</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>RH</td>
+<td>lecture seule</td>
+<td>lecture-écriture</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Comptabilite</td>
+<td>lecture seule</td>
+<td></td>
+<td>lecture-écriture</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Exploitation</td>
+<td>lecture seule</td>
+<td></td>
+<td></td>
+<td>lecture-écriture</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Case vide = aucun accès, et le dossier ne doit même pas être visible. Le service Informatique n’a pas accès aux données métier : il administre le serveur avec les comptes d’administration.</p>
+<h2 id="architecture-visée">Architecture visée</h2>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-886183" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1021.140625px;" viewBox="0 0 1021.140625 282" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-886183{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-886183 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-886183 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-886183 .error-icon{fill:#f5f6f8;}#mmd0-886183 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-886183 .edge-thickness-normal{stroke-width:1px;}#mmd0-886183 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-886183 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-886183 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-886183 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-886183 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-886183 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-886183 .marker.cross{stroke:#4a5563;}#mmd0-886183 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-886183 p{margin:0;}#mmd0-886183 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-886183 .cluster-label text{fill:#1f3a5f;}#mmd0-886183 .cluster-label span{color:#1f3a5f;}#mmd0-886183 .cluster-label span p{background-color:transparent;}#mmd0-886183 .label text,#mmd0-886183 span{fill:#1d2530;color:#1d2530;}#mmd0-886183 .node rect,#mmd0-886183 .node circle,#mmd0-886183 .node ellipse,#mmd0-886183 .node polygon,#mmd0-886183 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-886183 .rough-node .label text,#mmd0-886183 .node .label text,#mmd0-886183 .image-shape .label,#mmd0-886183 .icon-shape .label{text-anchor:middle;}#mmd0-886183 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-886183 .rough-node .label,#mmd0-886183 .node .label,#mmd0-886183 .image-shape .label,#mmd0-886183 .icon-shape .label{text-align:center;}#mmd0-886183 .node.clickable{cursor:pointer;}#mmd0-886183 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-886183 .arrowheadPath{fill:#000000;}#mmd0-886183 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-886183 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-886183 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-886183 .edgeLabel p{background-color:#ffffff;}#mmd0-886183 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-886183 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-886183 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-886183 .cluster text{fill:#1f3a5f;}#mmd0-886183 .cluster span{color:#1f3a5f;}#mmd0-886183 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-886183 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-886183 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-886183 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-886183 rect.text{fill:none;stroke-width:0;}#mmd0-886183 .icon-shape,#mmd0-886183 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-886183 .icon-shape p,#mmd0-886183 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-886183 .icon-shape .label rect,#mmd0-886183 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-886183 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-886183 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-886183 .node .neo-node{stroke:#1f3a5f;}#mmd0-886183 [data-look="neo"].node rect,#mmd0-886183 [data-look="neo"].cluster rect,#mmd0-886183 [data-look="neo"].node polygon{stroke:url(#mmd0-886183-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-886183 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-886183 [data-look="neo"].node path{stroke:url(#mmd0-886183-gradient);stroke-width:1px;}#mmd0-886183 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-886183 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-886183 [data-look="neo"].node circle{stroke:url(#mmd0-886183-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-886183 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-886183 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-886183-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-886183 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-886183-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-886183 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-886183_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-886183_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-886183_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-886183_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-886183_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-886183_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-886183_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-886183_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-886183_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-886183_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-886183_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-886183_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-886183-AD" data-look="classic"><rect style="" x="8" y="8" width="612" height="266"></rect><g class="cluster-label " transform="translate(248.2265625, 8)"><foreignObject width="131.546875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Annuaire hexalog.lan</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M289,141L314,141L335,141" id="mmd0-886183-L_GG_DL_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_GG_DL_0" data-points="W3sieCI6Mjg5LCJ5IjoxNDF9LHsieCI6MzE0LCJ5IjoxNDF9LHsieCI6MzM5LCJ5IjoxNDF9XQ==" data-look="classic" marker-end="url(#mmd0-886183_flowchart-v2-pointEnd)"></path><path d="M595,141L620,141L702.57,141L781.141,141" id="mmd0-886183-L_DL_FS_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_DL_FS_0" data-points="W3sieCI6NTk1LCJ5IjoxNDF9LHsieCI6NjIwLCJ5IjoxNDF9LHsieCI6NzAyLjU3MDMxMjUsInkiOjE0MX0seyJ4Ijo3ODUuMTQwNjI1LCJ5IjoxNDF9XQ==" data-look="classic" marker-end="url(#mmd0-886183_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_GG_DL_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(702.5703125, 141)"><g class="label" data-id="L_DL_FS_0" transform="translate(-57.5703125, -10.5)"><foreignObject width="115.140625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>permissions NTFS</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-886183-flowchart-GG-0" data-look="classic" transform="translate(161, 141)"><rect class="basic label-container" style="" x="-128" y="-66.5" width="256" height="133"></rect><g class="label" style="" transform="translate(-100, -52.5)"><rect></rect><foreignObject width="200" height="105"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Groupes globaux<br>GG_Direction, GG_RH,<br>GG_Comptabilite, GG_Exploitation,<br>GG_Informatique</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-886183-flowchart-DL-1" data-look="classic" transform="translate(467, 141)"><rect class="basic label-container" style="" x="-128" y="-98" width="256" height="196"></rect><g class="label" style="" transform="translate(-100, -84)"><rect></rect><foreignObject width="200" height="168"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Groupes de domaine local<br>DL_Commun_RW, DL_Direction_RW,<br>DL_RH_RW, DL_RH_RO,<br>DL_Compta_RW, DL_Compta_RO,<br>DL_Exploitation_RW, DL_Exploitation_RO</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-886183-flowchart-FS-4" data-look="classic" transform="translate(899.140625, 141)"><rect class="basic label-container" style="" x="-114" y="-56" width="228" height="112"></rect><g class="label" style="" transform="translate(-86, -42)"><rect></rect><foreignObject width="172" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>SRV-WIN-01, E:\Partages<br>partage Partages avec ABE<br>Commun, Direction, RH,<br>Comptabilite, Exploitation</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-886183-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-886183-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-886183-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<h2 id="étape-1.-les-groupes-de-domaine-local">Étape 1. Les groupes de domaine local</h2>
+<p>Faites un snapshot <code>07-avant-partages</code> de SRV-WIN-01. Dans PowerShell administrateur :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (PowerShell administrateur)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="va">$ouDL</span> <span class="op">=</span> <span class="st">"OU=DomaineLocal,OU=Groupes,OU=HEXALOG,DC=hexalog,DC=lan"</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="st">"DL_Commun_RW"</span><span class="op">,</span><span class="st">"DL_Direction_RW"</span><span class="op">,</span><span class="st">"DL_RH_RW"</span><span class="op">,</span><span class="st">"DL_RH_RO"</span><span class="op">,</span><span class="st">"DL_Compta_RW"</span><span class="op">,</span><span class="st">"DL_Compta_RO"</span><span class="op">,</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="st">"DL_Exploitation_RW"</span><span class="op">,</span><span class="st">"DL_Exploitation_RO"</span> <span class="op">|</span> <span class="fu">ForEach-Object</span> <span class="op">{</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a>    <span class="fu">New-ADGroup</span> <span class="op">-</span>Name <span class="va">$_</span> <span class="op">-</span>GroupScope DomainLocal <span class="op">-</span>GroupCategory Security <span class="op">-</span>Path <span class="va">$ouDL</span></span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a><span class="fu">Get-ADGroup</span> <span class="op">-</span>Filter <span class="st">'Name -like "DL_*"'</span> <span class="op">|</span> <span class="fu">Select-Object</span> Name<span class="op">,</span> GroupScope</span></code></pre></div></div>
+<p>À vous de remplir les groupes de domaine local avec les bons groupes globaux, d’après la matrice. Exemple pour la comptabilité :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (PowerShell administrateur)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">Add-ADGroupMember</span> <span class="op">-</span>Identity DL_Compta_RW <span class="op">-</span>Members GG_Comptabilite</span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="fu">Add-ADGroupMember</span> <span class="op">-</span>Identity DL_Compta_RO <span class="op">-</span>Members GG_Direction</span></code></pre></div></div>
+<p>Écrivez les six autres commandes (attention : <code>DL_Commun_RW</code> reçoit les cinq groupes globaux). Vérifiez avec :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (PowerShell administrateur)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">Get-ADGroup</span> <span class="op">-</span>Filter <span class="st">'Name -like "DL_*"'</span> <span class="op">|</span> <span class="fu">ForEach-Object</span> <span class="op">{</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a>    <span class="st">"{0,-22} : {1}"</span> <span class="op">-</span>f <span class="va">$_</span><span class="op">.</span><span class="fu">Name</span><span class="op">,</span> <span class="op">((</span><span class="fu">Get-ADGroupMember</span> <span class="va">$_</span><span class="op">).</span><span class="fu">Name</span> <span class="op">-</span>join <span class="st">', '</span><span class="op">)</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></div>
+<h2 id="étape-2.-larborescence-et-les-permissions-ntfs">Étape 2. L’arborescence et les permissions NTFS</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (PowerShell administrateur)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="va">$racine</span> <span class="op">=</span> <span class="st">"E:\Partages"</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">New-Item</span> <span class="op">-</span>ItemType Directory <span class="op">-</span>Path <span class="va">$racine</span></span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="st">"Commun"</span><span class="op">,</span><span class="st">"Direction"</span><span class="op">,</span><span class="st">"RH"</span><span class="op">,</span><span class="st">"Comptabilite"</span><span class="op">,</span><span class="st">"Exploitation"</span> <span class="op">|</span></span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a>    <span class="fu">ForEach-Object</span> <span class="op">{</span> <span class="fu">New-Item</span> <span class="op">-</span>ItemType Directory <span class="op">-</span>Path <span class="st">"$racine\$_"</span> <span class="op">}</span></span>
+<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a aria-hidden="true" href="#cb5-6" tabindex="-1"></a>icacls <span class="va">$racine</span>                                 <span class="co"># permissions héritées de E:\ : à noter dans le journal</span></span></code></pre></div></div>
+<p>On repart de zéro sur la racine : seuls les administrateurs et le système gardent le contrôle total (hérité par tous les sous-dossiers), et les utilisateurs authentifiés peuvent seulement <strong>lister la racine</strong> (portée « ce dossier seulement », donc non héritée) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (PowerShell administrateur)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a>icacls <span class="va">$racine</span> <span class="op">/</span>inheritance<span class="op">:</span>r <span class="op">/</span>grant<span class="op">:</span>r <span class="st">"*S-1-5-32-544:(OI)(CI)F"</span> <span class="st">"*S-1-5-18:(OI)(CI)F"</span> <span class="st">"*S-1-5-11:RX"</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a>icacls <span class="va">$racine</span></span></code></pre></div></div>
+<p>Puis chaque dossier reçoit ses groupes de domaine local :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (PowerShell administrateur)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a>icacls <span class="st">"$racine\Commun"</span>       <span class="op">/</span>grant <span class="st">"HEXALOG\DL_Commun_RW:(OI)(CI)M"</span></span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a>icacls <span class="st">"$racine\Direction"</span>    <span class="op">/</span>grant <span class="st">"HEXALOG\DL_Direction_RW:(OI)(CI)M"</span></span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a>icacls <span class="st">"$racine\RH"</span>           <span class="op">/</span>grant <span class="st">"HEXALOG\DL_RH_RW:(OI)(CI)M"</span> <span class="st">"HEXALOG\DL_RH_RO:(OI)(CI)RX"</span></span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a>icacls <span class="st">"$racine\Comptabilite"</span> <span class="op">/</span>grant <span class="st">"HEXALOG\DL_Compta_RW:(OI)(CI)M"</span> <span class="st">"HEXALOG\DL_Compta_RO:(OI)(CI)RX"</span></span>
+<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a>icacls <span class="st">"$racine\Exploitation"</span> <span class="op">/</span>grant <span class="st">"HEXALOG\DL_Exploitation_RW:(OI)(CI)M"</span> <span class="st">"HEXALOG\DL_Exploitation_RO:(OI)(CI)RX"</span></span>
+<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a>icacls <span class="st">"$racine\RH"</span></span></code></pre></div></div>
+<p>Ouvrez les propriétés de <code>E:\Partages\RH</code> → Sécurité → Avancé : repérez les entrées héritées (colonne <em>Hérité de</em>) et les entrées explicites.</p>
+<h2 id="étape-3.-le-partage">Étape 3. Le partage</h2>
+<p>On crée un seul partage <code>Partages</code> avec l’<strong>énumération basée sur l’accès</strong>. Les noms des groupes intégrés sont obtenus à partir de leur SID pour fonctionner quelle que soit la langue :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (PowerShell administrateur)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="kw">function</span> Get<span class="op">-</span>NomDepuisSid<span class="op">(</span><span class="va">$sid</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a>    <span class="op">(</span><span class="fu">New-Object</span> System<span class="op">.</span><span class="fu">Security</span><span class="op">.</span><span class="fu">Principal</span><span class="op">.</span><span class="fu">SecurityIdentifier</span><span class="op">(</span><span class="va">$sid</span><span class="op">)).</span><span class="fu">Translate</span><span class="op">([</span>System<span class="op">.</span><span class="fu">Security</span><span class="op">.</span><span class="fu">Principal</span><span class="op">.</span><span class="fu">NTAccount</span><span class="op">]).</span><span class="fu">Value</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a><span class="va">$admins</span>    <span class="op">=</span> Get<span class="op">-</span>NomDepuisSid <span class="st">"S-1-5-32-544"</span></span>
+<span id="cb8-5"><a aria-hidden="true" href="#cb8-5" tabindex="-1"></a><span class="va">$authentif</span> <span class="op">=</span> Get<span class="op">-</span>NomDepuisSid <span class="st">"S-1-5-11"</span></span>
+<span id="cb8-6"><a aria-hidden="true" href="#cb8-6" tabindex="-1"></a><span class="va">$admins</span> <span class="op">;</span> <span class="va">$authentif</span></span>
+<span id="cb8-7"><a aria-hidden="true" href="#cb8-7" tabindex="-1"></a></span>
+<span id="cb8-8"><a aria-hidden="true" href="#cb8-8" tabindex="-1"></a>New<span class="op">-</span>SmbShare <span class="op">-</span>Name <span class="st">"Partages"</span> <span class="op">-</span>Path <span class="va">$racine</span> <span class="op">-</span>FullAccess <span class="va">$admins</span> <span class="op">-</span>ChangeAccess <span class="va">$authentif</span> `</span>
+<span id="cb8-9"><a aria-hidden="true" href="#cb8-9" tabindex="-1"></a>    <span class="op">-</span>FolderEnumerationMode AccessBased <span class="op">-</span>Description <span class="st">"Partages des services Hexalog"</span></span>
+<span id="cb8-10"><a aria-hidden="true" href="#cb8-10" tabindex="-1"></a>Get<span class="op">-</span>SmbShare <span class="op">-</span>Name Partages <span class="op">|</span> <span class="fu">Select-Object</span> Name<span class="op">,</span> Path<span class="op">,</span> FolderEnumerationMode</span>
+<span id="cb8-11"><a aria-hidden="true" href="#cb8-11" tabindex="-1"></a>Get<span class="op">-</span>SmbShareAccess <span class="op">-</span>Name Partages</span></code></pre></div></div>
+<h2 id="étape-4.-les-tests">Étape 4. Les tests</h2>
+<h3 id="accès-effectif">4.1, Accès effectif</h3>
+<p>Sur <code>E:\Partages\RH</code> → Propriétés → Sécurité → Avancé → <strong>Accès effectif</strong> : calculez l’accès de <code>c.dubois</code>, <code>s.laurent</code> et <code>a.martin</code>. Faites une capture pour chacun.</p>
+<h3 id="tests-réels-depuis-cli-lnx-01">4.2, Tests réels depuis CLI-LNX-01</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : CLI-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="co"># Pour ne pas retaper le mot de passe (identique pour tous les salariés dans le lab)</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="bu">read</span> <span class="at">-s</span> <span class="at">-p</span> <span class="st">"Mot de passe des salariés : "</span> <span class="va">PASSWD</span> <span class="kw">;</span> <span class="bu">export</span> <span class="va">PASSWD</span> <span class="kw">;</span> <span class="bu">echo</span></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="va">P</span><span class="op">=</span>//srv-win-01.hexalog.lan/Partages</span>
+<span id="cb9-5"><a aria-hidden="true" href="#cb9-5" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Bilan provisoire"</span> <span class="op">&gt;</span> /tmp/bilan.txt</span>
+<span id="cb9-6"><a aria-hidden="true" href="#cb9-6" tabindex="-1"></a></span>
+<span id="cb9-7"><a aria-hidden="true" href="#cb9-7" tabindex="-1"></a><span class="co"># Alice (comptabilité) : que voit-elle à la racine ?</span></span>
+<span id="cb9-8"><a aria-hidden="true" href="#cb9-8" tabindex="-1"></a><span class="ex">smbclient</span> <span class="va">$P</span> <span class="at">-U</span> <span class="st">'HEXALOG\a.martin'</span> <span class="at">-c</span> <span class="st">'ls'</span></span>
+<span id="cb9-9"><a aria-hidden="true" href="#cb9-9" tabindex="-1"></a><span class="co"># Alice dépose un fichier dans Comptabilite</span></span>
+<span id="cb9-10"><a aria-hidden="true" href="#cb9-10" tabindex="-1"></a><span class="ex">smbclient</span> <span class="va">$P</span> <span class="at">-U</span> <span class="st">'HEXALOG\a.martin'</span> <span class="at">-c</span> <span class="st">'cd Comptabilite; put /tmp/bilan.txt bilan.txt; ls'</span></span>
+<span id="cb9-11"><a aria-hidden="true" href="#cb9-11" tabindex="-1"></a><span class="co"># Claire (direction) lit, mais ne peut pas écrire</span></span>
+<span id="cb9-12"><a aria-hidden="true" href="#cb9-12" tabindex="-1"></a><span class="ex">smbclient</span> <span class="va">$P</span> <span class="at">-U</span> <span class="st">'HEXALOG\c.dubois'</span> <span class="at">-c</span> <span class="st">'cd Comptabilite; get bilan.txt /tmp/bilan-lu.txt'</span></span>
+<span id="cb9-13"><a aria-hidden="true" href="#cb9-13" tabindex="-1"></a><span class="ex">smbclient</span> <span class="va">$P</span> <span class="at">-U</span> <span class="st">'HEXALOG\c.dubois'</span> <span class="at">-c</span> <span class="st">'cd Comptabilite; put /tmp/bilan.txt essai.txt'</span></span>
+<span id="cb9-14"><a aria-hidden="true" href="#cb9-14" tabindex="-1"></a><span class="co"># Julien (exploitation) ne voit pas Comptabilite et ne peut pas y entrer</span></span>
+<span id="cb9-15"><a aria-hidden="true" href="#cb9-15" tabindex="-1"></a><span class="ex">smbclient</span> <span class="va">$P</span> <span class="at">-U</span> <span class="st">'HEXALOG\j.moreau'</span> <span class="at">-c</span> <span class="st">'ls'</span></span>
+<span id="cb9-16"><a aria-hidden="true" href="#cb9-16" tabindex="-1"></a><span class="ex">smbclient</span> <span class="va">$P</span> <span class="at">-U</span> <span class="st">'HEXALOG\j.moreau'</span> <span class="at">-c</span> <span class="st">'cd Comptabilite'</span></span>
+<span id="cb9-17"><a aria-hidden="true" href="#cb9-17" tabindex="-1"></a><span class="co"># Nicolas (informatique) : que voit-il ?</span></span>
+<span id="cb9-18"><a aria-hidden="true" href="#cb9-18" tabindex="-1"></a><span class="ex">smbclient</span> <span class="va">$P</span> <span class="at">-U</span> <span class="st">'HEXALOG\n.fournier'</span> <span class="at">-c</span> <span class="st">'ls'</span></span></code></pre></div></div>
+<p>Complétez la <strong>matrice de tests</strong> (au moins 12 tests couvrant chaque ligne de la matrice des droits) :</p>
+<div class="table-wrap"><table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Compte</th>
+<th>Dossier</th>
+<th>Action</th>
+<th>Attendu</th>
+<th>Obtenu</th>
+<th>Preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>a.martin</td>
+<td>racine</td>
+<td>lister</td>
+<td>voit Commun et Comptabilite</td>
+<td></td>
+<td>capture</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>a.martin</td>
+<td>Comptabilite</td>
+<td>déposer un fichier</td>
+<td>autorisé</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>c.dubois</td>
+<td>Comptabilite</td>
+<td>lire un fichier</td>
+<td>autorisé</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>c.dubois</td>
+<td>Comptabilite</td>
+<td>déposer un fichier</td>
+<td>refusé</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>j.moreau</td>
+<td>Comptabilite</td>
+<td>entrer</td>
+<td>refusé</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>NT_STATUS_ACCESS_DENIED</code> indique un refus. Avec l’ABE, un dossier non autorisé n’apparaît pas dans <code>ls</code>.</p>
+<h3 id="un-changement-de-poste">4.3, Un changement de poste</h3>
+<p>Emma Garcia (Exploitation) remplace temporairement une assistante RH et doit pouvoir <strong>modifier</strong> les fichiers RH. Appliquez le changement selon AGDLP (une seule commande), testez, puis revenez à la situation initiale. Qu’auriez-vous dû faire si les droits avaient été donnés directement aux utilisateurs ?</p>
+<h2 id="étape-5.-quotas">Étape 5. Quotas</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (PowerShell administrateur)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a>Install<span class="op">-</span>WindowsFeature FS<span class="op">-</span>Resource<span class="op">-</span>Manager <span class="op">-</span>IncludeManagementTools</span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a>New<span class="op">-</span>FsrmQuota <span class="op">-</span>Path <span class="st">"E:\Partages\Commun"</span> <span class="op">-</span>Size 200MB <span class="op">-</span>Description <span class="st">"Quota strict du dossier commun"</span></span>
+<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a>New<span class="op">-</span>FsrmQuota <span class="op">-</span>Path <span class="st">"E:\Partages\Exploitation"</span> <span class="op">-</span>Size 1GB <span class="op">-</span>SoftLimit <span class="op">-</span>Description <span class="st">"Quota souple"</span></span>
+<span id="cb10-4"><a aria-hidden="true" href="#cb10-4" tabindex="-1"></a>Get<span class="op">-</span>FsrmQuota <span class="op">|</span> <span class="fu">Format-Table</span> Path<span class="op">,</span> Size<span class="op">,</span> SoftLimit<span class="op">,</span> Usage</span></code></pre></div></div>
+<p>Testez le quota strict :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : CLI-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="bu">cd</span> ~</span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="ex">fallocate</span> <span class="at">-l</span> 250M gros-fichier.bin          <span class="co"># dans le dossier personnel : /tmp est en mémoire sous Debian 13</span></span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a><span class="ex">smbclient</span> //srv-win-01.hexalog.lan/Partages <span class="at">-U</span> <span class="st">'HEXALOG\l.roux'</span> <span class="at">-c</span> <span class="st">'cd Commun; put gros-fichier.bin gros.bin'</span></span>
+<span id="cb11-4"><a aria-hidden="true" href="#cb11-4" tabindex="-1"></a><span class="fu">rm</span> ~/gros-fichier.bin</span></code></pre></div></div>
+<p>Quel message obtenez-vous ? Retrouvez l’événement correspondant dans l’Observateur d’événements (journal Application, source SRMSVC).</p>
+<h2 id="étape-6.-sauvegarder-et-documenter">Étape 6. Sauvegarder et documenter</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (PowerShell administrateur)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a>icacls E<span class="op">:</span>\Partages <span class="op">/</span>save C<span class="op">:</span>\Scripts\acl<span class="op">-</span>partages<span class="op">.</span><span class="fu">txt</span> <span class="op">/</span>t</span></code></pre></div></div>
+<p>Snapshot <code>07-partages</code>. Mettez à jour l’inventaire (partage, volume, quotas) et joignez la matrice des droits.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">Huit groupes <code>DL_*</code> de domaine local, remplis uniquement avec des groupes <code>GG_*</code>.</label></li>
+<li><label><input type="checkbox">Aucune permission NTFS accordée directement à un utilisateur.</label></li>
+<li><label><input type="checkbox">Aucun utilisateur n’a Contrôle total ; aucun refus explicite.</label></li>
+<li><label><input type="checkbox">Le partage <code>Partages</code> a l’ABE activé ; chaque compte ne voit que ses dossiers.</label></li>
+<li><label><input type="checkbox">La matrice de tests est complète et tous les résultats obtenus sont conformes.</label></li>
+<li><label><input type="checkbox">Quotas en place et testés.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Pourquoi les utilisateurs authentifiés ont-ils <code>RX</code> sur la racine sans <code>(OI)(CI)</code> ?</li>
+<li>Que verrait <code>j.moreau</code> à la racine sans l’ABE ? Pourrait-il ouvrir le dossier RH ?</li>
+<li>Un nouveau dossier <code>Paie</code> doit être accessible en lecture-écriture aux RH seulement. Listez toutes les opérations nécessaires.</li>
+<li>Que se passe-t-il si on supprime le groupe <code>DL_Compta_RW</code> puis qu’on le recrée avec le même nom ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>icacls</code> : « Mappage entre noms de compte et ID de sécurité non effectué »</td>
+<td>nom de groupe mal écrit ou groupe inexistant : <code>Get-ADGroup DL_RH_RW</code></td>
+</tr>
+<tr class="even">
+<td>Plus personne n’accède à rien, même l’administrateur</td>
+<td>héritage supprimé sans avoir remis Administrateurs : se réapproprier le dossier (<code>takeown /f E:\Partages /r /d o</code>) puis réappliquer <code>icacls</code></td>
+</tr>
+<tr class="odd">
+<td><code>NT_STATUS_ACCESS_DENIED</code> pour un compte qui devrait avoir accès</td>
+<td>le groupe global est-il dans le bon DL ? l’utilisateur dans le bon GG ? <code>Get-ADPrincipalGroupMembership</code></td>
+</tr>
+<tr class="even">
+<td><code>NT_STATUS_BAD_NETWORK_NAME</code></td>
+<td>nom du partage mal écrit (<code>Partages</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>NT_STATUS_LOGON_FAILURE</code></td>
+<td>identifiant ou mot de passe ; la variable <code>PASSWD</code> est-elle bien exportée ?</td>
+</tr>
+<tr class="even">
+<td>Un compte voit tous les dossiers</td>
+<td>ABE non activée : <code>Set-SmbShare -Name Partages -FolderEnumerationMode AccessBased</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="livrables">Livrables</h2>
+<ul>
+<li>La matrice des droits et la matrice de tests complétée avec les preuves.</li>
+<li>Captures : membres des DL, <code>icacls</code> des cinq dossiers, <code>Get-SmbShare</code>, accès effectifs, un refus et une réussite <code>smbclient</code>, le quota dépassé.</li>
+<li>Réponses aux questions.</li>
+</ul>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="dir">‹ Page précédente</span><span class="titre">Séance 7 : Permissions NTFS et partages</span></a><a class="next" href="../cours/s08-linux-admin.html" data-seance="8"><span class="dir">Page suivante ›</span><span class="titre">Séance 8 : Linux : distributions et administration</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>
