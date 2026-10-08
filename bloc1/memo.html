@@ -32,7 +32,7 @@
   <p class="lead">Les commandes utilisées dans le bloc, regroupées par thème. Pour le détail et les options, voir le cours correspondant ou la page de manuel (man commande, Get-Help commande).</p>
   
 </header>
-<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#virtualbox-vboxmanage">VirtualBox (VBoxManage)</a></li><li><a href="#réseau">Réseau</a></li><li><a href="#linux-système">Linux : système</a></li><li><a href="#linux-comptes-et-droits">Linux : comptes et droits</a></li><li><a href="#ssh">SSH</a></li><li><a href="#ufw">UFW</a></li><li><a href="#windows-server-administration">Windows Server : administration</a></li><li><a href="#active-directory">Active Directory</a></li><li><a href="#partages-et-ntfs">Partages et NTFS</a></li><li><a href="#événements-windows-à-connaître">Événements Windows à connaître</a></li></ul></nav>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#virtualbox-vboxmanage">VirtualBox (VBoxManage)</a></li><li><a href="#réseau">Réseau</a></li><li><a href="#linux-système">Linux : système</a></li><li><a href="#linux-comptes-et-droits">Linux : comptes et droits</a></li><li><a href="#ssh">SSH</a></li><li><a href="#ufw">UFW</a></li><li><a href="#windows-les-consoles-graphiques">Windows : les consoles graphiques</a></li><li><a href="#pour-information-les-équivalents-powershell">Pour information : les équivalents PowerShell</a></li><li><a href="#événements-windows-à-connaître">Événements Windows à connaître</a></li></ul></nav>
 <article class="content">
 <h2 id="virtualbox-vboxmanage">VirtualBox (VBoxManage)</h2>
 <div class="table-wrap"><table>
@@ -100,42 +100,42 @@
 <tr class="odd">
 <td>adresses</td>
 <td><code>ip -br a</code></td>
-<td><code>Get-NetIPConfiguration</code>, <code>ipconfig /all</code></td>
+<td><code>ncpa.cpl</code> → Statut → Détails ; <code>ipconfig /all</code></td>
 </tr>
 <tr class="even">
 <td>routes</td>
 <td><code>ip route</code></td>
-<td><code>Get-NetRoute</code>, <code>route print</code></td>
+<td><code>route print</code></td>
 </tr>
 <tr class="odd">
 <td>tester une machine</td>
 <td><code>ping -c 3 IP</code></td>
-<td><code>Test-Connection IP</code>, <code>ping IP</code></td>
+<td><code>ping IP</code></td>
 </tr>
 <tr class="even">
 <td>tester un port</td>
 <td><code>nc -zv -w 3 IP PORT</code></td>
-<td><code>Test-NetConnection IP -Port PORT</code></td>
+<td><code>Test-NetConnection IP -Port PORT</code> (PowerShell, sur le PC hôte)</td>
 </tr>
 <tr class="odd">
 <td>requête HTTP</td>
 <td><code>curl -I http://IP</code></td>
-<td><code>curl.exe -I http://IP</code>, <code>Invoke-WebRequest</code></td>
+<td>le navigateur ; <code>curl.exe -I http://IP</code></td>
 </tr>
 <tr class="even">
 <td>résoudre un nom</td>
 <td><code>dig +short nom</code>, <code>getent hosts nom</code></td>
-<td><code>Resolve-DnsName nom</code>, <code>nslookup nom</code></td>
+<td><code>nslookup nom</code></td>
 </tr>
 <tr class="odd">
 <td>enregistrement SRV</td>
 <td><code>dig -t SRV _ldap._tcp.hexalog.local</code></td>
-<td><code>Resolve-DnsName -Type SRV _ldap._tcp.hexalog.local</code></td>
+<td>console DNS (dossiers <code>_tcp</code>, <code>_msdcs</code> de la zone) ; <code>nslookup -type=SRV _ldap._tcp.hexalog.local</code></td>
 </tr>
 <tr class="even">
 <td>ports en écoute</td>
 <td><code>sudo ss -tulpn</code></td>
-<td><code>Get-NetTCPConnection -State Listen</code>, <code>netstat -ano</code></td>
+<td>Moniteur de ressources (<code>resmon</code>) → Réseau → Ports d’écoute ; <code>netstat -ano</code></td>
 </tr>
 <tr class="odd">
 <td>chemin réseau</td>
@@ -150,7 +150,7 @@
 <tr class="odd">
 <td>configuration permanente</td>
 <td><code>/etc/network/interfaces</code>, <code>/etc/resolv.conf</code></td>
-<td><code>New-NetIPAddress</code>, <code>Set-DnsClientServerAddress</code></td>
+<td><code>ncpa.cpl</code> → Propriétés → Protocole Internet version 4</td>
 </tr>
 </tbody>
 </table></div>
@@ -416,7 +416,129 @@
 </tr>
 </tbody>
 </table></div>
-<h2 id="windows-server-administration">Windows Server : administration</h2>
+<h2 id="windows-les-consoles-graphiques">Windows : les consoles graphiques</h2>
+<p>Sous Windows (Server ou 11), les TP du bloc se font avec les consoles graphiques. Elles s’ouvrent depuis le menu <strong>Outils</strong> du Gestionnaire de serveur, ou par leur nom dans la boîte <strong>Exécuter</strong> (touches Windows + R).</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Console</th>
+<th>Nom à taper</th>
+<th>Pour</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Gestionnaire de serveur</td>
+<td>(s’ouvre au démarrage)</td>
+<td>nom, domaine, adresse, bureau à distance (Serveur local) ; ajouter des rôles (Gérer) ; partages (Services de fichiers et de stockage)</td>
+</tr>
+<tr class="even">
+<td>Connexions réseau</td>
+<td><code>ncpa.cpl</code></td>
+<td>adresse IP fixe et DNS (Propriétés → IPv4), adresse reçue (Statut → Détails)</td>
+</tr>
+<tr class="odd">
+<td>Propriétés système</td>
+<td><code>sysdm.cpl</code></td>
+<td>renommer l’ordinateur, le joindre au domaine</td>
+</tr>
+<tr class="even">
+<td>Services</td>
+<td><code>services.msc</code></td>
+<td>état, type de démarrage, compte, dépendances d’un service</td>
+</tr>
+<tr class="odd">
+<td>Observateur d’événements</td>
+<td><code>eventvwr.msc</code></td>
+<td>journaux Système, Application, Sécurité ; <strong>Filtrer le journal actuel</strong> par ID, niveau, période</td>
+</tr>
+<tr class="even">
+<td>Pare-feu avec fonctions avancées de sécurité</td>
+<td><code>wf.msc</code></td>
+<td>règles entrantes et sortantes, portée (onglet Étendue)</td>
+</tr>
+<tr class="odd">
+<td>Gestion des disques</td>
+<td><code>diskmgmt.msc</code></td>
+<td>initialiser, partitionner, formater un disque</td>
+</tr>
+<tr class="even">
+<td>Gestion de l’ordinateur</td>
+<td><code>compmgmt.msc</code></td>
+<td>dossiers partagés, utilisateurs et groupes locaux, disques, services</td>
+</tr>
+<tr class="odd">
+<td>Utilisateurs et ordinateurs Active Directory</td>
+<td><code>dsa.msc</code></td>
+<td>OU, utilisateurs (Nouveau, Copier, Désactiver, Réinitialiser le mot de passe, Déplacer), groupes (onglets Membres, Membre de), requêtes enregistrées</td>
+</tr>
+<tr class="even">
+<td>Centre d’administration Active Directory</td>
+<td><code>dsac.exe</code></td>
+<td>la même chose ; stratégies de mot de passe affinées (System → Password Settings Container)</td>
+</tr>
+<tr class="odd">
+<td>DNS</td>
+<td><code>dnsmgmt.msc</code></td>
+<td>zones, enregistrements (Nouvel hôte, Nouvel alias), redirecteurs (propriétés du serveur)</td>
+</tr>
+<tr class="even">
+<td>Gestion des stratégies de groupe</td>
+<td><code>gpmc.msc</code></td>
+<td>modifier une GPO (Default Domain Policy, Default Domain Controllers Policy), onglet Paramètres</td>
+</tr>
+<tr class="odd">
+<td>Connexion Bureau à distance</td>
+<td><code>mstsc</code></td>
+<td>ouvrir une session à distance sur un serveur</td>
+</tr>
+</tbody>
+</table></div>
+<p>Partages et permissions, dans l’Explorateur : propriétés d’un dossier → onglet <strong>Partage → Partage avancé</strong> (le partage et ses autorisations) ; onglet <strong>Sécurité</strong> (permissions NTFS) → <strong>Avancé</strong> (héritage, onglets Audit et Accès effectif).</p>
+<p>Quelques commandes simples, dans l’<strong>Invite de commandes</strong> (<code>cmd</code>) :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ipconfig /all</code></td>
+<td>configuration IP complète</td>
+</tr>
+<tr class="even">
+<td><code>ping NOM</code></td>
+<td>tester une machine (le serveur ne répond pas par défaut)</td>
+</tr>
+<tr class="odd">
+<td><code>nslookup hexalog.local</code></td>
+<td>le DNS trouve-t-il le domaine ?</td>
+</tr>
+<tr class="even">
+<td><code>whoami</code>, <code>whoami /groups</code></td>
+<td>compte de la session et ses groupes</td>
+</tr>
+<tr class="odd">
+<td><code>echo %LOGONSERVER%</code></td>
+<td>contrôleur qui a ouvert la session</td>
+</tr>
+<tr class="even">
+<td><code>gpupdate /force</code></td>
+<td>appliquer tout de suite les stratégies de groupe</td>
+</tr>
+<tr class="odd">
+<td><code>icacls DOSSIER</code></td>
+<td>lire les permissions NTFS d’un dossier</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="pour-information-les-équivalents-powershell">Pour information : les équivalents PowerShell</h2>
+<p>Les mêmes opérations s’automatisent en PowerShell. Elles ne sont pas utilisées dans les TP ; elles servent quand il faut traiter beaucoup de comptes ou de serveurs.</p>
+<h3 id="administration-du-serveur">Administration du serveur</h3>
 <div class="table-wrap"><table>
 
 <thead>
@@ -480,7 +602,7 @@
 </tr>
 </tbody>
 </table></div>
-<h2 id="active-directory">Active Directory</h2>
+<h3 id="active-directory">Active Directory</h3>
 <div class="table-wrap"><table>
 
 <thead>
@@ -544,7 +666,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>Sur un poste du domaine (CLI-WIN-01) :</p>
+<p>Sur un poste à joindre au domaine :</p>
 <div class="table-wrap"><table>
 
 <thead>
@@ -555,32 +677,12 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>ncpa.cpl</code></td>
-<td>connexions réseau : adresse IP et DNS de la carte</td>
-</tr>
-<tr class="even">
-<td><code>sysdm.cpl</code></td>
-<td>nom de l’ordinateur, jonction au domaine</td>
-</tr>
-<tr class="odd">
-<td><code>nslookup hexalog.local</code></td>
-<td>le poste trouve-t-il le domaine ?</td>
-</tr>
-<tr class="even">
-<td><code>whoami</code>, <code>whoami /groups</code></td>
-<td>compte de la session et ses groupes</td>
-</tr>
-<tr class="odd">
-<td><code>$env:LOGONSERVER</code> (PowerShell), <code>echo %LOGONSERVER%</code> (cmd)</td>
-<td>contrôleur qui a ouvert la session</td>
-</tr>
-<tr class="even">
 <td><code>Add-Computer -DomainName hexalog.local -Credential HEXALOG\Administrateur -Restart</code></td>
-<td>joindre le domaine en PowerShell</td>
+<td>joindre le domaine</td>
 </tr>
 </tbody>
 </table></div>
-<h2 id="partages-et-ntfs">Partages et NTFS</h2>
+<h3 id="partages-et-ntfs">Partages et NTFS</h3>
 <div class="table-wrap"><table>
 
 <thead>
