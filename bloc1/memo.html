@@ -496,6 +496,7 @@
 </tbody>
 </table></div>
 <p>Partages et permissions, dans l’Explorateur : propriétés d’un dossier → onglet <strong>Partage → Partage avancé</strong> (le partage et ses autorisations) ; onglet <strong>Sécurité</strong> (permissions NTFS) → <strong>Avancé</strong> (héritage, onglets Audit et Accès effectif).</p>
+<p>Méthode <strong>AGDLP</strong> : comptes → groupe global <code>GG_…</code> (le service) → groupe de domaine local <code>DL_…</code> (un dossier, un niveau : <code>_RW</code> ou <code>_RO</code>, étendue <em>Domaine local</em>) → permissions NTFS aux seuls <code>DL_…</code>. On ne met jamais une personne dans un <code>DL_…</code>.</p>
 <p>Quelques commandes simples, dans l’<strong>Invite de commandes</strong> (<code>cmd</code>) :</p>
 <div class="table-wrap"><table>
 
@@ -697,11 +698,11 @@
 <td>afficher les permissions</td>
 </tr>
 <tr class="even">
-<td><code>icacls D /grant "HEXALOG\GROUPE:(OI)(CI)M"</code></td>
+<td><code>icacls D /grant "HEXALOG\DL_Compta_RW:(OI)(CI)M"</code></td>
 <td>Modification, héritée partout</td>
 </tr>
 <tr class="odd">
-<td><code>icacls D /grant "HEXALOG\GROUPE:(OI)(CI)RX"</code></td>
+<td><code>icacls D /grant "HEXALOG\DL_Compta_RO:(OI)(CI)RX"</code></td>
 <td>Lecture et exécution</td>
 </tr>
 <tr class="even">
