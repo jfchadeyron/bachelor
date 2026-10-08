@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 7 bis : Autorisations avancées, propriétaire et délégation dans l&#x27;annuaire | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Au TP 7, les autorisations de base (Modification, Lecture et exécution) ont suffi pour appliquer la matrice des droits. Elles laissent pourtant un problème : dans Commun, n&#x27;importe qui peut supprimer ">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item active" data-seance="7"><a class="nav-link" href="tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module B : Windows Server</span><span class="sep">›</span><a href="../cours/s07-ntfs-partages.html" data-seance="7">Séance 7</a><span class="sep">›</span><span>TP complémentaire</span></div>
+<header class="hero">
+  <span class="surtitre">TP complémentaire de la séance 7</span>
+  <h1>TP 7 bis : Autorisations avancées, propriétaire et délégation dans l&#x27;annuaire</h1>
+  <p class="lead">Au TP 7, les autorisations de base (Modification, Lecture et exécution) ont suffi pour appliquer la matrice des droits. Elles laissent pourtant un problème : dans Commun, n'importe qui peut supprimer le fichier d'un collègue. Vous ouvrez les autorisations avancées de Windows pour le régler, vous reprenez la main sur un fichier devenu inaccessible, puis vous retrouvez les mêmes mécanismes dans l'annuaire : Nicolas Fournier, du service informatique, pourra réinitialiser les mots de passe des salariés sans être administrateur du domaine.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>1 h 30</td></tr><tr><th>Prérequis</th><td>TP 7 terminé (au moins jusqu&#x27;à l&#x27;étape 7)</td></tr><tr><th>Machines virtuelles</th><td>SRV-WIN-01, CLI-WIN-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s07-ntfs-partages.html" data-seance="7">Séance 7 : Permissions NTFS et partages</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#objectifs">Objectifs</a></li><li><a href="#les-autorisations-spéciales">Les autorisations spéciales</a></li><li><a href="#étape-1.-préparer-et-lancer-une-installation-sur-le-poste">Étape 1. Préparer, et lancer une installation sur le poste</a></li><li><a href="#étape-2.-lire-les-autorisations-avancées">Étape 2. Lire les autorisations avancées</a></li><li><a href="#étape-3.-commun-chacun-gère-ses-fichiers">Étape 3. Commun : chacun gère ses fichiers</a></li><li><a href="#étape-4.-le-propriétaire-reprendre-la-main-sur-un-fichier">Étape 4. Le propriétaire : reprendre la main sur un fichier</a></li><li><a href="#étape-5.-tester-commun-depuis-cli-win-01">Étape 5. Tester Commun depuis CLI-WIN-01</a></li><li><a href="#étape-6.-déléguer-la-réinitialisation-des-mots-de-passe">Étape 6. Déléguer la réinitialisation des mots de passe</a></li><li><a href="#étape-7.-tester-la-délégation">Étape 7. Tester la délégation</a></li><li><a href="#étape-8.-sauvegarder-et-documenter">Étape 8. Sauvegarder et documenter</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#livrables">Livrables</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Trois demandes sont arrivées après la mise en place des partages.</p>
+<ol type="1">
+<li><strong>Commun</strong> : au test 13 du TP 7, Julien a supprimé le fichier d’Alice. La direction veut que chacun puisse déposer et lire des fichiers dans <code>Commun</code>, mais ne puisse modifier ou supprimer <strong>que les siens</strong>.</li>
+<li><strong>Un fichier verrouillé</strong> : un ancien prestataire a « bricolé » les autorisations d’un fichier RH. Plus personne n’y a accès, pas même les administrateurs. Il faut reprendre la main proprement.</li>
+<li><strong>Les mots de passe oubliés</strong> : Nicolas Fournier (<code>n.fournier</code>, service Informatique) assure le support. Pour chaque mot de passe oublié, il doit appeler l’administrateur. La direction veut qu’il puisse <strong>réinitialiser</strong> les mots de passe des salariés lui-même, <strong>sans</strong> devenir administrateur du domaine.</li>
+</ol>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Avant de commencer</strong></p>
+<p>Il faut avoir fait le <a href="tp07-ntfs-partages.html">TP 7 : Partages et permissions en AGDLP, testés depuis le poste</a> au moins jusqu’à l’étape 7 : le partage <code>\\SRV-WIN-01\Partages</code>, les groupes <code>DL_…</code> et le fichier <code>paie-octobre.txt</code> créé par <code>s.laurent</code> dans <code>RH</code> (test 5). Allumez <code>SRV-WIN-01</code> d’abord, puis <code>CLI-WIN-01</code>.</p>
+</div></div>
+<h2 id="objectifs">Objectifs</h2>
+<ul>
+<li>Lire la liste avancée des autorisations d’un dossier : type, principal, accès, héritage, portée.</li>
+<li>Remplacer une autorisation de base par des <strong>autorisations spéciales</strong>, et comprendre le rôle de <strong>CREATEUR PROPRIETAIRE</strong>.</li>
+<li>Comprendre le rôle du <strong>propriétaire</strong> et reprendre la main sur un fichier inaccessible.</li>
+<li><strong>Déléguer</strong> une tâche d’administration dans Active Directory à un groupe, selon la même logique qu’AGDLP.</li>
+<li>Retrouver dans l’annuaire les notions vues sur NTFS : liste d’autorisations, héritage, portée.</li>
+</ul>
+<h2 id="les-autorisations-spéciales">Les autorisations spéciales</h2>
+<p>Chaque case de l’onglet <strong>Sécurité</strong> (Modification, Lecture et exécution…) est en réalité un <strong>lot</strong> d’autorisations plus fines, appelées autorisations <strong>spéciales</strong> (ou avancées). Windows en compte quatorze :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Autorisation spéciale</th>
+<th>Sur un dossier</th>
+<th>Sur un fichier</th>
+<th>Contenue dans Modification ?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Parcours du dossier/exécuter le fichier</td>
+<td>traverser le dossier</td>
+<td>lancer un programme</td>
+<td>oui</td>
+</tr>
+<tr class="even">
+<td>Liste du dossier/lecture de données</td>
+<td>voir la liste du contenu</td>
+<td>lire le contenu</td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td>Attributs de lecture, Lecture des attributs étendus</td>
+<td></td>
+<td>voir les attributs (lecture seule, caché…)</td>
+<td>oui</td>
+</tr>
+<tr class="even">
+<td><strong>Création de fichiers/écriture de données</strong></td>
+<td><strong>créer un fichier</strong> dedans</td>
+<td><strong>modifier le contenu</strong></td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td>Création de dossiers/ajout de données</td>
+<td>créer un sous-dossier</td>
+<td>ajouter à la fin du fichier</td>
+<td>oui</td>
+</tr>
+<tr class="even">
+<td>Attributs d’écriture, Écriture d’attributs étendus</td>
+<td></td>
+<td>changer les attributs</td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td><strong>Suppression</strong></td>
+<td>supprimer le dossier lui-même</td>
+<td><strong>supprimer le fichier</strong></td>
+<td><strong>oui</strong></td>
+</tr>
+<tr class="even">
+<td>Suppression de sous-dossier et fichier</td>
+<td>supprimer n’importe quel élément qu’il contient</td>
+<td></td>
+<td>non (Contrôle total)</td>
+</tr>
+<tr class="odd">
+<td>Autorisations de lecture</td>
+<td>voir les autorisations</td>
+<td>voir les autorisations</td>
+<td>oui</td>
+</tr>
+<tr class="even">
+<td>Modifier les autorisations</td>
+<td>changer les autorisations</td>
+<td>changer les autorisations</td>
+<td>non (Contrôle total)</td>
+</tr>
+<tr class="odd">
+<td>Appropriation</td>
+<td>devenir propriétaire</td>
+<td>devenir propriétaire</td>
+<td>non (Contrôle total)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Remarquez que la même case n’a pas le même effet sur un dossier et sur un fichier : <em>Création de fichiers/écriture de données</em> veut dire « créer un fichier » sur un dossier, mais « modifier le contenu » sur un fichier. C’est la <strong>portée</strong> (<em>S’applique à</em>) qui permet de choisir.</p>
+<h2 id="étape-1.-préparer-et-lancer-une-installation-sur-le-poste">Étape 1. Préparer, et lancer une installation sur le poste</h2>
+<p>L’étape 7 utilise la console <em>Utilisateurs et ordinateurs Active Directory</em> sur <code>CLI-WIN-01</code>. Elle ne fait pas partie de Windows 11 : on l’installe maintenant, et elle s’installera pendant que vous travaillez sur le serveur.</p>
+<ol type="1">
+<li>Faites un snapshot <code>07b-avant</code> de <code>SRV-WIN-01</code> et de <code>CLI-WIN-01</code>.</li>
+<li>Sur <code>CLI-WIN-01</code>, ouvrez la session <code>HEXALOG\adm.nfournier</code> (le compte d’administration de Nicolas, membre d’Admins du domaine, donc administrateur du poste).</li>
+<li><strong>Paramètres → Système → Fonctionnalités facultatives → Ajouter une fonctionnalité facultative</strong> (bouton <em>Afficher les fonctionnalités</em>).</li>
+<li>Tapez <code>Active Directory</code> dans la recherche, cochez <strong>RSAT : outils Active Directory Domain Services et services AD LDS</strong> → Suivant → <strong>Ajouter</strong>.</li>
+<li>Laissez la session ouverte et l’installation se faire (5 à 15 minutes). Passez sur <code>SRV-WIN-01</code>.</li>
+</ol>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>L'installation a besoin d'Internet</strong></p>
+<p>La fonctionnalité est téléchargée depuis Windows Update. Si elle échoue, vérifiez que le PC est bien identifié sur le portail du lycée (page de connexion dans le navigateur), puis relancez-la. Voir aussi le dépannage.</p>
+</div></div>
+<h2 id="étape-2.-lire-les-autorisations-avancées">Étape 2. Lire les autorisations avancées</h2>
+<p>Sur <code>SRV-WIN-01</code>, session <code>HEXALOG\Administrateur</code> : clic droit sur <code>C:\Partages\Commun</code> → <strong>Propriétés → Sécurité → Avancé</strong>.</p>
+<p>La fenêtre liste les <strong>entrées d’autorisation</strong>, une par ligne. Pour chacune, notez dans votre journal :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Colonne</th>
+<th>Ce qu’elle indique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Type</td>
+<td>Autoriser ou Refuser</td>
+</tr>
+<tr class="even">
+<td>Principal</td>
+<td>à qui s’applique la ligne (groupe, utilisateur, identité intégrée)</td>
+</tr>
+<tr class="odd">
+<td>Accès</td>
+<td>l’autorisation de base, ou <em>Spéciale</em> si c’est un lot personnalisé</td>
+</tr>
+<tr class="even">
+<td>Hérité de</td>
+<td>le dossier d’où vient la ligne, ou <em>Aucun</em> si elle a été posée ici</td>
+</tr>
+<tr class="odd">
+<td>S’applique à</td>
+<td>la <strong>portée</strong> : ce dossier, les sous-dossiers, les fichiers…</td>
+</tr>
+</tbody>
+</table></div>
+<p>Puis :</p>
+<ol type="1">
+<li>Double-cliquez sur la ligne <code>DL_Commun_RW</code> → lien <strong>Afficher les autorisations avancées</strong> : repérez <strong>Suppression</strong> parmi les cases cochées. C’est elle qui a permis à Julien de supprimer le fichier d’Alice. Fermez avec <strong>Annuler</strong>.</li>
+<li>Repérez la ligne <strong>CREATEUR PROPRIETAIRE</strong>, héritée de <code>C:\Partages</code> : <em>Contrôle total</em>, s’applique aux <em>sous-dossiers et fichiers seulement</em>.</li>
+</ol>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>CREATEUR PROPRIETAIRE, une identité qui se remplace</strong></p>
+<p>Cette ligne ne donne de droit à personne sur le dossier lui-même. Quand quelqu’un crée un fichier dans ce dossier, Windows remplace <em>CREATEUR PROPRIETAIRE</em> par le compte de cette personne, sur le nouveau fichier seulement. Résultat : chacun a tous les droits <strong>sur ce qu’il a créé lui-même</strong>. C’est elle qui va servir à l’étape suivante.</p>
+</div></div>
+<h2 id="étape-3.-commun-chacun-gère-ses-fichiers">Étape 3. Commun : chacun gère ses fichiers</h2>
+<p>On remplace la ligne <code>DL_Commun_RW : Modification</code> par deux lignes plus fines :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Principal</th>
+<th>Accès</th>
+<th>S’applique à</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>DL_Commun_RW</code></td>
+<td>Lecture et exécution</td>
+<td>Ce dossier, les sous-dossiers et les fichiers</td>
+</tr>
+<tr class="even">
+<td><code>DL_Commun_RW</code></td>
+<td>Spéciale : Création de fichiers/écriture de données, Création de dossiers/ajout de données</td>
+<td><strong>Ce dossier et les sous-dossiers</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Les salariés pourront lire tous les fichiers et en créer de nouveaux, mais pas modifier ni supprimer ceux des autres. Leurs propres fichiers restent à eux grâce à la ligne CREATEUR PROPRIETAIRE.</p>
+<p>Dans la fenêtre <strong>Avancé</strong> de <code>C:\Partages\Commun</code> :</p>
+<ol type="1">
+<li>Double-cliquez sur la ligne <code>DL_Commun_RW</code> (<em>Modification</em>). Dans <strong>Autorisations de base</strong>, décochez <strong>Modification</strong> et <strong>Écriture</strong>. Il reste <em>Lecture et exécution</em>, <em>Affichage du contenu du dossier</em> et <em>Lecture</em>. Laissez <em>S’applique à : Ce dossier, les sous-dossiers et les fichiers</em>. OK.</li>
+<li><strong>Ajouter → Sélectionnez un principal</strong> → <code>DL_Commun_RW</code> → Vérifier les noms → OK.</li>
+<li><strong>S’applique à : Ce dossier et les sous-dossiers</strong>.</li>
+<li>Cliquez sur <strong>Afficher les autorisations avancées</strong>. Laissez les cases déjà cochées et cochez en plus <strong>Création de fichiers/écriture de données</strong> et <strong>Création de dossiers/ajout de données</strong>. OK.</li>
+<li><strong>Appliquer</strong>, puis OK.</li>
+</ol>
+<p>Rouvrez <strong>Avancé</strong> : vous devez voir deux lignes <code>DL_Commun_RW</code>, dont une avec l’accès <em>Spéciale</em>. Aucune des deux ne contient <em>Suppression</em>.</p>
+<div class="callout tip"><div class="callout-body"><p class="callout-titre"><strong>Pourquoi « Ce dossier et les sous-dossiers » ?</strong></p>
+<p>Sur un dossier, <em>Création de fichiers/écriture de données</em> veut dire « créer un fichier ». Sur un fichier, la même case veut dire « modifier son contenu ». En excluant les fichiers de la portée, on donne le droit de créer, sans donner celui de modifier les fichiers existants.</p>
+</div></div>
+<h2 id="étape-4.-le-propriétaire-reprendre-la-main-sur-un-fichier">Étape 4. Le propriétaire : reprendre la main sur un fichier</h2>
+<p>Chaque fichier a un <strong>propriétaire</strong> : en général, le compte qui l’a créé. Le propriétaire a un pouvoir particulier : il peut <strong>toujours</strong> modifier les autorisations du fichier, même si aucune ligne ne le lui permet.</p>
+<p><strong>4.1, Simuler le problème.</strong> Sur <code>SRV-WIN-01</code>, propriétés de <code>C:\Partages\RH\paie-octobre.txt</code> (créé par Sophie au TP 7) → <strong>Sécurité → Avancé</strong> :</p>
+<ol type="1">
+<li>En haut de la fenêtre, lisez la ligne <strong>Propriétaire</strong> : <code>s.laurent</code>.</li>
+<li><strong>Désactiver l’héritage</strong> → <strong>Supprimer toutes les autorisations héritées de cet objet</strong>.</li>
+<li><strong>Ajouter</strong> → principal <code>s.laurent</code> → cochez <strong>Contrôle total</strong> → OK.</li>
+<li><strong>Appliquer</strong> (confirmez si Windows affiche un avertissement), puis OK, OK.</li>
+</ol>
+<p>C’est la situation laissée par le prestataire : une seule ligne, pour une seule personne.</p>
+<p><strong>4.2, Constater.</strong> Toujours en <code>Administrateur</code>, double-cliquez sur <code>paie-octobre.txt</code> : accès refusé. Ouvrez ses propriétés → <strong>Sécurité</strong> : Windows ne peut même plus afficher les autorisations.</p>
+<p><strong>4.3, Prendre possession.</strong> Cliquez sur <strong>Avancé</strong> :</p>
+<ol type="1">
+<li>Ligne <strong>Propriétaire</strong> → <strong>Modifier</strong> → tapez <code>Administrateurs</code> → Vérifier les noms → OK.</li>
+<li><strong>Appliquer</strong>, puis OK, et refermez <strong>toutes</strong> les fenêtres de propriétés.</li>
+<li>Rouvrez les propriétés → <strong>Sécurité → Avancé</strong> : les autorisations s’affichent de nouveau, car le groupe Administrateurs est maintenant propriétaire (Windows demande justement de refermer et rouvrir les propriétés après une prise de possession).</li>
+<li><strong>Activer l’héritage</strong> : les lignes de <code>RH</code> reviennent (Administrateurs, Système, <code>DL_RH_RW</code>, <code>DL_RH_RO</code>).</li>
+<li>Sélectionnez la ligne explicite <code>s.laurent</code> (<em>Hérité de : Aucun</em>) → <strong>Supprimer</strong>. Appliquer, OK.</li>
+</ol>
+<p>Vérifiez avec l’onglet <strong>Accès effectif</strong> : <code>s.laurent</code> peut modifier le fichier, <code>c.dubois</code> peut le lire, <code>a.martin</code> n’a aucun accès.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Un administrateur peut tout reprendre, mais pas en cachette</strong></p>
+<p>Les administrateurs ont le privilège <em>Prendre possession de fichiers ou d’autres objets</em>. Ils peuvent donc toujours récupérer un fichier, même verrouillé. Mais pour cela, ils doivent <strong>changer le propriétaire</strong>, et ce changement se voit : le fichier n’appartient plus à <code>s.laurent</code>. Le service informatique ne peut pas lire la paie discrètement, puis tout remettre comme avant.</p>
+</div></div>
+<h2 id="étape-5.-tester-commun-depuis-cli-win-01">Étape 5. Tester Commun depuis CLI-WIN-01</h2>
+<p>Revenez sur <code>CLI-WIN-01</code>. Vérifiez dans <strong>Paramètres → Système → Fonctionnalités facultatives</strong> que l’installation de l’étape 1 est <strong>terminée</strong> (elle apparaît dans les fonctionnalités installées). Déconnectez <code>adm.nfournier</code>.</p>
+<p>Faites les tests dans l’ordre, en ouvrant la session de chaque salarié (<code>\\SRV-WIN-01\Partages\Commun</code>) et en vous déconnectant entre deux comptes :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Compte</th>
+<th>Action dans <code>Commun</code></th>
+<th>Attendu</th>
+<th>Obtenu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><code>a.martin</code></td>
+<td>créer le fichier <code>idee-alice.txt</code>, y écrire une ligne, enregistrer</td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><code>a.martin</code></td>
+<td>renommer le fichier en <code>idee-alice-v2.txt</code></td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><code>j.moreau</code></td>
+<td>ouvrir <code>idee-alice-v2.txt</code></td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><code>j.moreau</code></td>
+<td>modifier <code>idee-alice-v2.txt</code> et enregistrer</td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td><code>j.moreau</code></td>
+<td>supprimer <code>idee-alice-v2.txt</code></td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td><code>j.moreau</code></td>
+<td>créer <code>planning-julien.txt</code>, y écrire une ligne, enregistrer</td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td><code>j.moreau</code></td>
+<td>supprimer <code>planning-julien.txt</code></td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td><code>a.martin</code></td>
+<td>supprimer <code>idee-alice-v2.txt</code></td>
+<td>autorisé</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Au test 4, le Bloc-notes refuse d’enregistrer et propose <em>Enregistrer sous</em> : annulez.</p>
+<p>Sur <code>SRV-WIN-01</code>, avant le test 8, ouvrez les propriétés de <code>C:\Partages\Commun\idee-alice-v2.txt</code> → <strong>Sécurité → Avancé</strong> : le propriétaire est <code>a.martin</code>, et une ligne <code>a.martin : Contrôle total</code> est apparue, héritée de <code>C:\Partages</code>. C’est la ligne CREATEUR PROPRIETAIRE, remplacée par le compte d’Alice.</p>
+<h2 id="étape-6.-déléguer-la-réinitialisation-des-mots-de-passe">Étape 6. Déléguer la réinitialisation des mots de passe</h2>
+<p>Dans l’annuaire, chaque objet (OU, utilisateur, groupe) a lui aussi une <strong>liste d’autorisations</strong>, comme un dossier. La <strong>délégation</strong> consiste à ajouter des lignes à cette liste pour confier une tâche précise à un groupe, sans lui donner tous les droits.</p>
+<p>On applique la même logique qu’AGDLP : le droit est donné à un groupe de <strong>domaine local</strong>, qui contient le groupe global du service.</p>
+<p><strong>6.1, Le groupe.</strong> Dans <strong>Utilisateurs et ordinateurs Active Directory</strong> (<code>dsa.msc</code>), OU <code>Groupes</code> → <strong>Nouveau → Groupe</strong> : <code>DL_AD_ResetMdp</code>, étendue <strong>Domaine local</strong>, type Sécurité. Onglet <strong>Membres</strong> → ajoutez <code>GG_Informatique</code>.</p>
+<p><strong>6.2, La délégation.</strong> Clic droit sur l’OU <strong>Utilisateurs</strong> → <strong>Délégation de contrôle…</strong> :</p>
+<ol type="1">
+<li>Suivant → <strong>Ajouter</strong> → <code>DL_AD_ResetMdp</code> → Vérifier les noms → OK → Suivant.</li>
+<li><strong>Déléguer les tâches courantes suivantes</strong> : cochez <strong>seulement</strong> <em>Réinitialiser les mots de passe utilisateur et forcer le changement de mot de passe lors de la prochaine ouverture de session</em>. Suivant → Terminer.</li>
+</ol>
+<p><strong>6.3, Où se trouve la délégation ?</strong> Menu <strong>Affichage → Fonctionnalités avancées</strong> (un onglet <em>Sécurité</em> apparaît sur les objets). Propriétés de l’OU <strong>Utilisateurs</strong> → <strong>Sécurité → Avancé</strong>. Cherchez les lignes <code>DL_AD_ResetMdp</code> et notez leurs colonnes :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Accès</th>
+<th>S’applique à</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Réinitialiser le mot de passe</td>
+<td>Objets Utilisateur descendants</td>
+</tr>
+<tr class="even">
+<td>Lire pwdLastSet, Écrire pwdLastSet</td>
+<td>Objets Utilisateur descendants</td>
+</tr>
+</tbody>
+</table></div>
+<p>C’est la même fenêtre que pour un dossier : principal, accès, héritage, portée. <em>Écrire pwdLastSet</em> permet de cocher ou décocher « doit changer le mot de passe ».</p>
+<p>Remarquez que la délégation est posée sur l’OU <code>Utilisateurs</code> : elle ne concerne ni l’OU <code>Admins</code>, ni le conteneur <code>Users</code> où se trouve le compte <code>Administrateur</code>.</p>
+<h2 id="étape-7.-tester-la-délégation">Étape 7. Tester la délégation</h2>
+<p>Sur <code>CLI-WIN-01</code>, ouvrez la session <code>HEXALOG\n.fournier</code> (le compte de tous les jours de Nicolas, <strong>pas</strong> administrateur). Ouvrez <strong>Utilisateurs et ordinateurs Active Directory</strong> (menu Démarrer → Outils Windows, ou <code>Windows + R</code> → <code>dsa.msc</code>). Dans le domaine <code>hexalog.local</code>, faites les tests :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Action de <code>n.fournier</code></th>
+<th>Attendu</th>
+<th>Obtenu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>OU <code>Utilisateurs</code> : clic droit sur <code>j.moreau</code> → <strong>Réinitialiser le mot de passe</strong> : un nouveau mot de passe (par exemple <code>Provisoire-2026</code>), case <strong>doit changer le mot de passe</strong> cochée</td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>clic droit sur <code>j.moreau</code> → <strong>Désactiver le compte</strong></td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>OU <code>Utilisateurs</code> → <strong>Nouveau → Utilisateur</strong> : créer un compte <code>test.deleg</code></td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>OU <code>Admins</code> : réinitialiser le mot de passe de <code>adm.nfournier</code></td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>conteneur <code>Users</code> : réinitialiser le mot de passe de <code>Administrateur</code></td>
+<td>refusé</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Déconnectez <code>n.fournier</code>. Ouvrez la session de <code>j.moreau</code> avec le mot de passe provisoire : Windows exige un nouveau mot de passe. Choisissez-en un, connectez-vous, puis déconnectez-vous.</p>
+<p>Enfin, remettez le lab en ordre : session <code>n.fournier</code> → réinitialisez le mot de passe de <code>j.moreau</code> au <strong>mot de passe de lab</strong>, case <em>doit changer le mot de passe</em> <strong>décochée</strong>. Vérifiez que <code>j.moreau</code> se connecte avec le mot de passe de lab : les TP suivants en ont besoin.</p>
+<div class="callout tip"><div class="callout-body"><p class="callout-titre"><strong>Le moindre privilège</strong></p>
+<p>Mettre Nicolas dans Admins du domaine aurait été plus rapide. Mais son compte de tous les jours, celui qui lit la messagerie et navigue sur Internet, aurait alors pu tout faire dans le domaine. Avec la délégation, s’il se fait voler ce compte, l’attaquant ne peut que réinitialiser des mots de passe de salariés, et chaque réinitialisation laisse une trace.</p>
+</div></div>
+<h2 id="étape-8.-sauvegarder-et-documenter">Étape 8. Sauvegarder et documenter</h2>
+<p>Faites un snapshot <code>07b-autorisations</code> des deux VM. Dans votre journal : les deux lignes <code>DL_Commun_RW</code> de <code>Commun</code> et leur portée, la matrice de tests de l’étape 5, la procédure de prise de possession (étape 4) en quelques lignes, le groupe <code>DL_AD_ResetMdp</code> et la délégation posée sur l’OU <code>Utilisateurs</code>, la matrice de tests de l’étape 7. Mettez à jour votre inventaire (groupe <code>DL_AD_ResetMdp</code>, RSAT installé sur <code>CLI-WIN-01</code>).</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul>
+<li>Sur <code>Commun</code> : deux lignes <code>DL_Commun_RW</code> (Lecture et exécution ; Spéciale sur <em>Ce dossier et les sous-dossiers</em>), plus de <em>Modification</em>, aucun utilisateur dans la liste.</li>
+<li>Les 8 tests de l’étape 5 sont conformes.</li>
+<li><code>paie-octobre.txt</code> : héritage activé, propriétaire Administrateurs, aucune ligne explicite pour <code>s.laurent</code>.</li>
+<li><code>DL_AD_ResetMdp</code> existe (Domaine local), ne contient que <code>GG_Informatique</code>.</li>
+<li>La délégation apparaît dans <strong>Sécurité → Avancé</strong> de l’OU <code>Utilisateurs</code>.</li>
+<li>Les 5 tests de l’étape 7 sont conformes ; <code>j.moreau</code> se connecte avec le mot de passe de lab.</li>
+<li><code>n.fournier</code> n’est toujours pas membre d’Admins du domaine.</li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Quelle autorisation spéciale, contenue dans <em>Modification</em>, permettait à Julien de supprimer le fichier d’Alice au TP 7 ?</li>
+<li>Après l’étape 3, Julien ne peut plus supprimer le fichier d’Alice. Comment Alice peut-elle encore modifier et supprimer <strong>ses</strong> fichiers ? Quelle ligne le permet ?</li>
+<li>Grâce à CREATEUR PROPRIETAIRE, Alice a <em>Contrôle total</em> sur ses fichiers. Pourrait-elle en changer les autorisations depuis <code>CLI-WIN-01</code>, à travers le partage <code>Partages</code> ? Pourquoi ? (Pensez aux autorisations du partage.)</li>
+<li>À l’étape 4, pourquoi l’administrateur ne pouvait-il plus ouvrir le fichier ? Qu’est-ce qui lui a permis de reprendre la main ? Pourquoi ne peut-il pas le faire sans laisser de trace ?</li>
+<li>Pourquoi a-t-on délégué à <code>DL_AD_ResetMdp</code> plutôt que directement à <code>n.fournier</code> ? Que faites-vous quand un second technicien arrive au service informatique ?</li>
+<li><code>n.fournier</code> a pu réinitialiser le mot de passe de <code>j.moreau</code>, mais pas celui d’<code>adm.nfournier</code>. Pourquoi ?</li>
+<li>Comparez la fenêtre <strong>Avancé</strong> d’un dossier NTFS et celle de l’OU <code>Utilisateurs</code> : quels éléments retrouvez-vous des deux côtés ?</li>
+<li>Pourquoi la délégation est-elle plus sûre que l’ajout de Nicolas à Admins du domaine ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>L’installation de RSAT échoue ou reste bloquée</td>
+<td>le PC n’est plus identifié sur le portail du lycée : identifiez-le dans le navigateur, puis relancez ; la VM doit être en Réseau NAT <code>LAB-HEXALOG</code></td>
+</tr>
+<tr class="even">
+<td>Toujours pas de RSAT au moment de l’étape 7</td>
+<td>faites l’étape 7 plus tard, ou testez la réinitialisation dans l’Invite de commandes de la session <code>n.fournier</code> : <code>net user j.moreau Provisoire-2026 /domain</code> (autorisé), puis avec <code>adm.nfournier</code> (refusé)</td>
+</tr>
+<tr class="odd">
+<td>Test 1 de l’étape 5 : Alice ne peut plus créer de fichier</td>
+<td>la ligne <em>Spéciale</em> manque, ou sa portée exclut <em>ce dossier</em> : elle doit être <em>Ce dossier et les sous-dossiers</em></td>
+</tr>
+<tr class="even">
+<td>Test 2 : Alice ne peut pas renommer son propre fichier</td>
+<td>la ligne CREATEUR PROPRIETAIRE a disparu de <code>C:\Partages</code> (étape 3 du TP 7) : remettez-la, <em>Contrôle total</em>, <em>Les sous-dossiers et les fichiers seulement</em></td>
+</tr>
+<tr class="odd">
+<td>Test 4 : Julien peut encore modifier le fichier d’Alice</td>
+<td>la ligne <em>Spéciale</em> s’applique aussi aux fichiers : corrigez sa portée ; ou la case <em>Écriture</em> est restée cochée sur la première ligne</td>
+</tr>
+<tr class="even">
+<td>Test 5 : Julien peut encore supprimer</td>
+<td>la ligne <code>DL_Commun_RW : Modification</code> n’a pas été modifiée ; reconnectez Julien après la correction</td>
+</tr>
+<tr class="odd">
+<td>Étape 4 : le propriétaire n’apparaît pas tout de suite</td>
+<td>refermez toutes les fenêtres de propriétés après <strong>Appliquer</strong>, puis rouvrez-les</td>
+</tr>
+<tr class="even">
+<td>Étape 4 : « Accès refusé » en changeant le propriétaire</td>
+<td>vous n’êtes pas connecté avec <code>HEXALOG\Administrateur</code> sur le serveur</td>
+</tr>
+<tr class="odd">
+<td><code>dsa.msc</code> introuvable sur le poste</td>
+<td>RSAT pas encore installé (étape 1), ou installé pendant que la session était ouverte : déconnectez-vous et reconnectez-vous</td>
+</tr>
+<tr class="even">
+<td>Test 1 de l’étape 7 : « Accès refusé »</td>
+<td><code>n.fournier</code> n’est pas dans <code>GG_Informatique</code>, ou <code>GG_Informatique</code> n’est pas dans <code>DL_AD_ResetMdp</code>, ou la délégation a été posée sur une autre OU ; Nicolas doit se reconnecter après tout changement de groupe</td>
+</tr>
+<tr class="odd">
+<td>Pas d’onglet <em>Sécurité</em> dans les propriétés de l’OU</td>
+<td><strong>Affichage → Fonctionnalités avancées</strong> n’est pas coché</td>
+</tr>
+<tr class="even">
+<td>« Le mot de passe ne répond pas aux exigences »</td>
+<td>il faut au moins 7 caractères et trois types parmi majuscules, minuscules, chiffres et symboles, et un mot de passe différent des précédents</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="livrables">Livrables</h2>
+<ul>
+<li>Les deux matrices de tests complétées (étapes 5 et 7).</li>
+<li>Captures : fenêtre <strong>Avancé</strong> de <code>Commun</code> avec les deux lignes <code>DL_Commun_RW</code>, autorisations avancées de la ligne <em>Spéciale</em>, propriétaire de <code>idee-alice-v2.txt</code>, refus d’accès puis changement de propriétaire de <code>paie-octobre.txt</code>, lignes <code>DL_AD_ResetMdp</code> dans la sécurité de l’OU <code>Utilisateurs</code>, réinitialisation réussie et un refus dans la session <code>n.fournier</code>.</li>
+<li>Réponses aux questions.</li>
+</ul>
+<h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<h3 id="un-refuser-qui-protège-la-suppression-accidentelle">Un « Refuser » qui protège : la suppression accidentelle</h3>
+<p>Avec les fonctionnalités avancées affichées, ouvrez les propriétés de l’OU <strong>Utilisateurs</strong> → onglet <strong>Objet</strong> : la case <em>Protéger l’objet des suppressions accidentelles</em> est cochée. Allez dans <strong>Sécurité → Avancé</strong> : vous trouvez des lignes <strong>Refuser</strong> pour <em>Tout le monde</em> (<em>Supprimer</em>, <em>Supprimer la sous-arborescence</em>). Essayez de supprimer l’OU : même l’administrateur est bloqué. Un <em>Refuser</em> l’emporte sur un <em>Autoriser</em> : c’est pour cela qu’on l’évite dans les dossiers partagés, mais qu’il est utile ici. <strong>Ne décochez pas</strong> la case.</p>
+<h3 id="createur-proprietaire-en-modification">CREATEUR PROPRIETAIRE en Modification</h3>
+<p>Sur <code>C:\Partages</code>, la ligne CREATEUR PROPRIETAIRE donne <em>Contrôle total</em> : le créateur d’un fichier pourrait en changer les autorisations s’il y accédait autrement que par le partage. Remplacez-la par <strong>Modification</strong> (même portée : <em>Les sous-dossiers et les fichiers seulement</em>), puis refaites les tests 1, 2 et 8 de l’étape 5. Qu’est-ce qui change pour Alice ?</p>
+<h3 id="une-délégation-dangereuse">Une délégation dangereuse</h3>
+<p>Imaginez qu’on délègue aussi à <code>DL_AD_ResetMdp</code> la tâche <em>Modifier l’appartenance à un groupe</em> sur l’OU <code>Groupes</code>. Que pourrait faire Nicolas avec son compte de tous les jours ? Pourquoi cette délégation-là est-elle bien plus dangereuse que la réinitialisation des mots de passe ? Ne la mettez pas en place : répondez dans votre journal.</p>
+<h3 id="pour-information-les-autorisations-spéciales-en-ligne-de-commande">Pour information : les autorisations spéciales en ligne de commande</h3>
+<p>Dans l’Invite de commandes de <code>SRV-WIN-01</code> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-WIN-01 (Invite de commandes)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode cmd"><code class="sourceCode dosbat"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a>icacls C:\Partages\Commun</span></code></pre></div></div>
+<p>La ligne <em>Spéciale</em> de <code>HEXALOG\DL_Commun_RW</code> commence par <code>(CI)</code> (s’applique au dossier et aux sous-dossiers, pas aux fichiers) et contient les lettres <code>WD</code> (création de fichiers/écriture de données) et <code>AD</code> (création de dossiers/ajout de données). La ligne CREATEUR PROPRIETAIRE contient <code>(IO)</code> : elle ne s’applique pas au dossier lui-même, seulement à ce qui y sera créé.</p>
+
+</article>
+<nav class="prevnext"><a class="prev" href="tp07-ntfs-partages.html" data-seance="7"><span class="dir">‹ Page précédente</span><span class="titre">TP 7 : Partages et permissions en AGDLP, testés depuis le poste</span></a><a class="next" href="../cours/s08-linux-admin.html" data-seance="8"><span class="dir">Page suivante ›</span><span class="titre">Séance 8 : Linux : distributions et administration</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>
