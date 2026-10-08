@@ -32,7 +32,7 @@
   <p class="lead">Au TP 7, les autorisations de base (Modification, Lecture et exécution) ont suffi pour appliquer la matrice des droits. Elles laissent pourtant un problème : dans Commun, n'importe qui peut supprimer le fichier d'un collègue. Vous ouvrez les autorisations avancées de Windows pour le régler, vous reprenez la main sur un fichier devenu inaccessible, puis vous retrouvez les mêmes mécanismes dans l'annuaire : Nicolas Fournier, du service informatique, pourra réinitialiser les mots de passe des salariés sans être administrateur du domaine.</p>
   <table class="fiche-seance"><tr><th>Durée</th><td>1 h 30</td></tr><tr><th>Prérequis</th><td>TP 7 terminé (au moins jusqu&#x27;à l&#x27;étape 7)</td></tr><tr><th>Machines virtuelles</th><td>SRV-WIN-01, CLI-WIN-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s07-ntfs-partages.html" data-seance="7">Séance 7 : Permissions NTFS et partages</a></td></tr></table>
 </header>
-<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#objectifs">Objectifs</a></li><li><a href="#les-autorisations-spéciales">Les autorisations spéciales</a></li><li><a href="#étape-1.-préparer-et-lancer-une-installation-sur-le-poste">Étape 1. Préparer, et lancer une installation sur le poste</a></li><li><a href="#étape-2.-lire-les-autorisations-avancées">Étape 2. Lire les autorisations avancées</a></li><li><a href="#étape-3.-commun-chacun-gère-ses-fichiers">Étape 3. Commun : chacun gère ses fichiers</a></li><li><a href="#étape-4.-le-propriétaire-reprendre-la-main-sur-un-fichier">Étape 4. Le propriétaire : reprendre la main sur un fichier</a></li><li><a href="#étape-5.-tester-commun-depuis-cli-win-01">Étape 5. Tester Commun depuis CLI-WIN-01</a></li><li><a href="#étape-6.-déléguer-la-réinitialisation-des-mots-de-passe">Étape 6. Déléguer la réinitialisation des mots de passe</a></li><li><a href="#étape-7.-tester-la-délégation">Étape 7. Tester la délégation</a></li><li><a href="#étape-8.-sauvegarder-et-documenter">Étape 8. Sauvegarder et documenter</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#livrables">Livrables</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#objectifs">Objectifs</a></li><li><a href="#les-autorisations-spéciales">Les autorisations spéciales</a></li><li><a href="#étape-1.-préparer-et-lancer-une-installation-sur-le-poste">Étape 1. Préparer, et lancer une installation sur le poste</a></li><li><a href="#étape-2.-lire-les-autorisations-avancées">Étape 2. Lire les autorisations avancées</a></li><li><a href="#étape-3.-commun-chacun-gère-ses-fichiers">Étape 3. Commun : chacun gère ses fichiers</a></li><li><a href="#étape-4.-le-propriétaire-reprendre-la-main-sur-un-fichier">Étape 4. Le propriétaire : reprendre la main sur un fichier</a></li><li><a href="#étape-5.-tester-commun-et-les-renommages-depuis-cli-win-01">Étape 5. Tester Commun et les renommages depuis CLI-WIN-01</a></li><li><a href="#étape-6.-déléguer-la-réinitialisation-des-mots-de-passe">Étape 6. Déléguer la réinitialisation des mots de passe</a></li><li><a href="#étape-7.-tester-la-délégation">Étape 7. Tester la délégation</a></li><li><a href="#étape-8.-sauvegarder-et-documenter">Étape 8. Sauvegarder et documenter</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#livrables">Livrables</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
 <article class="content">
 <h2 id="contexte">Contexte</h2>
 <p>Trois demandes sont arrivées après la mise en place des partages.</p>
@@ -134,6 +134,36 @@
 </tbody>
 </table></div>
 <p>Remarquez que la même case n’a pas le même effet sur un dossier et sur un fichier : <em>Création de fichiers/écriture de données</em> veut dire « créer un fichier » sur un dossier, mais « modifier le contenu » sur un fichier. C’est la <strong>portée</strong> (<em>S’applique à</em>) qui permet de choisir.</p>
+<h3 id="renommer-cest-supprimer-puis-recréer">Renommer, c’est supprimer puis recréer</h3>
+<p>Il n’existe pas d’autorisation « Renommer ». Pour Windows, renommer un élément revient à le retirer de son dossier sous l’ancien nom, puis à l’y recréer sous le nouveau. Il faut donc <strong>deux</strong> autorisations, à <strong>deux</strong> endroits :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Pour renommer…</th>
+<th>Sur l’élément lui-même</th>
+<th>Sur le dossier qui le contient</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>un fichier</td>
+<td><strong>Suppression</strong></td>
+<td><strong>Création de fichiers/écriture de données</strong></td>
+</tr>
+<tr class="even">
+<td>un dossier</td>
+<td><strong>Suppression</strong></td>
+<td><strong>Création de dossiers/ajout de données</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>S’il en manque une seule, le renommage est refusé. Deux remarques, que vous vérifierez à l’étape 5 :</p>
+<ul>
+<li><em>Suppression</em> sur l’élément peut être remplacée par <em>Suppression de sous-dossier et fichier</em> sur le dossier qui le contient. Celle-ci permet de supprimer, et donc de renommer, <strong>n’importe quel</strong> élément du dossier, même celui d’un collègue : c’est pour cela qu’elle n’est donnée qu’avec <em>Contrôle total</em>.</li>
+<li>Supprimer ne demande rien sur le dossier qui contient l’élément ; renommer, si. On peut donc avoir le droit de <strong>supprimer</strong> un dossier sans avoir celui de le <strong>renommer</strong>.</li>
+</ul>
+<p>Dans l’Explorateur, un fichier ou un dossier qu’on vient de créer s’appelle d’abord <em>Nouveau document texte</em> ou <em>Nouveau dossier</em> : lui donner son vrai nom, c’est déjà un renommage.</p>
 <h2 id="étape-1.-préparer-et-lancer-une-installation-sur-le-poste">Étape 1. Préparer, et lancer une installation sur le poste</h2>
 <p>L’étape 7 utilise la console <em>Utilisateurs et ordinateurs Active Directory</em> sur <code>CLI-WIN-01</code>. Elle ne fait pas partie de Windows 11 : on l’installe maintenant, et elle s’installera pendant que vous travaillez sur le serveur.</p>
 <ol type="1">
@@ -248,16 +278,16 @@
 <div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Un administrateur peut tout reprendre, mais pas en cachette</strong></p>
 <p>Les administrateurs ont le privilège <em>Prendre possession de fichiers ou d’autres objets</em>. Ils peuvent donc toujours récupérer un fichier, même verrouillé. Mais pour cela, ils doivent <strong>changer le propriétaire</strong>, et ce changement se voit : le fichier n’appartient plus à <code>s.laurent</code>. Le service informatique ne peut pas lire la paie discrètement, puis tout remettre comme avant.</p>
 </div></div>
-<h2 id="étape-5.-tester-commun-depuis-cli-win-01">Étape 5. Tester Commun depuis CLI-WIN-01</h2>
+<h2 id="étape-5.-tester-commun-et-les-renommages-depuis-cli-win-01">Étape 5. Tester Commun et les renommages depuis CLI-WIN-01</h2>
 <p>Revenez sur <code>CLI-WIN-01</code>. Vérifiez dans <strong>Paramètres → Système → Fonctionnalités facultatives</strong> que l’installation de l’étape 1 est <strong>terminée</strong> (elle apparaît dans les fonctionnalités installées). Déconnectez <code>adm.nfournier</code>.</p>
-<p>Faites les tests dans l’ordre, en ouvrant la session de chaque salarié (<code>\\SRV-WIN-01\Partages\Commun</code>) et en vous déconnectant entre deux comptes :</p>
+<p>Faites les tests dans l’ordre, en ouvrant la session de chaque salarié (<code>\\SRV-WIN-01\Partages</code>) et en vous déconnectant entre deux comptes. Sauf indication, les tests se passent dans <code>Commun</code> :</p>
 <div class="table-wrap"><table>
 
 <thead>
 <tr class="header">
 <th>#</th>
 <th>Compte</th>
-<th>Action dans <code>Commun</code></th>
+<th>Action</th>
 <th>Attendu</th>
 <th>Obtenu</th>
 </tr>
@@ -279,50 +309,88 @@
 </tr>
 <tr class="odd">
 <td>3</td>
-<td><code>j.moreau</code></td>
-<td>ouvrir <code>idee-alice-v2.txt</code></td>
+<td><code>a.martin</code></td>
+<td>créer un dossier (<strong>Nouveau → Dossier</strong>) et le nommer <code>Projet-Alice</code></td>
 <td>autorisé</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>4</td>
-<td><code>j.moreau</code></td>
-<td>modifier <code>idee-alice-v2.txt</code> et enregistrer</td>
+<td><code>a.martin</code></td>
+<td>dans <code>\\SRV-WIN-01\Partages</code> : renommer le dossier <code>Commun</code> en <code>Commun2</code></td>
 <td>refusé</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>5</td>
-<td><code>j.moreau</code></td>
-<td>supprimer <code>idee-alice-v2.txt</code></td>
+<td><code>a.martin</code></td>
+<td>dans <code>\\SRV-WIN-01\Partages</code> : renommer le dossier <code>Comptabilite</code> en <code>Compta</code></td>
 <td>refusé</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>6</td>
 <td><code>j.moreau</code></td>
-<td>créer <code>planning-julien.txt</code>, y écrire une ligne, enregistrer</td>
+<td>ouvrir <code>idee-alice-v2.txt</code></td>
 <td>autorisé</td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>7</td>
 <td><code>j.moreau</code></td>
-<td>supprimer <code>planning-julien.txt</code></td>
-<td>autorisé</td>
+<td>modifier <code>idee-alice-v2.txt</code> et enregistrer</td>
+<td>refusé</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>8</td>
-<td><code>a.martin</code></td>
+<td><code>j.moreau</code></td>
+<td>renommer <code>idee-alice-v2.txt</code></td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td><code>j.moreau</code></td>
 <td>supprimer <code>idee-alice-v2.txt</code></td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td><code>j.moreau</code></td>
+<td>renommer le dossier <code>Projet-Alice</code></td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td><code>j.moreau</code></td>
+<td>créer <code>planning-julien.txt</code>, y écrire une ligne, enregistrer, puis le renommer en <code>planning-julien-v2.txt</code></td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td><code>j.moreau</code></td>
+<td>supprimer <code>planning-julien-v2.txt</code></td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td><code>a.martin</code></td>
+<td>supprimer <code>idee-alice-v2.txt</code> et le dossier <code>Projet-Alice</code></td>
 <td>autorisé</td>
 <td></td>
 </tr>
 </tbody>
 </table></div>
-<p>Au test 4, le Bloc-notes refuse d’enregistrer et propose <em>Enregistrer sous</em> : annulez.</p>
-<p>Sur <code>SRV-WIN-01</code>, avant le test 8, ouvrez les propriétés de <code>C:\Partages\Commun\idee-alice-v2.txt</code> → <strong>Sécurité → Avancé</strong> : le propriétaire est <code>a.martin</code>, et une ligne <code>a.martin : Contrôle total</code> est apparue, héritée de <code>C:\Partages</code>. C’est la ligne CREATEUR PROPRIETAIRE, remplacée par le compte d’Alice.</p>
+<p>Au test 7, le Bloc-notes refuse d’enregistrer et propose <em>Enregistrer sous</em> : annulez. Pour chaque renommage, notez dans votre journal laquelle des deux autorisations de la règle manquait ou était présente.</p>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>Test 5 : renommer est refusé… et supprimer ?</strong></p>
+<p>Sur <code>SRV-WIN-01</code>, ouvrez les propriétés de <code>C:\Partages\Comptabilite</code> → <strong>Sécurité → Avancé → Accès effectif</strong> → <code>a.martin</code> : la case <strong>Suppression</strong> est cochée. Alice ne peut pas <strong>renommer</strong> le dossier de son service, car elle n’a pas <em>Création de dossiers/ajout de données</em> sur <code>C:\Partages</code>. Mais elle pourrait le <strong>supprimer</strong>, avec tout son contenu : <em>Modification</em> lui donne <em>Suppression</em> sur le dossier <code>Comptabilite</code> lui-même, et la suppression ne demande rien sur <code>C:\Partages</code>. <strong>Ne faites pas l’essai.</strong> La parade est dans « Pour aller plus loin ».</p>
+</div></div>
+<p>Sur <code>SRV-WIN-01</code>, avant le test 13, ouvrez les propriétés de <code>C:\Partages\Commun\idee-alice-v2.txt</code> → <strong>Sécurité → Avancé</strong> : le propriétaire est <code>a.martin</code>, et une ligne <code>a.martin : Contrôle total</code> est apparue, héritée de <code>C:\Partages</code>. C’est la ligne CREATEUR PROPRIETAIRE, remplacée par le compte d’Alice.</p>
 <h2 id="étape-6.-déléguer-la-réinitialisation-des-mots-de-passe">Étape 6. Déléguer la réinitialisation des mots de passe</h2>
 <p>Dans l’annuaire, chaque objet (OU, utilisateur, groupe) a lui aussi une <strong>liste d’autorisations</strong>, comme un dossier. La <strong>délégation</strong> consiste à ajouter des lignes à cette liste pour confier une tâche précise à un groupe, sans lui donner tous les droits.</p>
 <p>On applique la même logique qu’AGDLP : le droit est donné à un groupe de <strong>domaine local</strong>, qui contient le groupe global du service.</p>
@@ -408,7 +476,7 @@
 <h2 id="vérifications">Vérifications</h2>
 <ul>
 <li>Sur <code>Commun</code> : deux lignes <code>DL_Commun_RW</code> (Lecture et exécution ; Spéciale sur <em>Ce dossier et les sous-dossiers</em>), plus de <em>Modification</em>, aucun utilisateur dans la liste.</li>
-<li>Les 8 tests de l’étape 5 sont conformes.</li>
+<li>Les 13 tests de l’étape 5 sont conformes.</li>
 <li><code>paie-octobre.txt</code> : héritage activé, propriétaire Administrateurs, aucune ligne explicite pour <code>s.laurent</code>.</li>
 <li><code>DL_AD_ResetMdp</code> existe (Domaine local), ne contient que <code>GG_Informatique</code>.</li>
 <li>La délégation apparaît dans <strong>Sécurité → Avancé</strong> de l’OU <code>Utilisateurs</code>.</li>
@@ -419,6 +487,8 @@
 <ol type="1">
 <li>Quelle autorisation spéciale, contenue dans <em>Modification</em>, permettait à Julien de supprimer le fichier d’Alice au TP 7 ?</li>
 <li>Après l’étape 3, Julien ne peut plus supprimer le fichier d’Alice. Comment Alice peut-elle encore modifier et supprimer <strong>ses</strong> fichiers ? Quelle ligne le permet ?</li>
+<li>Julien et Alice ont tous les deux <em>Création de fichiers/écriture de données</em> sur <code>Commun</code>. Pourquoi Alice peut-elle renommer son fichier (test 2) et pas Julien (test 8) ?</li>
+<li>Au test 5, Alice ne peut pas renommer <code>Comptabilite</code>, alors qu’elle pourrait le supprimer. Quelle autorisation lui manque pour le renommer, et sur quel dossier ? Laquelle lui permettrait de le supprimer ?</li>
 <li>Grâce à CREATEUR PROPRIETAIRE, Alice a <em>Contrôle total</em> sur ses fichiers. Pourrait-elle en changer les autorisations depuis <code>CLI-WIN-01</code>, à travers le partage <code>Partages</code> ? Pourquoi ? (Pensez aux autorisations du partage.)</li>
 <li>À l’étape 4, pourquoi l’administrateur ne pouvait-il plus ouvrir le fichier ? Qu’est-ce qui lui a permis de reprendre la main ? Pourquoi ne peut-il pas le faire sans laisser de trace ?</li>
 <li>Pourquoi a-t-on délégué à <code>DL_AD_ResetMdp</code> plutôt que directement à <code>n.fournier</code> ? Que faites-vous quand un second technicien arrive au service informatique ?</li>
@@ -453,12 +523,20 @@
 <td>la ligne CREATEUR PROPRIETAIRE a disparu de <code>C:\Partages</code> (étape 3 du TP 7) : remettez-la, <em>Contrôle total</em>, <em>Les sous-dossiers et les fichiers seulement</em></td>
 </tr>
 <tr class="odd">
-<td>Test 4 : Julien peut encore modifier le fichier d’Alice</td>
+<td>Test 7 : Julien peut encore modifier le fichier d’Alice</td>
 <td>la ligne <em>Spéciale</em> s’applique aussi aux fichiers : corrigez sa portée ; ou la case <em>Écriture</em> est restée cochée sur la première ligne</td>
 </tr>
 <tr class="even">
-<td>Test 5 : Julien peut encore supprimer</td>
+<td>Tests 8 à 10 : Julien peut encore renommer ou supprimer</td>
 <td>la ligne <code>DL_Commun_RW : Modification</code> n’a pas été modifiée ; reconnectez Julien après la correction</td>
+</tr>
+<tr class="odd">
+<td>Test 3 : Alice ne peut pas nommer son dossier (il reste « Nouveau dossier »)</td>
+<td>la ligne <em>Spéciale</em> n’a pas <em>Création de dossiers/ajout de données</em></td>
+</tr>
+<tr class="even">
+<td>Test 4 ou 5 : le renommage réussit</td>
+<td>la session ouverte est celle d’un administrateur, ou <code>C:\Partages</code> donne plus que <em>Lecture et exécution, ce dossier seulement</em> à Utilisateurs authentifiés (étape 3 du TP 7)</td>
 </tr>
 <tr class="odd">
 <td>Étape 4 : le propriétaire n’apparaît pas tout de suite</td>
@@ -489,14 +567,39 @@
 <h2 id="livrables">Livrables</h2>
 <ul>
 <li>Les deux matrices de tests complétées (étapes 5 et 7).</li>
-<li>Captures : fenêtre <strong>Avancé</strong> de <code>Commun</code> avec les deux lignes <code>DL_Commun_RW</code>, autorisations avancées de la ligne <em>Spéciale</em>, propriétaire de <code>idee-alice-v2.txt</code>, refus d’accès puis changement de propriétaire de <code>paie-octobre.txt</code>, lignes <code>DL_AD_ResetMdp</code> dans la sécurité de l’OU <code>Utilisateurs</code>, réinitialisation réussie et un refus dans la session <code>n.fournier</code>.</li>
+<li>Captures : fenêtre <strong>Avancé</strong> de <code>Commun</code> avec les deux lignes <code>DL_Commun_RW</code>, autorisations avancées de la ligne <em>Spéciale</em>, propriétaire de <code>idee-alice-v2.txt</code>, accès effectif d’<code>a.martin</code> sur <code>Comptabilite</code> (case <em>Suppression</em>), refus d’accès puis changement de propriétaire de <code>paie-octobre.txt</code>, lignes <code>DL_AD_ResetMdp</code> dans la sécurité de l’OU <code>Utilisateurs</code>, réinitialisation réussie et un refus dans la session <code>n.fournier</code>.</li>
 <li>Réponses aux questions.</li>
 </ul>
 <h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<h3 id="protéger-le-dossier-comptabilite-lui-même">Protéger le dossier Comptabilite lui-même</h3>
+<p>Le test 5 a montré qu’Alice pourrait supprimer tout le dossier <code>Comptabilite</code>. Pour qu’elle garde tous ses droits <strong>dans</strong> le dossier, mais plus sur le dossier lui-même, remplacez sur <code>C:\Partages\Comptabilite</code> la ligne <code>DL_Compta_RW : Modification</code> par deux lignes :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Principal</th>
+<th>Accès</th>
+<th>S’applique à</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>DL_Compta_RW</code></td>
+<td>Modification</td>
+<td>Les sous-dossiers et les fichiers seulement</td>
+</tr>
+<tr class="even">
+<td><code>DL_Compta_RW</code></td>
+<td>Spéciale : Lecture et exécution, plus Création de fichiers/écriture de données et Création de dossiers/ajout de données</td>
+<td>Ce dossier seulement</td>
+</tr>
+</tbody>
+</table></div>
+<p>Même méthode qu’à l’étape 3 : modifiez la ligne existante (changez sa portée), puis ajoutez la seconde avec <strong>Afficher les autorisations avancées</strong>. Vérifiez avec l’accès effectif : <code>a.martin</code> n’a plus <em>Suppression</em> sur <code>Comptabilite</code>, mais l’a toujours sur <code>bilan.txt</code>. Depuis <code>CLI-WIN-01</code>, Alice crée, renomme et supprime toujours ses fichiers dans <code>Comptabilite</code>. Il faudrait faire de même pour <code>Direction</code>, <code>RH</code> et <code>Exploitation</code>.</p>
 <h3 id="un-refuser-qui-protège-la-suppression-accidentelle">Un « Refuser » qui protège : la suppression accidentelle</h3>
 <p>Avec les fonctionnalités avancées affichées, ouvrez les propriétés de l’OU <strong>Utilisateurs</strong> → onglet <strong>Objet</strong> : la case <em>Protéger l’objet des suppressions accidentelles</em> est cochée. Allez dans <strong>Sécurité → Avancé</strong> : vous trouvez des lignes <strong>Refuser</strong> pour <em>Tout le monde</em> (<em>Supprimer</em>, <em>Supprimer la sous-arborescence</em>). Essayez de supprimer l’OU : même l’administrateur est bloqué. Un <em>Refuser</em> l’emporte sur un <em>Autoriser</em> : c’est pour cela qu’on l’évite dans les dossiers partagés, mais qu’il est utile ici. <strong>Ne décochez pas</strong> la case.</p>
 <h3 id="createur-proprietaire-en-modification">CREATEUR PROPRIETAIRE en Modification</h3>
-<p>Sur <code>C:\Partages</code>, la ligne CREATEUR PROPRIETAIRE donne <em>Contrôle total</em> : le créateur d’un fichier pourrait en changer les autorisations s’il y accédait autrement que par le partage. Remplacez-la par <strong>Modification</strong> (même portée : <em>Les sous-dossiers et les fichiers seulement</em>), puis refaites les tests 1, 2 et 8 de l’étape 5. Qu’est-ce qui change pour Alice ?</p>
+<p>Sur <code>C:\Partages</code>, la ligne CREATEUR PROPRIETAIRE donne <em>Contrôle total</em> : le créateur d’un fichier pourrait en changer les autorisations s’il y accédait autrement que par le partage. Remplacez-la par <strong>Modification</strong> (même portée : <em>Les sous-dossiers et les fichiers seulement</em>), puis refaites les tests 1, 2 et 13 de l’étape 5. Qu’est-ce qui change pour Alice ?</p>
 <h3 id="une-délégation-dangereuse">Une délégation dangereuse</h3>
 <p>Imaginez qu’on délègue aussi à <code>DL_AD_ResetMdp</code> la tâche <em>Modifier l’appartenance à un groupe</em> sur l’OU <code>Groupes</code>. Que pourrait faire Nicolas avec son compte de tous les jours ? Pourquoi cette délégation-là est-elle bien plus dangereuse que la réinitialisation des mots de passe ? Ne la mettez pas en place : répondez dans votre journal.</p>
 <h3 id="pour-information-les-autorisations-spéciales-en-ligne-de-commande">Pour information : les autorisations spéciales en ligne de commande</h3>
