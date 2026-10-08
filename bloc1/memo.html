@@ -129,8 +129,8 @@
 </tr>
 <tr class="odd">
 <td>enregistrement SRV</td>
-<td><code>dig -t SRV _ldap._tcp.hexalog.lan</code></td>
-<td><code>Resolve-DnsName -Type SRV _ldap._tcp.hexalog.lan</code></td>
+<td><code>dig -t SRV _ldap._tcp.hexalog.local</code></td>
+<td><code>Resolve-DnsName -Type SRV _ldap._tcp.hexalog.local</code></td>
 </tr>
 <tr class="even">
 <td>ports en écoute</td>
@@ -491,7 +491,7 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>Install-ADDSForest -DomainName hexalog.lan -DomainNetbiosName HEXALOG -InstallDns</code></td>
+<td><code>Install-ADDSForest -DomainName hexalog.local -DomainNetbiosName HEXALOG -InstallDns</code></td>
 <td>créer le domaine</td>
 </tr>
 <tr class="even">
@@ -499,7 +499,7 @@
 <td>vérifier</td>
 </tr>
 <tr class="odd">
-<td><code>New-ADOrganizationalUnit -Name NOM -Path "OU=…,DC=hexalog,DC=lan"</code></td>
+<td><code>New-ADOrganizationalUnit -Name NOM -Path "OU=…,DC=hexalog,DC=local"</code></td>
 <td>créer une OU</td>
 </tr>
 <tr class="even">
@@ -539,8 +539,44 @@
 <td>politiques de mot de passe</td>
 </tr>
 <tr class="odd">
-<td><code>Add-DnsServerResourceRecordA -ZoneName hexalog.lan -Name NOM -IPv4Address IP</code></td>
+<td><code>Add-DnsServerResourceRecordA -ZoneName hexalog.local -Name NOM -IPv4Address IP</code></td>
 <td>enregistrement DNS</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sur un poste du domaine (CLI-WIN-01) :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ncpa.cpl</code></td>
+<td>connexions réseau : adresse IP et DNS de la carte</td>
+</tr>
+<tr class="even">
+<td><code>sysdm.cpl</code></td>
+<td>nom de l’ordinateur, jonction au domaine</td>
+</tr>
+<tr class="odd">
+<td><code>nslookup hexalog.local</code></td>
+<td>le poste trouve-t-il le domaine ?</td>
+</tr>
+<tr class="even">
+<td><code>whoami</code>, <code>whoami /groups</code></td>
+<td>compte de la session et ses groupes</td>
+</tr>
+<tr class="odd">
+<td><code>$env:LOGONSERVER</code> (PowerShell), <code>echo %LOGONSERVER%</code> (cmd)</td>
+<td>contrôleur qui a ouvert la session</td>
+</tr>
+<tr class="even">
+<td><code>Add-Computer -DomainName hexalog.local -Credential HEXALOG\Administrateur -Restart</code></td>
+<td>joindre le domaine en PowerShell</td>
 </tr>
 </tbody>
 </table></div>

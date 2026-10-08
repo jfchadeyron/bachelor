@@ -103,6 +103,14 @@ Copie d’une VM ; le clone intégral est autonome, le clone lié s’appuie sur
 <dd>
 Combinaison d’une infrastructure sur site et de services cloud, reliés et gérés ensemble. (S1)
 </dd>
+<dt>Compte local</dt>
+<dd>
+Compte enregistré sur un seul ordinateur et valable seulement sur lui (<code>.\localadmin</code>), par opposition au compte du domaine (<code>HEXALOG\a.martin</code>). (S6)
+</dd>
+<dt>Compte ordinateur</dt>
+<dd>
+Objet de l’annuaire qui représente un ordinateur membre du domaine ; il est créé lors de la jonction. (S6)
+</dd>
 <dt>Contrôleur de domaine (DC)</dt>
 <dd>
 Serveur qui héberge une copie de l’annuaire Active Directory et authentifie les utilisateurs. (S6)
@@ -120,7 +128,7 @@ Sous-réseau séparé du réseau interne, qui accueille les serveurs joignables 
 </dd>
 <dt>DN (nom distinctif)</dt>
 <dd>
-Chemin complet d’un objet dans l’annuaire : <code>CN=Alice Martin,OU=Comptabilite,…,DC=hexalog,DC=lan</code>. (S6)
+Chemin complet d’un objet dans l’annuaire : <code>CN=Alice Martin,OU=Comptabilite,…,DC=hexalog,DC=local</code>. (S6)
 </dd>
 <dt>DNS</dt>
 <dd>
@@ -132,7 +140,7 @@ Un même nom reçoit deux réponses : l’adresse publique pour les clients d’
 </dd>
 <dt>Domaine</dt>
 <dd>
-Ensemble d’objets Active Directory partageant la même base et les mêmes règles, identifié par un nom DNS (<code>hexalog.lan</code>). (S6)
+Ensemble d’objets Active Directory partageant la même base et les mêmes règles, identifié par un nom DNS (<code>hexalog.local</code>). (S6)
 </dd>
 <dt>Dossier d’exploitation</dt>
 <dd>
@@ -211,6 +219,10 @@ Commande de lecture du journal de systemd sous Linux. (S8)
 </dl>
 <h2 id="k">K</h2>
 <dl>
+<dt>Jonction au domaine</dt>
+<dd>
+Opération qui fait entrer un ordinateur dans un domaine : création de son compte ordinateur et d’un secret partagé avec le contrôleur. Le DNS du poste doit être le contrôleur de domaine. (S6)
+</dd>
 <dt>Kerberos</dt>
 <dd>
 Protocole d’authentification par tickets d’Active Directory (port 88), qui exige des horloges synchronisées. (S11)
@@ -428,7 +440,7 @@ Masque qui retire des droits aux fichiers et dossiers au moment de leur créatio
 </dd>
 <dt>UPN</dt>
 <dd>
-Nom d’utilisateur au format adresse de messagerie : <code>a.martin@hexalog.lan</code>. (S6)
+Nom d’utilisateur au format adresse de messagerie : <code>a.martin@hexalog.local</code>. (S6)
 </dd>
 </dl>
 <h2 id="v">V</h2>
