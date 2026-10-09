@@ -1,0 +1,465 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 8 : Linux : distributions et administration | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Panorama des distributions Linux utilisées en entreprise, puis les gestes d'administration de tous les jours : l'arborescence, les paquets, les services avec systemd, les journaux avec journalctl, le ">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="../tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="../tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="../tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="../tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="../tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="../tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="../tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../tp/tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item active" data-seance="8"><a class="nav-link" href="s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="../tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="../tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="../tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="../tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="../tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="../tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="../tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Linux</span><span class="sep">›</span><span>Séance 8</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 8</span>
+  <h1>Linux : distributions et administration de base</h1>
+  <p class="lead">Panorama des distributions Linux utilisées en entreprise, puis les gestes d'administration de tous les jours : l'arborescence, les paquets, les services avec systemd, les journaux avec journalctl, le réseau et le stockage. Chaque notion est mise en parallèle avec ce que vous avez vu sous Windows Server.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 1 à 3</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp08-linux-admin.html" data-seance="8">TP 8 : Administrer SRV-LNX-01</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#noyau-et-distributions">1. Noyau et distributions</a></li><li><a href="#larborescence-linux">2. L’arborescence Linux</a></li><li><a href="#les-paquets">3. Les paquets</a></li><li><a href="#les-services-avec-systemd">4. Les services avec systemd</a></li><li><a href="#les-journaux">5. Les journaux</a></li><li><a href="#réseau">6. Réseau</a></li><li><a href="#le-stockage">7. Le stockage</a></li><li><a href="#méthode-de-dépannage-dun-service">8. Méthode de dépannage d’un service</a></li><li><a href="#à-retenir">9. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Distinguer noyau et distribution, et comparer les grandes familles de distributions d’entreprise.</li>
+<li>Choisir une distribution selon des critères : support, cycle de vie, paquets, usage.</li>
+<li>Se repérer dans l’arborescence Linux.</li>
+<li>Gérer les paquets (<code>apt</code>, avec les équivalents <code>dnf</code>), les services (<code>systemctl</code>) et consulter les journaux (<code>journalctl</code>).</li>
+<li>Ajouter un disque, le formater et le monter de façon permanente.</li>
+<li>Dépanner un service qui ne démarre pas.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>50 min</td>
+<td>Cours de la séance 4 (cloud) en format resserré et <a data-seance="4" href="../tp/tp04-cloud.html">TP 4 : Du schéma cloud au lab</a> partie A en TD</td>
+</tr>
+<tr class="even">
+<td>20 min</td>
+<td>Cours : paquets, systemd, journaux, stockage (les distributions sont vues par les présentations)</td>
+</tr>
+<tr class="odd">
+<td>35 min</td>
+<td><a data-seance="8" href="../tp/tp08-linux-admin.html">TP 8 : Administrer SRV-LNX-01</a> partie A : présentations (recherche faite avant la séance)</td>
+</tr>
+<tr class="even">
+<td>1 h 40</td>
+<td><a data-seance="8" href="../tp/tp08-linux-admin.html">TP 8 : Administrer SRV-LNX-01</a> partie B : administration de SRV-LNX-01, et rattrapages</td>
+</tr>
+<tr class="odd">
+<td>en autonomie</td>
+<td>Quiz des séances 4 et 8 sur le site</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="noyau-et-distributions">1. Noyau et distributions</h2>
+<p><strong>Linux</strong> est, au sens strict, un <strong>noyau</strong> : le cœur du système qui gère le processeur, la mémoire, les disques et le réseau. Il est libre (licence GPL) et développé depuis 1991 par une large communauté.</p>
+<p>Une <strong>distribution</strong> assemble ce noyau avec des milliers de logiciels (outils GNU, gestionnaire de services, serveur web, bibliothèques…), un <strong>gestionnaire de paquets</strong>, un installateur, une politique de mises à jour et, parfois, un support commercial. Choisir un Linux, c’est choisir une distribution.</p>
+<p>Linux fait tourner la très grande majorité des serveurs web, du cloud public, des conteneurs et des équipements réseau. En entreprise, on le trouve partout où il faut de la stabilité, de l’automatisation et peu de coûts de licence.</p>
+<h3 id="les-grandes-familles">Les grandes familles</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Famille</th>
+<th>Distributions</th>
+<th>Paquets</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Debian</td>
+<td><strong>Debian</strong>, <strong>Ubuntu</strong> (Server, LTS), Linux Mint</td>
+<td><code>.deb</code>, <code>apt</code></td>
+<td>Debian : communautaire, très stable. Ubuntu : éditeur Canonical, support commercial possible</td>
+</tr>
+<tr class="even">
+<td>Red Hat</td>
+<td><strong>RHEL</strong>, <strong>Rocky Linux</strong>, <strong>AlmaLinux</strong>, Oracle Linux, CentOS Stream, Fedora</td>
+<td><code>.rpm</code>, <code>dnf</code></td>
+<td>RHEL : support commercial, référence des grands comptes ; Rocky et Alma : reconstructions gratuites compatibles ; Fedora : laboratoire des nouveautés</td>
+</tr>
+<tr class="odd">
+<td>SUSE</td>
+<td><strong>SLES</strong>, openSUSE Leap, openSUSE Tumbleweed</td>
+<td><code>.rpm</code>, <code>zypper</code></td>
+<td>présent dans l’industrie et l’informatique de gestion (SAP)</td>
+</tr>
+<tr class="even">
+<td>Indépendantes</td>
+<td>Arch Linux, Alpine Linux, Gentoo</td>
+<td><code>pacman</code>, <code>apk</code>…</td>
+<td>Arch : <em>rolling release</em> ; Alpine : très légère, courante dans les conteneurs</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="les-modèles-de-publication">Les modèles de publication</h3>
+<ul>
+<li><strong>Version fixe</strong> (Debian, RHEL, Ubuntu LTS) : une version majeure tous les 2 à 3 ans, puis uniquement des correctifs pendant toute sa durée de vie. On sait ce qu’on a, rien ne change sans qu’on le décide. C’est ce que veut un serveur.</li>
+<li><strong>LTS</strong> (<em>Long Term Support</em>) : version fixe avec un support long (5 ans et plus chez Ubuntu, 10 ans chez Red Hat).</li>
+<li><strong>Rolling release</strong> (Arch, openSUSE Tumbleweed) : pas de version, le système est mis à jour en continu vers les dernières versions des logiciels. Idéal pour un poste de passionné, risqué pour un serveur.</li>
+</ul>
+<h3 id="critères-de-choix-en-entreprise">Critères de choix en entreprise</h3>
+<ol type="1">
+<li><strong>Support</strong> : qui appelle-t-on en cas de problème ? (éditeur, prestataire, communauté)</li>
+<li><strong>Durée de vie</strong> : combien d’années de correctifs de sécurité ?</li>
+<li><strong>Compatibilité</strong> : le logiciel métier est-il certifié pour cette distribution ?</li>
+<li><strong>Compétences</strong> de l’équipe et <strong>homogénéité</strong> du parc.</li>
+<li><strong>Coût</strong> : abonnement de support ou gratuité.</li>
+<li><strong>Écosystème</strong> : images cloud, documentation, outils d’automatisation.</li>
+</ol>
+<h2 id="larborescence-linux">2. L’arborescence Linux</h2>
+<p>Sous Linux, il n’y a pas de lettres de lecteur : tout part de la racine <code>/</code>, et les disques sont « montés » dans des dossiers.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Dossier</th>
+<th>Contenu</th>
+<th>Équivalent Windows approché</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/etc</code></td>
+<td>fichiers de <strong>configuration</strong> du système et des services</td>
+<td>le registre, <code>C:\ProgramData</code></td>
+</tr>
+<tr class="even">
+<td><code>/var</code></td>
+<td>données qui varient : <strong>journaux</strong> (<code>/var/log</code>), sites web (<code>/var/www</code>), files d’attente</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>/home</code></td>
+<td>dossiers personnels des utilisateurs</td>
+<td><code>C:\Users</code></td>
+</tr>
+<tr class="even">
+<td><code>/root</code></td>
+<td>dossier personnel de l’administrateur root</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>/usr</code></td>
+<td>programmes et bibliothèques (<code>/usr/bin</code>, <code>/usr/sbin</code>, <code>/usr/lib</code>)</td>
+<td><code>C:\Program Files</code>, <code>C:\Windows</code></td>
+</tr>
+<tr class="even">
+<td><code>/srv</code></td>
+<td>données <strong>servies</strong> par la machine (partages, sites)</td>
+<td><code>C:\Partages</code></td>
+</tr>
+<tr class="odd">
+<td><code>/tmp</code></td>
+<td>fichiers temporaires (en mémoire sous Debian 13)</td>
+<td><code>%TEMP%</code></td>
+</tr>
+<tr class="even">
+<td><code>/opt</code></td>
+<td>logiciels tiers installés hors paquets</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>/dev</code></td>
+<td>périphériques (<code>/dev/sda</code> = premier disque)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>/proc</code>, <code>/sys</code></td>
+<td>fichiers virtuels exposant l’état du noyau</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>/boot</code></td>
+<td>noyau et chargeur de démarrage</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Sous Linux, <strong>tout est fichier</strong> : la configuration est du texte qu’on lit avec <code>cat</code> ou <code>less</code> et qu’on modifie avec <code>nano</code> ou <code>vim</code>. D’où l’importance de faire une copie (<code>sudo cp fichier fichier.bak</code>) avant chaque modification.</p>
+<h3 id="rappels-de-ligne-de-commande">Rappels de ligne de commande</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Besoin</th>
+<th>Commande</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>où suis-je, lister, se déplacer</td>
+<td><code>pwd</code>, <code>ls -l</code>, <code>cd</code></td>
+</tr>
+<tr class="even">
+<td>lire un fichier</td>
+<td><code>cat</code>, <code>less</code>, <code>head -n 20</code>, <code>tail -n 20</code>, <code>tail -f</code> (suivre)</td>
+</tr>
+<tr class="odd">
+<td>chercher du texte, un fichier</td>
+<td><code>grep -i motif fichier</code>, <code>find /etc -name "*.conf"</code></td>
+</tr>
+<tr class="even">
+<td>copier, déplacer, supprimer</td>
+<td><code>cp</code>, <code>mv</code>, <code>rm</code>, <code>mkdir -p</code>, <code>rmdir</code></td>
+</tr>
+<tr class="odd">
+<td>enchaîner et rediriger</td>
+<td><code>commande1 | commande2</code>, <code>&gt; fichier</code> (écrase), <code>&gt;&gt; fichier</code> (ajoute), <code>2&gt;</code> (erreurs)</td>
+</tr>
+<tr class="even">
+<td>aide</td>
+<td><code>man commande</code>, <code>commande --help</code></td>
+</tr>
+<tr class="odd">
+<td>agir en administrateur</td>
+<td><code>sudo commande</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="les-paquets">3. Les paquets</h2>
+<p>Un <strong>paquet</strong> est une archive qui contient un logiciel, ses fichiers de configuration, et la liste de ses <strong>dépendances</strong> (les autres paquets dont il a besoin). Les paquets sont téléchargés depuis des <strong>dépôts</strong> : des serveurs de la distribution qui publient les logiciels et leurs mises à jour, signés pour garantir leur authenticité.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Action</th>
+<th>Debian, Ubuntu</th>
+<th>RHEL, Rocky, Alma</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mettre à jour la liste des paquets</td>
+<td><code>sudo apt update</code></td>
+<td>(automatique)</td>
+</tr>
+<tr class="even">
+<td>installer les mises à jour</td>
+<td><code>sudo apt upgrade</code> / <code>sudo apt full-upgrade</code></td>
+<td><code>sudo dnf upgrade</code></td>
+</tr>
+<tr class="odd">
+<td>installer</td>
+<td><code>sudo apt install nginx</code></td>
+<td><code>sudo dnf install nginx</code></td>
+</tr>
+<tr class="even">
+<td>supprimer (garder la config)</td>
+<td><code>sudo apt remove nginx</code></td>
+<td><code>sudo dnf remove nginx</code></td>
+</tr>
+<tr class="odd">
+<td>supprimer avec la config</td>
+<td><code>sudo apt purge nginx</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>rechercher, informations</td>
+<td><code>apt search</code>, <code>apt show</code></td>
+<td><code>dnf search</code>, <code>dnf info</code></td>
+</tr>
+<tr class="odd">
+<td>paquets installés</td>
+<td><code>apt list --installed</code>, <code>dpkg -l</code></td>
+<td><code>dnf list installed</code>, <code>rpm -qa</code></td>
+</tr>
+<tr class="even">
+<td>fichiers d’un paquet</td>
+<td><code>dpkg -L nginx</code></td>
+<td><code>rpm -ql nginx</code></td>
+</tr>
+<tr class="odd">
+<td>historique</td>
+<td><code>/var/log/apt/history.log</code></td>
+<td><code>dnf history</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Sous Debian 13, les dépôts sont déclarés dans <code>/etc/apt/sources.list.d/debian.sources</code>. Le paquet <code>unattended-upgrades</code> permet d’installer automatiquement les mises à jour de sécurité.</p>
+<h2 id="les-services-avec-systemd">4. Les services avec systemd</h2>
+<p><strong>systemd</strong> est le premier programme lancé au démarrage (PID 1). Il démarre et surveille tous les services, appelés <strong>unités</strong> (<em>units</em>) : <code>nginx.service</code>, <code>ssh.service</code>…</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Action</th>
+<th>Commande</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>état détaillé (actif ? erreurs récentes ?)</td>
+<td><code>systemctl status nginx</code></td>
+</tr>
+<tr class="even">
+<td>démarrer, arrêter, redémarrer</td>
+<td><code>sudo systemctl start</code> / <code>stop</code> / <code>restart nginx</code></td>
+</tr>
+<tr class="odd">
+<td>recharger la configuration sans couper</td>
+<td><code>sudo systemctl reload nginx</code></td>
+</tr>
+<tr class="even">
+<td>lancer au démarrage de la machine, ou non</td>
+<td><code>sudo systemctl enable</code> / <code>disable nginx</code></td>
+</tr>
+<tr class="odd">
+<td>les deux d’un coup</td>
+<td><code>sudo systemctl enable --now nginx</code></td>
+</tr>
+<tr class="even">
+<td>est-il actif ? activé ?</td>
+<td><code>systemctl is-active nginx</code>, <code>systemctl is-enabled nginx</code></td>
+</tr>
+<tr class="odd">
+<td>services démarrés, services en échec</td>
+<td><code>systemctl list-units --type=service --state=running</code>, <code>systemctl --failed</code></td>
+</tr>
+<tr class="even">
+<td>lire le fichier d’unité</td>
+<td><code>systemctl cat nginx</code></td>
+</tr>
+<tr class="odd">
+<td>interdire tout démarrage</td>
+<td><code>sudo systemctl mask</code> / <code>unmask</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Correspondance avec Windows : <code>enable</code> = type de démarrage Automatique, <code>disable</code> = Manuel, <code>mask</code> = Désactivé.</p>
+<h2 id="les-journaux">5. Les journaux</h2>
+<p>Le service <strong>journald</strong> collecte les messages du noyau et de tous les services. On les lit avec <code>journalctl</code> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-u</span> nginx                   <span class="co"># journaux d'un service</span></span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-u</span> nginx <span class="at">-n</span> 50 <span class="at">--no-pager</span>  <span class="co"># les 50 dernières lignes, sans pagination</span></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-u</span> ssh <span class="at">-f</span>                  <span class="co"># suivre en direct (Ctrl+C pour quitter)</span></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-p</span> err <span class="at">-b</span>                  <span class="co"># erreurs depuis le dernier démarrage</span></span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">--since</span> <span class="st">"1 hour ago"</span>       <span class="co"># dernière heure</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-k</span>                         <span class="co"># messages du noyau</span></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-t</span> sudo                    <span class="co"># messages d'un programme (identifiant)</span></span></code></pre></div></div>
+<p>Certains logiciels écrivent aussi leurs propres fichiers dans <code>/var/log</code> : <code>/var/log/nginx/access.log</code> et <code>error.log</code>, <code>/var/log/apt/history.log</code>, <code>/var/log/dpkg.log</code>.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Debian 13 et /var/log/auth.log</strong></p>
+<p>Depuis Debian 12, le service <code>rsyslog</code> n’est plus installé par défaut : les fichiers historiques <code>/var/log/syslog</code> et <code>/var/log/auth.log</code> n’existent pas. Tout est dans le journal de systemd, accessible avec <code>journalctl</code>. Les anciennes commandes <code>last</code> et <code>lastlog</code> ont aussi disparu de Debian 13 (remplacées par <code>wtmpdb</code> et <code>lastlog2</code>).</p>
+</div></div>
+<h2 id="réseau">6. Réseau</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Besoin</th>
+<th>Commande ou fichier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>adresses, cartes</td>
+<td><code>ip -br a</code>, <code>ip link</code></td>
+</tr>
+<tr class="even">
+<td>routes</td>
+<td><code>ip route</code></td>
+</tr>
+<tr class="odd">
+<td>ports en écoute</td>
+<td><code>sudo ss -tulpn</code></td>
+</tr>
+<tr class="even">
+<td>nom de la machine</td>
+<td><code>hostnamectl</code>, <code>/etc/hostname</code>, <code>/etc/hosts</code></td>
+</tr>
+<tr class="odd">
+<td>DNS</td>
+<td><code>/etc/resolv.conf</code></td>
+</tr>
+<tr class="even">
+<td>configuration permanente</td>
+<td>Debian : <code>/etc/network/interfaces</code> ; Ubuntu : Netplan (<code>/etc/netplan/*.yaml</code>) ; RHEL : NetworkManager (<code>nmcli</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="le-stockage">7. Le stockage</h2>
+<ol type="1">
+<li>Repérer le disque : <code>lsblk</code> (le deuxième disque est <code>sdb</code>).</li>
+<li>Créer une table de partitions et une partition : <code>parted</code> ou <code>fdisk</code>.</li>
+<li>Créer un système de fichiers : <code>mkfs.ext4</code> (Debian) ou <code>mkfs.xfs</code> (RHEL).</li>
+<li>Créer un point de montage (<code>mkdir /srv/partages</code>) et monter : <code>mount</code>.</li>
+<li>Rendre le montage permanent dans <code>/etc/fstab</code>, en désignant le disque par son <strong>UUID</strong> (identifiant stable, contrairement à <code>sdb</code> qui peut changer).</li>
+<li>Vérifier : <code>df -h</code>, et un redémarrage.</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/fstab (exemple)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="co"># &lt;périphérique&gt;                           &lt;point de montage&gt;  &lt;type&gt; &lt;options&gt;         &lt;dump&gt; &lt;ordre fsck&gt;</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="dt">UUID</span><span class="ot">=</span><span class="st">5d1c7a52-8f0e-4f2b-9d0c-1b2a3c4d5e6f  /srv/partages       ext4   defaults,nofail   0      2</span></span></code></pre></div></div>
+<p>L’option <code>nofail</code> évite que le serveur reste bloqué au démarrage si ce disque de données est absent. Pour des besoins plus souples (agrandir un volume à chaud, regrouper plusieurs disques), on utilise <strong>LVM</strong> (volumes logiques), vu dans un autre bloc.</p>
+<h2 id="méthode-de-dépannage-dun-service">8. Méthode de dépannage d’un service</h2>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-132140" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 272px;" viewBox="0 0 272 785" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-132140{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-132140 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-132140 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-132140 .error-icon{fill:#f5f6f8;}#mmd0-132140 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-132140 .edge-thickness-normal{stroke-width:1px;}#mmd0-132140 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-132140 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-132140 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-132140 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-132140 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-132140 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-132140 .marker.cross{stroke:#4a5563;}#mmd0-132140 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-132140 p{margin:0;}#mmd0-132140 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-132140 .cluster-label text{fill:#1f3a5f;}#mmd0-132140 .cluster-label span{color:#1f3a5f;}#mmd0-132140 .cluster-label span p{background-color:transparent;}#mmd0-132140 .label text,#mmd0-132140 span{fill:#1d2530;color:#1d2530;}#mmd0-132140 .node rect,#mmd0-132140 .node circle,#mmd0-132140 .node ellipse,#mmd0-132140 .node polygon,#mmd0-132140 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-132140 .rough-node .label text,#mmd0-132140 .node .label text,#mmd0-132140 .image-shape .label,#mmd0-132140 .icon-shape .label{text-anchor:middle;}#mmd0-132140 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-132140 .rough-node .label,#mmd0-132140 .node .label,#mmd0-132140 .image-shape .label,#mmd0-132140 .icon-shape .label{text-align:center;}#mmd0-132140 .node.clickable{cursor:pointer;}#mmd0-132140 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-132140 .arrowheadPath{fill:#000000;}#mmd0-132140 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-132140 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-132140 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-132140 .edgeLabel p{background-color:#ffffff;}#mmd0-132140 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-132140 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-132140 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-132140 .cluster text{fill:#1f3a5f;}#mmd0-132140 .cluster span{color:#1f3a5f;}#mmd0-132140 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-132140 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-132140 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-132140 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-132140 rect.text{fill:none;stroke-width:0;}#mmd0-132140 .icon-shape,#mmd0-132140 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-132140 .icon-shape p,#mmd0-132140 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-132140 .icon-shape .label rect,#mmd0-132140 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-132140 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-132140 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-132140 .node .neo-node{stroke:#1f3a5f;}#mmd0-132140 [data-look="neo"].node rect,#mmd0-132140 [data-look="neo"].cluster rect,#mmd0-132140 [data-look="neo"].node polygon{stroke:url(#mmd0-132140-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-132140 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-132140 [data-look="neo"].node path{stroke:url(#mmd0-132140-gradient);stroke-width:1px;}#mmd0-132140 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-132140 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-132140 [data-look="neo"].node circle{stroke:url(#mmd0-132140-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-132140 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-132140 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-132140-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-132140 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-132140-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-132140 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-132140_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-132140_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-132140_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-132140_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-132140_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-132140_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-132140_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-132140_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-132140_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-132140_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-132140_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-132140_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M136,57L136,82L136,103" id="mmd0-132140-L_A_B_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A_B_0" data-points="W3sieCI6MTM2LCJ5Ijo1N30seyJ4IjoxMzYsInkiOjgyfSx7IngiOjEzNiwieSI6MTA3fV0=" data-look="classic" marker-end="url(#mmd0-132140_flowchart-v2-pointEnd)"></path><path d="M136,177L136,202L136,223" id="mmd0-132140-L_B_C_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_C_0" data-points="W3sieCI6MTM2LCJ5IjoxNzd9LHsieCI6MTM2LCJ5IjoyMDJ9LHsieCI6MTM2LCJ5IjoyMjd9XQ==" data-look="classic" marker-end="url(#mmd0-132140_flowchart-v2-pointEnd)"></path><path d="M136,297L136,322L136,343" id="mmd0-132140-L_C_D_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C_D_0" data-points="W3sieCI6MTM2LCJ5IjoyOTd9LHsieCI6MTM2LCJ5IjozMjJ9LHsieCI6MTM2LCJ5IjozNDd9XQ==" data-look="classic" marker-end="url(#mmd0-132140_flowchart-v2-pointEnd)"></path><path d="M136,417L136,442L136,463" id="mmd0-132140-L_D_E_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_E_0" data-points="W3sieCI6MTM2LCJ5Ijo0MTd9LHsieCI6MTM2LCJ5Ijo0NDJ9LHsieCI6MTM2LCJ5Ijo0Njd9XQ==" data-look="classic" marker-end="url(#mmd0-132140_flowchart-v2-pointEnd)"></path><path d="M136,558L136,583L136,604" id="mmd0-132140-L_E_F_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_E_F_0" data-points="W3sieCI6MTM2LCJ5Ijo1NTh9LHsieCI6MTM2LCJ5Ijo1ODN9LHsieCI6MTM2LCJ5Ijo2MDh9XQ==" data-look="classic" marker-end="url(#mmd0-132140_flowchart-v2-pointEnd)"></path><path d="M136,657L136,682L136,703" id="mmd0-132140-L_F_G_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_F_G_0" data-points="W3sieCI6MTM2LCJ5Ijo2NTd9LHsieCI6MTM2LCJ5Ijo2ODJ9LHsieCI6MTM2LCJ5Ijo3MDd9XQ==" data-look="classic" marker-end="url(#mmd0-132140_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_A_B_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_B_C_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_C_D_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_D_E_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_E_F_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_F_G_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-132140-flowchart-A-0" data-look="classic" transform="translate(136, 32.5)"><rect class="basic label-container" style="" x="-106.609375" y="-24.5" width="213.21875" height="49"></rect><g class="label" style="" transform="translate(-78.609375, -10.5)"><rect></rect><foreignObject width="157.21875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Le service ne répond pas</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-132140-flowchart-B-1" data-look="classic" transform="translate(136, 142)"><rect class="basic label-container" style="" x="-101.9140625" y="-35" width="203.828125" height="70"></rect><g class="label" style="" transform="translate(-73.9140625, -21)"><rect></rect><foreignObject width="147.828125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>systemctl status service<br>actif ? en échec ?</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-132140-flowchart-C-3" data-look="classic" transform="translate(136, 262)"><rect class="basic label-container" style="" x="-106.203125" y="-35" width="212.40625" height="70"></rect><g class="label" style="" transform="translate(-78.203125, -21)"><rect></rect><foreignObject width="156.40625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>journalctl -u service -n 50<br>lire le message d'erreur</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-132140-flowchart-D-5" data-look="classic" transform="translate(136, 382)"><rect class="basic label-container" style="" x="-126.0390625" y="-35" width="252.078125" height="70"></rect><g class="label" style="" transform="translate(-98.0390625, -21)"><rect></rect><foreignObject width="196.078125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Tester la configuration<br>nginx -t, sshd -t, dnsmasq --test</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-132140-flowchart-E-7" data-look="classic" transform="translate(136, 512.5)"><rect class="basic label-container" style="" x="-128" y="-45.5" width="256" height="91"></rect><g class="label" style="" transform="translate(-100, -31.5)"><rect></rect><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>ss -tulpn<br>écoute-t-il sur le bon port et la bonne adresse ?</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-132140-flowchart-F-9" data-look="classic" transform="translate(136, 632.5)"><rect class="basic label-container" style="" x="-92.203125" y="-24.5" width="184.40625" height="49"></rect><g class="label" style="" transform="translate(-64.203125, -10.5)"><rect></rect><foreignObject width="128.40625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Pare-feu : ufw status</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-132140-flowchart-G-11" data-look="classic" transform="translate(136, 742)"><rect class="basic label-container" style="" x="-128" y="-35" width="256" height="70"></rect><g class="label" style="" transform="translate(-100, -21)"><rect></rect><foreignObject width="200" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Corriger une chose, redémarrer, vérifier</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-132140-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-132140-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-132140-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<p>Les erreurs les plus fréquentes : faute de syntaxe dans un fichier de configuration, port déjà utilisé par un autre service, fichier ou dossier inexistant, droits insuffisants, disque plein (<code>df -h</code>).</p>
+<h2 id="à-retenir">9. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Linux est un noyau ; une distribution l’assemble avec des logiciels, des paquets, un cycle de support.</li>
+<li>Familles Debian (<code>apt</code>), Red Hat (<code>dnf</code>), SUSE (<code>zypper</code>). Version fixe et LTS pour les serveurs, rolling release à éviter en production.</li>
+<li><code>/etc</code> = configuration, <code>/var/log</code> = journaux, <code>/srv</code> = données servies, <code>/home</code> = utilisateurs.</li>
+<li><code>apt update</code> puis <code>apt upgrade</code> ; <code>systemctl status/start/enable</code> ; <code>journalctl -u service</code>.</li>
+<li>Disque : <code>lsblk</code>, partitionner, <code>mkfs</code>, monter, <code>/etc/fstab</code> par UUID avec <code>nofail</code>.</li>
+<li>Dépannage : status, journal, test de configuration, ports, pare-feu.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Quelle différence entre le noyau Linux et une distribution ?</li>
+<li>Citez deux distributions de la famille Red Hat et leur gestionnaire de paquets.</li>
+<li>Pourquoi évite-t-on une distribution <em>rolling release</em> sur un serveur ?</li>
+<li>Dans quel dossier trouve-t-on la configuration de nginx ? Ses journaux ?</li>
+<li>Quelle différence entre <code>apt update</code> et <code>apt upgrade</code> ?</li>
+<li>Quelle commande pour que nginx démarre automatiquement au démarrage de la machine ?</li>
+<li>Comment afficher les erreurs du démarrage en cours ?</li>
+<li>Pourquoi <code>/var/log/auth.log</code> n’existe-t-il pas sur votre Debian 13 ?</li>
+<li>Pourquoi désigner un disque par son UUID dans <code>/etc/fstab</code> ?</li>
+<li><code>systemctl restart nginx</code> échoue. Quelles sont vos trois premières commandes ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Le noyau gère le matériel ; la distribution l’assemble avec des logiciels, un gestionnaire de paquets et une politique de mises à jour.</li>
+<li>RHEL, Rocky Linux, AlmaLinux, Fedora : <code>dnf</code>.</li>
+<li>Les logiciels changent en permanence de version : risque de régression et d’incompatibilité, pas de stabilité garantie.</li>
+<li><code>/etc/nginx</code> ; <code>/var/log/nginx</code> (et <code>journalctl -u nginx</code>).</li>
+<li><code>update</code> rafraîchit la liste des paquets disponibles ; <code>upgrade</code> installe les mises à jour.</li>
+<li><code>sudo systemctl enable nginx</code>.</li>
+<li><code>journalctl -p err -b</code>.</li>
+<li><code>rsyslog</code> n’est plus installé par défaut : les journaux sont dans journald (<code>journalctl</code>).</li>
+<li>Le nom <code>sdb</code> peut changer (ordre de détection), l’UUID est propre au système de fichiers.</li>
+<li><code>systemctl status nginx</code>, <code>journalctl -u nginx -n 50</code>, <code>sudo nginx -t</code>.</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp07-bis-autorisations-avancees.html" data-seance="7"><span class="dir">‹ Page précédente</span><span class="titre">TP 7 bis : Autorisations avancées, propriétaire et délégation dans l'annuaire</span></a><a class="next" href="../tp/tp08-linux-admin.html" data-seance="8"><span class="dir">Page suivante ›</span><span class="titre">TP 8 : Administrer SRV-LNX-01</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>

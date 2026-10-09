@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 8 : Administrer SRV-LNX-01 | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Deux parties : une enquête en groupe sur une distribution Linux d&#x27;entreprise, présentée à l&#x27;oral, puis une série de tâches d&#x27;administration réelles sur SRV-LNX-01 : paquets, services, journaux, panne ">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item active" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp active" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Linux</span><span class="sep">›</span><a href="../cours/s08-linux-admin.html" data-seance="8">Séance 8</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 8</span>
+  <h1>TP 8 : Distributions et administration de SRV-LNX-01</h1>
+  <p class="lead">Deux parties : une enquête en groupe sur une distribution Linux d'entreprise, présentée à l'oral, puis une série de tâches d'administration réelles sur SRV-LNX-01 : paquets, services, journaux, panne de configuration à diagnostiquer et ajout d'un disque de données.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>2 h 15 (+ recherche avant la séance)</td></tr><tr><th>Machines virtuelles</th><td>SRV-LNX-01, CLI-LNX-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s08-linux-admin.html" data-seance="8">Séance 8 : Linux : distributions et administration</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#partie-a.-présenter-une-distribution-recherche-avant-la-séance-3-minutes-doral">Partie A. Présenter une distribution (recherche avant la séance, 3 minutes d’oral)</a></li><li><a href="#partie-b.-administrer-srv-lnx-01-1-h-40">Partie B. Administrer SRV-LNX-01 (1 h 40)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li></ul></nav>
+<article class="content">
+<h2 id="partie-a.-présenter-une-distribution-recherche-avant-la-séance-3-minutes-doral">Partie A. Présenter une distribution (recherche avant la séance, 3 minutes d’oral)</h2>
+<h3 id="consigne">Consigne</h3>
+<p>Par groupes de deux ou trois, vous présentez une distribution à la classe comme si vous deviez convaincre (ou dissuader) la DSI d’Hexalog de l’adopter pour ses serveurs. Distributions à répartir :</p>
+<p>Debian, Ubuntu Server, Red Hat Enterprise Linux, Rocky Linux, AlmaLinux, SUSE Linux Enterprise Server, Fedora Server, Arch Linux, Alpine Linux</p>
+<h3 id="grille-de-recherche-à-remplir-avant-la-séance-8">Grille de recherche (à remplir avant la séance 8)</h3>
+<p>Utilisez les sites officiels des projets et éditeurs, et citez vos sources.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Critère</th>
+<th>Votre réponse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Origine et organisation (entreprise, fondation, communauté)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Famille et distribution « parente »</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Modèle de publication (version fixe, LTS, rolling)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Version actuelle et date de fin de support</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Durée totale de support d’une version</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Support commercial : existe-t-il, par qui, combien environ ?</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Format de paquets et gestionnaire</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Gestion du réseau par défaut (ifupdown, Netplan, NetworkManager…)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Système de fichiers par défaut, pare-feu par défaut</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Usages typiques et exemples d’utilisateurs</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Présence dans le cloud (images officielles AWS, Azure, OVHcloud…)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Certifications professionnelles associées</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Points forts / points faibles pour Hexalog</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Votre recommandation en une phrase</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="présentation-3-minutes-par-groupe">Présentation (3 minutes par groupe)</h3>
+<p>Deux ou trois diapositives au maximum, ou la grille projetée. Les autres groupes remplissent un tableau comparatif de toutes les distributions présentées : il sera utile pour l’échange final et pour votre dossier.</p>
+<p><strong>Échange final (5 min)</strong> : quelle distribution pour les serveurs d’Hexalog ? Et pour un conteneur ? Et pour le poste d’un développeur ?</p>
+<h2 id="partie-b.-administrer-srv-lnx-01-1-h-40">Partie B. Administrer SRV-LNX-01 (1 h 40)</h2>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Avant la partie B</strong></p>
+<p>Le <a href="tp03-reseau.html">TP 3 : Adresses fixes, intranet et redirections</a> doit être terminé (étapes 1 à 6 : adresses fixes, DNS, intranet, redirections <code>web-srv</code> et <code>ssh-srv</code>), puis la partie C du <a href="tp04-cloud.html">TP 4 : Du schéma cloud au lab</a>. Ils se font au début du bloc pratique de cette séance.</p>
+</div></div>
+<p>Faites un snapshot <code>08-avant-admin</code> de SRV-LNX-01. Connectez-vous en SSH depuis l’hôte (<code>ssh -p 2222 sysadmin@127.0.0.1</code>) : c’est plus confortable que la console (copier-coller).</p>
+<h3 id="b.1-se-repérer">B.1, Se repérer</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">cat</span> /etc/os-release <span class="kw">;</span> <span class="fu">uname</span> <span class="at">-r</span> <span class="kw">;</span> <span class="fu">uptime</span></span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="fu">ls</span> /etc <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 30               <span class="co"># tout est configuration texte</span></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="fu">ls</span> /var/log</span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="fu">sudo</span> du <span class="at">-sh</span> /var/log/<span class="pp">*</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-h</span>   <span class="co"># qu'est-ce qui prend de la place ?</span></span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> /</span></code></pre></div></div>
+<h3 id="b.2-les-paquets">B.2, Les paquets</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">cat</span> /etc/apt/sources.list.d/debian.sources      <span class="co"># les dépôts configurés</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="ex">apt</span> list <span class="at">--upgradable</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="ex">apt</span> show nginx <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 15                      <span class="co"># version, dépendances, description</span></span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a><span class="ex">dpkg</span> <span class="at">-L</span> nginx <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 20                       <span class="co"># fichiers installés par le paquet</span></span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> htop tree</span>
+<span id="cb2-7"><a aria-hidden="true" href="#cb2-7" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 20 /var/log/apt/history.log              <span class="co"># l'historique garde la trace de vos installations</span></span></code></pre></div></div>
+<p>Répondez dans le journal : quelle version de nginx est installée ? De quels paquets dépend-il ? Combien de mises à jour sont en attente ?</p>
+<p>Installez les mises à jour de sécurité automatiques et vérifiez leur configuration :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> unattended-upgrades</span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="ex">systemctl</span> status unattended-upgrades <span class="at">--no-pager</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="fu">cat</span> /etc/apt/apt.conf.d/20auto-upgrades</span></code></pre></div></div>
+<h3 id="b.3-les-services">B.3, Les services</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="ex">systemctl</span> status nginx <span class="at">--no-pager</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="ex">systemctl</span> is-enabled nginx <span class="kw">;</span> <span class="ex">systemctl</span> is-active nginx</span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="ex">systemctl</span> list-units <span class="at">--type</span><span class="op">=</span>service <span class="at">--state</span><span class="op">=</span>running <span class="at">--no-pager</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="ex">systemctl</span> <span class="at">--failed</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="ex">systemctl</span> cat nginx                               <span class="co"># comment systemd lance nginx</span></span></code></pre></div></div>
+<p>Arrêtez nginx et observez l’effet depuis CLI-LNX-01 :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop nginx</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : CLI-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-I</span> http://srv-lnx-01          <span class="co"># quel message ? à quelle étape du diagnostic correspond-il ?</span></span></code></pre></div></div>
+<p>Puis testez la différence entre <code>stop</code> et <code>disable</code> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> systemctl start nginx</span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="fu">sudo</span> systemctl disable nginx</span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="fu">sudo</span> reboot</span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a><span class="co"># après redémarrage :</span></span>
+<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a><span class="ex">systemctl</span> is-active nginx          <span class="co"># ?</span></span>
+<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable <span class="at">--now</span> nginx</span></code></pre></div></div>
+<h3 id="b.4-les-journaux">B.4, Les journaux</h3>
+<p>Ouvrez <strong>deux</strong> sessions SSH sur SRV-LNX-01. Dans la première :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (session 1)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="fu">sudo</span> tail <span class="at">-f</span> /var/log/nginx/access.log</span></code></pre></div></div>
+<p>Depuis CLI-LNX-01, lancez plusieurs <code>curl http://srv-lnx-01</code> et <code>curl http://srv-lnx-01/nexiste-pas</code> : observez les lignes qui arrivent (code 200 ou 404). Dans la seconde session :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (session 2)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-u</span> nginx <span class="at">--no-pager</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-p</span> err <span class="at">-b</span> <span class="at">--no-pager</span></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">--since</span> <span class="st">"30 min ago"</span> <span class="at">--no-pager</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 30</span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-u</span> ssh <span class="at">-n</span> 10 <span class="at">--no-pager</span>                <span class="co"># vos connexions SSH</span></span></code></pre></div></div>
+<h3 id="b.5-une-panne-de-configuration">B.5, Une panne de configuration</h3>
+<p>Vous allez provoquer vous-même une erreur, pour apprendre à la lire :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'server { listen 8081 '</span> <span class="kw">|</span> <span class="fu">sudo</span> tee /etc/nginx/conf.d/test.conf</span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart nginx</span></code></pre></div></div>
+<p>Le redémarrage échoue. Sans supprimer le fichier tout de suite, diagnostiquez :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="ex">systemctl</span> status nginx <span class="at">--no-pager</span></span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-xeu</span> nginx <span class="at">--no-pager</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 20</span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a><span class="fu">sudo</span> nginx <span class="at">-t</span>                                      <span class="co"># test de syntaxe : fichier et ligne en cause</span></span></code></pre></div></div>
+<p>Notez le message exact, le fichier et la ligne signalés, puis corrigez (supprimez <code>test.conf</code>), testez avec <code>sudo nginx -t</code> et redémarrez. Le site est-il de nouveau accessible depuis CLI-LNX-01 ?</p>
+<p>Deuxième panne : un conflit de port.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop nginx</span>
+<span id="cb12-2"><a aria-hidden="true" href="#cb12-2" tabindex="-1"></a><span class="fu">sudo</span> python3 <span class="at">-m</span> http.server 80 <span class="kw">&amp;</span>                  <span class="co"># un autre programme prend le port 80</span></span>
+<span id="cb12-3"><a aria-hidden="true" href="#cb12-3" tabindex="-1"></a><span class="fu">sudo</span> systemctl start nginx                        <span class="co"># échec : pourquoi ?</span></span>
+<span id="cb12-4"><a aria-hidden="true" href="#cb12-4" tabindex="-1"></a><span class="fu">sudo</span> ss <span class="at">-tlnp</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">':80'</span>                        <span class="co"># qui occupe le port ?</span></span></code></pre></div></div>
+<p>Trouvez le numéro du processus, arrêtez-le (<code>sudo kill NUMERO</code>), puis redémarrez nginx.</p>
+<h3 id="b.6-un-disque-de-données-pour-srvpartages">B.6, Un disque de données pour /srv/partages</h3>
+<p>Éteignez SRV-LNX-01, ajoutez un disque <strong>VDI dynamique de 5 Go</strong> (<code>SRV-LNX-01-DATA</code>) sur le contrôleur SATA, redémarrez.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a aria-hidden="true" href="#cb13-1" tabindex="-1"></a><span class="ex">lsblk</span>                                              <span class="co"># le nouveau disque : sdb, sans partition</span></span>
+<span id="cb13-2"><a aria-hidden="true" href="#cb13-2" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> parted</span>
+<span id="cb13-3"><a aria-hidden="true" href="#cb13-3" tabindex="-1"></a><span class="fu">sudo</span> parted /dev/sdb <span class="at">--script</span> mklabel gpt mkpart data ext4 0% 100%</span>
+<span id="cb13-4"><a aria-hidden="true" href="#cb13-4" tabindex="-1"></a><span class="ex">lsblk</span>                                              <span class="co"># sdb1 apparaît</span></span>
+<span id="cb13-5"><a aria-hidden="true" href="#cb13-5" tabindex="-1"></a><span class="fu">sudo</span> mkfs.ext4 <span class="at">-L</span> DATA /dev/sdb1</span>
+<span id="cb13-6"><a aria-hidden="true" href="#cb13-6" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /srv/partages</span>
+<span id="cb13-7"><a aria-hidden="true" href="#cb13-7" tabindex="-1"></a><span class="fu">sudo</span> blkid /dev/sdb1                               <span class="co"># relevez l'UUID</span></span></code></pre></div></div>
+<div class="callout danger"><div class="callout-body"><p class="callout-titre"><strong>Vérifiez deux fois le nom du disque</strong></p>
+<p><code>parted</code> et <code>mkfs</code> effacent le disque visé sans demander confirmation. Si vous vous trompez de disque (<code>sda</code> au lieu de <code>sdb</code>), vous effacez le système. Contrôlez avec <code>lsblk</code> : le disque à préparer est celui de 5 Go, sans partition.</p>
+</div></div>
+<p>Ajoutez la ligne de montage à <code>/etc/fstab</code> (remplacez l’UUID par le vôtre) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a aria-hidden="true" href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> cp /etc/fstab /etc/fstab.bak</span>
+<span id="cb14-2"><a aria-hidden="true" href="#cb14-2" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'UUID=VOTRE-UUID  /srv/partages  ext4  defaults,nofail  0  2'</span> <span class="kw">|</span> <span class="fu">sudo</span> tee <span class="at">-a</span> /etc/fstab</span>
+<span id="cb14-3"><a aria-hidden="true" href="#cb14-3" tabindex="-1"></a><span class="fu">sudo</span> systemctl daemon-reload</span>
+<span id="cb14-4"><a aria-hidden="true" href="#cb14-4" tabindex="-1"></a><span class="fu">sudo</span> mount <span class="at">-a</span>                                      <span class="co"># monte tout ce qui est dans fstab : aucune erreur attendue</span></span>
+<span id="cb14-5"><a aria-hidden="true" href="#cb14-5" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> /srv/partages</span>
+<span id="cb14-6"><a aria-hidden="true" href="#cb14-6" tabindex="-1"></a><span class="fu">sudo</span> reboot</span>
+<span id="cb14-7"><a aria-hidden="true" href="#cb14-7" tabindex="-1"></a><span class="co"># après redémarrage :</span></span>
+<span id="cb14-8"><a aria-hidden="true" href="#cb14-8" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> /srv/partages                                <span class="co"># toujours monté ?</span></span></code></pre></div></div>
+<h3 id="b.7-bilan-et-snapshot">B.7, Bilan et snapshot</h3>
+<p>Complétez l’inventaire de SRV-LNX-01 : version, services actifs et ports (<code>sudo ss -tulpn</code>), disques et points de montage, mises à jour automatiques. Faites un snapshot <code>08-admin</code>.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Grille de recherche complète avec sources, présentation faite.</label></li>
+<li><label><input type="checkbox"/><code>unattended-upgrades</code> installé et actif.</label></li>
+<li><label><input type="checkbox"/>nginx <code>enabled</code> et <code>active</code>, le site répond depuis CLI-LNX-01.</label></li>
+<li><label><input type="checkbox"/>Les deux pannes ont été diagnostiquées avec le message d’erreur noté.</label></li>
+<li><label><input type="checkbox"/><code>/srv/partages</code> monté depuis <code>/dev/sdb1</code> par UUID, toujours présent après redémarrage.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Quelle différence avez-vous constatée entre <code>systemctl stop</code> et <code>systemctl disable</code> ?</li>
+<li>Quel est le rôle de <code>nginx -t</code> ? Connaissez-vous d’autres services qui ont une commande de test équivalente ?</li>
+<li>Pourquoi l’option <code>nofail</code> dans <code>/etc/fstab</code> ?</li>
+<li>Que se passerait-il au redémarrage si vous aviez fait une faute de frappe dans l’UUID sans <code>nofail</code> ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>mount -a</code> affiche une erreur</td>
+<td>ligne fstab mal écrite : restaurer <code>fstab.bak</code>, recommencer</td>
+</tr>
+<tr class="even">
+<td>Le serveur démarre en <em>emergency mode</em></td>
+<td>fstab incorrect sans <code>nofail</code> : saisir le mot de passe de sysadmin, corriger <code>/etc/fstab</code>, <code>reboot</code></td>
+</tr>
+<tr class="odd">
+<td><code>parted</code> : <code>/dev/sdb</code> introuvable</td>
+<td>disque non ajouté ou VM non redémarrée : <code>lsblk</code></td>
+</tr>
+<tr class="even">
+<td><code>python3 -m http.server 80</code> échoue</td>
+<td>nginx tourne encore : l’arrêter d’abord</td>
+</tr>
+<tr class="odd">
+<td><code>apt</code> : « Could not get lock »</td>
+<td>une autre installation (mises à jour automatiques) est en cours : attendre une minute</td>
+</tr>
+</tbody>
+</table></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s08-linux-admin.html" data-seance="8"><span class="dir">‹ Page précédente</span><span class="titre">Séance 8 : Linux : distributions et administration</span></a><a class="next" href="../cours/s09-linux-droits.html" data-seance="9"><span class="dir">Page suivante ›</span><span class="titre">Séance 9 : Linux : comptes, droits, ACL et sudo</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>
