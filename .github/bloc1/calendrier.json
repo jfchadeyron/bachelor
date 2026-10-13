@@ -1,5 +1,6 @@
 {
-  "commentaire": "Date de mise en ligne du cours et du TP de chaque séance (AAAA-MM-JJ). La publication a lieu tôt le matin, heure de Paris.",
+  "commentaire": "Date de chaque séance (AAAA-MM-JJ). Le cours et le TP d'une séance sont mis en ligne tôt le matin de sa date (heure de Paris), avec en plus « avance » séance(s) suivante(s) : avec 1, la séance suivante est toujours déjà en ligne. Mettre 0 pour revenir à une mise en ligne le jour même.",
+  "avance": 1,
   "seances": [
     {"numero": 1, "date": "2026-09-29", "titre": "Environnements et premier lab"},
     {"numero": 2, "date": "2026-10-01", "titre": "VirtualBox : snapshots, clones, réseaux"},
