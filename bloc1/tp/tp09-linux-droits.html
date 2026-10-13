@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 9 : Partages Linux et délégation sudo | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Vous reproduisez sous Linux la matrice des droits mise en place sur le serveur Windows : comptes et groupes locaux, dossiers partagés avec setgid, ACL et héritage, sticky bit sur le dossier commun. Pu">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item active" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp active" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Linux</span><span class="sep">›</span><a href="../cours/s09-linux-droits.html" data-seance="9">Séance 9</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 9</span>
+  <h1>TP 9 : Partages Linux et délégation sudo</h1>
+  <p class="lead">Vous reproduisez sous Linux la matrice des droits mise en place sur le serveur Windows : comptes et groupes locaux, dossiers partagés avec setgid, ACL et héritage, sticky bit sur le dossier commun. Puis vous confiez à un technicien la gestion de nginx, et rien d'autre, avec sudo. Un TD compare enfin les deux systèmes.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>2 h 30</td></tr><tr><th>Machines virtuelles</th><td>SRV-LNX-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s09-linux-droits.html" data-seance="9">Séance 9 : Linux : comptes, droits, ACL et sudo</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#étape-1.-groupes-et-comptes">Étape 1. Groupes et comptes</a></li><li><a href="#étape-2.-observer-le-umask-et-le-problème-du-groupe">Étape 2. Observer le umask et le problème du groupe</a></li><li><a href="#étape-3.-créer-les-dossiers-partagés">Étape 3. Créer les dossiers partagés</a></li><li><a href="#étape-4.-tester">Étape 4. Tester</a></li><li><a href="#étape-5.-déléguer-la-gestion-de-nginx">Étape 5. Déléguer la gestion de nginx</a></li><li><a href="#étape-6.-verrouiller-un-compte">Étape 6. Verrouiller un compte</a></li><li><a href="#étape-7.-td-windows-et-linux-face-à-face">Étape 7. TD : Windows et Linux face à face</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Hexalog veut héberger une copie de travail des dossiers de services sur <code>SRV-LNX-01</code> (dans <code>/srv/partages</code>, sur le disque de données ajouté à la séance 8). Les droits doivent respecter <strong>la même matrice</strong> que sur le serveur Windows. Par ailleurs, Nicolas Fournier doit pouvoir redémarrer le serveur web en cas de problème, sans être administrateur complet de la machine.</p>
+<p>Rappel de la matrice :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Dossier</th>
+<th>direction</th>
+<th>rh</th>
+<th>compta</th>
+<th>exploitation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>commun</code></td>
+<td>lecture-écriture</td>
+<td>lecture-écriture</td>
+<td>lecture-écriture</td>
+<td>lecture-écriture</td>
+</tr>
+<tr class="even">
+<td><code>direction</code></td>
+<td>lecture-écriture</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>rh</code></td>
+<td>lecture seule</td>
+<td>lecture-écriture</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>compta</code></td>
+<td>lecture seule</td>
+<td></td>
+<td>lecture-écriture</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>exploitation</code></td>
+<td>lecture seule</td>
+<td></td>
+<td></td>
+<td>lecture-écriture</td>
+</tr>
+</tbody>
+</table></div>
+<p>Règle supplémentaire pour <code>commun</code> : chacun peut lire et modifier les fichiers des autres, mais <strong>pas les supprimer</strong>.</p>
+<h2 id="étape-1.-groupes-et-comptes">Étape 1. Groupes et comptes</h2>
+<p>Faites un snapshot <code>09-avant-droits</code>. Puis sur SRV-LNX-01 :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="cf">for</span> g <span class="kw">in</span> salaries direction rh compta exploitation web-ops <span class="kw">;</span> <span class="cf">do</span> <span class="fu">sudo</span> groupadd <span class="st">"</span><span class="va">$g</span><span class="st">"</span> <span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="co"># identifiant:groupe du service</span></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="cf">for</span> u <span class="kw">in</span> cdubois:direction slaurent:rh amartin:compta tpetit:compta jmoreau:exploitation egarcia:exploitation <span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a>    <span class="va">login</span><span class="op">=</span><span class="st">"</span><span class="va">${u</span><span class="op">%%</span>:<span class="pp">*</span><span class="va">}</span><span class="st">"</span> <span class="kw">;</span> <span class="va">service</span><span class="op">=</span><span class="st">"</span><span class="va">${u</span><span class="op">##</span><span class="pp">*</span>:<span class="va">}</span><span class="st">"</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a>    <span class="fu">sudo</span> useradd <span class="at">-m</span> <span class="at">-s</span> /bin/bash <span class="at">-G</span> <span class="st">"</span><span class="va">$service</span><span class="st">,salaries"</span> <span class="st">"</span><span class="va">$login</span><span class="st">"</span></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb1-8"><a aria-hidden="true" href="#cb1-8" tabindex="-1"></a><span class="fu">sudo</span> useradd <span class="at">-m</span> <span class="at">-s</span> /bin/bash <span class="at">-c</span> <span class="st">"Nicolas Fournier"</span> <span class="at">-G</span> web-ops nfournier</span>
+<span id="cb1-9"><a aria-hidden="true" href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a aria-hidden="true" href="#cb1-10" tabindex="-1"></a><span class="bu">read</span> <span class="at">-s</span> <span class="at">-p</span> <span class="st">"Mot de passe de lab : "</span> <span class="va">MDP</span> <span class="kw">;</span> <span class="bu">echo</span></span>
+<span id="cb1-11"><a aria-hidden="true" href="#cb1-11" tabindex="-1"></a><span class="cf">for</span> login <span class="kw">in</span> cdubois slaurent amartin tpetit jmoreau egarcia nfournier <span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb1-12"><a aria-hidden="true" href="#cb1-12" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"</span><span class="va">$login</span><span class="st">:</span><span class="va">$MDP</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">sudo</span> chpasswd</span>
+<span id="cb1-13"><a aria-hidden="true" href="#cb1-13" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb1-14"><a aria-hidden="true" href="#cb1-14" tabindex="-1"></a><span class="bu">unset</span> <span class="va">MDP</span></span></code></pre></div></div>
+<p>Vérifiez :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">id</span> amartin <span class="kw">;</span> <span class="fu">id</span> cdubois <span class="kw">;</span> <span class="fu">id</span> nfournier</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="fu">getent</span> group compta salaries web-ops</span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="fu">sudo</span> tail <span class="at">-n</span> 8 /etc/passwd</span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="fu">sudo</span> tail <span class="at">-n</span> 8 /etc/shadow           <span class="co"># repérez l'empreinte ($y$ = algorithme yescrypt)</span></span></code></pre></div></div>
+<p>Dans votre journal, décomposez la ligne de <code>amartin</code> dans <code>/etc/passwd</code> champ par champ.</p>
+<h2 id="étape-2.-observer-le-umask-et-le-problème-du-groupe">Étape 2. Observer le umask et le problème du groupe</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="bu">umask</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="fu">mkdir</span> ~/essai <span class="kw">&amp;&amp;</span> <span class="fu">touch</span> ~/essai/fichier</span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-ld</span> ~/essai <span class="kw">&amp;&amp;</span> <span class="fu">ls</span> <span class="at">-l</span> ~/essai</span></code></pre></div></div>
+<p>Expliquez les droits obtenus à partir du umask. Puis constatez le problème à résoudre :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">sudo</span> mkdir /srv/partages/test <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> chown root:compta /srv/partages/test <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> chmod 770 /srv/partages/test</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> amartin touch /srv/partages/test/facture.txt</span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> /srv/partages/test                                    <span class="co"># à quel groupe appartient le fichier ?</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> tpetit sh <span class="at">-c</span> <span class="st">'echo ajout &gt;&gt; /srv/partages/test/facture.txt'</span>   <span class="co"># Thomas peut-il le modifier ?</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="fu">sudo</span> rm <span class="at">-r</span> /srv/partages/test</span></code></pre></div></div>
+<p><code>sudo -u amartin commande</code> exécute la commande en tant qu’Alice : c’est la façon la plus rapide de tester des droits.</p>
+<h2 id="étape-3.-créer-les-dossiers-partagés">Étape 3. Créer les dossiers partagés</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> acl</span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="bu">cd</span> /srv/partages</span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="fu">sudo</span> mkdir commun direction rh compta exploitation</span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="fu">sudo</span> chmod 755 /srv/partages</span>
+<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a aria-hidden="true" href="#cb5-6" tabindex="-1"></a><span class="co"># Propriétaire root, groupe du service, setgid, rien pour les autres</span></span>
+<span id="cb5-7"><a aria-hidden="true" href="#cb5-7" tabindex="-1"></a><span class="fu">sudo</span> chown root:salaries commun      <span class="kw">;</span> <span class="fu">sudo</span> chmod 3770 commun      <span class="co"># + sticky bit</span></span>
+<span id="cb5-8"><a aria-hidden="true" href="#cb5-8" tabindex="-1"></a><span class="fu">sudo</span> chown root:direction direction  <span class="kw">;</span> <span class="fu">sudo</span> chmod 2770 direction</span>
+<span id="cb5-9"><a aria-hidden="true" href="#cb5-9" tabindex="-1"></a><span class="fu">sudo</span> chown root:rh rh                <span class="kw">;</span> <span class="fu">sudo</span> chmod 2770 rh</span>
+<span id="cb5-10"><a aria-hidden="true" href="#cb5-10" tabindex="-1"></a><span class="fu">sudo</span> chown root:compta compta        <span class="kw">;</span> <span class="fu">sudo</span> chmod 2770 compta</span>
+<span id="cb5-11"><a aria-hidden="true" href="#cb5-11" tabindex="-1"></a><span class="fu">sudo</span> chown root:exploitation exploitation <span class="kw">;</span> <span class="fu">sudo</span> chmod 2770 exploitation</span>
+<span id="cb5-12"><a aria-hidden="true" href="#cb5-12" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> /srv/partages</span></code></pre></div></div>
+<p>Ajoutez les ACL : lecture pour la direction sur trois dossiers, et partout une ACL par défaut qui donne la lecture-écriture au groupe du dossier pour les futurs fichiers.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> rh compta exploitation <span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a>    <span class="fu">sudo</span> setfacl <span class="at">-m</span> g:direction:rx /srv/partages/<span class="va">$d</span></span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a>    <span class="fu">sudo</span> setfacl <span class="at">-d</span> <span class="at">-m</span> g::rwx,g:direction:rx,o::--- /srv/partages/<span class="va">$d</span></span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> commun direction <span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a>    <span class="fu">sudo</span> setfacl <span class="at">-d</span> <span class="at">-m</span> g::rwx,o::--- /srv/partages/<span class="va">$d</span></span>
+<span id="cb6-7"><a aria-hidden="true" href="#cb6-7" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb6-8"><a aria-hidden="true" href="#cb6-8" tabindex="-1"></a><span class="ex">getfacl</span> /srv/partages/compta</span>
+<span id="cb6-9"><a aria-hidden="true" href="#cb6-9" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> /srv/partages</span></code></pre></div></div>
+<h2 id="étape-4.-tester">Étape 4. Tester</h2>
+<p>Recopiez et complétez la matrice de tests. <code>Permission denied</code> = refus.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="va">P</span><span class="op">=</span>/srv/partages</span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> amartin sh <span class="at">-c</span> <span class="st">"echo 'Facture 001' &gt; </span><span class="va">$P</span><span class="st">/compta/facture-001.txt"</span></span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="va">$P</span>/compta <span class="kw">;</span> <span class="ex">getfacl</span> <span class="va">$P</span>/compta/facture-001.txt        <span class="co"># droits hérités ?</span></span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> tpetit  sh <span class="at">-c</span> <span class="st">"echo 'ligne ajoutée' &gt;&gt; </span><span class="va">$P</span><span class="st">/compta/facture-001.txt"</span>   <span class="co"># collègue : modification</span></span>
+<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> cdubois cat <span class="va">$P</span>/compta/facture-001.txt                                <span class="co"># direction : lecture</span></span>
+<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> cdubois touch <span class="va">$P</span>/compta/note-direction.txt                           <span class="co"># direction : écriture ?</span></span>
+<span id="cb7-7"><a aria-hidden="true" href="#cb7-7" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> jmoreau ls <span class="va">$P</span>/compta                                                 <span class="co"># exploitation : accès ?</span></span>
+<span id="cb7-8"><a aria-hidden="true" href="#cb7-8" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> egarcia sh <span class="at">-c</span> <span class="st">"echo 'planning' &gt; </span><span class="va">$P</span><span class="st">/commun/planning.txt"</span></span>
+<span id="cb7-9"><a aria-hidden="true" href="#cb7-9" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> amartin sh <span class="at">-c</span> <span class="st">"echo 'modif' &gt;&gt; </span><span class="va">$P</span><span class="st">/commun/planning.txt"</span>               <span class="co"># commun : modification</span></span>
+<span id="cb7-10"><a aria-hidden="true" href="#cb7-10" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> amartin rm <span class="va">$P</span>/commun/planning.txt                                    <span class="co"># commun : suppression ?</span></span>
+<span id="cb7-11"><a aria-hidden="true" href="#cb7-11" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> slaurent ls <span class="va">$P</span>/direction                                             <span class="co"># RH dans direction ?</span></span></code></pre></div></div>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Compte</th>
+<th>Dossier</th>
+<th>Action</th>
+<th>Attendu</th>
+<th>Obtenu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>amartin</td>
+<td>compta</td>
+<td>créer un fichier</td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>tpetit</td>
+<td>compta</td>
+<td>modifier le fichier d’Alice</td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>cdubois</td>
+<td>compta</td>
+<td>lire</td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>cdubois</td>
+<td>compta</td>
+<td>créer</td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>jmoreau</td>
+<td>compta</td>
+<td>lister</td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>amartin</td>
+<td>commun</td>
+<td>modifier le fichier d’Emma</td>
+<td>autorisé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>amartin</td>
+<td>commun</td>
+<td>supprimer le fichier d’Emma</td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>slaurent</td>
+<td>direction</td>
+<td>lister</td>
+<td>refusé</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Ajoutez au moins quatre tests pour couvrir <code>rh</code> et <code>exploitation</code>.</p>
+<h2 id="étape-5.-déléguer-la-gestion-de-nginx">Étape 5. Déléguer la gestion de nginx</h2>
+<p>Créez le fichier de règles <strong>avec visudo</strong> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-f</span> /etc/sudoers.d/web-ops</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/sudoers.d/web-ops</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="co"># Rôle opérateurs web : gérer le service nginx uniquement</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="dt">Cmnd_Alias NGINX </span><span class="ot">=</span><span class="st"> /usr/bin/systemctl restart nginx, /usr/bin/systemctl reload nginx, \</span></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="dt">                   /usr/bin/systemctl status nginx, /usr/sbin/nginx -t</span></span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="dt">%web-ops ALL</span><span class="ot">=</span><span class="st">(root) NGINX</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-c</span></span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-l</span> <span class="at">-U</span> nfournier</span></code></pre></div></div>
+<p>Testez en tant que Nicolas (ouvrez une session avec son compte) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="fu">su</span> <span class="at">-</span> nfournier</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (nfournier)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-l</span></span>
+<span id="cb12-2"><a aria-hidden="true" href="#cb12-2" tabindex="-1"></a><span class="fu">sudo</span> /usr/sbin/nginx <span class="at">-t</span></span>
+<span id="cb12-3"><a aria-hidden="true" href="#cb12-3" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart nginx          <span class="co"># autorisé</span></span>
+<span id="cb12-4"><a aria-hidden="true" href="#cb12-4" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop nginx             <span class="co"># refusé : pourquoi ?</span></span>
+<span id="cb12-5"><a aria-hidden="true" href="#cb12-5" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> cowsay            <span class="co"># refusé</span></span>
+<span id="cb12-6"><a aria-hidden="true" href="#cb12-6" tabindex="-1"></a><span class="fu">cat</span> /etc/shadow                       <span class="co"># refusé</span></span>
+<span id="cb12-7"><a aria-hidden="true" href="#cb12-7" tabindex="-1"></a><span class="bu">exit</span></span></code></pre></div></div>
+<p>Retrouvez les traces :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a aria-hidden="true" href="#cb13-1" tabindex="-1"></a><span class="fu">sudo</span> journalctl _COMM=sudo <span class="at">--since</span> <span class="st">"15 min ago"</span> <span class="at">--no-pager</span></span></code></pre></div></div>
+<p>Repérez pour chaque tentative : qui, quand, depuis quel terminal, quelle commande, et si elle a été acceptée (<code>COMMAND=</code>) ou refusée (<code>command not allowed</code>).</p>
+<h2 id="étape-6.-verrouiller-un-compte">Étape 6. Verrouiller un compte</h2>
+<p>Thomas Petit part en congé longue durée : son compte doit être bloqué sans être supprimé.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a aria-hidden="true" href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-L</span> tpetit</span>
+<span id="cb14-2"><a aria-hidden="true" href="#cb14-2" tabindex="-1"></a><span class="fu">sudo</span> passwd <span class="at">-S</span> tpetit          <span class="co"># L = locked</span></span>
+<span id="cb14-3"><a aria-hidden="true" href="#cb14-3" tabindex="-1"></a><span class="fu">su</span> <span class="at">-</span> tpetit                    <span class="co"># échec avec le bon mot de passe</span></span>
+<span id="cb14-4"><a aria-hidden="true" href="#cb14-4" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-U</span> tpetit         <span class="co"># déverrouillage à son retour</span></span>
+<span id="cb14-5"><a aria-hidden="true" href="#cb14-5" tabindex="-1"></a><span class="fu">sudo</span> chage <span class="at">-l</span> tpetit</span></code></pre></div></div>
+<p>Faites un snapshot <code>09-droits-linux</code> et mettez à jour l’inventaire (comptes, groupes, partages, règles sudo).</p>
+<h2 id="étape-7.-td-windows-et-linux-face-à-face">Étape 7. TD : Windows et Linux face à face</h2>
+<p>Complétez le tableau suivant à partir des séances 6, 7 et 9. Il sera corrigé en classe.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Windows Server / Active Directory</th>
+<th>Linux</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Où sont stockés les comptes locaux ? Les comptes centralisés ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Comment est identifié de façon unique un utilisateur ou un groupe ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Quel compte ou groupe a tous les droits ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Comment un administrateur exécute-t-il une tâche avec des privilèges élevés ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Quels droits de base peut-on accorder sur un dossier ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Combien d’utilisateurs ou de groupes peut-on autoriser sur un même dossier ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Comment les nouveaux fichiers reçoivent-ils leurs droits (héritage) ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Peut-on refuser explicitement un accès ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Commande pour afficher et modifier les droits</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Comment délègue-t-on une tâche d’administration précise ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Où trouve-t-on les traces des connexions et des élévations de privilèges ?</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Quand un ajout à un groupe prend-il effet ?</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Sept comptes et six groupes créés ; chaque salarié dans son groupe de service et dans <code>salaries</code>.</label></li>
+<li><label><input type="checkbox"/><code>ls -l /srv/partages</code> montre <code>drwxrws---+</code> (ou <code>drwxrws--T+</code> pour <code>commun</code>) avec les bons groupes.</label></li>
+<li><label><input type="checkbox"/>La matrice de tests est complète et conforme ; un fichier créé par Alice est modifiable par Thomas.</label></li>
+<li><label><input type="checkbox"/><code>sudo -l -U nfournier</code> n’affiche que les commandes nginx ; les refus sont visibles dans le journal.</label></li>
+<li><label><input type="checkbox"/>Le TD est complété.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Sans le bit setgid, à quel groupe appartiendrait <code>facture-001.txt</code> ? Qui pourrait le lire ?</li>
+<li>Sans l’ACL par défaut, Thomas aurait-il pu modifier le fichier d’Alice ? Pourquoi ?</li>
+<li>Pourquoi <code>sudo systemctl stop nginx</code> est-il refusé à Nicolas alors que <code>restart</code> est autorisé ?</li>
+<li>Que se passerait-il si on avait autorisé <code>/usr/bin/systemctl *</code> pour le groupe <code>web-ops</code> ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>setfacl: command not found</code></td>
+<td>paquet <code>acl</code> non installé</td>
+</tr>
+<tr class="even">
+<td><code>setfacl: Operation not supported</code></td>
+<td>système de fichiers monté sans ACL (rare avec ext4) ; vérifier que <code>/srv/partages</code> est bien sur <code>/dev/sdb1</code></td>
+</tr>
+<tr class="odd">
+<td>Un fichier créé n’a pas le groupe du dossier</td>
+<td>bit setgid absent : <code>ls -ld</code> doit montrer un <code>s</code> dans les droits du groupe</td>
+</tr>
+<tr class="even">
+<td><code>visudo</code> signale une erreur</td>
+<td>lire la ligne indiquée, choisir <code>e</code> pour corriger ; ne jamais forcer l’enregistrement</td>
+</tr>
+<tr class="odd">
+<td><code>sudo: /etc/sudoers.d/web-ops is world writable</code> ou ignoré</td>
+<td>droits du fichier : <code>sudo chmod 440 /etc/sudoers.d/web-ops</code></td>
+</tr>
+<tr class="even">
+<td><code>su - nfournier</code> : échec d’authentification</td>
+<td>mot de passe non défini : relancer la boucle <code>chpasswd</code> pour ce compte</td>
+</tr>
+</tbody>
+</table></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s09-linux-droits.html" data-seance="9"><span class="dir">‹ Page précédente</span><span class="titre">Séance 9 : Linux : comptes, droits, ACL et sudo</span></a><a class="next" href="../cours/s10-ssh.html" data-seance="10"><span class="dir">Page suivante ›</span><span class="titre">Séance 10 : SSH : accès sécurisé par clés</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

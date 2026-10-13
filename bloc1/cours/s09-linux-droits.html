@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 9 : Linux : comptes, droits, ACL et sudo | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Sous Linux, chaque fichier appartient à un utilisateur et à un groupe, avec trois jeux de droits. Cette séance explique comment sont stockés les comptes, comment lire et modifier les permissions, comm">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="../tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="../tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="../tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="../tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="../tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="../tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="../tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../tp/tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="../tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item active" data-seance="9"><a class="nav-link" href="s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="../tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="../tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="../tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="../tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="../tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="../tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Linux</span><span class="sep">›</span><span>Séance 9</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 9</span>
+  <h1>Linux : comptes, permissions, ACL et sudo</h1>
+  <p class="lead">Sous Linux, chaque fichier appartient à un utilisateur et à un groupe, avec trois jeux de droits. Cette séance explique comment sont stockés les comptes, comment lire et modifier les permissions, comment faire des dossiers partagés propres avec le bit setgid et les ACL, et comment déléguer des tâches d'administration précises avec sudo.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séance 8</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp09-linux-droits.html" data-seance="9">TP 9 : Partages Linux et délégation sudo</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#utilisateurs-et-groupes">1. Utilisateurs et groupes</a></li><li><a href="#les-permissions-unix">2. Les permissions Unix</a></li><li><a href="#les-bits-spéciaux">3. Les bits spéciaux</a></li><li><a href="#les-acl-posix">4. Les ACL POSIX</a></li><li><a href="#déléguer-avec-sudo">5. Déléguer avec sudo</a></li><li><a href="#et-sous-windows">6. Et sous Windows ?</a></li><li><a href="#à-retenir">7. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Lire les fichiers de comptes (<code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code>) et gérer utilisateurs et groupes.</li>
+<li>Interpréter la sortie de <code>ls -l</code> et modifier les droits en notation symbolique et octale.</li>
+<li>Expliquer le <code>umask</code> et les bits spéciaux (setuid, setgid, sticky).</li>
+<li>Utiliser les ACL POSIX, y compris les ACL par défaut (héritage).</li>
+<li>Configurer une délégation <code>sudo</code> restreinte à quelques commandes et en vérifier les traces.</li>
+<li>Comparer le modèle de droits Linux avec celui de Windows.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 h 15</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>2 h 30</td>
+<td><a data-seance="9" href="../tp/tp09-linux-droits.html">TP 9 : Partages Linux et délégation sudo</a> (dont TD de comparaison Windows / Linux)</td>
+</tr>
+<tr class="odd">
+<td>15 min</td>
+<td>Quiz</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="utilisateurs-et-groupes">1. Utilisateurs et groupes</h2>
+<h3 id="où-sont-stockés-les-comptes">Où sont stockés les comptes</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Fichier</th>
+<th>Contenu</th>
+<th>Lisible par</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/etc/passwd</code></td>
+<td>la liste des comptes</td>
+<td>tout le monde</td>
+</tr>
+<tr class="even">
+<td><code>/etc/shadow</code></td>
+<td>les mots de passe <strong>hachés</strong> et leurs règles d’expiration</td>
+<td>root seulement</td>
+</tr>
+<tr class="odd">
+<td><code>/etc/group</code></td>
+<td>les groupes et leurs membres</td>
+<td>tout le monde</td>
+</tr>
+</tbody>
+</table></div>
+<p>Une ligne de <code>/etc/passwd</code> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/passwd</span><button class="copy" type="button">Copier</button></div><pre class="text"><code>amartin:x:1002:1002:Alice Martin:/home/amartin:/bin/bash
+# identifiant : x (mot de passe dans shadow) : UID : GID du groupe principal : commentaire : dossier personnel : shell</code></pre></div>
+<ul>
+<li><strong>UID 0</strong> : root, tous les droits. <strong>1 à 999</strong> : comptes système (services : <code>www-data</code> pour nginx, <code>sshd</code>…). <strong>1000 et plus</strong> : utilisateurs.</li>
+<li>Chaque utilisateur a un <strong>groupe principal</strong> (souvent un groupe à son nom) et des <strong>groupes secondaires</strong> qui lui donnent des droits supplémentaires.</li>
+<li>Un compte de service a souvent le shell <code>/usr/sbin/nologin</code> : il ne peut pas ouvrir de session.</li>
+<li>Le mot de passe n’est jamais stocké en clair : <code>/etc/shadow</code> contient une <strong>empreinte</strong> (hachage) calculée avec un algorithme lent (yescrypt sous Debian) et un sel aléatoire.</li>
+</ul>
+<h3 id="les-commandes">Les commandes</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Action</th>
+<th>Commande</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>qui suis-je, mes groupes</td>
+<td><code>id</code>, <code>id amartin</code>, <code>groups amartin</code></td>
+</tr>
+<tr class="even">
+<td>infos d’un compte ou d’un groupe</td>
+<td><code>getent passwd amartin</code>, <code>getent group compta</code></td>
+</tr>
+<tr class="odd">
+<td>créer un utilisateur (Debian, interactif)</td>
+<td><code>sudo adduser amartin</code></td>
+</tr>
+<tr class="even">
+<td>créer un utilisateur (toutes distributions)</td>
+<td><code>sudo useradd -m -s /bin/bash -c "Alice Martin" amartin</code></td>
+</tr>
+<tr class="odd">
+<td>définir un mot de passe</td>
+<td><code>sudo passwd amartin</code></td>
+</tr>
+<tr class="even">
+<td>créer un groupe</td>
+<td><code>sudo groupadd compta</code></td>
+</tr>
+<tr class="odd">
+<td>ajouter à un groupe secondaire</td>
+<td><code>sudo usermod -aG compta amartin</code> ou <code>sudo gpasswd -a amartin compta</code></td>
+</tr>
+<tr class="even">
+<td>retirer d’un groupe</td>
+<td><code>sudo gpasswd -d amartin compta</code></td>
+</tr>
+<tr class="odd">
+<td>verrouiller / déverrouiller</td>
+<td><code>sudo usermod -L amartin</code> / <code>sudo usermod -U amartin</code></td>
+</tr>
+<tr class="even">
+<td>expiration du mot de passe</td>
+<td><code>sudo chage -l amartin</code>, <code>sudo chage -M 90 amartin</code></td>
+</tr>
+<tr class="odd">
+<td>supprimer (avec le dossier personnel)</td>
+<td><code>sudo userdel -r amartin</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout danger"><div class="callout-body"><p class="callout-titre"><strong>Le piège de usermod -G</strong></p>
+<p><code>usermod -G compta amartin</code> <strong>remplace</strong> tous les groupes secondaires d’Alice par <code>compta</code> : elle perd les autres (dont <code>sudo</code> si elle l’avait). Il faut toujours <code>-aG</code> (<em>append</em>).</p>
+</div></div>
+<p>Le dossier <code>/etc/skel</code> contient les fichiers copiés dans chaque nouveau dossier personnel ; <code>/etc/login.defs</code> fixe les valeurs par défaut (plages d’UID, durée de vie des mots de passe, umask).</p>
+<p>Comme sous Windows, un changement de groupe ne s’applique qu’à la <strong>prochaine ouverture de session</strong> de l’utilisateur.</p>
+<h2 id="les-permissions-unix">2. Les permissions Unix</h2>
+<h3 id="lire-ls--l">Lire <code>ls -l</code></h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><pre class="text"><code>-rw-r-----  1 amartin compta  2048  bilan.ods
+drwxrws---  2 root    compta  4096  compta
+│└┬┘└┬┘└┬┘     └──┬──┘ └──┬─┘
+│ │  │  │        │       └ groupe propriétaire
+│ │  │  │        └ utilisateur propriétaire
+│ │  │  └ droits des autres (others)
+│ │  └ droits du groupe (group)
+│ └ droits du propriétaire (user)
+└ type : - fichier, d dossier, l lien symbolique</code></pre></div>
+<h3 id="ce-que-signifient-r-w-x">Ce que signifient r, w, x</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Droit</th>
+<th>Sur un fichier</th>
+<th>Sur un dossier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>r</code> (lecture)</td>
+<td>lire le contenu</td>
+<td><strong>lister</strong> les noms des fichiers</td>
+</tr>
+<tr class="even">
+<td><code>w</code> (écriture)</td>
+<td>modifier le contenu</td>
+<td><strong>créer, renommer, supprimer</strong> des fichiers dedans (même ceux des autres !)</td>
+</tr>
+<tr class="odd">
+<td><code>x</code> (exécution)</td>
+<td>exécuter le fichier (programme, script)</td>
+<td><strong>traverser</strong> le dossier (y entrer, accéder à son contenu)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Linux vérifie les droits dans l’ordre : si vous êtes le propriétaire, seuls les droits du propriétaire comptent ; sinon, si vous êtes dans le groupe, seuls ceux du groupe ; sinon, ceux des autres. root n’est pas concerné : il a tous les droits.</p>
+<h3 id="notation-octale">Notation octale</h3>
+<p>Chaque droit vaut un nombre : <code>r = 4</code>, <code>w = 2</code>, <code>x = 1</code>. On additionne pour chaque catégorie.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Octal</th>
+<th>Symbolique</th>
+<th>Usage typique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>644</code></td>
+<td><code>rw-r--r--</code></td>
+<td>fichier lisible par tous, modifiable par le propriétaire</td>
+</tr>
+<tr class="even">
+<td><code>640</code></td>
+<td><code>rw-r-----</code></td>
+<td>fichier lisible par le groupe seulement</td>
+</tr>
+<tr class="odd">
+<td><code>600</code></td>
+<td><code>rw-------</code></td>
+<td>fichier privé (clé SSH privée)</td>
+</tr>
+<tr class="even">
+<td><code>755</code></td>
+<td><code>rwxr-xr-x</code></td>
+<td>dossier ou programme accessible à tous</td>
+</tr>
+<tr class="odd">
+<td><code>750</code></td>
+<td><code>rwxr-x---</code></td>
+<td>dossier réservé au propriétaire et au groupe</td>
+</tr>
+<tr class="even">
+<td><code>700</code></td>
+<td><code>rwx------</code></td>
+<td>dossier privé</td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">chmod</span> 640 bilan.ods                  <span class="co"># octal</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="fu">chmod</span> u+x script.sh                  <span class="co"># symbolique : ajouter x au propriétaire</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="fu">chmod</span> g-w,o= rapport.txt             <span class="co"># retirer w au groupe, tout retirer aux autres</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="fu">sudo</span> chown amartin:compta bilan.ods  <span class="co"># changer propriétaire et groupe</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="fu">sudo</span> chgrp <span class="at">-R</span> compta /srv/partages/compta   <span class="co"># changer le groupe, récursivement</span></span></code></pre></div></div>
+<h3 id="le-umask">Le umask</h3>
+<p>Le <strong>umask</strong> retire des droits aux fichiers et dossiers <strong>au moment de leur création</strong>. Un fichier est créé au maximum en <code>666</code>, un dossier en <code>777</code>, moins le umask.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>umask</th>
+<th>Fichier créé</th>
+<th>Dossier créé</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>022</code> (défaut)</td>
+<td><code>644</code></td>
+<td><code>755</code></td>
+</tr>
+<tr class="even">
+<td><code>027</code></td>
+<td><code>640</code></td>
+<td><code>750</code></td>
+</tr>
+<tr class="odd">
+<td><code>077</code></td>
+<td><code>600</code></td>
+<td><code>700</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="bu">umask</span>            <span class="co"># afficher (0022)</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="bu">umask</span> 027        <span class="co"># pour la session en cours</span></span></code></pre></div></div>
+<h2 id="les-bits-spéciaux">3. Les bits spéciaux</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Bit</th>
+<th>Octal</th>
+<th>Sur un fichier</th>
+<th>Sur un dossier</th>
+<th>Affichage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>setuid</td>
+<td><code>4000</code></td>
+<td>le programme s’exécute avec les droits de son <strong>propriétaire</strong> (ex. <code>passwd</code> s’exécute en root)</td>
+<td>sans effet</td>
+<td><code>rws</code> côté propriétaire</td>
+</tr>
+<tr class="even">
+<td>setgid</td>
+<td><code>2000</code></td>
+<td>s’exécute avec les droits du groupe</td>
+<td>les nouveaux fichiers <strong>héritent du groupe du dossier</strong></td>
+<td><code>rws</code> côté groupe</td>
+</tr>
+<tr class="odd">
+<td>sticky</td>
+<td><code>1000</code></td>
+<td>sans effet</td>
+<td>seul le <strong>propriétaire</strong> d’un fichier peut le supprimer</td>
+<td><code>t</code> côté autres</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le <strong>setgid sur un dossier partagé</strong> est indispensable : sans lui, un fichier créé par Alice dans <code>/srv/partages/compta</code> appartiendrait à son groupe principal (<code>amartin</code>), et ses collègues de <code>compta</code> n’y auraient pas accès. Le <strong>sticky bit</strong> est celui de <code>/tmp</code> (<code>drwxrwxrwt</code>) : tout le monde peut y écrire, mais personne ne supprime les fichiers des autres.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> chmod 2770 /srv/partages/compta     <span class="co"># rwxrws--- : setgid + groupe en lecture-écriture</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> chmod 3770 /srv/partages/commun     <span class="co"># setgid + sticky</span></span></code></pre></div></div>
+<h2 id="les-acl-posix">4. Les ACL POSIX</h2>
+<p>Les droits Unix ne connaissent qu’<strong>un</strong> propriétaire et <strong>un</strong> groupe. Pour donner en plus la lecture à la Direction sur le dossier de la comptabilité, il faut des <strong>listes de contrôle d’accès</strong> (ACL).</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> acl                                   <span class="co"># outils getfacl et setfacl</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="fu">sudo</span> setfacl <span class="at">-m</span> g:direction:rx /srv/partages/compta       <span class="co"># ajouter : groupe direction en lecture</span></span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="ex">getfacl</span> /srv/partages/compta                              <span class="co"># afficher</span></span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-ld</span> /srv/partages/compta                               <span class="co"># un + apparaît : drwxrws---+</span></span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="fu">sudo</span> setfacl <span class="at">-x</span> g:direction /srv/partages/compta          <span class="co"># retirer une entrée</span></span>
+<span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a><span class="fu">sudo</span> setfacl <span class="at">-b</span> /srv/partages/compta                      <span class="co"># retirer toutes les ACL</span></span></code></pre></div></div>
+<h3 id="les-acl-par-défaut-lhéritage-sous-linux">Les ACL par défaut : l’héritage sous Linux</h3>
+<p>Une ACL posée avec <code>-m</code> ne concerne que le dossier lui-même. Pour que les <strong>fichiers et dossiers créés ensuite</strong> reçoivent automatiquement des droits, on pose une <strong>ACL par défaut</strong> avec <code>-d</code> : c’est l’équivalent de l’héritage NTFS.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> setfacl <span class="at">-d</span> <span class="at">-m</span> g::rwx,g:direction:rx,o::--- /srv/partages/compta</span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="ex">getfacl</span> /srv/partages/compta        <span class="co"># lignes "default:..."</span></span></code></pre></div></div>
+<p>Effet utile : quand un dossier a une ACL par défaut, le <code>umask</code> n’est plus appliqué aux nouveaux fichiers, ce sont les droits par défaut qui décident. Avec <code>default:group::rwx</code>, les fichiers créés par Alice sont modifiables par Thomas, son collègue du groupe <code>compta</code>, même si leur umask est <code>022</code>.</p>
+<p>La ligne <strong>mask</strong> de <code>getfacl</code> limite les droits maximaux de toutes les entrées de groupe et d’utilisateurs nommés ; un <code>chmod</code> sur un fichier qui a des ACL modifie ce masque.</p>
+<h2 id="déléguer-avec-sudo">5. Déléguer avec sudo</h2>
+<h3 id="le-principe">Le principe</h3>
+<p><code>sudo</code> permet à un utilisateur autorisé d’exécuter une commande <strong>en tant qu’un autre utilisateur</strong> (root par défaut), avec <strong>son propre mot de passe</strong>, et <strong>journalise</strong> chaque commande. On n’a donc jamais besoin de partager le mot de passe root (qui est d’ailleurs verrouillé sur nos Debian).</p>
+<p>Les règles sont dans <code>/etc/sudoers</code> et surtout dans des fichiers séparés de <code>/etc/sudoers.d/</code>. On les modifie <strong>toujours</strong> avec <code>visudo</code>, qui vérifie la syntaxe avant d’enregistrer : une erreur dans sudoers peut supprimer tout accès administrateur.</p>
+<h3 id="la-syntaxe">La syntaxe</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Règles sudoers</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="co"># qui          sur quelle machine = (en tant que qui)  quelles commandes</span></span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="co"># Règle présente par défaut dans /etc/sudoers : le groupe sudo peut tout faire</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="dt">%sudo          ALL</span><span class="ot">=</span><span class="st">(ALL:ALL) ALL</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a aria-hidden="true" href="#cb8-5" tabindex="-1"></a><span class="co"># Fichier /etc/sudoers.d/web-ops : le rôle opérateurs web gère nginx, et rien d'autre</span></span>
+<span id="cb8-6"><a aria-hidden="true" href="#cb8-6" tabindex="-1"></a><span class="dt">Cmnd_Alias NGINX </span><span class="ot">=</span><span class="st"> /usr/bin/systemctl restart nginx, /usr/bin/systemctl reload nginx, \</span></span>
+<span id="cb8-7"><a aria-hidden="true" href="#cb8-7" tabindex="-1"></a><span class="dt">                   /usr/bin/systemctl status nginx, /usr/sbin/nginx -t</span></span>
+<span id="cb8-8"><a aria-hidden="true" href="#cb8-8" tabindex="-1"></a><span class="dt">%web-ops       ALL</span><span class="ot">=</span><span class="st">(root) NGINX</span></span></code></pre></div></div>
+<ul>
+<li><code>%</code> désigne un <strong>groupe</strong> : on délègue à un rôle, pas à une personne (RBAC, comme AGDLP).</li>
+<li>Les commandes s’écrivent avec leur <strong>chemin complet</strong>. Si des arguments sont indiqués, seuls ceux-là sont permis.</li>
+<li><code>NOPASSWD:</code> supprime la demande de mot de passe : à réserver à des automatismes précis.</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-f</span> /etc/sudoers.d/web-ops        <span class="co"># créer ou modifier un fichier de règles</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-c</span>                               <span class="co"># vérifier toute la configuration</span></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-l</span>                                      <span class="co"># ce que j'ai le droit de faire</span></span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-l</span> <span class="at">-U</span> nfournier                         <span class="co"># ce qu'un autre a le droit de faire</span></span>
+<span id="cb9-5"><a aria-hidden="true" href="#cb9-5" tabindex="-1"></a><span class="fu">sudo</span> journalctl _COMM=sudo <span class="at">-n</span> 20             <span class="co"># qui a lancé quoi avec sudo</span></span></code></pre></div></div>
+<div class="callout danger"><div class="callout-body"><p class="callout-titre"><strong>Les commandes qui donnent tout</strong></p>
+<p>Autoriser <code>sudo vi</code>, <code>sudo less</code>, <code>sudo find</code>, <code>sudo tar</code>, <code>sudo python3</code>, <code>sudo bash</code> ou <code>sudo cp</code>, c’est en pratique donner un accès root complet : ces programmes permettent de lancer un shell ou d’écrire n’importe quel fichier. Le site GTFOBins recense ces détournements. Pour modifier un fichier protégé, on délègue <code>sudoedit fichier</code>, qui fait travailler l’éditeur avec les droits de l’utilisateur sur une copie.</p>
+</div></div>
+<h2 id="et-sous-windows">6. Et sous Windows ?</h2>
+<p>Vous avez maintenant les deux modèles en main. Le TD du TP compare point par point : où sont les comptes, comment sont identifiés utilisateurs et groupes, qui est administrateur, comment on pose des droits, comment fonctionne l’héritage, comment on élève ses privilèges et où on retrouve les traces.</p>
+<h2 id="à-retenir">7. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li><code>/etc/passwd</code> (comptes), <code>/etc/shadow</code> (empreintes des mots de passe, root seulement), <code>/etc/group</code>.</li>
+<li><code>usermod -aG</code>, jamais <code>-G</code> seul. Changement de groupe effectif à la prochaine session.</li>
+<li><code>rwx</code> pour propriétaire, groupe, autres ; sur un dossier, <code>w</code> = créer et supprimer, <code>x</code> = traverser.</li>
+<li>Octal : r=4, w=2, x=1. <code>umask 022</code> → fichiers 644, dossiers 755.</li>
+<li>Dossier partagé = groupe propriétaire + setgid (<code>2770</code>) + ACL par défaut pour l’héritage.</li>
+<li><code>sudo</code> : délégation par groupe, commandes précises, <code>visudo</code>, traces dans le journal.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Où est stockée l’empreinte du mot de passe d’un utilisateur ? Qui peut la lire ?</li>
+<li>Que fait <code>usermod -G compta amartin</code> ? Quelle commande fallait-il taper ?</li>
+<li>Traduisez <code>rwxr-x---</code> en octal.</li>
+<li>Un utilisateur a <code>w</code> sur un dossier mais pas sur un fichier de ce dossier. Peut-il supprimer le fichier ?</li>
+<li>Avec un umask de <code>027</code>, quels droits a un fichier créé ?</li>
+<li>À quoi sert le bit setgid sur un dossier partagé ?</li>
+<li>Que signifie le <code>+</code> à la fin de <code>drwxrws---+</code> ?</li>
+<li>Quelle option de <code>setfacl</code> permet l’héritage vers les nouveaux fichiers ?</li>
+<li>Pourquoi toujours utiliser <code>visudo</code> ?</li>
+<li>Pourquoi est-il dangereux d’autoriser <code>sudo less /var/log/nginx/error.log</code> ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Dans <code>/etc/shadow</code>, lisible uniquement par root.</li>
+<li>Il remplace tous les groupes secondaires par <code>compta</code>. Il fallait <code>usermod -aG compta amartin</code>.</li>
+<li><code>750</code>.</li>
+<li>Oui : supprimer un fichier est une opération sur le dossier (droit <code>w</code> sur le dossier), sauf si le sticky bit est posé.</li>
+<li><code>640</code> (<code>666</code> moins <code>027</code>).</li>
+<li>Les fichiers créés dans le dossier appartiennent au groupe du dossier, donc aux collègues, et non au groupe principal de leur créateur.</li>
+<li>Le dossier a des ACL en plus des droits Unix.</li>
+<li><code>-d</code> (ACL par défaut).</li>
+<li><code>visudo</code> vérifie la syntaxe : une erreur dans sudoers peut bloquer tout accès administrateur.</li>
+<li><code>less</code> permet de lancer un shell (<code>!sh</code>) : l’utilisateur obtiendrait un shell root.</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp08-linux-admin.html" data-seance="8"><span class="dir">‹ Page précédente</span><span class="titre">TP 8 : Administrer SRV-LNX-01</span></a><a class="next" href="../tp/tp09-linux-droits.html" data-seance="9"><span class="dir">Page suivante ›</span><span class="titre">TP 9 : Partages Linux et délégation sudo</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>
