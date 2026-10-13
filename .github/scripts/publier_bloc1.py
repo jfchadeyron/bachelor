@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Met en ligne le cours et le TP des séances du BLOC 1 dont la date est arrivée.
+"""Met en ligne le cours et le TP des séances du BLOC 1 dont la date est arrivée,
+plus les séances d'avance demandées dans le calendrier.
 
 Lancé chaque matin par le workflow « Publication BLOC 1 ».
-- .github/bloc1/calendrier.json : date de mise en ligne de chaque séance ;
+- .github/bloc1/calendrier.json : date de chaque séance, et « avance » : nombre de
+  séances mises en ligne en plus de celles dont la date est arrivée (0 = aucune) ;
 - .github/bloc1/paquets/sNN.enc  : supports de la séance NN, chiffrés, en attente ;
 - bloc1/assets/publie.json       : liste des séances en ligne (lue par les pages).
 
@@ -76,12 +78,18 @@ def main():
         print(f"Test terminé : {len(paquets)} séance(s) en attente, clé correcte. Rien n'a été publié.")
         return
 
+    # séances dont la date est arrivée, puis les séances d'avance
+    avance = int(calendrier.get("avance", 0) or 0)
+    arrivees = [int(s["numero"]) for s in calendrier["seances"]
+                if datetime.date.fromisoformat(s["date"]) <= aujourdhui]
+    limite = max(max(arrivees, default=0) + avance, jusqua)
+    print(f"Séances d'avance : {avance} ; mise en ligne jusqu'à la séance {limite}")
+
     a_publier = []
     for s in calendrier["seances"]:
         n = int(s["numero"])
-        date = datetime.date.fromisoformat(s["date"])
         paquet = PAQUETS / f"s{n:02d}.enc"
-        if paquet.exists() and (date <= aujourdhui or n <= jusqua):
+        if paquet.exists() and n <= limite:
             a_publier.append((n, paquet))
 
     if a_publier and not cle:
