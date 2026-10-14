@@ -61,6 +61,10 @@ Méthode d’attribution des droits : comptes dans des groupes globaux, groupes 
 <dd>
 Preuve de l’identité déclarée (mot de passe, clé, second facteur). À distinguer de l’autorisation. (S11)
 </dd>
+<dt>Authentification par clé</dt>
+<dd>
+Méthode d’authentification de l’utilisateur où il prouve son identité en signant avec sa clé privée ; le serveur vérifie avec la clé publique de <code>authorized_keys</code>. Elle ne chiffre pas la connexion : le chiffrement vient du transport sécurisé. (S10)
+</dd>
 <dt>authorized_keys</dt>
 <dd>
 Fichier <code>~/.ssh/authorized_keys</code> d’un compte, sur le serveur SSH : les clés publiques autorisées à se connecter à ce compte. (S10)
@@ -486,6 +490,10 @@ Coût total de possession d’une solution sur sa durée de vie. (S1)
 <dt>TLS</dt>
 <dd>
 Protocole qui chiffre et authentifie une connexion (HTTPS, LDAPS, messagerie, certains VPN) ; version actuelle : TLS 1.3. (S10, S12)
+</dd>
+<dt>Transport sécurisé (canal chiffré)</dt>
+<dd>
+Première phase d’une connexion SSH ou TLS : le serveur prouve son identité et les deux côtés calculent les clés de session qui chiffrent tout, avant et indépendamment de l’authentification de l’utilisateur. (S10)
 </dd>
 <dt>Tunnel SSH</dt>
 <dd>
