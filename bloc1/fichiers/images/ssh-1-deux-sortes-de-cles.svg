@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 310" width="680" height="310" font-family="Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif" role="img">
+<title>Les deux sortes de clés de SSH</title>
+<defs>
+<g id="cle"><circle cx="14" cy="14" r="13"/><rect x="24" y="10" width="42" height="8" rx="2"/><rect x="50" y="18" width="6" height="8"/><rect x="59" y="18" width="6" height="11"/><circle cx="14" cy="14" r="5" fill="#ffffff"/></g>
+</defs>
+<rect x="15" y="15" width="315" height="280" rx="10" fill="#f5f6f8" stroke="#d3d9e0"/>
+<text x="172" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="#1f3a5f">La clé de session</text>
+<text x="172" y="66" text-anchor="middle" font-size="13" fill="#4a5563">une seule clé, en double</text>
+<text x="95" y="102" text-anchor="middle" font-size="13" fill="#1d2530">Votre PC</text>
+<text x="250" y="102" text-anchor="middle" font-size="13" fill="#1d2530">Serveur</text>
+<use href="#cle" x="62" y="115" fill="#1f3a5f"/>
+<use href="#cle" x="217" y="115" fill="#1f3a5f"/>
+<text x="172" y="137" text-anchor="middle" font-size="20" font-weight="bold" fill="#1f3a5f">=</text>
+<text x="172" y="187" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d2530">La même clé des deux côtés</text>
+<text x="172" y="207" text-anchor="middle" font-size="13" fill="#1d2530">chiffre et déchiffre tout ce qui passe</text>
+<text x="172" y="242" text-anchor="middle" font-size="12" fill="#4a5563">calculée au début de chaque connexion,</text>
+<text x="172" y="260" text-anchor="middle" font-size="12" fill="#4a5563">effacée à la fin</text>
+<rect x="350" y="15" width="315" height="280" rx="10" fill="#f5f6f8" stroke="#d3d9e0"/>
+<text x="507" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="#1f3a5f">La paire de clés</text>
+<text x="507" y="66" text-anchor="middle" font-size="13" fill="#4a5563">deux clés différentes qui vont ensemble</text>
+<use href="#cle" x="393" y="100" fill="#c07a0c"/>
+<use href="#cle" x="555" y="100" fill="#2d6a3e"/>
+<text x="426" y="155" text-anchor="middle" font-size="14" font-weight="bold" fill="#8f5400">Clé privée</text>
+<text x="426" y="175" text-anchor="middle" font-size="13" fill="#1d2530">on la garde</text>
+<text x="426" y="193" text-anchor="middle" font-size="13" fill="#1d2530">sert à prouver</text>
+<text x="588" y="155" text-anchor="middle" font-size="14" font-weight="bold" fill="#2d6a3e">Clé publique</text>
+<text x="588" y="175" text-anchor="middle" font-size="13" fill="#1d2530">on la donne</text>
+<text x="588" y="193" text-anchor="middle" font-size="13" fill="#1d2530">sert à vérifier</text>
+<text x="507" y="242" text-anchor="middle" font-size="12" fill="#4a5563">signature = preuve faite avec la clé privée,</text>
+<text x="507" y="260" text-anchor="middle" font-size="12" fill="#4a5563">vérifiée par tous avec la clé publique</text>
+</svg>

@@ -121,11 +121,11 @@ Paire de clés qui identifie un serveur SSH : la clé privée reste sur le serve
 </dd>
 <dt>Clé de session</dt>
 <dd>
-Clé symétrique calculée par les deux côtés au début d’une connexion (échange Diffie-Hellman), jamais transmise, effacée à la fin. (S10)
+Code secret commun d’une connexion : la même clé des deux côtés (clé symétrique), calculée au début de la connexion sans être envoyée, qui chiffre tout ce qui passe, et effacée à la fin. (S10)
 </dd>
 <dt>Clé privée, clé publique</dt>
 <dd>
-Les deux moitiés d’une paire de clés (cryptographie asymétrique). La clé privée reste secrète et sert à signer (ou à déchiffrer) ; la clé publique se diffuse et sert à vérifier les signatures (ou à chiffrer). (S10)
+Les deux clés d’une paire (cryptographie asymétrique). La clé privée, gardée par son propriétaire, sert à prouver son identité (signer) ; la clé publique, donnée à ceux qui doivent le reconnaître, sert à vérifier cette preuve. (S10)
 </dd>
 <dt>Clé utilisateur (SSH)</dt>
 <dd>
@@ -493,7 +493,7 @@ Protocole qui chiffre et authentifie une connexion (HTTPS, LDAPS, messagerie, ce
 </dd>
 <dt>Transport sécurisé (canal chiffré)</dt>
 <dd>
-Première phase d’une connexion SSH ou TLS : le serveur prouve son identité et les deux côtés calculent les clés de session qui chiffrent tout, avant et indépendamment de l’authentification de l’utilisateur. (S10)
+Le « tuyau chiffré » d’une connexion SSH ou TLS : le serveur prouve son identité, puis les deux côtés calculent la clé de session qui chiffre tout, avant que l’utilisateur ait à prouver qui il est. (S10)
 </dd>
 <dt>Tunnel SSH</dt>
 <dd>
