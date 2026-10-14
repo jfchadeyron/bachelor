@@ -354,11 +354,27 @@
 </tr>
 <tr class="odd">
 <td><code>ssh-keygen -lf fichier.pub</code></td>
-<td>empreinte d’une clé</td>
+<td>empreinte d’une clé publique</td>
 </tr>
 <tr class="even">
+<td><code>ssh-keygen -y -f ~/.ssh/id_ed25519</code></td>
+<td>recalculer la clé publique à partir de la clé privée</td>
+</tr>
+<tr class="odd">
+<td><code>ssh-keygen -p -f ~/.ssh/id_ed25519</code></td>
+<td>changer la phrase de passe d’une clé (rien à changer sur les serveurs)</td>
+</tr>
+<tr class="even">
+<td><code>ssh-keygen -F hôte</code>, <code>ssh-keygen -F hôte -l</code></td>
+<td>retrouver la clé d’un serveur dans <code>known_hosts</code>, avec son empreinte</td>
+</tr>
+<tr class="odd">
 <td><code>ssh-keygen -R "[127.0.0.1]:2222"</code></td>
-<td>oublier une empreinte</td>
+<td>retirer de <code>known_hosts</code> la clé d’un serveur</td>
+</tr>
+<tr class="even">
+<td><code>ssh -v user@hôte</code></td>
+<td>afficher le déroulé de la connexion (échange de clés, clé d’hôte, chiffrement, authentification)</td>
 </tr>
 <tr class="odd">
 <td><code>scp F user@hôte:/chemin</code>, <code>scp -P 2222 …</code>, <code>sftp hôte</code></td>

@@ -61,9 +61,17 @@ Méthode d’attribution des droits : comptes dans des groupes globaux, groupes 
 <dd>
 Preuve de l’identité déclarée (mot de passe, clé, second facteur). À distinguer de l’autorisation. (S11)
 </dd>
+<dt>authorized_keys</dt>
+<dd>
+Fichier <code>~/.ssh/authorized_keys</code> d’un compte, sur le serveur SSH : les clés publiques autorisées à se connecter à ce compte. (S10)
+</dd>
 <dt>Autorisation</dt>
 <dd>
 Détermination de ce qu’une identité authentifiée a le droit de faire. (S11)
+</dd>
+<dt>Autorité de certification (AC)</dt>
+<dd>
+Organisme qui signe les certificats et garantit ainsi le lien entre une clé publique et un nom de domaine ; les AC racines sont enregistrées dans le magasin de confiance du système ou du navigateur. (S10)
 </dd>
 </dl>
 <h2 id="b">B</h2>
@@ -71,6 +79,10 @@ Détermination de ce qu’une identité authentifiée a le droit de faire. (S11)
 <dt>Bail DHCP</dt>
 <dd>
 Durée pendant laquelle un client peut utiliser l’adresse attribuée par le serveur DHCP. (S3)
+</dd>
+<dt>Diffie-Hellman (échange de clés)</dt>
+<dd>
+Méthode par laquelle deux machines calculent le même secret en n’échangeant que des valeurs publiques ; base des clés de session de SSH et de TLS. (S10)
 </dd>
 <dt>Bastion</dt>
 <dd>
@@ -87,13 +99,37 @@ Compte d’administration réservé aux urgences, au mot de passe conservé en l
 <dd>
 Dépense d’investissement (achat de matériel), amortie sur plusieurs années. (S1)
 </dd>
+<dt>Certificat</dt>
+<dd>
+Clé publique accompagnée d’une identité (noms de domaine), de dates de validité et de la signature d’une autorité de certification ; il ne contient pas la clé privée. (S3, S10, S12)
+</dd>
+<dt>Chiffrement symétrique</dt>
+<dd>
+Chiffrement où la même clé secrète sert à chiffrer et à déchiffrer (AES, ChaCha20). Rapide, il protège les données d’une session SSH ou HTTPS. (S10)
+</dd>
 <dt>CIDR</dt>
 <dd>
 Notation du masque par le nombre de bits de la partie réseau : <code>/24</code> = <code>255.255.255.0</code>. (S3)
 </dd>
 <dt>Clé d’hôte</dt>
 <dd>
-Clé qui identifie un serveur SSH ; son empreinte est enregistrée dans <code>known_hosts</code> à la première connexion. (S10)
+Paire de clés qui identifie un serveur SSH : la clé privée reste sur le serveur (<code>/etc/ssh/ssh_host_*_key</code>), la clé publique est enregistrée dans <code>known_hosts</code> de chaque client à la première connexion. (S10)
+</dd>
+<dt>Clé de session</dt>
+<dd>
+Clé symétrique calculée par les deux côtés au début d’une connexion (échange Diffie-Hellman), jamais transmise, effacée à la fin. (S10)
+</dd>
+<dt>Clé privée, clé publique</dt>
+<dd>
+Les deux moitiés d’une paire de clés (cryptographie asymétrique). La clé privée reste secrète et sert à signer (ou à déchiffrer) ; la clé publique se diffuse et sert à vérifier les signatures (ou à chiffrer). (S10)
+</dd>
+<dt>Clé utilisateur (SSH)</dt>
+<dd>
+Paire de clés d’une personne sur un appareil : la clé privée reste sur le poste client, la clé publique est déposée dans <code>authorized_keys</code> sur le serveur. (S10)
+</dd>
+<dt>Client, serveur</dt>
+<dd>
+Le client ouvre la connexion (<code>ssh</code>, navigateur) ; le serveur attend les connexions sur un port (<code>sshd</code>, nginx). C’est un rôle tenu pour une connexion, pas un type de machine. (S10)
 </dd>
 <dt>Clone (intégral, lié)</dt>
 <dd>
@@ -110,6 +146,10 @@ Compte enregistré sur un seul ordinateur et valable seulement sur lui (<code>.\
 <dt>Compte ordinateur</dt>
 <dd>
 Objet de l’annuaire qui représente un ordinateur membre du domaine ; il est créé lors de la jonction. (S6)
+</dd>
+<dt>Confidentialité persistante (forward secrecy)</dt>
+<dd>
+Propriété d’une connexion dont les clés de session sont éphémères : le vol ultérieur d’une clé privée ne permet pas de déchiffrer les échanges enregistrés. (S10)
 </dd>
 <dt>Contrôleur de domaine (DC)</dt>
 <dd>
@@ -151,7 +191,7 @@ Documentation de référence d’une infrastructure : architecture, inventaire, 
 <dl>
 <dt>Empreinte (fingerprint)</dt>
 <dd>
-Résumé court d’une clé, qui permet de la vérifier ou de l’identifier (<code>SHA256:…</code>). (S10)
+Résultat d’un hachage. Pour une clé SSH : résumé court de la clé publique (<code>SHA256:…</code>), qui permet de comparer deux clés à l’œil ; ce n’est pas une clé. (S9, S10)
 </dd>
 </dl>
 <h2 id="f">F</h2>
@@ -198,6 +238,10 @@ Transformation à sens unique d’un mot de passe, stockée à sa place, avec un
 <dd>
 Propagation des permissions d’un dossier à son contenu. (S7, S9)
 </dd>
+<dt>HTTPS</dt>
+<dd>
+HTTP protégé par TLS, sur le port 443. (S3, S10)
+</dd>
 <dt>Hyperviseur</dt>
 <dd>
 Logiciel qui crée et exécute des machines virtuelles. Type 1 : sur le matériel ; type 2 : sur un système hôte. (S1)
@@ -220,6 +264,10 @@ Commande Windows d’affichage et de modification des permissions NTFS. (S7)
 <dd>
 Cycle de vie d’une identité : arrivée, mobilité, départ. (S13)
 </dd>
+<dt>Jonction au domaine</dt>
+<dd>
+Opération qui fait entrer un ordinateur dans un domaine : création de son compte ordinateur et d’un secret partagé avec le contrôleur. Le DNS du poste doit être le contrôleur de domaine. (S6)
+</dd>
 <dt>journalctl</dt>
 <dd>
 Commande de lecture du journal de systemd sous Linux. (S8)
@@ -227,17 +275,13 @@ Commande de lecture du journal de systemd sous Linux. (S8)
 </dl>
 <h2 id="k">K</h2>
 <dl>
-<dt>Jonction au domaine</dt>
-<dd>
-Opération qui fait entrer un ordinateur dans un domaine : création de son compte ordinateur et d’un secret partagé avec le contrôleur. Le DNS du poste doit être le contrôleur de domaine. (S6)
-</dd>
 <dt>Kerberos</dt>
 <dd>
 Protocole d’authentification par tickets d’Active Directory (port 88), qui exige des horloges synchronisées. (S11)
 </dd>
 <dt>known_hosts</dt>
 <dd>
-Fichier du client SSH contenant les empreintes des serveurs déjà acceptés. (S10)
+Fichier du client SSH contenant les clés publiques des serveurs déjà acceptés (et non leurs empreintes). (S10)
 </dd>
 </dl>
 <h2 id="l">L</h2>
@@ -322,6 +366,10 @@ Traduction d’adresses qui porte aussi sur les ports : en sortie, plusieurs mac
 <dd>
 Routeur vers lequel une machine envoie tout ce qui n’est pas sur son réseau local. (S3)
 </dd>
+<dt>Phrase de passe</dt>
+<dd>
+Mot de passe qui chiffre le fichier d’une clé privée sur le poste ; elle n’est jamais envoyée au serveur. (S10)
+</dd>
 <dt>Portail captif</dt>
 <dd>
 Page web d’authentification imposée par un pare-feu avant tout accès à Internet (FortiGate au lycée). Une VM en pont, sans navigateur, ne peut pas s’y identifier ; en NAT, elle profite de l’identification du PC. (S2)
@@ -392,6 +440,10 @@ Bit spécial qui fait hériter aux nouveaux fichiers le groupe du dossier. (S9)
 <dd>
 Identifiant de sécurité unique d’un compte ou d’un groupe Windows. (S6)
 </dd>
+<dt>Signature numérique</dt>
+<dd>
+Valeur calculée avec une clé privée sur un message, vérifiable par tous avec la clé publique : elle prouve qui a signé et que le message n’a pas été modifié, sans le rendre confidentiel. (S10)
+</dd>
 <dt>SLA</dt>
 <dd>
 Engagement contractuel de niveau de service, par exemple 99,9 % de disponibilité. (S4)
@@ -430,6 +482,10 @@ Gestionnaire de démarrage et de services des distributions Linux actuelles. (S8
 <dt>TCO</dt>
 <dd>
 Coût total de possession d’une solution sur sa durée de vie. (S1)
+</dd>
+<dt>TLS</dt>
+<dd>
+Protocole qui chiffre et authentifie une connexion (HTTPS, LDAPS, messagerie, certains VPN) ; version actuelle : TLS 1.3. (S10, S12)
 </dd>
 <dt>Tunnel SSH</dt>
 <dd>

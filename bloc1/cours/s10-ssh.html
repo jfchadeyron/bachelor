@@ -2,7 +2,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Séance 10 : SSH : accès sécurisé par clés | BLOC 1 Bases des infrastructures</title>
-<meta name="description" content="SSH est la porte d'entrée de tous les serveurs Linux, et de plus en plus de serveurs Windows. Cette séance explique comment la connexion est protégée, pourquoi l'authentification par clé est préférabl">
+<meta name="description" content="SSH est la porte d'entrée de tous les serveurs Linux, et de plus en plus de serveurs Windows. Cette séance pose d'abord les bases de la cryptographie utilisées par SSH et par HTTPS (clé symétrique, pa">
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body class="kind-cours">
@@ -27,15 +27,17 @@
 <header class="hero">
   <span class="surtitre">Cours de la séance 10</span>
   <h1>SSH : accès sécurisé par clés, durcissement et transferts</h1>
-  <p class="lead">SSH est la porte d'entrée de tous les serveurs Linux, et de plus en plus de serveurs Windows. Cette séance explique comment la connexion est protégée, pourquoi l'authentification par clé est préférable au mot de passe, comment configurer clients et serveur, transférer des fichiers, durcir le service et prouver qui s'est connecté grâce aux journaux.</p>
+  <p class="lead">SSH est la porte d'entrée de tous les serveurs Linux, et de plus en plus de serveurs Windows. Cette séance pose d'abord les bases de la cryptographie utilisées par SSH et par HTTPS (clé symétrique, paire de clés, signature, échange de clés), puis montre comment une connexion est protégée, comment le serveur et l'utilisateur prouvent leur identité, comment configurer clients et serveur, transférer des fichiers, durcir le service et prouver qui s'est connecté grâce aux journaux.</p>
   <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 3, 8 et 9</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp10-ssh.html" data-seance="10">TP 10 : SSH par clé, durcissement et preuves</a></td></tr></tbody></table>
 </header>
-<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#ce-que-fait-ssh">1. Ce que fait SSH</a></li><li><a href="#déroulement-dune-connexion">2. Déroulement d’une connexion</a></li><li><a href="#lauthentification-par-clé">3. L’authentification par clé</a></li><li><a href="#le-fichier-de-configuration-du-client">4. Le fichier de configuration du client</a></li><li><a href="#transférer-des-fichiers">5. Transférer des fichiers</a></li><li><a href="#durcir-le-serveur">6. Durcir le serveur</a></li><li><a href="#les-journaux-prouver-qui-sest-connecté">7. Les journaux : prouver qui s’est connecté</a></li><li><a href="#à-retenir">8. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#ce-que-fait-ssh">1. Ce que fait SSH</a></li><li><a href="#client-et-serveur">2. Client et serveur</a></li><li><a href="#les-briques-de-la-cryptographie">3. Les briques de la cryptographie</a></li><li><a href="#les-deux-paires-de-clés-de-ssh">4. Les deux paires de clés de SSH</a></li><li><a href="#déroulement-dune-connexion-ssh">5. Déroulement d’une connexion SSH</a></li><li><a href="#lauthentification-par-clé">6. L’authentification par clé</a></li><li><a href="#et-https">7. Et HTTPS ?</a></li><li><a href="#le-fichier-de-configuration-du-client">8. Le fichier de configuration du client</a></li><li><a href="#transférer-des-fichiers">9. Transférer des fichiers</a></li><li><a href="#durcir-le-serveur">10. Durcir le serveur</a></li><li><a href="#les-journaux-prouver-qui-sest-connecté">11. Les journaux : prouver qui s’est connecté</a></li><li><a href="#à-retenir">12. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
 <article class="content">
 <h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
 <ul>
-<li>Décrire les étapes d’une connexion SSH et le rôle des clés d’hôte.</li>
-<li>Expliquer le principe de la cryptographie à clé publique appliqué à l’authentification.</li>
+<li>Distinguer clé symétrique, clé privée, clé publique, empreinte et phrase de passe.</li>
+<li>Distinguer chiffrement et signature, et expliquer l’authentification par clé.</li>
+<li>Distinguer le client du serveur, et la clé d’hôte de la clé utilisateur.</li>
+<li>Décrire les étapes d’une connexion SSH et les comparer avec celles d’une connexion HTTPS.</li>
 <li>Générer une paire de clés, la déployer et se connecter sans mot de passe.</li>
 <li>Configurer le client (<code>~/.ssh/config</code>) et transférer des fichiers (<code>scp</code>, <code>sftp</code>).</li>
 <li>Durcir le serveur (<code>sshd_config</code>) sans se couper l’accès.</li>
@@ -73,28 +75,350 @@
 <li><strong>automatiser</strong> : les outils comme Ansible pilotent les serveurs par SSH.</li>
 </ul>
 <p>Le serveur écoute par défaut sur le port <strong>TCP 22</strong>. L’implémentation standard est <strong>OpenSSH</strong> : le client <code>ssh</code> et le serveur <code>sshd</code>. Le client OpenSSH est intégré à Windows 10, 11 et Windows Server ; le serveur est disponible comme fonctionnalité de Windows.</p>
-<h2 id="déroulement-dune-connexion">2. Déroulement d’une connexion</h2>
-<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-514266" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width: 616.5px;" viewBox="-111.5 -10 616.5 478.5" role="graphics-document document" aria-roledescription="sequence"><g><line id="actor1" x1="380" y1="65" x2="380" y2="2000" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="S" data-et="life-line" data-id="S"></line><g id="root-1" data-et="participant" data-type="participant" data-id="S"><rect x="305" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="S" rx="3" ry="3" class="actor actor-top"></rect><text x="380" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400; font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif;"><tspan x="380" dy="0">Serveur (sshd)</tspan></text></g></g><g><line id="actor0" x1="75" y1="65" x2="75" y2="2000" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="C" data-et="life-line" data-id="C"></line><g id="root-0" data-et="participant" data-type="participant" data-id="C"><rect x="0" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="C" rx="3" ry="3" class="actor actor-top"></rect><text x="75" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400; font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif;"><tspan x="75" dy="0">Client (ssh)</tspan></text></g></g><style>#mmd0-514266{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-514266 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-514266 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-514266 .error-icon{fill:#f5f6f8;}#mmd0-514266 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-514266 .edge-thickness-normal{stroke-width:1px;}#mmd0-514266 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-514266 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-514266 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-514266 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-514266 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-514266 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-514266 .marker.cross{stroke:#4a5563;}#mmd0-514266 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-514266 p{margin:0;}#mmd0-514266 .actor{stroke:#1f3a5f;fill:#e8eef6;stroke-width:1;}#mmd0-514266 rect.actor.outer-path[data-look="neo"]{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-514266 rect.note[data-look="neo"]{stroke:#c07a0c;fill:#fdf5e6;filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-514266 text.actor&gt;tspan{fill:#1d2530;stroke:none;}#mmd0-514266 .actor-line{stroke:#9aa5b4;}#mmd0-514266 .innerArc{stroke-width:1.5;stroke-dasharray:none;}#mmd0-514266 .messageLine0{stroke-width:1.5;stroke-dasharray:none;stroke:#4a5563;}#mmd0-514266 .messageLine1{stroke-width:1.5;stroke-dasharray:2,2;stroke:#4a5563;}#mmd0-514266 [id$="-arrowhead"] path{fill:#4a5563;stroke:#4a5563;}#mmd0-514266 .sequenceNumber{fill:#ffffff;}#mmd0-514266 [id$="-sequencenumber"]{fill:#4a5563;}#mmd0-514266 [id$="-crosshead"] path{fill:#4a5563;stroke:#4a5563;}#mmd0-514266 .messageText{fill:#1d2530;stroke:none;}#mmd0-514266 .labelBox{stroke:#9aa5b4;fill:#f5f6f8;filter:none;}#mmd0-514266 .labelText,#mmd0-514266 .labelText&gt;tspan{fill:#1d2530;stroke:none;}#mmd0-514266 .loopText,#mmd0-514266 .loopText&gt;tspan{fill:#1d2530;stroke:none;}#mmd0-514266 .sectionTitle,#mmd0-514266 .sectionTitle&gt;tspan{fill:#1d2530;stroke:none;}#mmd0-514266 .loopLine{stroke-width:2px;stroke-dasharray:2,2;stroke:#9aa5b4;fill:#9aa5b4;}#mmd0-514266 .note{stroke:#c07a0c;fill:#fdf5e6;}#mmd0-514266 .noteText,#mmd0-514266 .noteText&gt;tspan{fill:#1d2530;stroke:none;font-weight:normal;}#mmd0-514266 .activation0{fill:#f5f6f8;stroke:#4a5563;}#mmd0-514266 .activation1{fill:#f5f6f8;stroke:#4a5563;}#mmd0-514266 .activation2{fill:#f5f6f8;stroke:#4a5563;}#mmd0-514266 .actorPopupMenu{position:absolute;}#mmd0-514266 .actorPopupMenuPanel{position:absolute;fill:#e8eef6;box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2);filter:drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}#mmd0-514266 .actor-man circle,#mmd0-514266 line{fill:#e8eef6;stroke-width:2px;}#mmd0-514266 g rect.rect{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));stroke:#1f3a5f;}#mmd0-514266 .node .neo-node{stroke:#1f3a5f;}#mmd0-514266 [data-look="neo"].node rect,#mmd0-514266 [data-look="neo"].cluster rect,#mmd0-514266 [data-look="neo"].node polygon{stroke:url(#mmd0-514266-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-514266 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-514266 [data-look="neo"].node path{stroke:url(#mmd0-514266-gradient);stroke-width:1px;}#mmd0-514266 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-514266 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-514266 [data-look="neo"].node circle{stroke:url(#mmd0-514266-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-514266 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-514266 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-514266-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-514266 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-514266-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-514266 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g></g><defs><symbol id="mmd0-514266-computer" width="24" height="24"><path transform="scale(.5)" d="M2 2v13h20v-13h-20zm18 11h-16v-9h16v9zm-10.228 6l.466-1h3.524l.467 1h-4.457zm14.228 3h-24l2-6h2.104l-1.33 4h18.45l-1.297-4h2.073l2 6zm-5-10h-14v-7h14v7z"></path></symbol></defs><defs><symbol id="mmd0-514266-database" fill-rule="evenodd" clip-rule="evenodd"><path transform="scale(.5)" d="M12.258.001l.256.004.255.005.253.008.251.01.249.012.247.015.246.016.242.019.241.02.239.023.236.024.233.027.231.028.229.031.225.032.223.034.22.036.217.038.214.04.211.041.208.043.205.045.201.046.198.048.194.05.191.051.187.053.183.054.18.056.175.057.172.059.168.06.163.061.16.063.155.064.15.066.074.033.073.033.071.034.07.034.069.035.068.035.067.035.066.035.064.036.064.036.062.036.06.036.06.037.058.037.058.037.055.038.055.038.053.038.052.038.051.039.05.039.048.039.047.039.045.04.044.04.043.04.041.04.04.041.039.041.037.041.036.041.034.041.033.042.032.042.03.042.029.042.027.042.026.043.024.043.023.043.021.043.02.043.018.044.017.043.015.044.013.044.012.044.011.045.009.044.007.045.006.045.004.045.002.045.001.045v17l-.001.045-.002.045-.004.045-.006.045-.007.045-.009.044-.011.045-.012.044-.013.044-.015.044-.017.043-.018.044-.02.043-.021.043-.023.043-.024.043-.026.043-.027.042-.029.042-.03.042-.032.042-.033.042-.034.041-.036.041-.037.041-.039.041-.04.041-.041.04-.043.04-.044.04-.045.04-.047.039-.048.039-.05.039-.051.039-.052.038-.053.038-.055.038-.055.038-.058.037-.058.037-.06.037-.06.036-.062.036-.064.036-.064.036-.066.035-.067.035-.068.035-.069.035-.07.034-.071.034-.073.033-.074.033-.15.066-.155.064-.16.063-.163.061-.168.06-.172.059-.175.057-.18.056-.183.054-.187.053-.191.051-.194.05-.198.048-.201.046-.205.045-.208.043-.211.041-.214.04-.217.038-.22.036-.223.034-.225.032-.229.031-.231.028-.233.027-.236.024-.239.023-.241.02-.242.019-.246.016-.247.015-.249.012-.251.01-.253.008-.255.005-.256.004-.258.001-.258-.001-.256-.004-.255-.005-.253-.008-.251-.01-.249-.012-.247-.015-.245-.016-.243-.019-.241-.02-.238-.023-.236-.024-.234-.027-.231-.028-.228-.031-.226-.032-.223-.034-.22-.036-.217-.038-.214-.04-.211-.041-.208-.043-.204-.045-.201-.046-.198-.048-.195-.05-.19-.051-.187-.053-.184-.054-.179-.056-.176-.057-.172-.059-.167-.06-.164-.061-.159-.063-.155-.064-.151-.066-.074-.033-.072-.033-.072-.034-.07-.034-.069-.035-.068-.035-.067-.035-.066-.035-.064-.036-.063-.036-.062-.036-.061-.036-.06-.037-.058-.037-.057-.037-.056-.038-.055-.038-.053-.038-.052-.038-.051-.039-.049-.039-.049-.039-.046-.039-.046-.04-.044-.04-.043-.04-.041-.04-.04-.041-.039-.041-.037-.041-.036-.041-.034-.041-.033-.042-.032-.042-.03-.042-.029-.042-.027-.042-.026-.043-.024-.043-.023-.043-.021-.043-.02-.043-.018-.044-.017-.043-.015-.044-.013-.044-.012-.044-.011-.045-.009-.044-.007-.045-.006-.045-.004-.045-.002-.045-.001-.045v-17l.001-.045.002-.045.004-.045.006-.045.007-.045.009-.044.011-.045.012-.044.013-.044.015-.044.017-.043.018-.044.02-.043.021-.043.023-.043.024-.043.026-.043.027-.042.029-.042.03-.042.032-.042.033-.042.034-.041.036-.041.037-.041.039-.041.04-.041.041-.04.043-.04.044-.04.046-.04.046-.039.049-.039.049-.039.051-.039.052-.038.053-.038.055-.038.056-.038.057-.037.058-.037.06-.037.061-.036.062-.036.063-.036.064-.036.066-.035.067-.035.068-.035.069-.035.07-.034.072-.034.072-.033.074-.033.151-.066.155-.064.159-.063.164-.061.167-.06.172-.059.176-.057.179-.056.184-.054.187-.053.19-.051.195-.05.198-.048.201-.046.204-.045.208-.043.211-.041.214-.04.217-.038.22-.036.223-.034.226-.032.228-.031.231-.028.234-.027.236-.024.238-.023.241-.02.243-.019.245-.016.247-.015.249-.012.251-.01.253-.008.255-.005.256-.004.258-.001.258.001zm-9.258 20.499v.01l.001.021.003.021.004.022.005.021.006.022.007.022.009.023.01.022.011.023.012.023.013.023.015.023.016.024.017.023.018.024.019.024.021.024.022.025.023.024.024.025.052.049.056.05.061.051.066.051.07.051.075.051.079.052.084.052.088.052.092.052.097.052.102.051.105.052.11.052.114.051.119.051.123.051.127.05.131.05.135.05.139.048.144.049.147.047.152.047.155.047.16.045.163.045.167.043.171.043.176.041.178.041.183.039.187.039.19.037.194.035.197.035.202.033.204.031.209.03.212.029.216.027.219.025.222.024.226.021.23.02.233.018.236.016.24.015.243.012.246.01.249.008.253.005.256.004.259.001.26-.001.257-.004.254-.005.25-.008.247-.011.244-.012.241-.014.237-.016.233-.018.231-.021.226-.021.224-.024.22-.026.216-.027.212-.028.21-.031.205-.031.202-.034.198-.034.194-.036.191-.037.187-.039.183-.04.179-.04.175-.042.172-.043.168-.044.163-.045.16-.046.155-.046.152-.047.148-.048.143-.049.139-.049.136-.05.131-.05.126-.05.123-.051.118-.052.114-.051.11-.052.106-.052.101-.052.096-.052.092-.052.088-.053.083-.051.079-.052.074-.052.07-.051.065-.051.06-.051.056-.05.051-.05.023-.024.023-.025.021-.024.02-.024.019-.024.018-.024.017-.024.015-.023.014-.024.013-.023.012-.023.01-.023.01-.022.008-.022.006-.022.006-.022.004-.022.004-.021.001-.021.001-.021v-4.127l-.077.055-.08.053-.083.054-.085.053-.087.052-.09.052-.093.051-.095.05-.097.05-.1.049-.102.049-.105.048-.106.047-.109.047-.111.046-.114.045-.115.045-.118.044-.12.043-.122.042-.124.042-.126.041-.128.04-.13.04-.132.038-.134.038-.135.037-.138.037-.139.035-.142.035-.143.034-.144.033-.147.032-.148.031-.15.03-.151.03-.153.029-.154.027-.156.027-.158.026-.159.025-.161.024-.162.023-.163.022-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.011-.178.01-.179.008-.179.008-.181.006-.182.005-.182.004-.184.003-.184.002h-.37l-.184-.002-.184-.003-.182-.004-.182-.005-.181-.006-.179-.008-.179-.008-.178-.01-.176-.011-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.022-.162-.023-.161-.024-.159-.025-.157-.026-.156-.027-.155-.027-.153-.029-.151-.03-.15-.03-.148-.031-.146-.032-.145-.033-.143-.034-.141-.035-.14-.035-.137-.037-.136-.037-.134-.038-.132-.038-.13-.04-.128-.04-.126-.041-.124-.042-.122-.042-.12-.044-.117-.043-.116-.045-.113-.045-.112-.046-.109-.047-.106-.047-.105-.048-.102-.049-.1-.049-.097-.05-.095-.05-.093-.052-.09-.051-.087-.052-.085-.053-.083-.054-.08-.054-.077-.054v4.127zm0-5.654v.011l.001.021.003.021.004.021.005.022.006.022.007.022.009.022.01.022.011.023.012.023.013.023.015.024.016.023.017.024.018.024.019.024.021.024.022.024.023.025.024.024.052.05.056.05.061.05.066.051.07.051.075.052.079.051.084.052.088.052.092.052.097.052.102.052.105.052.11.051.114.051.119.052.123.05.127.051.131.05.135.049.139.049.144.048.147.048.152.047.155.046.16.045.163.045.167.044.171.042.176.042.178.04.183.04.187.038.19.037.194.036.197.034.202.033.204.032.209.03.212.028.216.027.219.025.222.024.226.022.23.02.233.018.236.016.24.014.243.012.246.01.249.008.253.006.256.003.259.001.26-.001.257-.003.254-.006.25-.008.247-.01.244-.012.241-.015.237-.016.233-.018.231-.02.226-.022.224-.024.22-.025.216-.027.212-.029.21-.03.205-.032.202-.033.198-.035.194-.036.191-.037.187-.039.183-.039.179-.041.175-.042.172-.043.168-.044.163-.045.16-.045.155-.047.152-.047.148-.048.143-.048.139-.05.136-.049.131-.05.126-.051.123-.051.118-.051.114-.052.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.051.07-.052.065-.051.06-.05.056-.051.051-.049.023-.025.023-.024.021-.025.02-.024.019-.024.018-.024.017-.024.015-.023.014-.023.013-.024.012-.022.01-.023.01-.023.008-.022.006-.022.006-.022.004-.021.004-.022.001-.021.001-.021v-4.139l-.077.054-.08.054-.083.054-.085.052-.087.053-.09.051-.093.051-.095.051-.097.05-.1.049-.102.049-.105.048-.106.047-.109.047-.111.046-.114.045-.115.044-.118.044-.12.044-.122.042-.124.042-.126.041-.128.04-.13.039-.132.039-.134.038-.135.037-.138.036-.139.036-.142.035-.143.033-.144.033-.147.033-.148.031-.15.03-.151.03-.153.028-.154.028-.156.027-.158.026-.159.025-.161.024-.162.023-.163.022-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.011-.178.009-.179.009-.179.007-.181.007-.182.005-.182.004-.184.003-.184.002h-.37l-.184-.002-.184-.003-.182-.004-.182-.005-.181-.007-.179-.007-.179-.009-.178-.009-.176-.011-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.022-.162-.023-.161-.024-.159-.025-.157-.026-.156-.027-.155-.028-.153-.028-.151-.03-.15-.03-.148-.031-.146-.033-.145-.033-.143-.033-.141-.035-.14-.036-.137-.036-.136-.037-.134-.038-.132-.039-.13-.039-.128-.04-.126-.041-.124-.042-.122-.043-.12-.043-.117-.044-.116-.044-.113-.046-.112-.046-.109-.046-.106-.047-.105-.048-.102-.049-.1-.049-.097-.05-.095-.051-.093-.051-.09-.051-.087-.053-.085-.052-.083-.054-.08-.054-.077-.054v4.139zm0-5.666v.011l.001.02.003.022.004.021.005.022.006.021.007.022.009.023.01.022.011.023.012.023.013.023.015.023.016.024.017.024.018.023.019.024.021.025.022.024.023.024.024.025.052.05.056.05.061.05.066.051.07.051.075.052.079.051.084.052.088.052.092.052.097.052.102.052.105.051.11.052.114.051.119.051.123.051.127.05.131.05.135.05.139.049.144.048.147.048.152.047.155.046.16.045.163.045.167.043.171.043.176.042.178.04.183.04.187.038.19.037.194.036.197.034.202.033.204.032.209.03.212.028.216.027.219.025.222.024.226.021.23.02.233.018.236.017.24.014.243.012.246.01.249.008.253.006.256.003.259.001.26-.001.257-.003.254-.006.25-.008.247-.01.244-.013.241-.014.237-.016.233-.018.231-.02.226-.022.224-.024.22-.025.216-.027.212-.029.21-.03.205-.032.202-.033.198-.035.194-.036.191-.037.187-.039.183-.039.179-.041.175-.042.172-.043.168-.044.163-.045.16-.045.155-.047.152-.047.148-.048.143-.049.139-.049.136-.049.131-.051.126-.05.123-.051.118-.052.114-.051.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.052.07-.051.065-.051.06-.051.056-.05.051-.049.023-.025.023-.025.021-.024.02-.024.019-.024.018-.024.017-.024.015-.023.014-.024.013-.023.012-.023.01-.022.01-.023.008-.022.006-.022.006-.022.004-.022.004-.021.001-.021.001-.021v-4.153l-.077.054-.08.054-.083.053-.085.053-.087.053-.09.051-.093.051-.095.051-.097.05-.1.049-.102.048-.105.048-.106.048-.109.046-.111.046-.114.046-.115.044-.118.044-.12.043-.122.043-.124.042-.126.041-.128.04-.13.039-.132.039-.134.038-.135.037-.138.036-.139.036-.142.034-.143.034-.144.033-.147.032-.148.032-.15.03-.151.03-.153.028-.154.028-.156.027-.158.026-.159.024-.161.024-.162.023-.163.023-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.01-.178.01-.179.009-.179.007-.181.006-.182.006-.182.004-.184.003-.184.001-.185.001-.185-.001-.184-.001-.184-.003-.182-.004-.182-.006-.181-.006-.179-.007-.179-.009-.178-.01-.176-.01-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.023-.162-.023-.161-.024-.159-.024-.157-.026-.156-.027-.155-.028-.153-.028-.151-.03-.15-.03-.148-.032-.146-.032-.145-.033-.143-.034-.141-.034-.14-.036-.137-.036-.136-.037-.134-.038-.132-.039-.13-.039-.128-.041-.126-.041-.124-.041-.122-.043-.12-.043-.117-.044-.116-.044-.113-.046-.112-.046-.109-.046-.106-.048-.105-.048-.102-.048-.1-.05-.097-.049-.095-.051-.093-.051-.09-.052-.087-.052-.085-.053-.083-.053-.08-.054-.077-.054v4.153zm8.74-8.179l-.257.004-.254.005-.25.008-.247.011-.244.012-.241.014-.237.016-.233.018-.231.021-.226.022-.224.023-.22.026-.216.027-.212.028-.21.031-.205.032-.202.033-.198.034-.194.036-.191.038-.187.038-.183.04-.179.041-.175.042-.172.043-.168.043-.163.045-.16.046-.155.046-.152.048-.148.048-.143.048-.139.049-.136.05-.131.05-.126.051-.123.051-.118.051-.114.052-.11.052-.106.052-.101.052-.096.052-.092.052-.088.052-.083.052-.079.052-.074.051-.07.052-.065.051-.06.05-.056.05-.051.05-.023.025-.023.024-.021.024-.02.025-.019.024-.018.024-.017.023-.015.024-.014.023-.013.023-.012.023-.01.023-.01.022-.008.022-.006.023-.006.021-.004.022-.004.021-.001.021-.001.021.001.021.001.021.004.021.004.022.006.021.006.023.008.022.01.022.01.023.012.023.013.023.014.023.015.024.017.023.018.024.019.024.02.025.021.024.023.024.023.025.051.05.056.05.06.05.065.051.07.052.074.051.079.052.083.052.088.052.092.052.096.052.101.052.106.052.11.052.114.052.118.051.123.051.126.051.131.05.136.05.139.049.143.048.148.048.152.048.155.046.16.046.163.045.168.043.172.043.175.042.179.041.183.04.187.038.191.038.194.036.198.034.202.033.205.032.21.031.212.028.216.027.22.026.224.023.226.022.231.021.233.018.237.016.241.014.244.012.247.011.25.008.254.005.257.004.26.001.26-.001.257-.004.254-.005.25-.008.247-.011.244-.012.241-.014.237-.016.233-.018.231-.021.226-.022.224-.023.22-.026.216-.027.212-.028.21-.031.205-.032.202-.033.198-.034.194-.036.191-.038.187-.038.183-.04.179-.041.175-.042.172-.043.168-.043.163-.045.16-.046.155-.046.152-.048.148-.048.143-.048.139-.049.136-.05.131-.05.126-.051.123-.051.118-.051.114-.052.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.051.07-.052.065-.051.06-.05.056-.05.051-.05.023-.025.023-.024.021-.024.02-.025.019-.024.018-.024.017-.023.015-.024.014-.023.013-.023.012-.023.01-.023.01-.022.008-.022.006-.023.006-.021.004-.022.004-.021.001-.021.001-.021-.001-.021-.001-.021-.004-.021-.004-.022-.006-.021-.006-.023-.008-.022-.01-.022-.01-.023-.012-.023-.013-.023-.014-.023-.015-.024-.017-.023-.018-.024-.019-.024-.02-.025-.021-.024-.023-.024-.023-.025-.051-.05-.056-.05-.06-.05-.065-.051-.07-.052-.074-.051-.079-.052-.083-.052-.088-.052-.092-.052-.096-.052-.101-.052-.106-.052-.11-.052-.114-.052-.118-.051-.123-.051-.126-.051-.131-.05-.136-.05-.139-.049-.143-.048-.148-.048-.152-.048-.155-.046-.16-.046-.163-.045-.168-.043-.172-.043-.175-.042-.179-.041-.183-.04-.187-.038-.191-.038-.194-.036-.198-.034-.202-.033-.205-.032-.21-.031-.212-.028-.216-.027-.22-.026-.224-.023-.226-.022-.231-.021-.233-.018-.237-.016-.241-.014-.244-.012-.247-.011-.25-.008-.254-.005-.257-.004-.26-.001-.26.001z"></path></symbol></defs><defs><symbol id="mmd0-514266-clock" width="24" height="24"><path transform="scale(.5)" d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.848 12.459c.202.038.202.333.001.372-1.907.361-6.045 1.111-6.547 1.111-.719 0-1.301-.582-1.301-1.301 0-.512.77-5.447 1.125-7.445.034-.192.312-.181.343.014l.985 6.238 5.394 1.011z"></path></symbol></defs><defs><marker id="mmd0-514266-arrowhead" refX="7.9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M -1 0 L 10 5 L 0 10 z"></path></marker></defs><defs><marker id="mmd0-514266-crosshead" markerWidth="15" markerHeight="8" orient="auto" refX="4" refY="4.5"><path fill="none" stroke="#000000" stroke-width="1pt" d="M 1,2 L 6,7 M 6,2 L 1,7" style="stroke-dasharray: 0, 0;"></path></marker></defs><defs><marker id="mmd0-514266-filled-head" refX="15.5" refY="7" markerWidth="20" markerHeight="28" orient="auto"><path d="M 18,7 L9,13 L14,7 L9,1 Z"></path></marker></defs><defs><marker id="mmd0-514266-sequencenumber" refX="15" refY="15" markerWidth="60" markerHeight="40" orient="auto"><circle cx="15" cy="15" r="6"></circle></marker></defs><defs><marker id="mmd0-514266-solidTopArrowHead" refX="7.9" refY="7.25" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 10 8 L 0 8 z"></path></marker></defs><defs><marker id="mmd0-514266-solidBottomArrowHead" refX="7.9" refY="0.75" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 10 0 L 0 8 z"></path></marker></defs><defs><marker id="mmd0-514266-stickTopArrowHead" refX="7.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 7 7" stroke="black" stroke-width="1.5" fill="none"></path></marker></defs><defs><marker id="mmd0-514266-stickBottomArrowHead" refX="7.5" refY="0" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 7 L 7 0" stroke="black" stroke-width="1.5" fill="none"></path></marker></defs><g data-et="note" data-id="i2"><rect x="50" y="167" fill="#EDF2AE" stroke="#666" width="355" height="73" class="note"></rect><text x="228" y="172" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="228">échange de clés (Diffie-Hellman) :</tspan></text><text x="228" y="190" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="228">une clé de session secrète est calculée des deux côtés,</tspan></text><text x="228" y="207" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="228">sans jamais circuler sur le réseau</tspan></text></g><g data-et="note" data-id="i4"><rect x="-61.5" y="296" fill="#EDF2AE" stroke="#666" width="273" height="56" class="note"></rect><text x="75" y="301" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="75">vérification dans known_hosts</tspan></text><text x="75" y="319" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="75">(première fois : empreinte à valider)</tspan></text></g><text x="226" y="80" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">connexion TCP sur le port 22</text><line x1="76" y1="111" x2="376" y2="111" class="messageLine0" data-et="message" data-id="i0" data-from="C" data-to="S" stroke-width="2" stroke="none" marker-end="url(#mmd0-514266-arrowhead)" style="fill: none;"></line><text x="229" y="126" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">versions et algorithmes proposés</text><line x1="379" y1="157" x2="79" y2="157" class="messageLine1" data-et="message" data-id="i1" data-from="S" data-to="C" stroke-width="2" stroke="none" marker-end="url(#mmd0-514266-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line><text x="229" y="255" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">clé d'hôte du serveur + signature</text><line x1="379" y1="286" x2="79" y2="286" class="messageLine1" data-et="message" data-id="i3" data-from="S" data-to="C" stroke-width="2" stroke="none" marker-end="url(#mmd0-514266-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line><text x="226" y="367" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">authentification de l'utilisateur</text><text x="226" y="384" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">(clé publique, ou mot de passe)</text><line x1="76" y1="414.5" x2="376" y2="414.5" class="messageLine0" data-et="message" data-id="i5" data-from="C" data-to="S" stroke-width="2" stroke="none" marker-end="url(#mmd0-514266-arrowhead)" style="fill: none;"></line><text x="229" y="430" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">session ouverte, tout est chiffré</text><line x1="379" y1="458.5" x2="79" y2="458.5" class="messageLine1" data-et="message" data-id="i6" data-from="S" data-to="C" stroke-width="2" stroke="none" marker-end="url(#mmd0-514266-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></svg></div></div>
-<p>Deux authentifications se succèdent :</p>
-<ol type="1">
-<li>le <strong>serveur</strong> prouve son identité avec sa <strong>clé d’hôte</strong> : le client vérifie qu’il parle au bon serveur et pas à un imposteur ;</li>
-<li>l’<strong>utilisateur</strong> prouve son identité, par mot de passe ou par clé.</li>
-</ol>
-<h3 id="la-clé-dhôte-et-known_hosts">La clé d’hôte et known_hosts</h3>
-<p>À la <strong>première connexion</strong>, le client affiche l’<strong>empreinte</strong> (<em>fingerprint</em>) de la clé du serveur et demande de la valider. Si on répond <code>yes</code>, elle est enregistrée dans <code>~/.ssh/known_hosts</code>. Aux connexions suivantes, le client compare : si la clé a changé, il affiche un avertissement très visible (<em>REMOTE HOST IDENTIFICATION HAS CHANGED</em>) et refuse de se connecter.</p>
-<p>Cela arrive légitimement quand un serveur a été réinstallé ou cloné. Mais cela peut aussi être une <strong>attaque de l’homme du milieu</strong>. On ne supprime l’ancienne empreinte (<code>ssh-keygen -R serveur</code>) qu’après avoir vérifié la nouvelle auprès de l’administrateur du serveur :</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Sur le serveur</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-lf</span> /etc/ssh/ssh_host_ed25519_key.pub     <span class="co"># empreinte à comparer avec celle affichée par le client</span></span></code></pre></div></div>
-<h2 id="lauthentification-par-clé">3. L’authentification par clé</h2>
-<h3 id="le-principe">Le principe</h3>
-<p>On génère une <strong>paire de clés</strong> liées mathématiquement :</p>
+<h2 id="client-et-serveur">2. Client et serveur</h2>
+<p>Le <strong>client</strong> est le programme qui <strong>ouvre</strong> la connexion. Le <strong>serveur</strong> est le programme qui <strong>attend</strong> les connexions sur un port.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th></th>
+<th>Client</th>
+<th>Serveur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rôle</td>
+<td>demande la connexion</td>
+<td>écoute sur un port et répond</td>
+</tr>
+<tr class="even">
+<td>SSH</td>
+<td><code>ssh</code>, <code>scp</code>, <code>sftp</code> (paquet <code>openssh-client</code>)</td>
+<td><code>sshd</code> sur le port 22 (paquet <code>openssh-server</code>)</td>
+</tr>
+<tr class="odd">
+<td>Web</td>
+<td>le navigateur, <code>curl</code></td>
+<td>nginx sur les ports 80 et 443</td>
+</tr>
+<tr class="even">
+<td>Se vérifie avec</td>
+<td><code>ps</code>, la commande qu’on vient de taper</td>
+<td><code>sudo ss -tlnp</code> : le port est en écoute (<code>LISTEN</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>C’est un <strong>rôle tenu pour une connexion</strong>, pas une catégorie de machine :</p>
 <ul>
-<li>la <strong>clé privée</strong> reste sur le poste de l’utilisateur, <strong>secrète</strong>, idéalement protégée par une <strong>phrase de passe</strong> ;</li>
-<li>la <strong>clé publique</strong> peut être diffusée sans risque ; on la dépose sur chaque serveur, dans <code>~/.ssh/authorized_keys</code>.</li>
+<li>SRV-LNX-01 est serveur quand vous vous y connectez, mais il devient client s’il lance <code>ssh</code> vers une autre machine ;</li>
+<li>le reverse proxy de la séance 3 est serveur pour le navigateur et client pour le site interne ;</li>
+<li>le sens des données ne change pas les rôles : avec <code>scp sysadmin@srv-lnx-01:/etc/os-release .</code> lancé sur CLI-LNX-01, le fichier va du serveur vers CLI-LNX-01, qui reste le client.</li>
 </ul>
-<p>À la connexion, le serveur envoie un défi ; le client le <strong>signe</strong> avec la clé privée ; le serveur vérifie la signature avec la clé publique. La clé privée ne quitte jamais le poste.</p>
-<div class="callout analogy"><div class="callout-body"><p class="callout-titre"><strong>Analogie : le cadenas et la clé</strong></p>
-<p>Vous fabriquez des cadenas identiques (clé publique) et vous en laissez un sur chaque serveur. Vous gardez la seule clé qui les ouvre (clé privée). N’importe qui peut voir le cadenas, cela ne l’aide pas à l’ouvrir. Si vous perdez la clé, on retire vos cadenas des serveurs.</p>
+<p>Dans le TP 10 :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Connexion</th>
+<th>Client</th>
+<th>Serveur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ssh sysadmin@srv-lnx-01</code> depuis CLI-LNX-01</td>
+<td><code>ssh</code> sur CLI-LNX-01</td>
+<td><code>sshd</code> sur SRV-LNX-01 (10.10.10.20:22)</td>
+</tr>
+<tr class="even">
+<td><code>ssh -p 2222 sysadmin@127.0.0.1</code> depuis le PC</td>
+<td><code>ssh</code> sur le PC</td>
+<td><code>sshd</code> sur SRV-LNX-01, atteint par la redirection 2222 → 22</td>
+</tr>
+<tr class="odd">
+<td><code>scp sysadmin@srv-lnx-01:/etc/nginx/nginx.conf .</code></td>
+<td><code>scp</code> sur CLI-LNX-01</td>
+<td><code>sshd</code> sur SRV-LNX-01</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="les-briques-de-la-cryptographie">3. Les briques de la cryptographie</h2>
+<p>SSH et HTTPS utilisent les mêmes briques. Il faut les distinguer avant de voir comment elles s’assemblent.</p>
+<h3 id="le-chiffrement-symétrique">Le chiffrement symétrique</h3>
+<p>Une <strong>seule clé secrète</strong> sert à chiffrer et à déchiffrer. Les algorithmes actuels sont <strong>AES</strong> et <strong>ChaCha20</strong>. Vous en utilisez déjà : une archive 7-Zip protégée par mot de passe, un disque chiffré par BitLocker.</p>
+<ul>
+<li>Avantage : c’est <strong>très rapide</strong>. C’est lui qui chiffre toutes les données d’une session SSH ou HTTPS.</li>
+<li>Problème : les deux côtés doivent posséder <strong>la même clé</strong>, sans qu’un espion puisse la lire en chemin. La réponse est l’échange de clés, plus bas.</li>
+</ul>
+<h3 id="la-paire-de-clés-cryptographie-asymétrique">La paire de clés (cryptographie asymétrique)</h3>
+<p>On génère ensemble deux clés liées mathématiquement (<code>ssh-keygen</code> le fait) :</p>
+<ul>
+<li>la <strong>clé privée</strong> est secrète et ne quitte jamais l’appareil où elle a été créée ;</li>
+<li>la <strong>clé publique</strong> se calcule à partir de la clé privée et peut être donnée à tout le monde. L’inverse est impossible en pratique : avoir la clé publique ne permet pas de retrouver la clé privée.</li>
+</ul>
+<p>On dit « asymétrique » parce que les deux clés sont différentes et n’ont pas le même rôle. La commande <code>ssh-keygen -y -f ~/.ssh/id_ed25519</code> recalcule la clé publique à partir de la clé privée.</p>
+<h3 id="deux-usages-différents-chiffrer-ou-signer">Deux usages différents : chiffrer ou signer</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Usage</th>
+<th>Clé privée</th>
+<th>Clé publique</th>
+<th>Ce que cela garantit</th>
+<th>Exemples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Chiffrement</strong></td>
+<td>sert à <strong>déchiffrer</strong></td>
+<td>sert à <strong>chiffrer</strong> un message destiné au propriétaire</td>
+<td><strong>confidentialité</strong> : seul le propriétaire de la clé privée peut lire</td>
+<td>courriel chiffré (PGP, S/MIME), ancien échange « RSA » de TLS 1.2</td>
+</tr>
+<tr class="even">
+<td><strong>Signature</strong></td>
+<td>sert à <strong>signer</strong></td>
+<td>sert à <strong>vérifier</strong> la signature</td>
+<td><strong>authenticité</strong> (qui a signé) et <strong>intégrité</strong> (rien n’a été modifié). Le message reste lisible par tous</td>
+<td>authentification SSH, certificats HTTPS, dépôts Debian (<code>apt</code> vérifie la signature des listes de paquets)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Une signature fonctionne ainsi :</p>
+<div class="code-block"><div class="code-header"><button class="copy" type="button">Copier</button></div><pre class="text"><code>signature = Signer(clé privée, message)
+Vérifier(clé publique, message, signature)  →  valide ou invalide</code></pre></div>
+<ul>
+<li>Sans la clé privée, impossible de fabriquer une signature valide.</li>
+<li>Si un seul caractère du message change, la vérification échoue.</li>
+<li>Une signature ne vaut que pour <strong>ce</strong> message : on ne peut pas la recopier sur un autre.</li>
+</ul>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>Signer, ce n'est pas « chiffrer avec la clé privée »</strong></p>
+<p>On lit souvent cette formule. Elle vient de RSA, où les deux opérations se ressemblent mathématiquement, mais elle est fausse en général. <strong>Ed25519</strong>, l’algorithme recommandé pour SSH et utilisé dans le TP, sait <strong>uniquement signer</strong> : on ne peut rien chiffrer avec une clé Ed25519. Dans une connexion SSH avec des clés Ed25519, <strong>aucune donnée n’est chiffrée avec une clé publique</strong>.</p>
 </div></div>
+<h3 id="lempreinte">L’empreinte</h3>
+<p>Une <strong>empreinte</strong> (<em>hash</em>) est un résumé de taille fixe calculé par une fonction de hachage (SHA-256). Le même contenu donne toujours la même empreinte, et on ne peut pas revenir de l’empreinte au contenu. Vous l’avez vu avec les mots de passe de <code>/etc/shadow</code> (séance 9).</p>
+<p>En SSH, l’<strong>empreinte d’une clé publique</strong> (<code>SHA256:x6k…</code>) sert à <strong>comparer deux clés d’un coup d’œil</strong>. Ce n’est pas une clé : elle ne permet ni de chiffrer ni de vérifier une signature.</p>
+<h3 id="léchange-de-clés-obtenir-le-même-secret-sans-le-transmettre">L’échange de clés : obtenir le même secret sans le transmettre</h3>
+<p>Comment deux machines qui ne se sont jamais parlé obtiennent-elles la même clé symétrique, alors qu’un espion voit tout ce qui passe ? Par un <strong>échange de clés Diffie-Hellman</strong> :</p>
+<ol type="1">
+<li>chaque côté tire au hasard une <strong>valeur secrète</strong>, qu’il garde ;</li>
+<li>chacun en calcule une <strong>valeur publique</strong> et l’envoie à l’autre ;</li>
+<li>chacun combine sa valeur secrète avec la valeur publique reçue : <strong>les deux obtiennent le même secret partagé</strong>, qui n’a jamais circulé.</li>
+</ol>
+<p>L’espion a vu passer les deux valeurs publiques, mais sans l’une des valeurs secrètes il ne peut pas calculer le secret. Les valeurs secrètes sont tirées à chaque connexion puis effacées : l’échange est dit <strong>éphémère</strong>. Les <strong>clés de session</strong> (symétriques) sont ensuite calculées à partir du secret partagé.</p>
+<div class="callout analogy"><div class="callout-body"><p class="callout-titre"><strong>Analogie : le mélange de peintures</strong></p>
+<p>Les deux côtés choisissent publiquement une couleur de base (jaune). Chacun ajoute en secret sa propre couleur (rouge pour l’un, bleu pour l’autre) et envoie le mélange obtenu. Chacun ajoute ensuite sa couleur secrète au mélange reçu : les deux obtiennent la même teinte finale (jaune + rouge + bleu). L’espion a vu passer le jaune, le mélange jaune-rouge et le mélange jaune-bleu, mais on ne sait pas « démélanger » une peinture.</p>
+</div></div>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>L'échange de clés ne dit pas avec qui on parle</strong></p>
+<p>Un attaquant placé au milieu pourrait faire un échange Diffie-Hellman avec le client et un autre avec le serveur, puis relayer en lisant tout. C’est pourquoi le serveur <strong>signe</strong> l’échange avec sa clé privée (partie 5) : le client vérifie qu’il a bien fait l’échange avec le bon serveur.</p>
+</div></div>
+<h3 id="récapitulatif">Récapitulatif</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Élément</th>
+<th>Ce que c’est</th>
+<th>Où il se trouve</th>
+<th>À quoi il sert</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Clé de session</strong> (symétrique)</td>
+<td>clé secrète commune, calculée à chaque connexion</td>
+<td>en mémoire, des deux côtés ; jamais transmise, effacée à la fin</td>
+<td>chiffrer et protéger les données de la session</td>
+</tr>
+<tr class="even">
+<td><strong>Clé privée</strong></td>
+<td>moitié secrète d’une paire</td>
+<td>sur l’appareil de son propriétaire, jamais transmise</td>
+<td><strong>signer</strong> (ou déchiffrer, selon l’algorithme)</td>
+</tr>
+<tr class="odd">
+<td><strong>Clé publique</strong></td>
+<td>moitié diffusable d’une paire</td>
+<td>chez tous ceux qui doivent vérifier</td>
+<td><strong>vérifier une signature</strong> (ou chiffrer, selon l’algorithme)</td>
+</tr>
+<tr class="even">
+<td><strong>Empreinte</strong></td>
+<td>résumé SHA-256 d’une clé publique</td>
+<td>affichée par <code>ssh</code>, <code>ssh-keygen -lf</code>, les journaux</td>
+<td>comparer deux clés à l’œil ; ce n’est pas une clé</td>
+</tr>
+<tr class="odd">
+<td><strong>Phrase de passe</strong></td>
+<td>mot de passe qui protège le fichier de la clé privée</td>
+<td>connue de l’utilisateur seul</td>
+<td>déchiffrer <strong>localement</strong> la clé privée ; jamais envoyée au serveur</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="les-deux-paires-de-clés-de-ssh">4. Les deux paires de clés de SSH</h2>
+<p>Dans une connexion SSH, <strong>chaque côté prouve son identité avec sa propre paire de clés</strong>. Les deux paires sont disposées en miroir :</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-136121" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 827px;" viewBox="0 0 827 276" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-136121{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-136121 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-136121 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-136121 .error-icon{fill:#f5f6f8;}#mmd0-136121 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-136121 .edge-thickness-normal{stroke-width:1px;}#mmd0-136121 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-136121 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-136121 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-136121 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-136121 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-136121 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-136121 .marker.cross{stroke:#4a5563;}#mmd0-136121 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-136121 p{margin:0;}#mmd0-136121 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-136121 .cluster-label text{fill:#1f3a5f;}#mmd0-136121 .cluster-label span{color:#1f3a5f;}#mmd0-136121 .cluster-label span p{background-color:transparent;}#mmd0-136121 .label text,#mmd0-136121 span{fill:#1d2530;color:#1d2530;}#mmd0-136121 .node rect,#mmd0-136121 .node circle,#mmd0-136121 .node ellipse,#mmd0-136121 .node polygon,#mmd0-136121 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-136121 .rough-node .label text,#mmd0-136121 .node .label text,#mmd0-136121 .image-shape .label,#mmd0-136121 .icon-shape .label{text-anchor:middle;}#mmd0-136121 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-136121 .rough-node .label,#mmd0-136121 .node .label,#mmd0-136121 .image-shape .label,#mmd0-136121 .icon-shape .label{text-align:center;}#mmd0-136121 .node.clickable{cursor:pointer;}#mmd0-136121 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-136121 .arrowheadPath{fill:#000000;}#mmd0-136121 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-136121 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-136121 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-136121 .edgeLabel p{background-color:#ffffff;}#mmd0-136121 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-136121 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-136121 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-136121 .cluster text{fill:#1f3a5f;}#mmd0-136121 .cluster span{color:#1f3a5f;}#mmd0-136121 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-136121 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-136121 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-136121 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-136121 rect.text{fill:none;stroke-width:0;}#mmd0-136121 .icon-shape,#mmd0-136121 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-136121 .icon-shape p,#mmd0-136121 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-136121 .icon-shape .label rect,#mmd0-136121 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-136121 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-136121 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-136121 .node .neo-node{stroke:#1f3a5f;}#mmd0-136121 [data-look="neo"].node rect,#mmd0-136121 [data-look="neo"].cluster rect,#mmd0-136121 [data-look="neo"].node polygon{stroke:url(#mmd0-136121-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-136121 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-136121 [data-look="neo"].node path{stroke:url(#mmd0-136121-gradient);stroke-width:1px;}#mmd0-136121 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-136121 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-136121 [data-look="neo"].node circle{stroke:url(#mmd0-136121-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-136121 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-136121 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-136121-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-136121 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-136121-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-136121 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-136121_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-136121_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-136121_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-136121_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-136121_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-136121_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-136121_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-136121_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-136121_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-136121_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-136121_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-136121_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-136121-S" data-look="classic"><rect style="" x="512.96875" y="8" width="306.03125" height="260"></rect><g class="cluster-label " transform="translate(574.296875, 8)"><foreignObject width="183.375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Serveur : SRV-LNX-01 (sshd)</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-136121-C" data-look="classic"><rect style="" x="8" y="8" width="254.96875" height="260"></rect><g class="cluster-label " transform="translate(57.2890625, 8)"><foreignObject width="156.390625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Client : CLI-LNX-01 (ssh)</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M237.969,78L262.969,78L387.969,78L512.969,78L556.094,78" id="mmd0-136121-L_CP_SA_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_CP_SA_0" data-points="W3sieCI6MjM3Ljk2ODc1LCJ5Ijo3OH0seyJ4IjoyNjIuOTY4NzUsInkiOjc4fSx7IngiOjM4Ny45Njg3NSwieSI6Nzh9LHsieCI6NTEyLjk2ODc1LCJ5Ijo3OH0seyJ4Ijo1NTYuMDkzNzUsInkiOjc4fV0=" data-look="classic"></path><path d="M235.867,198L262.969,198L387.969,198L512.969,198L537.969,198" id="mmd0-136121-L_CK_SP_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_CK_SP_0" data-points="W3sieCI6MjM1Ljg2NzE4NzUsInkiOjE5OH0seyJ4IjoyNjIuOTY4NzUsInkiOjE5OH0seyJ4IjozODcuOTY4NzUsInkiOjE5OH0seyJ4Ijo1MTIuOTY4NzUsInkiOjE5OH0seyJ4Ijo1MzcuOTY4NzUsInkiOjE5OH1d" data-look="classic"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(387.96875, 78)"><g class="label" data-id="L_CP_SA_0" transform="translate(-100, -31.5)"><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel "><p>clé publique de l'utilisateur copiée →<br>(ssh-copy-id)</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(387.96875, 198)"><g class="label" data-id="L_CK_SP_0" transform="translate(-89.6796875, -21)"><foreignObject width="179.359375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>← clé publique d'hôte copiée<br>(première connexion)</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-136121-flowchart-CP-0" data-look="classic" transform="translate(135.484375, 78)"><rect class="basic label-container" style="" x="-102.484375" y="-35" width="204.96875" height="70"></rect><g class="label" style="" transform="translate(-74.484375, -21)"><rect></rect><foreignObject width="148.96875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>~/.ssh/id_ed25519<br>clé privée de l'utilisateur</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-136121-flowchart-CK-1" data-look="classic" transform="translate(135.484375, 198)"><rect class="basic label-container" style="" x="-100.3828125" y="-35" width="200.765625" height="70"></rect><g class="label" style="" transform="translate(-72.3828125, -21)"><rect></rect><foreignObject width="144.765625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>~/.ssh/known_hosts<br>clé publique du serveur</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-136121-flowchart-SA-2" data-look="classic" transform="translate(665.984375, 78)"><rect class="basic label-container" style="" x="-109.890625" y="-35" width="219.78125" height="70"></rect><g class="label" style="" transform="translate(-81.890625, -21)"><rect></rect><foreignObject width="163.78125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>~/.ssh/authorized_keys<br>clé publique de l'utilisateur</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-136121-flowchart-SP-3" data-look="classic" transform="translate(665.984375, 198)"><rect class="basic label-container" style="" x="-128.015625" y="-35" width="256.03125" height="70"></rect><g class="label" style="" transform="translate(-100.015625, -21)"><rect></rect><foreignObject width="200.03125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>/etc/ssh/ssh_host_ed25519_key<br>clé privée d'hôte</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-136121-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-136121-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-136121-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th></th>
+<th>Clé d’hôte</th>
+<th>Clé utilisateur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Identifie</td>
+<td>la machine serveur (SRV-LNX-01)</td>
+<td>une personne sur un appareil (<code>sysadmin@cli-lnx-01</code>, <code>perso-pc</code>)</td>
+</tr>
+<tr class="even">
+<td>Créée</td>
+<td>à l’installation d’<code>openssh-server</code></td>
+<td>par l’utilisateur avec <code>ssh-keygen</code></td>
+</tr>
+<tr class="odd">
+<td>Clé privée</td>
+<td>sur le serveur : <code>/etc/ssh/ssh_host_ed25519_key</code></td>
+<td>sur le client : <code>~/.ssh/id_ed25519</code></td>
+</tr>
+<tr class="even">
+<td>Clé publique</td>
+<td>copiée chez chaque client, dans <code>~/.ssh/known_hosts</code></td>
+<td>copiée sur le serveur, dans <code>~/.ssh/authorized_keys</code> du compte</td>
+</tr>
+<tr class="odd">
+<td>Prouve</td>
+<td>« je suis bien le serveur que tu connais »</td>
+<td>« je détiens une clé autorisée pour ce compte »</td>
+</tr>
+<tr class="even">
+<td>Vérifiée par</td>
+<td>le client</td>
+<td>le serveur</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les clés de session, elles, n’appartiennent à personne : elles sont calculées des deux côtés à chaque connexion.</p>
+<h3 id="la-clé-dhôte-et-known_hosts">La clé d’hôte et known_hosts</h3>
+<p>À la <strong>première connexion</strong>, le client ne connaît pas encore la clé d’hôte du serveur. Il affiche son <strong>empreinte</strong> et demande de la valider. On la compare avec l’empreinte lue sur le serveur lui-même (par la console, ou dans la documentation d’exploitation) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Sur le serveur</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-lf</span> /etc/ssh/ssh_host_ed25519_key.pub     <span class="co"># empreinte à comparer avec celle affichée par le client</span></span></code></pre></div></div>
+<p>Si l’on répond <code>yes</code>, le client enregistre la <strong>clé publique complète</strong> du serveur dans <code>~/.ssh/known_hosts</code> (pas seulement son empreinte). Ce principe s’appelle la <strong>confiance à la première utilisation</strong> (<em>TOFU, Trust On First Use</em>). Une ligne de <code>known_hosts</code> sous Debian :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : ~/.ssh/known_hosts</span><button class="copy" type="button">Copier</button></div><pre class="text"><code>|1|c51TgRF/4M8RgPRlccYkQ8c/rlc=|AHf4+MO72jq5UwG0KDjZi/fh+vg= ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK73t/jZ…
+# nom du serveur, haché                                      algorithme  clé publique du serveur</code></pre></div>
+<p>Le nom du serveur est haché (réglage <code>HashKnownHosts yes</code> de Debian) pour qu’un intrus qui lirait le fichier ne découvre pas la liste des serveurs. Pour retrouver la ligne d’un serveur : <code>ssh-keygen -F srv-lnx-01</code> (ajouter <code>-l</code> pour afficher son empreinte).</p>
+<p>Aux connexions suivantes, le client vérifie que le serveur possède toujours la clé privée correspondant à la clé enregistrée. Si la clé a changé, il affiche un avertissement très visible (<em>REMOTE HOST IDENTIFICATION HAS CHANGED</em>) et refuse de se connecter. Cela arrive légitimement quand un serveur a été réinstallé ou cloné, mais cela peut aussi être une <strong>attaque de l’homme du milieu</strong>. On ne retire l’ancienne clé (<code>ssh-keygen -R serveur</code>) qu’après avoir vérifié la nouvelle empreinte auprès de l’administrateur du serveur.</p>
+<h2 id="déroulement-dune-connexion-ssh">5. Déroulement d’une connexion SSH</h2>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd1-519319" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width: 859.5px;" viewBox="-90.5 -10 859.5 620.5" role="graphics-document document" aria-roledescription="sequence"><g><line id="actor1" x1="644" y1="65" x2="644" y2="2000" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="S" data-et="life-line" data-id="S"></line><g id="root-1" data-et="participant" data-type="participant" data-id="S"><rect x="569" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="S" rx="3" ry="3" class="actor actor-top"></rect><text x="644" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400; font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif;"><tspan x="644" dy="0">Serveur (sshd)</tspan></text></g></g><g><line id="actor0" x1="75" y1="65" x2="75" y2="2000" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="C" data-et="life-line" data-id="C"></line><g id="root-0" data-et="participant" data-type="participant" data-id="C"><rect x="0" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="C" rx="3" ry="3" class="actor actor-top"></rect><text x="75" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400; font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif;"><tspan x="75" dy="0">Client (ssh)</tspan></text></g></g><style>#mmd1-519319{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd1-519319 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd1-519319 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd1-519319 .error-icon{fill:#f5f6f8;}#mmd1-519319 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd1-519319 .edge-thickness-normal{stroke-width:1px;}#mmd1-519319 .edge-thickness-thick{stroke-width:3.5px;}#mmd1-519319 .edge-pattern-solid{stroke-dasharray:0;}#mmd1-519319 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd1-519319 .edge-pattern-dashed{stroke-dasharray:3;}#mmd1-519319 .edge-pattern-dotted{stroke-dasharray:2;}#mmd1-519319 .marker{fill:#4a5563;stroke:#4a5563;}#mmd1-519319 .marker.cross{stroke:#4a5563;}#mmd1-519319 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd1-519319 p{margin:0;}#mmd1-519319 .actor{stroke:#1f3a5f;fill:#e8eef6;stroke-width:1;}#mmd1-519319 rect.actor.outer-path[data-look="neo"]{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-519319 rect.note[data-look="neo"]{stroke:#c07a0c;fill:#fdf5e6;filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-519319 text.actor&gt;tspan{fill:#1d2530;stroke:none;}#mmd1-519319 .actor-line{stroke:#9aa5b4;}#mmd1-519319 .innerArc{stroke-width:1.5;stroke-dasharray:none;}#mmd1-519319 .messageLine0{stroke-width:1.5;stroke-dasharray:none;stroke:#4a5563;}#mmd1-519319 .messageLine1{stroke-width:1.5;stroke-dasharray:2,2;stroke:#4a5563;}#mmd1-519319 [id$="-arrowhead"] path{fill:#4a5563;stroke:#4a5563;}#mmd1-519319 .sequenceNumber{fill:#ffffff;}#mmd1-519319 [id$="-sequencenumber"]{fill:#4a5563;}#mmd1-519319 [id$="-crosshead"] path{fill:#4a5563;stroke:#4a5563;}#mmd1-519319 .messageText{fill:#1d2530;stroke:none;}#mmd1-519319 .labelBox{stroke:#9aa5b4;fill:#f5f6f8;filter:none;}#mmd1-519319 .labelText,#mmd1-519319 .labelText&gt;tspan{fill:#1d2530;stroke:none;}#mmd1-519319 .loopText,#mmd1-519319 .loopText&gt;tspan{fill:#1d2530;stroke:none;}#mmd1-519319 .sectionTitle,#mmd1-519319 .sectionTitle&gt;tspan{fill:#1d2530;stroke:none;}#mmd1-519319 .loopLine{stroke-width:2px;stroke-dasharray:2,2;stroke:#9aa5b4;fill:#9aa5b4;}#mmd1-519319 .note{stroke:#c07a0c;fill:#fdf5e6;}#mmd1-519319 .noteText,#mmd1-519319 .noteText&gt;tspan{fill:#1d2530;stroke:none;font-weight:normal;}#mmd1-519319 .activation0{fill:#f5f6f8;stroke:#4a5563;}#mmd1-519319 .activation1{fill:#f5f6f8;stroke:#4a5563;}#mmd1-519319 .activation2{fill:#f5f6f8;stroke:#4a5563;}#mmd1-519319 .actorPopupMenu{position:absolute;}#mmd1-519319 .actorPopupMenuPanel{position:absolute;fill:#e8eef6;box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2);filter:drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}#mmd1-519319 .actor-man circle,#mmd1-519319 line{fill:#e8eef6;stroke-width:2px;}#mmd1-519319 g rect.rect{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));stroke:#1f3a5f;}#mmd1-519319 .node .neo-node{stroke:#1f3a5f;}#mmd1-519319 [data-look="neo"].node rect,#mmd1-519319 [data-look="neo"].cluster rect,#mmd1-519319 [data-look="neo"].node polygon{stroke:url(#mmd1-519319-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-519319 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd1-519319 [data-look="neo"].node path{stroke:url(#mmd1-519319-gradient);stroke-width:1px;}#mmd1-519319 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-519319 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd1-519319 [data-look="neo"].node circle{stroke:url(#mmd1-519319-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-519319 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd1-519319 [data-look="neo"].icon-shape .icon{fill:url(#mmd1-519319-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-519319 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd1-519319-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-519319 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g></g><defs><symbol id="mmd1-519319-computer" width="24" height="24"><path transform="scale(.5)" d="M2 2v13h20v-13h-20zm18 11h-16v-9h16v9zm-10.228 6l.466-1h3.524l.467 1h-4.457zm14.228 3h-24l2-6h2.104l-1.33 4h18.45l-1.297-4h2.073l2 6zm-5-10h-14v-7h14v7z"></path></symbol></defs><defs><symbol id="mmd1-519319-database" fill-rule="evenodd" clip-rule="evenodd"><path transform="scale(.5)" d="M12.258.001l.256.004.255.005.253.008.251.01.249.012.247.015.246.016.242.019.241.02.239.023.236.024.233.027.231.028.229.031.225.032.223.034.22.036.217.038.214.04.211.041.208.043.205.045.201.046.198.048.194.05.191.051.187.053.183.054.18.056.175.057.172.059.168.06.163.061.16.063.155.064.15.066.074.033.073.033.071.034.07.034.069.035.068.035.067.035.066.035.064.036.064.036.062.036.06.036.06.037.058.037.058.037.055.038.055.038.053.038.052.038.051.039.05.039.048.039.047.039.045.04.044.04.043.04.041.04.04.041.039.041.037.041.036.041.034.041.033.042.032.042.03.042.029.042.027.042.026.043.024.043.023.043.021.043.02.043.018.044.017.043.015.044.013.044.012.044.011.045.009.044.007.045.006.045.004.045.002.045.001.045v17l-.001.045-.002.045-.004.045-.006.045-.007.045-.009.044-.011.045-.012.044-.013.044-.015.044-.017.043-.018.044-.02.043-.021.043-.023.043-.024.043-.026.043-.027.042-.029.042-.03.042-.032.042-.033.042-.034.041-.036.041-.037.041-.039.041-.04.041-.041.04-.043.04-.044.04-.045.04-.047.039-.048.039-.05.039-.051.039-.052.038-.053.038-.055.038-.055.038-.058.037-.058.037-.06.037-.06.036-.062.036-.064.036-.064.036-.066.035-.067.035-.068.035-.069.035-.07.034-.071.034-.073.033-.074.033-.15.066-.155.064-.16.063-.163.061-.168.06-.172.059-.175.057-.18.056-.183.054-.187.053-.191.051-.194.05-.198.048-.201.046-.205.045-.208.043-.211.041-.214.04-.217.038-.22.036-.223.034-.225.032-.229.031-.231.028-.233.027-.236.024-.239.023-.241.02-.242.019-.246.016-.247.015-.249.012-.251.01-.253.008-.255.005-.256.004-.258.001-.258-.001-.256-.004-.255-.005-.253-.008-.251-.01-.249-.012-.247-.015-.245-.016-.243-.019-.241-.02-.238-.023-.236-.024-.234-.027-.231-.028-.228-.031-.226-.032-.223-.034-.22-.036-.217-.038-.214-.04-.211-.041-.208-.043-.204-.045-.201-.046-.198-.048-.195-.05-.19-.051-.187-.053-.184-.054-.179-.056-.176-.057-.172-.059-.167-.06-.164-.061-.159-.063-.155-.064-.151-.066-.074-.033-.072-.033-.072-.034-.07-.034-.069-.035-.068-.035-.067-.035-.066-.035-.064-.036-.063-.036-.062-.036-.061-.036-.06-.037-.058-.037-.057-.037-.056-.038-.055-.038-.053-.038-.052-.038-.051-.039-.049-.039-.049-.039-.046-.039-.046-.04-.044-.04-.043-.04-.041-.04-.04-.041-.039-.041-.037-.041-.036-.041-.034-.041-.033-.042-.032-.042-.03-.042-.029-.042-.027-.042-.026-.043-.024-.043-.023-.043-.021-.043-.02-.043-.018-.044-.017-.043-.015-.044-.013-.044-.012-.044-.011-.045-.009-.044-.007-.045-.006-.045-.004-.045-.002-.045-.001-.045v-17l.001-.045.002-.045.004-.045.006-.045.007-.045.009-.044.011-.045.012-.044.013-.044.015-.044.017-.043.018-.044.02-.043.021-.043.023-.043.024-.043.026-.043.027-.042.029-.042.03-.042.032-.042.033-.042.034-.041.036-.041.037-.041.039-.041.04-.041.041-.04.043-.04.044-.04.046-.04.046-.039.049-.039.049-.039.051-.039.052-.038.053-.038.055-.038.056-.038.057-.037.058-.037.06-.037.061-.036.062-.036.063-.036.064-.036.066-.035.067-.035.068-.035.069-.035.07-.034.072-.034.072-.033.074-.033.151-.066.155-.064.159-.063.164-.061.167-.06.172-.059.176-.057.179-.056.184-.054.187-.053.19-.051.195-.05.198-.048.201-.046.204-.045.208-.043.211-.041.214-.04.217-.038.22-.036.223-.034.226-.032.228-.031.231-.028.234-.027.236-.024.238-.023.241-.02.243-.019.245-.016.247-.015.249-.012.251-.01.253-.008.255-.005.256-.004.258-.001.258.001zm-9.258 20.499v.01l.001.021.003.021.004.022.005.021.006.022.007.022.009.023.01.022.011.023.012.023.013.023.015.023.016.024.017.023.018.024.019.024.021.024.022.025.023.024.024.025.052.049.056.05.061.051.066.051.07.051.075.051.079.052.084.052.088.052.092.052.097.052.102.051.105.052.11.052.114.051.119.051.123.051.127.05.131.05.135.05.139.048.144.049.147.047.152.047.155.047.16.045.163.045.167.043.171.043.176.041.178.041.183.039.187.039.19.037.194.035.197.035.202.033.204.031.209.03.212.029.216.027.219.025.222.024.226.021.23.02.233.018.236.016.24.015.243.012.246.01.249.008.253.005.256.004.259.001.26-.001.257-.004.254-.005.25-.008.247-.011.244-.012.241-.014.237-.016.233-.018.231-.021.226-.021.224-.024.22-.026.216-.027.212-.028.21-.031.205-.031.202-.034.198-.034.194-.036.191-.037.187-.039.183-.04.179-.04.175-.042.172-.043.168-.044.163-.045.16-.046.155-.046.152-.047.148-.048.143-.049.139-.049.136-.05.131-.05.126-.05.123-.051.118-.052.114-.051.11-.052.106-.052.101-.052.096-.052.092-.052.088-.053.083-.051.079-.052.074-.052.07-.051.065-.051.06-.051.056-.05.051-.05.023-.024.023-.025.021-.024.02-.024.019-.024.018-.024.017-.024.015-.023.014-.024.013-.023.012-.023.01-.023.01-.022.008-.022.006-.022.006-.022.004-.022.004-.021.001-.021.001-.021v-4.127l-.077.055-.08.053-.083.054-.085.053-.087.052-.09.052-.093.051-.095.05-.097.05-.1.049-.102.049-.105.048-.106.047-.109.047-.111.046-.114.045-.115.045-.118.044-.12.043-.122.042-.124.042-.126.041-.128.04-.13.04-.132.038-.134.038-.135.037-.138.037-.139.035-.142.035-.143.034-.144.033-.147.032-.148.031-.15.03-.151.03-.153.029-.154.027-.156.027-.158.026-.159.025-.161.024-.162.023-.163.022-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.011-.178.01-.179.008-.179.008-.181.006-.182.005-.182.004-.184.003-.184.002h-.37l-.184-.002-.184-.003-.182-.004-.182-.005-.181-.006-.179-.008-.179-.008-.178-.01-.176-.011-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.022-.162-.023-.161-.024-.159-.025-.157-.026-.156-.027-.155-.027-.153-.029-.151-.03-.15-.03-.148-.031-.146-.032-.145-.033-.143-.034-.141-.035-.14-.035-.137-.037-.136-.037-.134-.038-.132-.038-.13-.04-.128-.04-.126-.041-.124-.042-.122-.042-.12-.044-.117-.043-.116-.045-.113-.045-.112-.046-.109-.047-.106-.047-.105-.048-.102-.049-.1-.049-.097-.05-.095-.05-.093-.052-.09-.051-.087-.052-.085-.053-.083-.054-.08-.054-.077-.054v4.127zm0-5.654v.011l.001.021.003.021.004.021.005.022.006.022.007.022.009.022.01.022.011.023.012.023.013.023.015.024.016.023.017.024.018.024.019.024.021.024.022.024.023.025.024.024.052.05.056.05.061.05.066.051.07.051.075.052.079.051.084.052.088.052.092.052.097.052.102.052.105.052.11.051.114.051.119.052.123.05.127.051.131.05.135.049.139.049.144.048.147.048.152.047.155.046.16.045.163.045.167.044.171.042.176.042.178.04.183.04.187.038.19.037.194.036.197.034.202.033.204.032.209.03.212.028.216.027.219.025.222.024.226.022.23.02.233.018.236.016.24.014.243.012.246.01.249.008.253.006.256.003.259.001.26-.001.257-.003.254-.006.25-.008.247-.01.244-.012.241-.015.237-.016.233-.018.231-.02.226-.022.224-.024.22-.025.216-.027.212-.029.21-.03.205-.032.202-.033.198-.035.194-.036.191-.037.187-.039.183-.039.179-.041.175-.042.172-.043.168-.044.163-.045.16-.045.155-.047.152-.047.148-.048.143-.048.139-.05.136-.049.131-.05.126-.051.123-.051.118-.051.114-.052.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.051.07-.052.065-.051.06-.05.056-.051.051-.049.023-.025.023-.024.021-.025.02-.024.019-.024.018-.024.017-.024.015-.023.014-.023.013-.024.012-.022.01-.023.01-.023.008-.022.006-.022.006-.022.004-.021.004-.022.001-.021.001-.021v-4.139l-.077.054-.08.054-.083.054-.085.052-.087.053-.09.051-.093.051-.095.051-.097.05-.1.049-.102.049-.105.048-.106.047-.109.047-.111.046-.114.045-.115.044-.118.044-.12.044-.122.042-.124.042-.126.041-.128.04-.13.039-.132.039-.134.038-.135.037-.138.036-.139.036-.142.035-.143.033-.144.033-.147.033-.148.031-.15.03-.151.03-.153.028-.154.028-.156.027-.158.026-.159.025-.161.024-.162.023-.163.022-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.011-.178.009-.179.009-.179.007-.181.007-.182.005-.182.004-.184.003-.184.002h-.37l-.184-.002-.184-.003-.182-.004-.182-.005-.181-.007-.179-.007-.179-.009-.178-.009-.176-.011-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.022-.162-.023-.161-.024-.159-.025-.157-.026-.156-.027-.155-.028-.153-.028-.151-.03-.15-.03-.148-.031-.146-.033-.145-.033-.143-.033-.141-.035-.14-.036-.137-.036-.136-.037-.134-.038-.132-.039-.13-.039-.128-.04-.126-.041-.124-.042-.122-.043-.12-.043-.117-.044-.116-.044-.113-.046-.112-.046-.109-.046-.106-.047-.105-.048-.102-.049-.1-.049-.097-.05-.095-.051-.093-.051-.09-.051-.087-.053-.085-.052-.083-.054-.08-.054-.077-.054v4.139zm0-5.666v.011l.001.02.003.022.004.021.005.022.006.021.007.022.009.023.01.022.011.023.012.023.013.023.015.023.016.024.017.024.018.023.019.024.021.025.022.024.023.024.024.025.052.05.056.05.061.05.066.051.07.051.075.052.079.051.084.052.088.052.092.052.097.052.102.052.105.051.11.052.114.051.119.051.123.051.127.05.131.05.135.05.139.049.144.048.147.048.152.047.155.046.16.045.163.045.167.043.171.043.176.042.178.04.183.04.187.038.19.037.194.036.197.034.202.033.204.032.209.03.212.028.216.027.219.025.222.024.226.021.23.02.233.018.236.017.24.014.243.012.246.01.249.008.253.006.256.003.259.001.26-.001.257-.003.254-.006.25-.008.247-.01.244-.013.241-.014.237-.016.233-.018.231-.02.226-.022.224-.024.22-.025.216-.027.212-.029.21-.03.205-.032.202-.033.198-.035.194-.036.191-.037.187-.039.183-.039.179-.041.175-.042.172-.043.168-.044.163-.045.16-.045.155-.047.152-.047.148-.048.143-.049.139-.049.136-.049.131-.051.126-.05.123-.051.118-.052.114-.051.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.052.07-.051.065-.051.06-.051.056-.05.051-.049.023-.025.023-.025.021-.024.02-.024.019-.024.018-.024.017-.024.015-.023.014-.024.013-.023.012-.023.01-.022.01-.023.008-.022.006-.022.006-.022.004-.022.004-.021.001-.021.001-.021v-4.153l-.077.054-.08.054-.083.053-.085.053-.087.053-.09.051-.093.051-.095.051-.097.05-.1.049-.102.048-.105.048-.106.048-.109.046-.111.046-.114.046-.115.044-.118.044-.12.043-.122.043-.124.042-.126.041-.128.04-.13.039-.132.039-.134.038-.135.037-.138.036-.139.036-.142.034-.143.034-.144.033-.147.032-.148.032-.15.03-.151.03-.153.028-.154.028-.156.027-.158.026-.159.024-.161.024-.162.023-.163.023-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.01-.178.01-.179.009-.179.007-.181.006-.182.006-.182.004-.184.003-.184.001-.185.001-.185-.001-.184-.001-.184-.003-.182-.004-.182-.006-.181-.006-.179-.007-.179-.009-.178-.01-.176-.01-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.023-.162-.023-.161-.024-.159-.024-.157-.026-.156-.027-.155-.028-.153-.028-.151-.03-.15-.03-.148-.032-.146-.032-.145-.033-.143-.034-.141-.034-.14-.036-.137-.036-.136-.037-.134-.038-.132-.039-.13-.039-.128-.041-.126-.041-.124-.041-.122-.043-.12-.043-.117-.044-.116-.044-.113-.046-.112-.046-.109-.046-.106-.048-.105-.048-.102-.048-.1-.05-.097-.049-.095-.051-.093-.051-.09-.052-.087-.052-.085-.053-.083-.053-.08-.054-.077-.054v4.153zm8.74-8.179l-.257.004-.254.005-.25.008-.247.011-.244.012-.241.014-.237.016-.233.018-.231.021-.226.022-.224.023-.22.026-.216.027-.212.028-.21.031-.205.032-.202.033-.198.034-.194.036-.191.038-.187.038-.183.04-.179.041-.175.042-.172.043-.168.043-.163.045-.16.046-.155.046-.152.048-.148.048-.143.048-.139.049-.136.05-.131.05-.126.051-.123.051-.118.051-.114.052-.11.052-.106.052-.101.052-.096.052-.092.052-.088.052-.083.052-.079.052-.074.051-.07.052-.065.051-.06.05-.056.05-.051.05-.023.025-.023.024-.021.024-.02.025-.019.024-.018.024-.017.023-.015.024-.014.023-.013.023-.012.023-.01.023-.01.022-.008.022-.006.023-.006.021-.004.022-.004.021-.001.021-.001.021.001.021.001.021.004.021.004.022.006.021.006.023.008.022.01.022.01.023.012.023.013.023.014.023.015.024.017.023.018.024.019.024.02.025.021.024.023.024.023.025.051.05.056.05.06.05.065.051.07.052.074.051.079.052.083.052.088.052.092.052.096.052.101.052.106.052.11.052.114.052.118.051.123.051.126.051.131.05.136.05.139.049.143.048.148.048.152.048.155.046.16.046.163.045.168.043.172.043.175.042.179.041.183.04.187.038.191.038.194.036.198.034.202.033.205.032.21.031.212.028.216.027.22.026.224.023.226.022.231.021.233.018.237.016.241.014.244.012.247.011.25.008.254.005.257.004.26.001.26-.001.257-.004.254-.005.25-.008.247-.011.244-.012.241-.014.237-.016.233-.018.231-.021.226-.022.224-.023.22-.026.216-.027.212-.028.21-.031.205-.032.202-.033.198-.034.194-.036.191-.038.187-.038.183-.04.179-.041.175-.042.172-.043.168-.043.163-.045.16-.046.155-.046.152-.048.148-.048.143-.048.139-.049.136-.05.131-.05.126-.051.123-.051.118-.051.114-.052.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.051.07-.052.065-.051.06-.05.056-.05.051-.05.023-.025.023-.024.021-.024.02-.025.019-.024.018-.024.017-.023.015-.024.014-.023.013-.023.012-.023.01-.023.01-.022.008-.022.006-.023.006-.021.004-.022.004-.021.001-.021.001-.021-.001-.021-.001-.021-.004-.021-.004-.022-.006-.021-.006-.023-.008-.022-.01-.022-.01-.023-.012-.023-.013-.023-.014-.023-.015-.024-.017-.023-.018-.024-.019-.024-.02-.025-.021-.024-.023-.024-.023-.025-.051-.05-.056-.05-.06-.05-.065-.051-.07-.052-.074-.051-.079-.052-.083-.052-.088-.052-.092-.052-.096-.052-.101-.052-.106-.052-.11-.052-.114-.052-.118-.051-.123-.051-.126-.051-.131-.05-.136-.05-.139-.049-.143-.048-.148-.048-.152-.048-.155-.046-.16-.046-.163-.045-.168-.043-.172-.043-.175-.042-.179-.041-.183-.04-.187-.038-.191-.038-.194-.036-.198-.034-.202-.033-.205-.032-.21-.031-.212-.028-.216-.027-.22-.026-.224-.023-.226-.022-.231-.021-.233-.018-.237-.016-.241-.014-.244-.012-.247-.011-.25-.008-.254-.005-.257-.004-.26-.001-.26.001z"></path></symbol></defs><defs><symbol id="mmd1-519319-clock" width="24" height="24"><path transform="scale(.5)" d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.848 12.459c.202.038.202.333.001.372-1.907.361-6.045 1.111-6.547 1.111-.719 0-1.301-.582-1.301-1.301 0-.512.77-5.447 1.125-7.445.034-.192.312-.181.343.014l.985 6.238 5.394 1.011z"></path></symbol></defs><defs><marker id="mmd1-519319-arrowhead" refX="7.9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M -1 0 L 10 5 L 0 10 z"></path></marker></defs><defs><marker id="mmd1-519319-crosshead" markerWidth="15" markerHeight="8" orient="auto" refX="4" refY="4.5"><path fill="none" stroke="#000000" stroke-width="1pt" d="M 1,2 L 6,7 M 6,2 L 1,7" style="stroke-dasharray: 0, 0;"></path></marker></defs><defs><marker id="mmd1-519319-filled-head" refX="15.5" refY="7" markerWidth="20" markerHeight="28" orient="auto"><path d="M 18,7 L9,13 L14,7 L9,1 Z"></path></marker></defs><defs><marker id="mmd1-519319-sequencenumber" refX="15" refY="15" markerWidth="60" markerHeight="40" orient="auto"><circle cx="15" cy="15" r="6"></circle></marker></defs><defs><marker id="mmd1-519319-solidTopArrowHead" refX="7.9" refY="7.25" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 10 8 L 0 8 z"></path></marker></defs><defs><marker id="mmd1-519319-solidBottomArrowHead" refX="7.9" refY="0.75" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 10 0 L 0 8 z"></path></marker></defs><defs><marker id="mmd1-519319-stickTopArrowHead" refX="7.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 7 7" stroke="black" stroke-width="1.5" fill="none"></path></marker></defs><defs><marker id="mmd1-519319-stickBottomArrowHead" refX="7.5" refY="0" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 7 L 7 0" stroke="black" stroke-width="1.5" fill="none"></path></marker></defs><g data-et="note" data-id="i5"><rect x="50" y="305" fill="#EDF2AE" stroke="#666" width="619" height="55" class="note"></rect><text x="360" y="310" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="360">chacun calcule le même secret partagé (jamais transmis)</tspan></text><text x="360" y="328" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="360">et l'identifiant de session</tspan></text></g><g data-et="note" data-id="i6"><rect x="-40.5" y="370" fill="#EDF2AE" stroke="#666" width="231" height="56" class="note"></rect><text x="75" y="375" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="75">vérifie la signature du serveur</tspan></text><text x="75" y="393" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="75">avec la clé de known_hosts</tspan></text></g><g data-et="note" data-id="i7"><rect x="50" y="436" fill="#EDF2AE" stroke="#666" width="619" height="56" class="note"></rect><text x="360" y="441" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="360">clés de session calculées à partir du secret :</tspan></text><text x="360" y="459" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;"><tspan x="360">à partir d'ici, tout est chiffré</tspan></text></g><text x="358" y="80" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">connexion TCP sur le port 22</text><line x1="76" y1="111" x2="640" y2="111" class="messageLine0" data-et="message" data-id="i0" data-from="C" data-to="S" stroke-width="2" stroke="none" marker-end="url(#mmd1-519319-arrowhead)" style="fill: none;"></line><text x="358" y="126" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">versions et algorithmes connus</text><line x1="76" y1="157" x2="640" y2="157" class="messageLine0" data-et="message" data-id="i1" data-from="C" data-to="S" stroke-width="2" stroke="none" marker-end="url(#mmd1-519319-arrowhead)" style="fill: none;"></line><text x="361" y="172" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">versions et algorithmes connus</text><line x1="643" y1="203" x2="79" y2="203" class="messageLine1" data-et="message" data-id="i2" data-from="S" data-to="C" stroke-width="2" stroke="none" marker-end="url(#mmd1-519319-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line><text x="358" y="218" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">valeur publique Diffie-Hellman du client</text><line x1="76" y1="249" x2="640" y2="249" class="messageLine0" data-et="message" data-id="i3" data-from="C" data-to="S" stroke-width="2" stroke="none" marker-end="url(#mmd1-519319-arrowhead)" style="fill: none;"></line><text x="361" y="264" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">valeur publique du serveur, clé publique d'hôte, signature de l'échange</text><line x1="643" y1="295" x2="79" y2="295" class="messageLine1" data-et="message" data-id="i4" data-from="S" data-to="C" stroke-width="2" stroke="none" marker-end="url(#mmd1-519319-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line><text x="358" y="507" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">authentification de l'utilisateur</text><text x="358" y="524" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">(signature avec sa clé privée, ou mot de passe)</text><line x1="76" y1="554.5" x2="640" y2="554.5" class="messageLine0" data-et="message" data-id="i8" data-from="C" data-to="S" stroke-width="2" stroke="none" marker-end="url(#mmd1-519319-arrowhead)" style="fill: none;"></line><text x="361" y="570" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-family: Arial, &quot;Liberation Sans&quot;, &quot;DejaVu Sans&quot;, sans-serif; font-size: 16px; font-weight: 400;">vérification avec authorized_keys, session ouverte</text><line x1="643" y1="600.5" x2="79" y2="600.5" class="messageLine1" data-et="message" data-id="i9" data-from="S" data-to="C" stroke-width="2" stroke="none" marker-end="url(#mmd1-519319-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></svg></div></div>
+<ol type="1">
+<li><strong>Négociation.</strong> Après la connexion TCP, chaque côté annonce ses versions et les algorithmes qu’il connaît ; ils retiennent les premiers qu’ils ont en commun (<code>ssh -Q kex</code> et <code>ssh -Q cipher</code> listent ceux du client).</li>
+<li><strong>Échange de clés.</strong> Les deux côtés font un échange Diffie-Hellman éphémère et obtiennent le même <strong>secret partagé</strong>. Ils calculent aussi l’<strong>identifiant de session</strong> : l’empreinte de tout ce qui a été échangé (versions, algorithmes, clé d’hôte, valeurs publiques, secret). Il est différent à chaque connexion.</li>
+<li><strong>Authentification du serveur.</strong> Le serveur <strong>signe</strong> l’identifiant de session avec sa <strong>clé privée d’hôte</strong>. Le client vérifie la signature avec la clé publique enregistrée dans <code>known_hosts</code>. Cela prouve que le serveur possède bien la clé privée, et que les valeurs Diffie-Hellman n’ont pas été remplacées en chemin (elles font partie de ce qui est signé).</li>
+<li><strong>Clés de session.</strong> Les deux côtés calculent, à partir du secret partagé, une clé de chiffrement pour chaque sens (client vers serveur, serveur vers client) et les valeurs qui protègent l’intégrité. Les algorithmes (<code>chacha20-poly1305</code>, <code>aes256-gcm</code>) chiffrent et détectent toute modification en chemin. Les clés sont renouvelées après un certain volume de données.</li>
+<li><strong>Authentification de l’utilisateur</strong>, dans le canal déjà chiffré : par clé (partie 6) ou par mot de passe.</li>
+<li><strong>Session.</strong> À la déconnexion, les clés de session sont effacées.</li>
+</ol>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>L'idée à retenir</strong></p>
+<p>Les <strong>clés à long terme</strong> (clé d’hôte, clé utilisateur) ne servent <strong>qu’à signer</strong>, c’est-à-dire à prouver une identité. Ce sont des <strong>clés éphémères</strong> (les clés de session) qui chiffrent les données. Conséquence : si la clé d’hôte du serveur est volée dans un an, les sessions enregistrées aujourd’hui resteront illisibles. C’est la <strong>confidentialité persistante</strong> (<em>forward secrecy</em>).</p>
+</div></div>
+<p>La commande <code>ssh -v</code> affiche ces étapes :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : CLI-LNX-01 (ssh -v sysadmin@srv-lnx-01, extrait)</span><button class="copy" type="button">Copier</button></div><pre class="text"><code>debug1: kex: algorithm: mlkem768x25519-sha256
+debug1: kex: host key algorithm: ssh-ed25519
+debug1: kex: server-&gt;client cipher: chacha20-poly1305@openssh.com MAC: &lt;implicit&gt; compression: none
+debug1: kex: client-&gt;server cipher: chacha20-poly1305@openssh.com MAC: &lt;implicit&gt; compression: none
+debug1: Server host key: ssh-ed25519 SHA256:vDezMcac6mBLN6FVNUe9…
+debug1: Host 'srv-lnx-01' is known and matches the ED25519 host key.
+debug1: Offering public key: /home/sysadmin/.ssh/id_ed25519 ED25519 SHA256:rgHiM1UblBKiKD…
+debug1: Server accepts key: /home/sysadmin/.ssh/id_ed25519 ED25519 SHA256:rgHiM1UblBKiKD…
+Authenticated to srv-lnx-01 ([10.10.10.20]:22) using "publickey".</code></pre></div>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Ligne</th>
+<th>Ce qu’elle montre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>kex: algorithm</code></td>
+<td>étape 2 : l’algorithme d’échange de clés</td>
+</tr>
+<tr class="even">
+<td><code>kex: host key algorithm</code></td>
+<td>étape 3 : le type de la clé d’hôte</td>
+</tr>
+<tr class="odd">
+<td><code>kex: … cipher</code></td>
+<td>étape 4 : le chiffrement symétrique, un par sens</td>
+</tr>
+<tr class="even">
+<td><code>Server host key</code></td>
+<td>l’empreinte de la clé d’hôte reçue</td>
+</tr>
+<tr class="odd">
+<td><code>is known and matches</code></td>
+<td>cette clé est bien celle enregistrée dans <code>known_hosts</code></td>
+</tr>
+<tr class="even">
+<td><code>Offering public key</code>, <code>Server accepts key</code>, <code>Authenticated</code></td>
+<td>étape 5 : l’authentification par clé (partie 6)</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>mlkem768x25519-sha256</code> est l’échange par défaut depuis OpenSSH 10 (la version de Debian 13) : il combine un Diffie-Hellman sur courbe elliptique (X25519) et un algorithme conçu pour résister aussi aux futurs ordinateurs quantiques (ML-KEM). Un client plus ancien, comme celui intégré à Windows, négociera un autre algorithme (<code>sntrup761x25519-sha512</code> ou <code>curve25519-sha256</code>) : le principe reste le même.</p>
+<h2 id="lauthentification-par-clé">6. L’authentification par clé</h2>
+<h3 id="le-principe">Le principe</h3>
+<p>Le serveur doit vérifier que le client possède la clé privée correspondant à une clé publique de <code>authorized_keys</code>, <strong>sans que la clé privée circule</strong>. Le client <strong>signe</strong> donc un message qui contient notamment :</p>
+<ul>
+<li>l’<strong>identifiant de session</strong> (partie 5) ;</li>
+<li>le nom du compte (<code>sysadmin</code>) ;</li>
+<li>la méthode (<code>publickey</code>) et sa clé publique.</li>
+</ul>
+<p>Le serveur vérifie la signature avec la clé publique trouvée dans <code>authorized_keys</code> du compte. Si elle est valide, l’utilisateur est authentifié.</p>
+<p>Pourquoi signer l’identifiant de session plutôt qu’un texte fixe ? Parce qu’il change à chaque connexion. Une signature capturée ne peut pas être <strong>rejouée</strong> sur une autre connexion, et un faux serveur qui recevrait votre signature ne pourrait pas s’en servir auprès du vrai : leurs sessions n’ont pas le même identifiant. Le serveur n’a donc pas besoin d’envoyer un « défi » : l’identifiant de session en tient lieu.</p>
+<p>En pratique, cela se fait en deux temps, visibles dans <code>ssh -v</code> et dans le journal du serveur (avec <code>LogLevel VERBOSE</code>, partie 10) :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Côté client (<code>ssh -v</code>)</th>
+<th>Côté serveur (journal)</th>
+<th>Ce qui se passe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Offering public key: … SHA256:rgHi…</code></td>
+<td></td>
+<td>le client demande si cette clé est autorisée, sans signer</td>
+</tr>
+<tr class="even">
+<td><code>Server accepts key: …</code></td>
+<td><code>Postponed publickey for sysadmin … [preauth]</code></td>
+<td>la clé est dans <code>authorized_keys</code> ; le serveur attend la signature</td>
+</tr>
+<tr class="odd">
+<td><code>Authenticated to … using "publickey".</code></td>
+<td><code>Accepted publickey for sysadmin … ED25519 SHA256:rgHi…</code></td>
+<td>le client a envoyé la signature, le serveur l’a vérifiée</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout analogy"><div class="callout-body"><p class="callout-titre"><strong>Analogie : le spécimen de signature</strong></p>
+<p>Le serveur garde votre clé publique comme une banque garde le spécimen de votre signature : il lui sert à <strong>vérifier</strong>, pas à signer à votre place. À chaque connexion, vous signez un document différent (l’identifiant de session), ce qui empêche de réutiliser une ancienne signature. Limite de l’image : une signature manuscrite peut s’imiter, une signature numérique ne peut être fabriquée qu’avec la clé privée.</p>
+</div></div>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Une explication que l'on trouve encore</strong></p>
+<p>Dans la première version du protocole (SSH-1, abandonnée depuis longtemps), le serveur chiffrait un défi avec la clé publique RSA de l’utilisateur, qui devait le déchiffrer. Cette explication circule encore dans des documents anciens ; elle ne correspond pas à SSH 2, et elle est impossible avec une clé Ed25519, qui ne sait pas chiffrer.</p>
+</div></div>
+<h3 id="la-phrase-de-passe-et-lagent">La phrase de passe et l’agent</h3>
+<p>La <strong>phrase de passe</strong> chiffre (en symétrique) le fichier de la clé privée sur le disque. Quand <code>ssh</code> affiche <code>Enter passphrase for key</code>, c’est pour <strong>déchiffrer ce fichier sur votre poste</strong> : la phrase de passe n’est <strong>jamais envoyée au serveur</strong>, qui ne la connaît pas. La preuve : <code>ssh-keygen -p</code> change la phrase de passe sans qu’il faille toucher à <code>authorized_keys</code>.</p>
+<p>L’<strong>agent SSH</strong> (<code>ssh-agent</code>) garde la clé privée déchiffrée en mémoire et signe à la place de <code>ssh</code> : la phrase de passe n’est demandée qu’une fois par session de travail.</p>
 <h3 id="pourquoi-cest-mieux-quun-mot-de-passe">Pourquoi c’est mieux qu’un mot de passe</h3>
 <div class="table-wrap"><table>
 
@@ -112,9 +436,9 @@
 <td>impossible en pratique</td>
 </tr>
 <tr class="even">
-<td>Hameçonnage, saisie sur un faux serveur</td>
-<td>le mot de passe est donné à l’attaquant</td>
-<td>la clé privée n’est jamais transmise</td>
+<td>Faux serveur (hameçonnage, empreinte acceptée sans vérifier)</td>
+<td>le mot de passe est envoyé en entier, dans le canal chiffré, à la machine d’en face : l’imposteur le reçoit</td>
+<td>la signature ne vaut que pour cette session : l’imposteur ne peut pas la réutiliser sur le vrai serveur</td>
 </tr>
 <tr class="odd">
 <td>Réutilisation sur plusieurs services</td>
@@ -140,9 +464,10 @@
 </table></div>
 <h3 id="les-algorithmes">Les algorithmes</h3>
 <ul>
-<li><strong>Ed25519</strong> : recommandé aujourd’hui, clés courtes et rapides.</li>
-<li><strong>RSA</strong> : encore très répandu, avec 3072 bits minimum.</li>
-<li><strong>DSA</strong> : obsolète, n’est plus accepté par les versions récentes d’OpenSSH.</li>
+<li><strong>Ed25519</strong> : recommandé aujourd’hui, clés courtes et rapides. Signature uniquement.</li>
+<li><strong>RSA</strong> : encore très répandu, avec 3072 bits minimum. Sait signer et chiffrer (SSH ne s’en sert que pour signer).</li>
+<li><strong>ECDSA</strong> : courbes elliptiques normalisées par le NIST, accepté mais moins conseillé qu’Ed25519.</li>
+<li><strong>DSA</strong> : obsolète, n’est plus pris en charge par OpenSSH depuis la version 10.</li>
 </ul>
 <h3 id="les-fichiers">Les fichiers</h3>
 <div class="table-wrap"><table>
@@ -152,7 +477,7 @@
 <th>Fichier</th>
 <th>Côté</th>
 <th>Droits</th>
-<th>Rôle</th>
+<th>Contenu</th>
 </tr>
 </thead>
 <tbody>
@@ -160,19 +485,19 @@
 <td><code>~/.ssh/id_ed25519</code></td>
 <td>client</td>
 <td><code>600</code></td>
-<td>clé privée</td>
+<td>clé privée de l’utilisateur, chiffrée par la phrase de passe</td>
 </tr>
 <tr class="even">
 <td><code>~/.ssh/id_ed25519.pub</code></td>
 <td>client</td>
 <td><code>644</code></td>
-<td>clé publique</td>
+<td>clé publique de l’utilisateur</td>
 </tr>
 <tr class="odd">
 <td><code>~/.ssh/known_hosts</code></td>
 <td>client</td>
 <td><code>644</code></td>
-<td>empreintes des serveurs connus</td>
+<td><strong>clés publiques</strong> des serveurs déjà acceptés</td>
 </tr>
 <tr class="even">
 <td><code>~/.ssh/config</code></td>
@@ -184,7 +509,7 @@
 <td><code>~/.ssh/authorized_keys</code></td>
 <td>serveur</td>
 <td><code>600</code>, dossier <code>~/.ssh</code> en <code>700</code></td>
-<td>clés publiques autorisées pour ce compte</td>
+<td>clés publiques autorisées à se connecter à ce compte</td>
 </tr>
 <tr class="even">
 <td><code>/etc/ssh/sshd_config</code> et <code>/etc/ssh/sshd_config.d/*.conf</code></td>
@@ -195,18 +520,81 @@
 <tr class="odd">
 <td><code>/etc/ssh/ssh_host_*_key</code></td>
 <td>serveur</td>
-<td><code>600</code></td>
-<td>clés d’hôte du serveur</td>
+<td><code>600</code>, root</td>
+<td>clés <strong>privées</strong> d’hôte du serveur</td>
+</tr>
+<tr class="even">
+<td><code>/etc/ssh/ssh_host_*_key.pub</code></td>
+<td>serveur</td>
+<td><code>644</code></td>
+<td>clés <strong>publiques</strong> d’hôte (celles qui arrivent dans <code>known_hosts</code>)</td>
 </tr>
 </tbody>
 </table></div>
 <p>Si <code>authorized_keys</code> ou le dossier personnel sont modifiables par d’autres utilisateurs, <code>sshd</code> <strong>refuse</strong> la clé (option <code>StrictModes</code>) : c’est une cause fréquente d’échec.</p>
 <h3 id="mise-en-place">Mise en place</h3>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : poste client</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"sysadmin@cli-lnx-01"</span>      <span class="co"># génère la paire, demande une phrase de passe</span></span>
-<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="at">-i</span> ~/.ssh/id_ed25519.pub sysadmin@srv-lnx-01   <span class="co"># ajoute la clé publique sur le serveur</span></span>
-<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="fu">ssh</span> sysadmin@srv-lnx-01                              <span class="co"># demande la phrase de passe de la clé, pas le mot de passe du compte</span></span></code></pre></div></div>
-<p>Sous Windows, <code>ssh-copy-id</code> n’existe pas ; on envoie la clé avec une commande PowerShell (voir le TP). Pour ne pas retaper la phrase de passe à chaque connexion, on charge la clé dans l’<strong>agent SSH</strong> : <code>eval "$(ssh-agent)"</code> puis <code>ssh-add</code>.</p>
-<h2 id="le-fichier-de-configuration-du-client">4. Le fichier de configuration du client</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : poste client</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"sysadmin@cli-lnx-01"</span>      <span class="co"># génère la paire, demande une phrase de passe</span></span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="at">-i</span> ~/.ssh/id_ed25519.pub sysadmin@srv-lnx-01   <span class="co"># ajoute la clé publique sur le serveur</span></span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="fu">ssh</span> sysadmin@srv-lnx-01                              <span class="co"># demande la phrase de passe de la clé (locale), pas le mot de passe du compte</span></span></code></pre></div></div>
+<p><code>ssh-copy-id</code> se connecte une dernière fois avec le mot de passe du compte pour déposer la clé publique. Sous Windows, <code>ssh-copy-id</code> n’existe pas ; on envoie la clé avec une commande PowerShell (voir le TP). Pour ne pas retaper la phrase de passe à chaque connexion, on charge la clé dans l’agent : <code>eval "$(ssh-agent)"</code> puis <code>ssh-add</code>.</p>
+<h2 id="et-https">7. Et HTTPS ?</h2>
+<p><strong>HTTPS</strong>, c’est HTTP transporté dans <strong>TLS</strong> (<em>Transport Layer Security</em>), sur le port 443. TLS assemble les mêmes briques que SSH. Avec TLS 1.3, la version actuelle :</p>
+<ol type="1">
+<li>Le navigateur (client) envoie ses versions, ses algorithmes, le nom du site demandé (SNI, que le reverse proxy lit à la séance 3) et <strong>déjà sa valeur publique Diffie-Hellman</strong>.</li>
+<li>Le serveur répond avec sa valeur publique : les deux calculent le même secret partagé. La suite de l’échange est déjà chiffrée.</li>
+<li>Le serveur envoie son <strong>certificat</strong>, puis une <strong>signature</strong> de tout l’échange faite avec la clé privée correspondant au certificat.</li>
+<li>Le navigateur vérifie le certificat (signé par une autorité reconnue, au nom du site demandé, en cours de validité), puis la signature avec la clé publique contenue dans le certificat.</li>
+<li>Les données HTTP circulent chiffrées avec les clés de session (AES-GCM ou ChaCha20-Poly1305).</li>
+</ol>
+<h3 id="le-certificat-et-la-chaîne-de-confiance">Le certificat et la chaîne de confiance</h3>
+<p>Un <strong>certificat</strong> contient une <strong>clé publique</strong>, une <strong>identité</strong> (les noms de domaine), des <strong>dates de validité</strong> et la <strong>signature d’une autorité de certification</strong> (AC). Il ne contient pas la clé privée, qui reste sur le serveur : dans nginx, <code>ssl_certificate</code> désigne le certificat et <code>ssl_certificate_key</code> la clé privée (séance 3).</p>
+<p>L’AC qui a signé le certificat du site est elle-même certifiée par une <strong>AC racine</strong>, déjà présente dans le magasin de confiance du système ou du navigateur : c’est la <strong>chaîne de confiance</strong>. Le navigateur fait confiance à la clé publique du site parce qu’une autorité qu’il connaît s’en porte garante.</p>
+<h3 id="ssh-et-https-côte-à-côte">SSH et HTTPS côte à côte</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th></th>
+<th>SSH</th>
+<th>HTTPS (TLS 1.3)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Clés de session</td>
+<td>échange Diffie-Hellman éphémère</td>
+<td>échange Diffie-Hellman éphémère</td>
+</tr>
+<tr class="even">
+<td>Le serveur prouve son identité</td>
+<td>signature avec sa clé privée d’hôte</td>
+<td>signature avec la clé privée liée à son certificat</td>
+</tr>
+<tr class="odd">
+<td>Pourquoi croire la clé publique du serveur</td>
+<td>elle est dans <code>known_hosts</code>, après vérification de l’empreinte à la première connexion (TOFU)</td>
+<td>elle est dans un certificat signé par une autorité reconnue (chaîne de confiance)</td>
+</tr>
+<tr class="even">
+<td>Le client prouve son identité</td>
+<td>clé utilisateur ou mot de passe, prévus par le protocole</td>
+<td>en général hors de TLS : formulaire, cookie, MFA dans l’application (séance 11). Un certificat client est possible (TLS mutuel)</td>
+</tr>
+<tr class="odd">
+<td>Chiffrement des données</td>
+<td>symétrique</td>
+<td>symétrique</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>Une explication dépassée</strong></p>
+<p>Beaucoup de cours et de vidéos expliquent que « le navigateur chiffre la clé de session avec la clé publique du serveur ». C’était l’échange « RSA », possible jusqu’à TLS 1.2. Il a été <strong>supprimé de TLS 1.3</strong> parce qu’il n’offre pas la confidentialité persistante : quiconque obtenait plus tard la clé privée du serveur pouvait déchiffrer tout le trafic enregistré.</p>
+</div></div>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Certificat autosigné</strong></p>
+<p>Un certificat <strong>autosigné</strong> n’est garanti par aucune autorité (c’est le cas de Proxmox ou du bureau à distance par défaut). La connexion est bien chiffrée, mais l’identité du serveur n’est pas prouvée : c’est exactement comme répondre <code>yes</code> en SSH sans comparer l’empreinte.</p>
+</div></div>
+<p>Pour observer une connexion HTTPS depuis une VM du lab (elle sort sur Internet par le réseau NAT) : <code>curl -v -o /dev/null https://deb.debian.org</code> ou <code>openssl s_client -connect deb.debian.org:443 -brief &lt;/dev/null</code>. On y lit la version de TLS, les algorithmes négociés, le certificat présenté et le résultat de sa vérification.</p>
+<h2 id="le-fichier-de-configuration-du-client">8. Le fichier de configuration du client</h2>
 <p>Plutôt que de retenir ports, utilisateurs et adresses, on déclare des raccourcis dans <code>~/.ssh/config</code> :</p>
 <div class="code-block"><div class="code-header"><span class="code-machine">Fichier : ~/.ssh/config (poste client)</span><button class="copy" type="button">Copier</button></div><pre class="sshconfig"><code>Host srv-lnx-01
     HostName 127.0.0.1
@@ -214,33 +602,34 @@
     User sysadmin
     IdentityFile ~/.ssh/id_ed25519</code></pre></div>
 <p>La commande <code>ssh srv-lnx-01</code> utilise alors automatiquement tous ces paramètres, de même que <code>scp</code> et <code>sftp</code>.</p>
-<h2 id="transférer-des-fichiers">5. Transférer des fichiers</h2>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : poste client</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">scp</span> rapport.txt sysadmin@srv-lnx-01:/tmp/              <span class="co"># envoyer</span></span>
-<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">scp</span> sysadmin@srv-lnx-01:/etc/os-release .               <span class="co"># récupérer</span></span>
-<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-P</span> 2222 rapport.txt sysadmin@127.0.0.1:/tmp/       <span class="co"># port avec un P majuscule pour scp</span></span>
-<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> dossier/ srv-lnx-01:/tmp/                       <span class="co"># dossier complet (avec un alias du fichier config)</span></span>
-<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a><span class="ex">sftp</span> srv-lnx-01                                        <span class="co"># session interactive : ls, cd, put, get, bye</span></span></code></pre></div></div>
-<h2 id="durcir-le-serveur">6. Durcir le serveur</h2>
+<h2 id="transférer-des-fichiers">9. Transférer des fichiers</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : poste client</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="fu">scp</span> rapport.txt sysadmin@srv-lnx-01:/tmp/              <span class="co"># envoyer</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="fu">scp</span> sysadmin@srv-lnx-01:/etc/os-release .               <span class="co"># récupérer (le poste reste le client)</span></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-P</span> 2222 rapport.txt sysadmin@127.0.0.1:/tmp/       <span class="co"># port avec un P majuscule pour scp</span></span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> dossier/ srv-lnx-01:/tmp/                       <span class="co"># dossier complet (avec un alias du fichier config)</span></span>
+<span id="cb9-5"><a aria-hidden="true" href="#cb9-5" tabindex="-1"></a><span class="ex">sftp</span> srv-lnx-01                                        <span class="co"># session interactive : ls, cd, put, get, bye</span></span></code></pre></div></div>
+<p><code>scp</code> et <code>sftp</code> passent par une connexion SSH ordinaire : mêmes clés, même chiffrement, mêmes journaux.</p>
+<h2 id="durcir-le-serveur">10. Durcir le serveur</h2>
 <h3 id="où-configurer">Où configurer</h3>
 <p>Sous Debian, <code>/etc/ssh/sshd_config</code> commence par une ligne <code>Include /etc/ssh/sshd_config.d/*.conf</code>. Pour chaque paramètre, <code>sshd</code> retient la <strong>première</strong> valeur lue : un fichier placé dans <code>sshd_config.d/</code> l’emporte donc sur le fichier principal. On y met ses réglages, sans toucher au fichier d’origine (les mises à jour du paquet se passent mieux).</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/ssh/sshd_config.d/10-durcissement.conf</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="co"># Pas de connexion directe en root</span></span>
-<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="dt">PermitRootLogin no</span></span>
-<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="co"># Clés uniquement</span></span>
-<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="dt">PubkeyAuthentication yes</span></span>
-<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="dt">PasswordAuthentication no</span></span>
-<span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a><span class="dt">KbdInteractiveAuthentication no</span></span>
-<span id="cb6-7"><a aria-hidden="true" href="#cb6-7" tabindex="-1"></a><span class="co"># Seuls les membres de ce groupe peuvent se connecter</span></span>
-<span id="cb6-8"><a aria-hidden="true" href="#cb6-8" tabindex="-1"></a><span class="dt">AllowGroups ssh-users</span></span>
-<span id="cb6-9"><a aria-hidden="true" href="#cb6-9" tabindex="-1"></a><span class="co"># Limiter les essais et le temps pour s'authentifier</span></span>
-<span id="cb6-10"><a aria-hidden="true" href="#cb6-10" tabindex="-1"></a><span class="dt">MaxAuthTries 3</span></span>
-<span id="cb6-11"><a aria-hidden="true" href="#cb6-11" tabindex="-1"></a><span class="dt">LoginGraceTime 30</span></span>
-<span id="cb6-12"><a aria-hidden="true" href="#cb6-12" tabindex="-1"></a><span class="co"># Fonctions inutiles sur un serveur</span></span>
-<span id="cb6-13"><a aria-hidden="true" href="#cb6-13" tabindex="-1"></a><span class="dt">X11Forwarding no</span></span>
-<span id="cb6-14"><a aria-hidden="true" href="#cb6-14" tabindex="-1"></a><span class="co"># Couper les sessions inactives (2 x 300 s)</span></span>
-<span id="cb6-15"><a aria-hidden="true" href="#cb6-15" tabindex="-1"></a><span class="dt">ClientAliveInterval 300</span></span>
-<span id="cb6-16"><a aria-hidden="true" href="#cb6-16" tabindex="-1"></a><span class="dt">ClientAliveCountMax 2</span></span>
-<span id="cb6-17"><a aria-hidden="true" href="#cb6-17" tabindex="-1"></a><span class="co"># Journaux détaillés (empreinte des clés utilisées)</span></span>
-<span id="cb6-18"><a aria-hidden="true" href="#cb6-18" tabindex="-1"></a><span class="dt">LogLevel VERBOSE</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/ssh/sshd_config.d/10-durcissement.conf</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="co"># Pas de connexion directe en root</span></span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="dt">PermitRootLogin no</span></span>
+<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a><span class="co"># Clés uniquement</span></span>
+<span id="cb10-4"><a aria-hidden="true" href="#cb10-4" tabindex="-1"></a><span class="dt">PubkeyAuthentication yes</span></span>
+<span id="cb10-5"><a aria-hidden="true" href="#cb10-5" tabindex="-1"></a><span class="dt">PasswordAuthentication no</span></span>
+<span id="cb10-6"><a aria-hidden="true" href="#cb10-6" tabindex="-1"></a><span class="dt">KbdInteractiveAuthentication no</span></span>
+<span id="cb10-7"><a aria-hidden="true" href="#cb10-7" tabindex="-1"></a><span class="co"># Seuls les membres de ce groupe peuvent se connecter</span></span>
+<span id="cb10-8"><a aria-hidden="true" href="#cb10-8" tabindex="-1"></a><span class="dt">AllowGroups ssh-users</span></span>
+<span id="cb10-9"><a aria-hidden="true" href="#cb10-9" tabindex="-1"></a><span class="co"># Limiter les essais et le temps pour s'authentifier</span></span>
+<span id="cb10-10"><a aria-hidden="true" href="#cb10-10" tabindex="-1"></a><span class="dt">MaxAuthTries 3</span></span>
+<span id="cb10-11"><a aria-hidden="true" href="#cb10-11" tabindex="-1"></a><span class="dt">LoginGraceTime 30</span></span>
+<span id="cb10-12"><a aria-hidden="true" href="#cb10-12" tabindex="-1"></a><span class="co"># Fonctions inutiles sur un serveur</span></span>
+<span id="cb10-13"><a aria-hidden="true" href="#cb10-13" tabindex="-1"></a><span class="dt">X11Forwarding no</span></span>
+<span id="cb10-14"><a aria-hidden="true" href="#cb10-14" tabindex="-1"></a><span class="co"># Couper les sessions inactives (2 x 300 s)</span></span>
+<span id="cb10-15"><a aria-hidden="true" href="#cb10-15" tabindex="-1"></a><span class="dt">ClientAliveInterval 300</span></span>
+<span id="cb10-16"><a aria-hidden="true" href="#cb10-16" tabindex="-1"></a><span class="dt">ClientAliveCountMax 2</span></span>
+<span id="cb10-17"><a aria-hidden="true" href="#cb10-17" tabindex="-1"></a><span class="co"># Journaux détaillés (empreinte des clés utilisées)</span></span>
+<span id="cb10-18"><a aria-hidden="true" href="#cb10-18" tabindex="-1"></a><span class="dt">LogLevel VERBOSE</span></span></code></pre></div></div>
 <h3 id="la-procédure-sans-risque">La procédure sans risque</h3>
 <ol type="1">
 <li>Vérifier que la connexion <strong>par clé fonctionne déjà</strong> pour le compte d’administration.</li>
@@ -253,11 +642,11 @@
 <div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Et changer le port 22 ?</strong></p>
 <p>Mettre SSH sur un autre port réduit le bruit dans les journaux (les robots visent le 22), mais n’apporte pas de sécurité réelle : un scan trouve le nouveau port en quelques secondes. La sécurité vient des clés, du filtrage par pare-feu, de la limitation des comptes autorisés et de la surveillance.</p>
 </div></div>
-<h2 id="les-journaux-prouver-qui-sest-connecté">7. Les journaux : prouver qui s’est connecté</h2>
+<h2 id="les-journaux-prouver-qui-sest-connecté">11. Les journaux : prouver qui s’est connecté</h2>
 <p>Sous Debian, les messages du serveur SSH se lisent avec <code>journalctl -u ssh</code>.</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-u</span> ssh <span class="at">--since</span> today <span class="at">--no-pager</span></span>
-<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-u</span> ssh <span class="at">-f</span>                                  <span class="co"># en direct</span></span>
-<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-u</span> ssh <span class="at">--no-pager</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">'Accepted|Failed|Invalid'</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-u</span> ssh <span class="at">--since</span> today <span class="at">--no-pager</span></span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-u</span> ssh <span class="at">-f</span>                                  <span class="co"># en direct</span></span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-u</span> ssh <span class="at">--no-pager</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">'Accepted|Failed|Invalid'</span></span></code></pre></div></div>
 <div class="table-wrap"><table>
 
 <thead>
@@ -269,37 +658,45 @@
 <tbody>
 <tr class="odd">
 <td><code>Accepted publickey for sysadmin from 10.10.10.101 port 51234 ssh2: ED25519 SHA256:x6k…</code></td>
-<td>connexion réussie par clé ; l’empreinte identifie <strong>quelle</strong> clé a été utilisée</td>
+<td>connexion réussie par clé ; l’empreinte identifie <strong>quelle</strong> clé a signé</td>
 </tr>
 <tr class="even">
+<td><code>Postponed publickey for sysadmin from … [preauth]</code></td>
+<td>la clé proposée est autorisée, le serveur attend la signature (visible avec <code>LogLevel VERBOSE</code>)</td>
+</tr>
+<tr class="odd">
 <td><code>Accepted password for …</code></td>
 <td>connexion réussie par mot de passe</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>Failed password for amartin from …</code></td>
 <td>mauvais mot de passe</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>Invalid user admin from 203.0.113.9</code></td>
 <td>tentative sur un compte qui n’existe pas (typique des robots)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>User amartin from … not allowed because none of user's groups are listed in AllowGroups</code></td>
 <td>compte refusé par la configuration</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>Connection closed by authenticating user … [preauth]</code></td>
 <td>abandon pendant l’authentification</td>
 </tr>
 </tbody>
 </table></div>
-<p>Pour relier une connexion à une personne, on compare l’empreinte du journal avec celle de la clé publique de chacun : <code>ssh-keygen -lf id_ed25519.pub</code>. D’où l’intérêt d’<strong>une clé par personne</strong> et jamais de clé partagée.</p>
-<h2 id="à-retenir">8. À retenir</h2>
+<p>Pour relier une connexion à une personne, on compare l’empreinte du journal avec celle de la clé publique de chacun : <code>ssh-keygen -lf id_ed25519.pub</code>. D’où l’intérêt d’<strong>une clé par personne et par appareil</strong>, et jamais de clé partagée.</p>
+<h2 id="à-retenir">12. À retenir</h2>
 <div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
 <ul>
-<li>SSH : shell distant chiffré, port 22, transferts (<code>scp</code>, <code>sftp</code>), tunnels.</li>
-<li>La clé d’hôte authentifie le serveur (<code>known_hosts</code>) ; un changement d’empreinte se vérifie avant d’être accepté.</li>
-<li>Clé privée secrète sur le poste, protégée par une phrase de passe ; clé publique dans <code>authorized_keys</code> sur le serveur.</li>
+<li>Le <strong>client</strong> ouvre la connexion (<code>ssh</code>), le <strong>serveur</strong> écoute (<code>sshd</code>, port 22) ; c’est un rôle par connexion, pas un type de machine.</li>
+<li><strong>Clé symétrique</strong> : une seule clé pour chiffrer et déchiffrer, rapide ; ce sont les clés de session, calculées par un échange Diffie-Hellman et jamais transmises.</li>
+<li><strong>Paire de clés</strong> : la clé privée signe et ne quitte jamais l’appareil ; la clé publique vérifie et se diffuse. <strong>Signer n’est pas chiffrer</strong> : une signature prouve qui et garantit l’intégrité, elle ne cache rien.</li>
+<li>Deux paires en miroir : la <strong>clé d’hôte</strong> prouve l’identité du serveur (sa clé publique est dans <code>known_hosts</code> du client) ; la <strong>clé utilisateur</strong> prouve celle de l’utilisateur (sa clé publique est dans <code>authorized_keys</code> du serveur).</li>
+<li>L’authentification par clé est une <strong>signature de l’identifiant de session</strong> : elle ne se rejoue pas et ne sert à rien à un faux serveur.</li>
+<li>La <strong>phrase de passe</strong> déchiffre la clé privée sur le poste ; elle ne part jamais vers le serveur.</li>
+<li>HTTPS (TLS 1.3) : même mécanique ; la confiance dans la clé du serveur vient d’un <strong>certificat</strong> signé par une autorité, et non de <code>known_hosts</code>.</li>
 <li><code>ssh-keygen -t ed25519</code>, <code>ssh-copy-id</code>, <code>~/.ssh/config</code>, droits <code>600</code>/<code>700</code>.</li>
 <li>Durcissement dans <code>sshd_config.d/</code> : <code>PermitRootLogin no</code>, <code>PasswordAuthentication no</code>, <code>AllowGroups</code> ; toujours <code>sshd -t</code> et une session de secours ouverte.</li>
 <li><code>journalctl -u ssh</code> : <code>Accepted publickey</code> + empreinte = preuve de qui s’est connecté.</li>
@@ -307,12 +704,18 @@
 </div></div>
 <h2 id="quiz">Quiz</h2>
 <ol type="1">
-<li>Quelles sont les deux authentifications d’une connexion SSH ?</li>
+<li>Quelle est la différence entre une clé symétrique et une paire de clés ?</li>
+<li>Avec quelle clé signe-t-on ? Avec quelle clé vérifie-t-on une signature ?</li>
+<li>Une signature rend-elle un message confidentiel ?</li>
+<li>Sur CLI-LNX-01, vous lancez <code>scp sysadmin@srv-lnx-01:/etc/os-release .</code>. Quelle machine est le client, laquelle est le serveur ?</li>
+<li>Quelles sont les deux authentifications d’une connexion SSH, et quelle clé sert à chacune ?</li>
 <li>Que contient <code>known_hosts</code> ? Où se trouve-t-il ?</li>
 <li>Que contient <code>authorized_keys</code> ? Où se trouve-t-il ?</li>
+<li>La clé de session circule-t-elle sur le réseau ? Comment les deux côtés l’obtiennent-ils ?</li>
+<li>Pourquoi le client signe-t-il l’identifiant de session plutôt qu’un texte toujours identique ?</li>
+<li>La phrase de passe de votre clé est-elle envoyée au serveur ? Pourquoi protéger la clé privée par une phrase de passe ?</li>
 <li>Un collègue vous demande votre clé privée pour se connecter à votre place. Que répondez-vous ?</li>
-<li>Pourquoi protéger la clé privée par une phrase de passe ?</li>
-<li>Donnez deux raisons de préférer l’authentification par clé.</li>
+<li>En HTTPS, pourquoi le navigateur fait-il confiance à la clé publique du serveur ? Et en SSH ?</li>
 <li>Pourquoi placer ses réglages dans <code>/etc/ssh/sshd_config.d/</code> plutôt que dans <code>sshd_config</code> ?</li>
 <li>Quelle commande teste la configuration du serveur SSH avant de le redémarrer ?</li>
 <li>Que faut-il absolument garder ouvert quand on désactive l’authentification par mot de passe ?</li>
@@ -323,12 +726,18 @@
 Voir la correction
 </summary>
 <ol type="1">
-<li>Le serveur s’authentifie avec sa clé d’hôte ; l’utilisateur s’authentifie par clé ou mot de passe.</li>
-<li>Les empreintes des serveurs déjà acceptés ; côté client, <code>~/.ssh/known_hosts</code>.</li>
+<li>Une clé symétrique est une clé unique, la même des deux côtés, pour chiffrer et déchiffrer. Une paire de clés est formée de deux clés différentes : la privée, secrète, et la publique, diffusable.</li>
+<li>On signe avec la clé privée ; on vérifie avec la clé publique.</li>
+<li>Non : le message reste lisible. La signature prouve qui l’a signé et qu’il n’a pas été modifié. La confidentialité vient du chiffrement.</li>
+<li>CLI-LNX-01 est le client (c’est lui qui lance <code>scp</code>), SRV-LNX-01 est le serveur (<code>sshd</code>), même si le fichier va du serveur vers le client.</li>
+<li>Le serveur s’authentifie avec sa clé d’hôte (le client vérifie avec <code>known_hosts</code>) ; l’utilisateur s’authentifie avec sa clé utilisateur (le serveur vérifie avec <code>authorized_keys</code>) ou par mot de passe.</li>
+<li>Les clés publiques des serveurs déjà acceptés (et non leurs empreintes) ; côté client, <code>~/.ssh/known_hosts</code>.</li>
 <li>Les clés publiques autorisées à se connecter à ce compte ; côté serveur, <code>~/.ssh/authorized_keys</code> du compte.</li>
+<li>Non. Chaque côté la calcule à partir du secret partagé obtenu par l’échange Diffie-Hellman, où seules des valeurs publiques circulent.</li>
+<li>Parce qu’il change à chaque connexion : une signature capturée ne peut pas être rejouée, et un faux serveur ne peut pas réutiliser la signature auprès du vrai.</li>
+<li>Non, elle sert seulement à déchiffrer la clé privée sur le poste. Elle protège la clé si le fichier est volé : sans elle, le fichier est inutilisable.</li>
 <li>Non : chacun sa clé. On ajoute sa clé publique à lui dans <code>authorized_keys</code>.</li>
-<li>Si le fichier est volé, il est inutilisable sans la phrase de passe.</li>
-<li>Résistance à la force brute, pas de secret transmis au serveur, retrait facile, automatisation.</li>
+<li>En HTTPS, la clé publique est dans un certificat signé par une autorité reconnue par le navigateur. En SSH, elle a été enregistrée dans <code>known_hosts</code> à la première connexion, après vérification de l’empreinte.</li>
 <li>Les fichiers inclus sont lus en premier et l’emportent ; le fichier d’origine reste intact pour les mises à jour.</li>
 <li><code>sudo sshd -t</code>.</li>
 <li>Une session SSH déjà ouverte (ou une console), pour pouvoir corriger en cas d’erreur.</li>
