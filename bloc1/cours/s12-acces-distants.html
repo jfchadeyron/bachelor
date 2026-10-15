@@ -1,0 +1,370 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 12 : Accès distants : RDP, SSH, bastion, VPN | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Administrer à distance, c'est ouvrir une porte sur ses serveurs. Cette séance présente les bonnes pratiques pour le bureau à distance et SSH, la séparation des comptes d'administration, le principe du">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="../tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="../tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="../tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="../tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="../tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="../tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="../tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../tp/tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="../tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="../tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="../tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="../tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item active" data-seance="12"><a class="nav-link" href="s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="../tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="../tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="../tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module D : Accès et authentification</span><span class="sep">›</span><span>Séance 12</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 12</span>
+  <h1>Accès distants : RDP, SSH, bastion et VPN</h1>
+  <p class="lead">Administrer à distance, c'est ouvrir une porte sur ses serveurs. Cette séance présente les bonnes pratiques pour le bureau à distance et SSH, la séparation des comptes d'administration, le principe du bastion par lequel passent tous les accès d'administration, les VPN et leurs évolutions, et la façon de rédiger une procédure d'accès et de prouver qui s'est connecté.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 5, 10 et 11</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp12-acces-distants.html" data-seance="12">TP 12 : Mettre en place un bastion d'administration</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#pourquoi-cest-sensible">1. Pourquoi c’est sensible</a></li><li><a href="#le-bureau-à-distance-rdp">2. Le bureau à distance (RDP)</a></li><li><a href="#ssh-rappel-et-compléments">3. SSH, rappel et compléments</a></li><li><a href="#séparer-les-comptes-et-les-niveaux">4. Séparer les comptes et les niveaux</a></li><li><a href="#le-bastion">5. Le bastion</a></li><li><a href="#les-vpn">6. Les VPN</a></li><li><a href="#la-procédure-daccès-administrateur">7. La procédure d’accès administrateur</a></li><li><a href="#prouver-les-accès">8. Prouver les accès</a></li><li><a href="#à-retenir">9. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Identifier les risques liés aux accès d’administration à distance.</li>
+<li>Sécuriser le bureau à distance (RDP) : NLA, comptes autorisés, filtrage, journaux.</li>
+<li>Expliquer la séparation des comptes et le modèle d’administration par niveaux.</li>
+<li>Expliquer le rôle d’un bastion et l’utiliser avec SSH (rebond, tunnel).</li>
+<li>Distinguer VPN site à site et VPN d’accès distant, et situer le Zero Trust.</li>
+<li>Rédiger une procédure d’accès administrateur et tracer les connexions.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 h</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>2 h 45</td>
+<td><a data-seance="12" href="../tp/tp12-acces-distants.html">TP 12 : Mettre en place un bastion d’administration</a></td>
+</tr>
+<tr class="odd">
+<td>15 min</td>
+<td>Quiz</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="pourquoi-cest-sensible">1. Pourquoi c’est sensible</h2>
+<p>Les accès d’administration sont la cible préférée des attaquants : un seul compte d’administration compromis donne la main sur tout. Scénarios fréquents :</p>
+<ul>
+<li>un bureau à distance <strong>exposé sur Internet</strong> avec un mot de passe faible : c’est l’une des premières portes d’entrée des rançongiciels ;</li>
+<li>un administrateur qui lit ses courriels avec un compte <strong>Admins du domaine</strong> et ouvre une pièce jointe piégée ;</li>
+<li>un attaquant qui, depuis un poste compromis, <strong>rebondit</strong> de serveur en serveur (mouvement latéral) en réutilisant les identifiants trouvés en mémoire.</li>
+</ul>
+<p>Les principes de défense, que toute la séance décline :</p>
+<ol type="1">
+<li><strong>exposer le minimum</strong> : aucun port d’administration ouvert à tous ;</li>
+<li><strong>authentifier fort</strong> : clés, MFA ;</li>
+<li><strong>séparer</strong> les comptes et les usages ;</li>
+<li><strong>passer par un point d’entrée unique</strong> et contrôlé ;</li>
+<li><strong>tracer</strong> : savoir qui s’est connecté, quand, d’où et ce qu’il a fait.</li>
+</ol>
+<h2 id="le-bureau-à-distance-rdp">2. Le bureau à distance (RDP)</h2>
+<p>Le protocole <strong>RDP</strong> (<em>Remote Desktop Protocol</em>) ouvre une session graphique sur un serveur ou un poste Windows, sur le port <strong>TCP 3389</strong> (et UDP 3389 pour les performances).</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Mesure</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Authentification au niveau du réseau (<strong>NLA</strong>)</td>
+<td>l’utilisateur s’authentifie <strong>avant</strong> que la session graphique ne soit créée : moins de ressources exposées. Activée par défaut, à conserver</td>
+</tr>
+<tr class="even">
+<td>Limiter qui peut se connecter</td>
+<td>groupe <strong>Administrateurs</strong> et groupe <strong>Utilisateurs du Bureau à distance</strong> ; sur un contrôleur de domaine, seuls les administrateurs sont autorisés par défaut</td>
+</tr>
+<tr class="odd">
+<td>Filtrer l’origine</td>
+<td>règle de pare-feu avec une <strong>portée</strong> : n’accepter que l’adresse du bastion ou du réseau d’administration</td>
+</tr>
+<tr class="even">
+<td>Ne jamais exposer directement sur Internet</td>
+<td>passer par un VPN, un bastion ou une passerelle RD</td>
+</tr>
+<tr class="odd">
+<td>Certificat</td>
+<td>le serveur présente un certificat auto-signé par défaut ; en entreprise, un certificat de l’autorité interne évite d’habituer les utilisateurs à ignorer les avertissements</td>
+</tr>
+<tr class="even">
+<td>Changer le port</td>
+<td>réduit le bruit, ne protège pas</td>
+</tr>
+</tbody>
+</table></div>
+<p>Pour n’accepter le bureau à distance que depuis le bastion : console <strong>Pare-feu Windows Defender avec fonctions avancées de sécurité</strong> (<code>wf.msc</code>) → Règles de trafic entrant → <strong>Bureau à distance - Mode utilisateur (TCP-Entrée)</strong> et <strong>(UDP-Entrée)</strong> → Propriétés → onglet <strong>Étendue</strong> → <em>Adresse IP distante</em> : <strong>Ces adresses IP</strong> → <code>10.10.10.30</code>.</p>
+<h3 id="les-traces-dune-connexion-rdp">Les traces d’une connexion RDP</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Journal</th>
+<th>ID</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sécurité</td>
+<td><strong>4624</strong> avec <em>Type d’ouverture de session</em> <strong>10</strong></td>
+<td>ouverture de session à distance réussie (compte, adresse source)</td>
+</tr>
+<tr class="even">
+<td>Sécurité</td>
+<td>4625</td>
+<td>échec d’ouverture de session</td>
+</tr>
+<tr class="odd">
+<td>Sécurité</td>
+<td>4778 / 4779</td>
+<td>reconnexion / déconnexion d’une session</td>
+</tr>
+<tr class="even">
+<td>TerminalServices-LocalSessionManager / Operational</td>
+<td>21, 24, 25</td>
+<td>ouverture, déconnexion, reconnexion de session</td>
+</tr>
+<tr class="odd">
+<td>TerminalServices-RemoteConnectionManager / Operational</td>
+<td>1149</td>
+<td>authentification réseau réussie (avec l’adresse source)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les types d’ouverture de session de l’événement 4624 à connaître : <strong>2</strong> interactive (au clavier), <strong>3</strong> réseau (partage de fichiers), <strong>10</strong> bureau à distance.</p>
+<h2 id="ssh-rappel-et-compléments">3. SSH, rappel et compléments</h2>
+<p>Tout ce qui a été vu à la séance 10 s’applique : clés, <code>PasswordAuthentication no</code>, <code>PermitRootLogin no</code>, <code>AllowGroups</code>, journaux. On y ajoute :</p>
+<ul>
+<li>le <strong>filtrage par origine</strong> avec UFW : <code>sudo ufw allow from 10.10.10.30 to any port 22 proto tcp</code> ;</li>
+<li>éventuellement <strong>fail2ban</strong>, qui lit les journaux et bannit temporairement les adresses qui accumulent les échecs (utile pour un service exposé, secondaire quand seules les clés sont acceptées).</li>
+</ul>
+<h2 id="séparer-les-comptes-et-les-niveaux">4. Séparer les comptes et les niveaux</h2>
+<h3 id="un-compte-pour-chaque-usage">Un compte pour chaque usage</h3>
+<ul>
+<li>Un compte <strong>courant</strong> (<code>n.fournier</code>) pour la messagerie, la navigation, la bureautique : aucun droit d’administration.</li>
+<li>Un compte <strong>d’administration nominatif</strong> (<code>adm.nfournier</code>) utilisé uniquement pour administrer.</li>
+<li>Jamais de compte d’administration <strong>partagé</strong> (<code>admin</code>, <code>Administrateur</code>) utilisé au quotidien : on ne sait plus qui a fait quoi. Le compte Administrateur intégré est réservé aux situations d’urgence (compte <strong>bris de glace</strong>), avec un mot de passe long gardé sous scellé ou dans un coffre.</li>
+</ul>
+<h3 id="le-modèle-dadministration-par-niveaux">Le modèle d’administration par niveaux</h3>
+<p>Pour éviter qu’un poste compromis donne accès au domaine, on sépare l’administration en <strong>niveaux</strong> (<em>tiers</em>) :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Niveau</th>
+<th>Contient</th>
+<th>Administré par</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>contrôleurs de domaine, annuaire, outils qui les pilotent</td>
+<td>comptes du niveau 0, depuis des postes dédiés</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>serveurs d’applications et de fichiers</td>
+<td>comptes du niveau 1</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>postes de travail</td>
+<td>comptes du niveau 2 (support)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Règle : un compte d’un niveau <strong>ne se connecte jamais</strong> sur une machine d’un niveau inférieur. Un administrateur du domaine qui ouvre une session sur un poste de travail y laisse des traces d’identifiants qu’un attaquant peut récupérer. L’ANSSI recommande aussi un <strong>poste d’administration dédié</strong>, qui ne sert à rien d’autre.</p>
+<h2 id="le-bastion">5. Le bastion</h2>
+<p>Un <strong>bastion</strong> (ou serveur de rebond, <em>jump host</em>) est <strong>le seul point d’entrée</strong> des accès d’administration. Les serveurs n’acceptent SSH et RDP <strong>que depuis le bastion</strong>. Le bastion est durci, surveillé, et c’est là qu’on applique le MFA.</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-662361" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 917.375px;" viewBox="0 0 917.375 338.25" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-662361{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-662361 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-662361 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-662361 .error-icon{fill:#f5f6f8;}#mmd0-662361 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-662361 .edge-thickness-normal{stroke-width:1px;}#mmd0-662361 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-662361 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-662361 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-662361 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-662361 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-662361 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-662361 .marker.cross{stroke:#4a5563;}#mmd0-662361 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-662361 p{margin:0;}#mmd0-662361 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-662361 .cluster-label text{fill:#1f3a5f;}#mmd0-662361 .cluster-label span{color:#1f3a5f;}#mmd0-662361 .cluster-label span p{background-color:transparent;}#mmd0-662361 .label text,#mmd0-662361 span{fill:#1d2530;color:#1d2530;}#mmd0-662361 .node rect,#mmd0-662361 .node circle,#mmd0-662361 .node ellipse,#mmd0-662361 .node polygon,#mmd0-662361 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-662361 .rough-node .label text,#mmd0-662361 .node .label text,#mmd0-662361 .image-shape .label,#mmd0-662361 .icon-shape .label{text-anchor:middle;}#mmd0-662361 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-662361 .rough-node .label,#mmd0-662361 .node .label,#mmd0-662361 .image-shape .label,#mmd0-662361 .icon-shape .label{text-align:center;}#mmd0-662361 .node.clickable{cursor:pointer;}#mmd0-662361 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-662361 .arrowheadPath{fill:#000000;}#mmd0-662361 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-662361 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-662361 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-662361 .edgeLabel p{background-color:#ffffff;}#mmd0-662361 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-662361 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-662361 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-662361 .cluster text{fill:#1f3a5f;}#mmd0-662361 .cluster span{color:#1f3a5f;}#mmd0-662361 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-662361 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-662361 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-662361 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-662361 rect.text{fill:none;stroke-width:0;}#mmd0-662361 .icon-shape,#mmd0-662361 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-662361 .icon-shape p,#mmd0-662361 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-662361 .icon-shape .label rect,#mmd0-662361 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-662361 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-662361 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-662361 .node .neo-node{stroke:#1f3a5f;}#mmd0-662361 [data-look="neo"].node rect,#mmd0-662361 [data-look="neo"].cluster rect,#mmd0-662361 [data-look="neo"].node polygon{stroke:url(#mmd0-662361-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-662361 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-662361 [data-look="neo"].node path{stroke:url(#mmd0-662361-gradient);stroke-width:1px;}#mmd0-662361 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-662361 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-662361 [data-look="neo"].node circle{stroke:url(#mmd0-662361-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-662361 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-662361 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-662361-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-662361 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-662361-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-662361 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-662361_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-662361_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-662361_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-662361_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-662361_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-662361_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-662361_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-662361_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-662361_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-662361_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-662361_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-662361_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-662361-ZONE" data-look="classic"><rect style="" x="661.703125" y="8" width="247.671875" height="322.25"></rect><g class="cluster-label " transform="translate(719.390625, 8)"><foreignObject width="132.296875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Réseau des serveurs</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M217.641,109.25L294.961,109.25L374.125,109.25" id="mmd0-662361-L_A_B_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A_B_0" data-points="W3sieCI6MjE3LjY0MDYyNSwieSI6MTA5LjI1fSx7IngiOjI5NC45NjA5Mzc1LCJ5IjoxMDkuMjV9LHsieCI6Mzc4LjEyNSwieSI6MTA5LjI1fV0=" data-look="classic" marker-end="url(#mmd0-662361_flowchart-v2-pointEnd)"></path><path d="M512.719,90.183L590.133,68.25L661.703,68.25L682.757,71.735" id="mmd0-662361-L_B_S1_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_S1_0" data-points="W3sieCI6NTEyLjcxODc1LCJ5Ijo5MC4xODMyMTgxNjEyMDQ5OX0seyJ4Ijo1OTAuMTMyODEyNSwieSI6NjguMjV9LHsieCI6NjYxLjcwMzEyNSwieSI6NjguMjV9LHsieCI6Njg2LjcwMzEyNSwieSI6NzIuMzg4NTQwMTU1MTk1MjZ9XQ==" data-look="classic" marker-end="url(#mmd0-662361_flowchart-v2-pointEnd)"></path><path d="M512.719,146.686L590.133,189.75L661.703,189.75L688.03,202.506" id="mmd0-662361-L_B_S2_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_S2_0" data-points="W3sieCI6NTEyLjcxODc1LCJ5IjoxNDYuNjg1OTk4NDg4MzY1OH0seyJ4Ijo1OTAuMTMyODEyNSwieSI6MTg5Ljc1fSx7IngiOjY2MS43MDMxMjUsInkiOjE4OS43NX0seyJ4Ijo2OTEuNjMwMTQzMjI5MTY2NiwieSI6MjA0LjI1fV0=" data-look="classic" marker-end="url(#mmd0-662361_flowchart-v2-pointEnd)"></path><path d="M489.464,204.75L590.133,148.75L661.703,148.75L688.03,135.994" id="mmd0-662361-L_X_S1_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_X_S1_0" data-points="W3sieCI6NDg5LjQ2NDMzNDIzOTEzMDQ0LCJ5IjoyMDQuNzV9LHsieCI6NTkwLjEzMjgxMjUsInkiOjE0OC43NX0seyJ4Ijo2NjEuNzAzMTI1LCJ5IjoxNDguNzV9LHsieCI6NjkxLjYzMDE0MzIyOTE2NjYsInkiOjEzNC4yNX1d" data-look="classic" marker-end="url(#mmd0-662361_flowchart-v2-pointEnd)"></path><path d="M515.282,253.75L590.133,280L661.703,280L682.817,274.842" id="mmd0-662361-L_X_S2_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_X_S2_0" data-points="W3sieCI6NTE1LjI4MjMyNzU4NjIwNjksInkiOjI1My43NX0seyJ4Ijo1OTAuMTMyODEyNSwieSI6MjgwfSx7IngiOjY2MS43MDMxMjUsInkiOjI4MH0seyJ4Ijo2ODYuNzAzMTI1LCJ5IjoyNzMuODkzMTI5NzcwOTkyMzV9XQ==" data-look="classic" marker-end="url(#mmd0-662361_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(294.9609375, 109.25)"><g class="label" data-id="L_A_B_0" transform="translate(-52.3203125, -10.5)"><foreignObject width="104.640625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>SSH (clé + MFA)</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(590.1328125, 68.25)"><g class="label" data-id="L_B_S1_0" transform="translate(-14.3984375, -10.5)"><foreignObject width="28.796875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>SSH</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(590.1328125, 189.75)"><g class="label" data-id="L_B_S2_0" transform="translate(-46.5703125, -10.5)"><foreignObject width="93.140625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>RDP via tunnel</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(590.1328125, 148.75)"><g class="label" data-id="L_X_S1_0" transform="translate(-19.4609375, -10.5)"><foreignObject width="38.921875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>refusé</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(590.1328125, 280)"><g class="label" data-id="L_X_S2_0" transform="translate(-19.4609375, -10.5)"><foreignObject width="38.921875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>refusé</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-662361-flowchart-A-0" data-look="classic" transform="translate(112.8203125, 109.25)"><rect class="basic label-container" style="" x="-104.8203125" y="-24.5" width="209.640625" height="49"></rect><g class="label" style="" transform="translate(-76.8203125, -10.5)"><rect></rect><foreignObject width="153.640625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Poste de l'administrateur</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-662361-flowchart-B-1" data-look="classic" transform="translate(445.421875, 109.25)"><rect class="basic label-container" style="" x="-67.296875" y="-45.5" width="134.59375" height="91"></rect><g class="label" style="" transform="translate(-39.296875, -31.5)"><rect></rect><foreignObject width="78.59375" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Bastion<br>BST-LNX-01<br>10.10.10.30</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-662361-flowchart-S1-2" data-look="classic" transform="translate(785.5390625, 88.75)"><rect class="basic label-container" style="" x="-98.8359375" y="-45.5" width="197.671875" height="91"></rect><g class="label" style="" transform="translate(-70.8359375, -31.5)"><rect></rect><foreignObject width="141.671875" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>SRV-LNX-01<br>SSH accepté<br>uniquement depuis .30</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-662361-flowchart-S2-3" data-look="classic" transform="translate(785.5390625, 249.75)"><rect class="basic label-container" style="" x="-98.8359375" y="-45.5" width="197.671875" height="91"></rect><g class="label" style="" transform="translate(-70.8359375, -31.5)"><rect></rect><foreignObject width="141.671875" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>SRV-WIN-01<br>RDP accepté<br>uniquement depuis .30</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-662361-flowchart-X-8" data-look="classic" transform="translate(445.421875, 229.25)"><rect class="basic label-container" style="" x="-73.140625" y="-24.5" width="146.28125" height="49"></rect><g class="label" style="" transform="translate(-45.140625, -10.5)"><rect></rect><foreignObject width="90.28125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Autre machine</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-662361-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-662361-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-662361-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<p>Avantages :</p>
+<ul>
+<li>une seule porte à surveiller et à protéger ;</li>
+<li>les serveurs ne sont plus joignables directement pour l’administration ;</li>
+<li>toutes les connexions sont tracées au même endroit.</li>
+</ul>
+<p>Des solutions commerciales de <strong>gestion des accès à privilèges</strong> (PAM : Wallix Bastion, CyberArk, Teleport…) ajoutent l’enregistrement vidéo des sessions, le coffre-fort de mots de passe, les demandes d’accès validées.</p>
+<h3 id="rebondir-avec-ssh-proxyjump">Rebondir avec SSH : ProxyJump</h3>
+<p>L’option <code>-J</code> (ou <code>ProxyJump</code> dans <code>~/.ssh/config</code>) établit une connexion vers la cible <strong>à travers</strong> le bastion. L’authentification auprès de la cible se fait depuis le poste de l’administrateur, de bout en bout : <strong>aucune clé privée n’est déposée sur le bastion</strong>.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : poste de l'administrateur</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-J</span> sysadmin@bastion sysadmin@10.10.10.20</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : ~/.ssh/config</span><button class="copy" type="button">Copier</button></div><pre class="sshconfig"><code>Host bastion
+    HostName 127.0.0.1
+    Port 2222
+    User sysadmin
+Host srv-lnx-01
+    HostName 10.10.10.20
+    User sysadmin
+    ProxyJump bastion</code></pre></div>
+<h3 id="faire-passer-rdp-dans-ssh-le-tunnel">Faire passer RDP dans SSH : le tunnel</h3>
+<p>L’option <code>-L</code> ouvre un port <strong>local</strong> sur le poste, qui est relayé par le bastion vers une machine du réseau interne :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : poste de l'administrateur</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-N</span> <span class="at">-L</span> 13389:10.10.10.10:3389 bastion</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="co"># puis : Connexion Bureau à distance vers 127.0.0.1:13389</span></span></code></pre></div></div>
+<p>Le serveur Windows voit arriver la connexion RDP <strong>depuis le bastion</strong>, la seule adresse autorisée par son pare-feu. Ces deux usages exigent que le bastion autorise le relais TCP (<code>AllowTcpForwarding yes</code>, valeur par défaut).</p>
+<h2 id="les-vpn">6. Les VPN</h2>
+<p>Un <strong>VPN</strong> (réseau privé virtuel) crée un <strong>tunnel chiffré</strong> à travers un réseau non sûr (Internet).</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Site à site</strong></td>
+<td>relier deux réseaux d’entreprise (siège et entrepôt), en permanence, entre deux pare-feu</td>
+</tr>
+<tr class="even">
+<td><strong>Accès distant</strong> (nomade)</td>
+<td>un salarié en déplacement ou en télétravail rejoint le réseau de l’entreprise</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Protocole</th>
+<th>Caractéristiques</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IPsec</td>
+<td>standard historique, très répandu entre équipements réseau</td>
+</tr>
+<tr class="even">
+<td>OpenVPN</td>
+<td>basé sur TLS, souple, logiciel libre</td>
+</tr>
+<tr class="odd">
+<td>WireGuard</td>
+<td>récent, très simple à configurer, performant, intégré au noyau Linux</td>
+</tr>
+</tbody>
+</table></div>
+<p>Points d’attention : l’authentification du VPN doit être <strong>forte</strong> (certificat et MFA) ; les boîtiers VPN exposés sur Internet sont une cible majeure et doivent être <strong>mis à jour sans délai</strong> ; un VPN donne en général accès à <strong>tout un réseau</strong>, bien plus que nécessaire.</p>
+<h3 id="vers-le-zero-trust">Vers le Zero Trust</h3>
+<p>Le modèle <strong>Zero Trust</strong> part du principe qu’être « à l’intérieur » du réseau ne prouve rien. Chaque accès à chaque application est vérifié : identité (avec MFA), état de l’appareil (à jour, géré par l’entreprise), contexte (pays, horaire). Les solutions <strong>ZTNA</strong> donnent accès à une application précise plutôt qu’à tout le réseau ; l’<strong>accès conditionnel</strong> de Microsoft Entra ID applique ce type de règles aux services cloud.</p>
+<h2 id="la-procédure-daccès-administrateur">7. La procédure d’accès administrateur</h2>
+<p>Une procédure écrite fixe les règles et permet de les vérifier :</p>
+<ol type="1">
+<li><strong>qui</strong> peut administrer quoi (liste nominative, comptes d’administration) ;</li>
+<li><strong>comment</strong> : par le bastion, avec quelle authentification (clé personnelle, MFA) ;</li>
+<li><strong>d’où</strong> : depuis quels postes ou réseaux ;</li>
+<li><strong>quand</strong> : horaires, demande de changement ou ticket préalable ;</li>
+<li><strong>tracé comment</strong> : quels journaux, conservés combien de temps, revus par qui ;</li>
+<li><strong>en cas d’urgence</strong> : compte bris de glace, qui le détient, comment son usage est signalé ;</li>
+<li><strong>à l’arrivée et au départ</strong> d’un administrateur : création, révocation des clés et des comptes.</li>
+</ol>
+<h2 id="prouver-les-accès">8. Prouver les accès</h2>
+<p>Pour reconstituer une intervention, on <strong>corrèle</strong> les journaux des différentes machines :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Heure</th>
+<th>Machine</th>
+<th>Source consultée</th>
+<th>Ligne de journal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>09:02:11</td>
+<td>BST-LNX-01</td>
+<td><code>journalctl -u ssh</code></td>
+<td><code>Accepted publickey for sysadmin from 10.10.10.1 … ED25519 SHA256:x6k…</code></td>
+</tr>
+<tr class="even">
+<td>09:02:12</td>
+<td>SRV-LNX-01</td>
+<td><code>journalctl -u ssh</code></td>
+<td><code>Accepted publickey for sysadmin from 10.10.10.30 …</code></td>
+</tr>
+<tr class="odd">
+<td>09:03:40</td>
+<td>SRV-LNX-01</td>
+<td><code>journalctl _COMM=sudo</code></td>
+<td><code>sysadmin : … COMMAND=/usr/bin/systemctl restart nginx</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>La première ligne identifie la personne (l’empreinte de sa clé), la deuxième montre qu’elle est bien passée par le bastion, la troisième ce qu’elle a fait.</p>
+<p>Cela n’est possible que si toutes les machines sont <strong>à la même heure</strong> (synchronisation NTP) et si les journaux sont <strong>conservés</strong> assez longtemps, idéalement copiés sur un serveur central que les administrateurs ne peuvent pas modifier (bloc Supervision et maintenance).</p>
+<h2 id="à-retenir">9. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Jamais de RDP ou SSH exposé à tous ; filtrage par origine, clés ou MFA, NLA pour RDP.</li>
+<li>4624 type 10 = connexion RDP ; <code>journalctl -u ssh</code> pour SSH ; corrélation par l’heure.</li>
+<li>Comptes d’administration nominatifs et séparés ; niveaux d’administration ; compte bris de glace.</li>
+<li>Bastion = point d’entrée unique ; les serveurs n’acceptent l’administration que depuis lui. <code>ProxyJump</code> et tunnels <code>-L</code>.</li>
+<li>VPN site à site ou nomade (IPsec, OpenVPN, WireGuard) ; Zero Trust : vérifier chaque accès.</li>
+<li>Une procédure d’accès écrite : qui, comment, d’où, quand, traces, urgence.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Pourquoi ne faut-il jamais exposer le port 3389 sur Internet ?</li>
+<li>Que fait la NLA ?</li>
+<li>Quel est le type d’ouverture de session d’une connexion RDP dans l’événement 4624 ?</li>
+<li>Pourquoi un administrateur du domaine ne doit-il pas ouvrir de session sur un poste de travail ?</li>
+<li>Qu’est-ce qu’un compte bris de glace ?</li>
+<li>Avec <code>ProxyJump</code>, où se trouve la clé privée utilisée pour se connecter au serveur cible ?</li>
+<li>À quoi sert la commande <code>ssh -N -L 13389:10.10.10.10:3389 bastion</code> ?</li>
+<li>Quelle différence entre un VPN site à site et un VPN d’accès distant ?</li>
+<li>Qu’apporte le Zero Trust par rapport à un VPN classique ?</li>
+<li>Pourquoi la synchronisation de l’heure est-elle indispensable à la traçabilité ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Il est scanné en permanence : attaques par mot de passe et exploitation de vulnérabilités, porte d’entrée classique des rançongiciels.</li>
+<li>L’utilisateur doit s’authentifier avant la création de la session graphique.</li>
+<li>Type 10.</li>
+<li>Ses identifiants peuvent être récupérés sur ce poste s’il est compromis : l’attaquant obtiendrait le domaine (modèle par niveaux).</li>
+<li>Un compte d’administration réservé aux urgences, au mot de passe long conservé en lieu sûr, dont l’usage est exceptionnel et signalé.</li>
+<li>Sur le poste de l’administrateur : l’authentification se fait de bout en bout, rien n’est déposé sur le bastion.</li>
+<li>À ouvrir un port local 13389 relayé par le bastion vers le port RDP de 10.10.10.10 (sans ouvrir de shell grâce à <code>-N</code>).</li>
+<li>Site à site : relie deux réseaux en permanence. Accès distant : un utilisateur rejoint le réseau depuis l’extérieur.</li>
+<li>Chaque accès est vérifié (identité, appareil, contexte) et limité à une application, au lieu de donner accès à tout le réseau.</li>
+<li>Pour corréler les événements de plusieurs machines et reconstituer la chronologie d’une intervention.</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp11-authentification.html" data-seance="11"><span class="dir">‹ Page précédente</span><span class="titre">TP 11 : Politiques de mots de passe et verrouillage</span></a><a class="next" href="../tp/tp12-acces-distants.html" data-seance="12"><span class="dir">Page suivante ›</span><span class="titre">TP 12 : Mettre en place un bastion d'administration</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>
