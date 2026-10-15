@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 11 : Politiques de mots de passe et verrouillage | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Vous appliquez la politique d&#x27;authentification d&#x27;Hexalog : stratégie de domaine par GPO, stratégie renforcée pour les administrateurs, scénarios de verrouillage, de déverrouillage et de réinitialisati">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item active" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp active" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module D : Accès et authentification</span><span class="sep">›</span><a href="../cours/s11-authentification.html" data-seance="11">Séance 11</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 11</span>
+  <h1>TP 11 : Politiques de mots de passe et verrouillage</h1>
+  <p class="lead">Vous appliquez la politique d'authentification d'Hexalog : stratégie de domaine par GPO, stratégie renforcée pour les administrateurs, scénarios de verrouillage, de déverrouillage et de réinitialisation avec leurs traces, puis l'équivalent sous Linux avec chage et PAM. Une étude de cas termine la séance.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>2 h 30</td></tr><tr><th>Machines virtuelles</th><td>SRV-WIN-01, CLI-WIN-01, SRV-LNX-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s11-authentification.html" data-seance="11">Séance 11 : Authentification : concepts et politiques</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-windows">Partie A. Windows</a></li><li><a href="#partie-b.-linux">Partie B. Linux</a></li><li><a href="#partie-c.-étude-de-cas-30-min">Partie C. Étude de cas (30 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Le RSSI d’Hexalog a rédigé la politique suivante, que vous devez mettre en œuvre et <strong>prouver</strong>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Règle</th>
+<th>Utilisateurs</th>
+<th>Administrateurs (Admins du domaine)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Longueur minimale</td>
+<td>12</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>Complexité</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td>Historique</td>
+<td>12</td>
+<td>24</td>
+</tr>
+<tr class="even">
+<td>Durée de vie maximale</td>
+<td>365 jours</td>
+<td>180 jours</td>
+</tr>
+<tr class="odd">
+<td>Durée de vie minimale</td>
+<td>1 jour</td>
+<td>1 jour</td>
+</tr>
+<tr class="even">
+<td>Seuil de verrouillage</td>
+<td>5 échecs</td>
+<td>3 échecs</td>
+</tr>
+<tr class="odd">
+<td>Durée de verrouillage et fenêtre d’observation</td>
+<td>15 min</td>
+<td>30 min</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="partie-a.-windows">Partie A. Windows</h2>
+<p>Faites un snapshot <code>11-avant-politiques</code> de SRV-WIN-01. Toute la partie A se fait avec les consoles graphiques : <strong>Gestion des stratégies de groupe</strong>, <strong>Centre d’administration Active Directory</strong>, <strong>Utilisateurs et ordinateurs Active Directory</strong> et <strong>Observateur d’événements</strong> (menu Outils du Gestionnaire de serveur).</p>
+<h3 id="a.1-état-initial">A.1, État initial</h3>
+<p>Ouvrez <strong>Gestion des stratégies de groupe</strong> (Outils, ou <code>gpmc.msc</code>) → Forêt → Domaines → <code>hexalog.local</code> → sélectionnez <strong>Default Domain Policy</strong> → onglet <strong>Paramètres</strong>. Dépliez <em>Configuration ordinateur → Stratégies → Paramètres Windows → Paramètres de sécurité → Stratégies de comptes</em>.</p>
+<p>Notez les valeurs actuelles dans votre journal.</p>
+<h3 id="a.2-la-stratégie-de-domaine-par-gpo">A.2, La stratégie de domaine par GPO</h3>
+<p>Clic droit sur <strong>Default Domain Policy</strong> → <strong>Modifier</strong>. Dans l’éditeur, allez dans Configuration ordinateur → Stratégies → Paramètres Windows → Paramètres de sécurité → <strong>Stratégies de comptes</strong> :</p>
+<ul>
+<li><strong>Stratégie de mot de passe</strong> : réglez les cinq valeurs de la colonne Utilisateurs (double-clic sur chaque paramètre) ;</li>
+<li><strong>Stratégie de verrouillage du compte</strong> : seuil 5, durée 15 minutes, réinitialisation du compteur après 15 minutes.</li>
+</ul>
+<p>Fermez l’éditeur. Pour appliquer tout de suite, tapez <code>gpupdate /force</code> dans l’Invite de commandes du serveur (sinon, la stratégie s’applique d’elle-même en quelques minutes). Revenez sur l’onglet <strong>Paramètres</strong> de la Default Domain Policy (F5) : les nouvelles valeurs apparaissent.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Pourquoi la Default Domain Policy ?</strong></p>
+<p>La politique de mots de passe des comptes du domaine se règle dans la stratégie liée au domaine : c’est elle qui fait foi. Une valeur modifiée ailleurs finirait par être écrasée par cette GPO.</p>
+</div></div>
+<p>Clic droit sur la Default Domain Policy → <strong>Enregistrer le rapport</strong> : gardez ce rapport pour votre dossier.</p>
+<h3 id="a.3-la-stratégie-renforcée-des-administrateurs">A.3, La stratégie renforcée des administrateurs</h3>
+<p>Une GPO s’applique à tout le domaine. Pour des règles plus strictes réservées aux administrateurs, on crée une <strong>stratégie de mot de passe affinée</strong> (PSO) dans le <strong>Centre d’administration Active Directory</strong> (Outils, ou <code>dsac.exe</code>) :</p>
+<ol type="1">
+<li>Dans le volet de gauche : <code>hexalog (local)</code> → <strong>System</strong> → <strong>Password Settings Container</strong>.</li>
+<li>Volet de droite : <strong>Nouveau → Paramètres de mot de passe</strong>.</li>
+<li>Nom <code>PSO-Admins</code>, priorité <code>10</code>. Cochez et réglez : longueur minimale 16, complexité, historique 24, durée de vie minimale 1 jour, durée de vie maximale 180 jours ; <strong>Appliquer la stratégie de verrouillage de compte</strong> : 3 tentatives, réinitialisation du compteur après 30 minutes, compte verrouillé pendant 30 minutes.</li>
+<li>En bas, <strong>S’applique directement à</strong> → <strong>Ajouter</strong> → <code>Admins du domaine</code> → Vérifier les noms → OK. Puis OK.</li>
+</ol>
+<p>Vérifiez à qui elle s’applique : dans le Centre d’administration, cherchez <code>adm.nfournier</code> (zone <em>Recherche globale</em>), clic droit → <strong>Afficher les paramètres de mot de passe résultants</strong> : <code>PSO-Admins</code>. Faites de même pour <code>a.martin</code> : aucune PSO, c’est la stratégie du domaine qui s’applique.</p>
+<p>Vérifiez que la politique est <strong>appliquée</strong> : dans <code>dsa.msc</code>, clic droit sur <code>adm.nfournier</code> → <strong>Réinitialiser le mot de passe</strong> → <code>Court-Mdp1!</code> (11 caractères). Quel message obtenez-vous ? Annulez.</p>
+<h3 id="a.4-scénario-verrouillage-dun-compte">A.4, Scénario : verrouillage d’un compte</h3>
+<p>Thomas Petit appelle le support : « Je ne peux plus me connecter. » Reproduisez la situation sur <code>CLI-WIN-01</code> : à l’écran de connexion, <strong>Autre utilisateur</strong>, <code>HEXALOG\t.petit</code>, et tapez <strong>six fois</strong> un mauvais mot de passe. Essayez ensuite avec le bon mot de passe : que se passe-t-il ?</p>
+<p>Côté serveur, menez l’enquête :</p>
+<ol type="1">
+<li><code>dsa.msc</code> → propriétés de <code>t.petit</code> → onglet <strong>Compte</strong> : la case <strong>Déverrouiller le compte</strong> indique que le compte est verrouillé.</li>
+<li><strong>Observateur d’événements</strong> → Journaux Windows → <strong>Sécurité</strong> → clic droit → <strong>Filtrer le journal actuel</strong> → dans la zone des ID, tapez <code>4740</code> → OK. Ouvrez l’événement : il indique le compte verrouillé et le <strong>nom de l’ordinateur appelant</strong>, d’où venaient les échecs.</li>
+<li>Filtrez ensuite sur <code>4625,4771,4776</code> : les échecs d’authentification qui ont précédé.</li>
+</ol>
+<p>Puis traitez la demande comme le ferait le support : vérification d’identité (décrivez comment), puis dans l’onglet <strong>Compte</strong> de <code>t.petit</code>, cochez <strong>Déverrouiller le compte</strong> → Appliquer. Vérifiez sur <code>CLI-WIN-01</code> que Thomas peut se connecter, et retrouvez l’événement <strong>4767</strong> (déverrouillage) dans le journal Sécurité.</p>
+<div class="callout tip"><div class="callout-body"><p class="callout-titre"><strong>Sans CLI-WIN-01</strong></p>
+<p>Si votre PC ne peut pas faire tourner le poste Windows en même temps, provoquez les échecs depuis CLI-LNX-01 : <code>sudo apt install -y smbclient</code>, puis six fois <code>smbclient -L //10.10.10.10 -U 'HEXALOG\t.petit%MauvaisMotDePasse'</code>.</p>
+</div></div>
+<h3 id="a.5-scénario-réinitialisation-du-mot-de-passe">A.5, Scénario : réinitialisation du mot de passe</h3>
+<p>Thomas a oublié son mot de passe. Dans <code>dsa.msc</code>, clic droit sur <code>t.petit</code> → <strong>Réinitialiser le mot de passe</strong> : un mot de passe temporaire conforme, et cochez <strong>L’utilisateur doit changer le mot de passe à la prochaine ouverture de session</strong>.</p>
+<p>Ouvrez la session de <code>t.petit</code> sur <code>CLI-WIN-01</code> avec le mot de passe temporaire : que demande Windows ? Choisissez un nouveau mot de passe.</p>
+<p>Pour la suite des TP, remettez ensuite le mot de passe de lab (Réinitialiser le mot de passe, case <em>doit changer</em> décochée). Retrouvez l’événement <strong>4724</strong> (réinitialisation) dans le journal Sécurité.</p>
+<h2 id="partie-b.-linux">Partie B. Linux</h2>
+<p>Faites un snapshot <code>11-avant-pam</code> de SRV-LNX-01. Gardez une <strong>deuxième session</strong> ouverte avec <code>sudo -i</code> pendant toute la partie B.</p>
+<h3 id="b.1-expiration">B.1, Expiration</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-E</span> <span class="st">'^PASS_(MAX|MIN|WARN)'</span> /etc/login.defs</span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="fu">sudo</span> chage <span class="at">-l</span> amartin</span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="fu">sudo</span> chage <span class="at">-M</span> 365 <span class="at">-m</span> 1 <span class="at">-W</span> 14 amartin</span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="fu">sudo</span> chage <span class="at">-l</span> amartin</span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="fu">sudo</span> passwd <span class="at">-e</span> amartin                 <span class="co"># expiration immédiate</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a><span class="fu">su</span> <span class="at">-</span> amartin                           <span class="co"># le changement est exigé</span></span></code></pre></div></div>
+<h3 id="b.2-qualité-des-mots-de-passe">B.2, Qualité des mots de passe</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> libpam-pwquality</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="fu">grep</span> pwquality /etc/pam.d/common-password     <span class="co"># le module a été ajouté automatiquement</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/security/pwquality.conf</span></code></pre></div></div>
+<p>Réglez (en décommentant les lignes concernées) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/security/pwquality.conf</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="dt">minlen </span><span class="ot">=</span><span class="st"> </span><span class="dv">12</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="dt">minclass </span><span class="ot">=</span><span class="st"> </span><span class="dv">3</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="dt">dictcheck </span><span class="ot">=</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="dt">usercheck </span><span class="ot">=</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="dt">enforce_for_root</span></span></code></pre></div></div>
+<p>Testez en tant qu’utilisateur :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">su</span> <span class="at">-</span> cdubois</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">passwd</span>            <span class="co"># essayez : soleil, Soleil123, un mot de passe contenant cdubois, puis une vraie phrase de passe</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="bu">exit</span></span></code></pre></div></div>
+<p>Notez chaque message de refus (<code>BAD PASSWORD: ...</code>).</p>
+<h2 id="partie-c.-étude-de-cas-30-min">Partie C. Étude de cas (30 min)</h2>
+<p>Hexalog prévoit les évolutions suivantes :</p>
+<ol type="1">
+<li>les commerciaux doivent accéder depuis l’extérieur à l’application de suivi des colis et aux partages de fichiers ;</li>
+<li>l’entreprise passe à une messagerie en ligne (SaaS) et veut que les salariés utilisent leur compte habituel ;</li>
+<li>les deux administrateurs gèrent les serveurs sur site et la console cloud de l’application ;</li>
+<li>l’entrepôt utilise des postes partagés par plusieurs préparateurs, avec des gants.</li>
+</ol>
+<p>Pour chaque point, proposez les mécanismes d’authentification (facteurs, MFA et type de second facteur, SSO ou non, politique de mot de passe, verrouillage) et <strong>justifiez</strong> en termes de risques couverts et de contraintes d’usage. Une page maximum, sous forme de tableau.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>La Default Domain Policy applique les valeurs utilisateurs ; rapport de GPO enregistré.</label></li>
+<li><label><input type="checkbox"/><code>PSO-Admins</code> s’applique à <code>adm.nfournier</code> et pas à <code>a.martin</code>.</label></li>
+<li><label><input type="checkbox"/>Verrouillage de <code>t.petit</code> reproduit, expliqué avec les événements d’échec (4771, ou 4625/4776), 4740 et 4767.</label></li>
+<li><label><input type="checkbox"/>Réinitialisation faite avec changement obligatoire, événement 4724 retrouvé, compte remis en état pour la suite.</label></li>
+<li><label><input type="checkbox"/>Sous Linux : expiration et qualité des mots de passe démontrées.</label></li>
+<li><label><input type="checkbox"/>Étude de cas rédigée.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Quel ordinateur l’événement 4740 désigne-t-il comme origine des échecs ? Comment l’utiliseriez-vous pour trouver un poste qui verrouille sans cesse un compte (ancien mot de passe enregistré, par exemple) ?</li>
+<li>Pourquoi la GPO de domaine ne suffit-elle pas pour avoir des règles différentes pour les administrateurs ?</li>
+<li><code>sudo passwd cdubois</code> accepte-t-il un mot de passe faible ? Pourquoi l’option <code>enforce_for_root</code> ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Les valeurs ne changent pas après la GPO</td>
+<td><code>gpupdate /force</code>, vérifier que c’est bien la Default Domain Policy liée au domaine qui a été modifiée</td>
+</tr>
+<tr class="even">
+<td>Le compte ne se verrouille pas</td>
+<td>seuil réellement appliqué ? onglet Paramètres de la Default Domain Policy, <code>gpupdate /force</code> ; bon compte (<code>HEXALOG\t.petit</code>)</td>
+</tr>
+<tr class="odd">
+<td>Le filtre ne trouve aucun événement</td>
+<td>mauvais ID ou mauvais journal (Sécurité) ; les échecs sont enregistrés sur le contrôleur de domaine, pas sur le poste</td>
+</tr>
+<tr class="even">
+<td>La PSO n’accepte pas le groupe</td>
+<td>la cible doit être un utilisateur ou un groupe <strong>global</strong> (Admins du domaine en est un)</td>
+</tr>
+<tr class="odd">
+<td><em>Password Settings Container</em> introuvable</td>
+<td>Centre d’administration, pas <code>dsa.msc</code> ; volet de gauche en arborescence, nœud <code>hexalog (local) → System</code></td>
+</tr>
+<tr class="even">
+<td><code>su</code> ou <code>sudo</code> ne fonctionnent plus après une modification PAM</td>
+<td>utiliser la session root de secours, restaurer le fichier (ou le snapshot)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<h3 id="verrouillage-des-comptes-linux-avec-pam_faillock">Verrouillage des comptes Linux avec pam_faillock</h3>
+<p>À faire uniquement avec un snapshot et une session root ouverte. Dans <code>/etc/pam.d/common-auth</code>, encadrez la ligne <code>pam_unix.so</code> ainsi (les autres lignes du fichier restent en place) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/pam.d/common-auth (extrait)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="dt">auth    requisite                       pam_faillock.so preauth</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="dt">auth    </span><span class="kw">[success=1 default=ignore]</span><span class="dt">      pam_unix.so nullok</span></span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="dt">auth    </span><span class="kw">[default=die]</span><span class="dt">                   pam_faillock.so authfail</span></span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="dt">auth    sufficient                      pam_faillock.so authsucc</span></span></code></pre></div></div>
+<p>Ajoutez <code>account required pam_faillock.so</code> en tête de <code>/etc/pam.d/common-account</code>, réglez <code>deny = 5</code> et <code>unlock_time = 900</code> dans <code>/etc/security/faillock.conf</code>, puis testez avec <code>su - cdubois</code> et de mauvais mots de passe. Consultez et réinitialisez le compteur avec <code>sudo faillock --user cdubois</code> et <code>sudo faillock --user cdubois --reset</code>.</p>
+<h3 id="second-facteur-totp-sur-ssh">Second facteur TOTP sur SSH</h3>
+<p>Le paquet <code>libpam-google-authenticator</code> ajoute un code à 6 chiffres (application d’authentification sur téléphone) en plus de la clé SSH : <code>AuthenticationMethods publickey,keyboard-interactive</code> dans la configuration de <code>sshd</code>. À tester sur une VM dédiée : une erreur de configuration bloque tous les accès SSH.</p>
+<h3 id="un-poste-linux-dans-le-domaine">Un poste Linux dans le domaine</h3>
+<p>Les paquets <code>realmd</code>, <code>sssd</code> et <code>adcli</code> permettent de joindre CLI-LNX-01 au domaine <code>hexalog.local</code> (<code>sudo realm join -U Administrateur hexalog.local</code>), puis d’ouvrir une session Linux avec un compte Active Directory et d’obtenir un ticket Kerberos (<code>kinit</code>, <code>klist</code>). C’est l’illustration concrète du SSO dans un environnement mixte.</p>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s11-authentification.html" data-seance="11"><span class="dir">‹ Page précédente</span><span class="titre">Séance 11 : Authentification : concepts et politiques</span></a><a class="next" href="../cours/s12-acces-distants.html" data-seance="12"><span class="dir">Page suivante ›</span><span class="titre">Séance 12 : Accès distants : RDP, SSH, bastion, VPN</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>
