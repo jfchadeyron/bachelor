@@ -41,6 +41,10 @@
 <dd>
 Option d’un partage Windows qui masque à chaque utilisateur les dossiers auxquels il n’a pas accès. (S7)
 </dd>
+<dt>Accès par pont (Bridged)</dt>
+<dd>
+Mode réseau VirtualBox qui branche la VM directement sur le réseau physique du PC, comme une machine de plus : elle reçoit son adresse du même DHCP et devient visible de tout ce réseau. Dans le lab, c’est la carte d’administration du bastion. (S2, S12)
+</dd>
 <dt>ACL (liste de contrôle d’accès)</dt>
 <dd>
 Liste d’entrées indiquant qui a quels droits sur un objet. Sous Windows, les permissions NTFS sont des ACL ; sous Linux, les ACL POSIX complètent les droits <code>rwx</code>. (S7, S9)
@@ -415,7 +419,7 @@ Mode réseau VirtualBox où plusieurs VM partagent un routeur NAT : elles se voi
 </dd>
 <dt>Réseau privé hôte (Host-only)</dt>
 <dd>
-Mode réseau VirtualBox qui relie des VM au PC hôte seul (<code>192.168.56.0/24</code> par défaut, le PC en <code>192.168.56.1</code>), sans accès à Internet. Dans le lab, c’est le réseau d’administration par lequel le PC joint le bastion. (S2, S12)
+Mode réseau VirtualBox qui relie des VM au PC hôte seul (<code>192.168.56.0/24</code> par défaut, le PC en <code>192.168.56.1</code>), sans accès à Internet. (S2)
 </dd>
 <dt>Reverse proxy (proxy inverse)</dt>
 <dd>
