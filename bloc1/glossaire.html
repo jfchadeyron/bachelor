@@ -90,7 +90,7 @@ Méthode par laquelle deux machines calculent le même secret en n’échangeant
 </dd>
 <dt>Bastion</dt>
 <dd>
-Serveur durci, seul point d’entrée des accès d’administration ; les serveurs n’acceptent l’administration que depuis lui. (S12)
+Serveur durci, seul point d’entrée des accès d’administration ; les serveurs n’acceptent l’administration que depuis lui. Il a souvent une carte dans le réseau d’administration et une dans celui des serveurs, sans router de l’un à l’autre. (S12)
 </dd>
 <dt>Bris de glace (compte)</dt>
 <dd>
@@ -412,6 +412,10 @@ Règle NAT qui rend joignable depuis l’extérieur un service d’une machine i
 <dt>Réseau NAT</dt>
 <dd>
 Mode réseau VirtualBox où plusieurs VM partagent un routeur NAT : elles se voient et sortent sur Internet. (S2)
+</dd>
+<dt>Réseau privé hôte (Host-only)</dt>
+<dd>
+Mode réseau VirtualBox qui relie des VM au PC hôte seul (<code>192.168.56.0/24</code> par défaut, le PC en <code>192.168.56.1</code>), sans accès à Internet. Dans le lab, c’est le réseau d’administration par lequel le PC joint le bastion. (S2, S12)
 </dd>
 <dt>Reverse proxy (proxy inverse)</dt>
 <dd>
