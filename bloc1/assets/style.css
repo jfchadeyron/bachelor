@@ -264,6 +264,24 @@ code { font-family: Consolas, "DejaVu Sans Mono", "Liberation Mono", Menlo, mono
 .code-block pre { margin: 0; overflow-x: auto; padding: 12px 16px; background: transparent; }
 .code-block pre code { display: block; font-size: 0.84rem; line-height: 1.55; color: #1b1f24; white-space: pre; }
 .code-block div.sourceCode { margin: 0; background: transparent; }
+
+/* exemples des cours : à lire, pas à taper (les commandes à taper sont dans les TP) */
+.code-block.exemple { border: 1px dashed var(--trait-fort); background: #fbfaf6; }
+.code-block.exemple .code-header { background: #f2efe6; border-bottom: 1px dashed var(--trait-fort); flex-wrap: wrap; }
+.code-exemple {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px solid #c9b47a;
+  background: #fff;
+  color: #6e5714;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+.code-note { margin-left: auto; font-style: italic; color: var(--texte-pale); }
+.callout .code-exemple { vertical-align: 1px; }
 pre > code.sourceCode > span { display: inline; }
 pre > code.sourceCode > span > a:first-child::before { content: none; }
 code.sourceCode a { pointer-events: none; text-decoration: none; color: inherit; }

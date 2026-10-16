@@ -34,7 +34,7 @@
 </header>
 <nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#utilisateurs-et-groupes">1. Utilisateurs et groupes</a></li><li><a href="#les-permissions-unix">2. Les permissions Unix</a></li><li><a href="#les-bits-spéciaux">3. Les bits spéciaux</a></li><li><a href="#les-acl-posix">4. Les ACL POSIX</a></li><li><a href="#déléguer-avec-sudo">5. Déléguer avec sudo</a></li><li><a href="#et-sous-windows">6. Et sous Windows ?</a></li><li><a href="#à-retenir">7. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
 <article class="content">
-<h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<div class="callout info avis-exemples"><div class="callout-body"><p class="callout-titre"><strong>Les commandes de ce cours sont des exemples</strong></p><p>Les blocs marqués <span class="code-exemple">Exemple</span> montrent des commandes et des fichiers pour expliquer comment les choses fonctionnent. Lisez-les, mais ne les tapez pas pendant le cours. Vous ferez les manipulations pendant le <a data-seance="9" href="../tp/tp09-linux-droits.html">TP 9</a>, dans l'ordre et sur les machines indiquées : certaines n'ont de sens qu'après les étapes précédentes.</p></div></div><h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
 <ul>
 <li>Lire les fichiers de comptes (<code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code>) et gérer utilisateurs et groupes.</li>
 <li>Interpréter la sortie de <code>ls -l</code> et modifier les droits en notation symbolique et octale.</li>
@@ -96,7 +96,7 @@
 </tbody>
 </table></div>
 <p>Une ligne de <code>/etc/passwd</code> :</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/passwd</span><button class="copy" type="button">Copier</button></div><pre class="text"><code>amartin:x:1002:1002:Alice Martin:/home/amartin:/bin/bash
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Fichier : /etc/passwd</span><span class="code-note">à lire, pas à taper</span></div><pre class="text"><code>amartin:x:1002:1002:Alice Martin:/home/amartin:/bin/bash
 # identifiant : x (mot de passe dans shadow) : UID : GID du groupe principal : commentaire : dossier personnel : shell</code></pre></div>
 <ul>
 <li><strong>UID 0</strong> : root, tous les droits. <strong>1 à 999</strong> : comptes système (services : <code>www-data</code> pour nginx, <code>sshd</code>…). <strong>1000 et plus</strong> : utilisateurs.</li>
@@ -167,7 +167,7 @@
 <p>Comme sous Windows, un changement de groupe ne s’applique qu’à la <strong>prochaine ouverture de session</strong> de l’utilisateur.</p>
 <h2 id="les-permissions-unix">2. Les permissions Unix</h2>
 <h3 id="lire-ls--l">Lire <code>ls -l</code></h3>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><pre class="text"><code>-rw-r-----  1 amartin compta  2048  bilan.ods
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : SRV-LNX-01</span><span class="code-note">à lire, pas à taper</span></div><pre class="text"><code>-rw-r-----  1 amartin compta  2048  bilan.ods
 drwxrws---  2 root    compta  4096  compta
 │└┬┘└┬┘└┬┘     └──┬──┘ └──┬─┘
 │ │  │  │        │       └ groupe propriétaire
@@ -249,7 +249,7 @@ drwxrws---  2 root    compta  4096  compta
 </tr>
 </tbody>
 </table></div>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">chmod</span> 640 bilan.ods                  <span class="co"># octal</span></span>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : SRV-LNX-01</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">chmod</span> 640 bilan.ods                  <span class="co"># octal</span></span>
 <span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="fu">chmod</span> u+x script.sh                  <span class="co"># symbolique : ajouter x au propriétaire</span></span>
 <span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="fu">chmod</span> g-w,o= rapport.txt             <span class="co"># retirer w au groupe, tout retirer aux autres</span></span>
 <span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="fu">sudo</span> chown amartin:compta bilan.ods  <span class="co"># changer propriétaire et groupe</span></span>
@@ -282,7 +282,7 @@ drwxrws---  2 root    compta  4096  compta
 </tr>
 </tbody>
 </table></div>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="bu">umask</span>            <span class="co"># afficher (0022)</span></span>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : SRV-LNX-01</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="bu">umask</span>            <span class="co"># afficher (0022)</span></span>
 <span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="bu">umask</span> 027        <span class="co"># pour la session en cours</span></span></code></pre></div></div>
 <h2 id="les-bits-spéciaux">3. Les bits spéciaux</h2>
 <div class="table-wrap"><table>
@@ -321,11 +321,11 @@ drwxrws---  2 root    compta  4096  compta
 </tbody>
 </table></div>
 <p>Le <strong>setgid sur un dossier partagé</strong> est indispensable : sans lui, un fichier créé par Alice dans <code>/srv/partages/compta</code> appartiendrait à son groupe principal (<code>amartin</code>), et ses collègues de <code>compta</code> n’y auraient pas accès. Le <strong>sticky bit</strong> est celui de <code>/tmp</code> (<code>drwxrwxrwt</code>) : tout le monde peut y écrire, mais personne ne supprime les fichiers des autres.</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> chmod 2770 /srv/partages/compta     <span class="co"># rwxrws--- : setgid + groupe en lecture-écriture</span></span>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : SRV-LNX-01</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> chmod 2770 /srv/partages/compta     <span class="co"># rwxrws--- : setgid + groupe en lecture-écriture</span></span>
 <span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> chmod 3770 /srv/partages/commun     <span class="co"># setgid + sticky</span></span></code></pre></div></div>
 <h2 id="les-acl-posix">4. Les ACL POSIX</h2>
 <p>Les droits Unix ne connaissent qu’<strong>un</strong> propriétaire et <strong>un</strong> groupe. Pour donner en plus la lecture à la Direction sur le dossier de la comptabilité, il faut des <strong>listes de contrôle d’accès</strong> (ACL).</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> acl                                   <span class="co"># outils getfacl et setfacl</span></span>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : SRV-LNX-01</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> acl                                   <span class="co"># outils getfacl et setfacl</span></span>
 <span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="fu">sudo</span> setfacl <span class="at">-m</span> g:direction:rx /srv/partages/compta       <span class="co"># ajouter : groupe direction en lecture</span></span>
 <span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="ex">getfacl</span> /srv/partages/compta                              <span class="co"># afficher</span></span>
 <span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-ld</span> /srv/partages/compta                               <span class="co"># un + apparaît : drwxrws---+</span></span>
@@ -333,7 +333,7 @@ drwxrws---  2 root    compta  4096  compta
 <span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a><span class="fu">sudo</span> setfacl <span class="at">-b</span> /srv/partages/compta                      <span class="co"># retirer toutes les ACL</span></span></code></pre></div></div>
 <h3 id="les-acl-par-défaut-lhéritage-sous-linux">Les ACL par défaut : l’héritage sous Linux</h3>
 <p>Une ACL posée avec <code>-m</code> ne concerne que le dossier lui-même. Pour que les <strong>fichiers et dossiers créés ensuite</strong> reçoivent automatiquement des droits, on pose une <strong>ACL par défaut</strong> avec <code>-d</code> : c’est l’équivalent de l’héritage NTFS.</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> setfacl <span class="at">-d</span> <span class="at">-m</span> g::rwx,g:direction:rx,o::--- /srv/partages/compta</span>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : SRV-LNX-01</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> setfacl <span class="at">-d</span> <span class="at">-m</span> g::rwx,g:direction:rx,o::--- /srv/partages/compta</span>
 <span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="ex">getfacl</span> /srv/partages/compta        <span class="co"># lignes "default:..."</span></span></code></pre></div></div>
 <p>Effet utile : quand un dossier a une ACL par défaut, le <code>umask</code> n’est plus appliqué aux nouveaux fichiers, ce sont les droits par défaut qui décident. Avec <code>default:group::rwx</code>, les fichiers créés par Alice sont modifiables par Thomas, son collègue du groupe <code>compta</code>, même si leur umask est <code>022</code>.</p>
 <p>La ligne <strong>mask</strong> de <code>getfacl</code> limite les droits maximaux de toutes les entrées de groupe et d’utilisateurs nommés ; un <code>chmod</code> sur un fichier qui a des ACL modifie ce masque.</p>
@@ -342,7 +342,7 @@ drwxrws---  2 root    compta  4096  compta
 <p><code>sudo</code> permet à un utilisateur autorisé d’exécuter une commande <strong>en tant qu’un autre utilisateur</strong> (root par défaut), avec <strong>son propre mot de passe</strong>, et <strong>journalise</strong> chaque commande. On n’a donc jamais besoin de partager le mot de passe root (qui est d’ailleurs verrouillé sur nos Debian).</p>
 <p>Les règles sont dans <code>/etc/sudoers</code> et surtout dans des fichiers séparés de <code>/etc/sudoers.d/</code>. On les modifie <strong>toujours</strong> avec <code>visudo</code>, qui vérifie la syntaxe avant d’enregistrer : une erreur dans sudoers peut supprimer tout accès administrateur.</p>
 <h3 id="la-syntaxe">La syntaxe</h3>
-<div class="code-block"><div class="code-header"><span class="code-machine">Règles sudoers</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="co"># qui          sur quelle machine = (en tant que qui)  quelles commandes</span></span>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Règles sudoers</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb8"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="co"># qui          sur quelle machine = (en tant que qui)  quelles commandes</span></span>
 <span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="co"># Règle présente par défaut dans /etc/sudoers : le groupe sudo peut tout faire</span></span>
 <span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="dt">%sudo          ALL</span><span class="ot">=</span><span class="st">(ALL:ALL) ALL</span></span>
 <span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a></span>
@@ -355,7 +355,7 @@ drwxrws---  2 root    compta  4096  compta
 <li>Les commandes s’écrivent avec leur <strong>chemin complet</strong>. Si des arguments sont indiqués, seuls ceux-là sont permis.</li>
 <li><code>NOPASSWD:</code> supprime la demande de mot de passe : à réserver à des automatismes précis.</li>
 </ul>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-f</span> /etc/sudoers.d/web-ops        <span class="co"># créer ou modifier un fichier de règles</span></span>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : SRV-LNX-01</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-f</span> /etc/sudoers.d/web-ops        <span class="co"># créer ou modifier un fichier de règles</span></span>
 <span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-c</span>                               <span class="co"># vérifier toute la configuration</span></span>
 <span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-l</span>                                      <span class="co"># ce que j'ai le droit de faire</span></span>
 <span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-l</span> <span class="at">-U</span> nfournier                         <span class="co"># ce qu'un autre a le droit de faire</span></span>
