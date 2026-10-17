@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 11 : Rédiger le PRA et l&#x27;éprouver | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous menez l&#x27;analyse d&#x27;impact d&#x27;Hexalog avec les données fournies par les métiers, vous en déduisez les objectifs de reprise, vous les comparez à ce que vos sauvegardes permettent vraiment, puis vous ">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item active" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp active" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module D : Sauvegarde et reprise d&#x27;activité</span><span class="sep">›</span><a href="../cours/s11-pra.html" data-seance="11">Séance 11</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 11</span>
+  <h1>TP 11 : Rédiger le PRA et l&#x27;éprouver</h1>
+  <p class="lead">Vous menez l'analyse d'impact d'Hexalog avec les données fournies par les métiers, vous en déduisez les objectifs de reprise, vous les comparez à ce que vos sauvegardes permettent vraiment, puis vous rédigez le PRA et la fiche de reprise de l'intranet. Ensuite, le sinistre arrive : un rançongiciel sur srv-lnx-01. Vous appliquez votre PRA, vous mesurez le RTO et le RPO réels, et vous en tirez les leçons.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>srv-lnx-01, sup-lnx-01, srv-win-01, srv-lnx-02</td></tr><tr><th>Cours associé</th><td><a href="../cours/s11-pra.html" data-seance="11">Séance 11 : Plan de reprise d&#x27;activité</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-lanalyse-dimpact-dhexalog-35-min">Partie A. L’analyse d’impact d’Hexalog (35 min)</a></li><li><a href="#partie-b.-ce-que-vous-savez-vraiment-faire-15-min">Partie B. Ce que vous savez vraiment faire (15 min)</a></li><li><a href="#partie-c.-le-pra-et-la-fiche-de-reprise-de-lintranet-35-min">Partie C. Le PRA et la fiche de reprise de l’intranet (35 min)</a></li><li><a href="#partie-d.-lexercice-un-rançongiciel-sur-srv-lnx-01-75-min">Partie D. L’exercice : un rançongiciel sur srv-lnx-01 (75 min)</a></li><li><a href="#partie-e.-le-retour-dexpérience-20-min">Partie E. Le retour d’expérience (20 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Après l’audit, la direction d’Hexalog veut un <strong>PRA écrit et testé</strong> avant la fin du mois. Les responsables des services ont répondu au questionnaire d’impact ; leurs réponses sont ci-dessous.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p><strong>Socle</strong> : toutes les parties. Les parties A à C préparent l’exercice de la partie D : ne dépassez pas les durées indiquées, le PRA sera complété à la maison (à rendre avec le dossier de MCO, séance 12).</p>
+<p>Le travail sur les parties A à C peut se faire à deux (même entreprise, mêmes données) ; l’exercice de la partie D se fait <strong>chacun sur son lab</strong>.</p>
+</div></div>
+<h2 id="partie-a.-lanalyse-dimpact-dhexalog-35-min">Partie A. L’analyse d’impact d’Hexalog (35 min)</h2>
+<h3 id="a.1-ce-que-disent-les-métiers">A.1, Ce que disent les métiers</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Service</th>
+<th>Ce qu’en disent les responsables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Intranet</strong> (expéditions)</td>
+<td>Utilisé par 25 préparateurs et 6 planificateurs, de 6 h à 20 h, du lundi au samedi. Environ 120 expéditions par jour (10 par heure). Sans intranet : la première heure, on attend ; ensuite, on travaille avec la liste imprimée chaque matin, avec environ 5 % d’erreurs ; au-delà de 4 heures, les camions de l’après-midi partent sans liste à jour, les livraisons prennent du retard (pénalité contractuelle de 50 € par expédition livrée en retard) ; au-delà d’une journée, le principal client (40 % du chiffre d’affaires) menace de partir. Une expédition perdue doit être ressaisie depuis le bon papier : 5 minutes chacune.</td>
+</tr>
+<tr class="even">
+<td><strong>Annuaire et DNS</strong> (srv-win-01)</td>
+<td>Sans eux, plus d’ouverture de session sur les postes, plus d’accès aux partages, et les serveurs ne se trouvent plus par leur nom. Les données de l’annuaire changent peu (quelques comptes par semaine).</td>
+</tr>
+<tr class="odd">
+<td><strong>Supervision</strong> (sup-lnx-01)</td>
+<td>Aucun impact direct pour les clients, mais sans elle, personne ne voit les pannes ; c’est aussi le serveur des journaux centralisés et de la copie des sauvegardes de la base.</td>
+</tr>
+<tr class="even">
+<td><strong>GLPI</strong> (srv-lnx-02)</td>
+<td>Le support peut fonctionner une journée au téléphone et avec un tableur ; au-delà, des demandes se perdent. Perdre quelques heures de tickets est gênant mais rattrapable.</td>
+</tr>
+<tr class="odd">
+<td><strong>Messagerie</strong></td>
+<td>Service en ligne (SaaS) d’un fournisseur : hors du périmètre technique d’Hexalog, mais dans celui du PCA (que fait-on si elle tombe ?).</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="a.2-le-tableau-danalyse">A.2, Le tableau d’analyse</h3>
+<p>Complétez le modèle « Analyse d’impact (BIA) » de la page <a href="../modeles.html">Modèles de livrables</a> pour les quatre premiers services : impacts à 1 h, 4 h, 1 jour et 3 jours (notés de 0, aucun, à 4, critique, avec une justification), DMIA, PDMA, dépendances. Calculez au passage :</p>
+<ol type="1">
+<li>le coût des pénalités pour une interruption de l’intranet de 8 heures en semaine, si la moitié des expéditions de l’après-midi part en retard ;</li>
+<li>le temps de ressaisie si l’on perd 24 heures d’expéditions, puis 1 heure.</li>
+</ol>
+<h3 id="a.3-les-objectifs">A.3, Les objectifs</h3>
+<p>Déduisez pour chaque service un <strong>RTO</strong> et un <strong>RPO</strong>, et justifiez-les en une ligne. Classez les services par ordre de reprise (cours, partie 5), en tenant compte des dépendances.</p>
+<h2 id="partie-b.-ce-que-vous-savez-vraiment-faire-15-min">Partie B. Ce que vous savez vraiment faire (15 min)</h2>
+<p>Avec votre rapport de test de restauration (TP 10) et la configuration actuelle de vos sauvegardes, remplissez :</p>
+<div class="table-wrap"><table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>Service</th>
+<th>RTO visé</th>
+<th>RTO mesuré ou estimé</th>
+<th>RPO visé</th>
+<th>RPO permis par les sauvegardes actuelles</th>
+<th>Écart, mesure proposée, coût</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intranet</td>
+<td></td>
+<td>(durée de la partie F.3 du TP 10, plus détection et décision)</td>
+<td></td>
+<td>(fréquence de l’export <strong>copié hors de la VM</strong>)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Annuaire et DNS</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Supervision</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>GLPI</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Pour l’annuaire, pensez à ce qu’apporte un <strong>second contrôleur de domaine</strong> ; pour la supervision, à ce qui se passe si c’est sup-lnx-01 qui est perdue (où sont les copies des sauvegardes de la base ?).</p>
+<h2 id="partie-c.-le-pra-et-la-fiche-de-reprise-de-lintranet-35-min">Partie C. Le PRA et la fiche de reprise de l’intranet (35 min)</h2>
+<ol type="1">
+<li>Complétez le modèle « Plan de reprise d’activité » de la page <a href="../modeles.html">Modèles de livrables</a> : organisation de crise (qui déclenche, qui décide, qui communique, dans le lab : vous), contacts, critères de déclenchement, ordre de reprise, messages préparés. Le reste sera complété à la maison.</li>
+<li>Rédigez avec soin la <strong>fiche de reprise de l’intranet</strong>, scénario « rançongiciel sur srv-lnx-01 ». Elle doit permettre à quelqu’un d’autre que vous de reprendre le service : étapes dans l’ordre, machine et compte pour chaque commande, choix à faire (quelle sauvegarde ?), vérifications, durée attendue de chaque étape. Appuyez-vous sur le cours (partie 7) et sur vos restaurations du TP 10. <strong>C’est elle que vous suivrez pendant l’exercice.</strong></li>
+</ol>
+<h2 id="partie-d.-lexercice-un-rançongiciel-sur-srv-lnx-01-75-min">Partie D. L’exercice : un rançongiciel sur srv-lnx-01 (75 min)</h2>
+<h3 id="d.1-se-préparer-10-min">D.1, Se préparer (10 min)</h3>
+<ol type="1">
+<li>Vérifiez que l’activité simulée tourne (<code>sudo bash activite-intranet.sh etat</code> sur srv-lnx-01), que l’export horaire est en place et que sup-lnx-01 en a des copies récentes (<code>sudo ls -lt /srv/copies/srv-lnx-01 | head -n 3</code>).</li>
+<li>Faites une <strong>sauvegarde PBS</strong> de srv-lnx-01 maintenant (notes : <code>avant exercice PRA</code>). Notez son heure.</li>
+<li>Ouvrez votre main courante et votre fiche de reprise. Prévenez M. CHADEYRON que vous êtes prêt.</li>
+</ol>
+<p>À partir de là, M. CHADEYRON déclenchera le sinistre <strong>à un moment de son choix</strong>, sans prévenir. Continuez à surveiller vos outils, comme pendant l’astreinte.</p>
+<h3 id="d.2-les-règles">D.2, Les règles</h3>
+<ul>
+<li>Le snapshot <code>filet-securite</code> qui apparaîtra sur srv-lnx-01 appartient à M. CHADEYRON : il sert uniquement à remettre le lab en état si l’exercice échoue. <strong>Interdit</strong> de l’utiliser : un vrai rançongiciel ne vous laisse pas de snapshot.</li>
+<li>Vous suivez <strong>votre</strong> PRA. Si une étape ne marche pas, notez-le (c’est le but d’un test), trouvez une solution, et continuez.</li>
+<li>Chaque étape a son heure dans la main courante : c’est elle qui donnera le RTO réel.</li>
+<li>Vous jouez tous les rôles de la cellule de crise ; M. CHADEYRON joue la direction et les utilisateurs. Il attend des <strong>points d’information</strong> réguliers.</li>
+</ul>
+<h3 id="d.3-ce-qui-est-attendu">D.3, Ce qui est attendu</h3>
+<p>Votre reprise est réussie quand :</p>
+<ul class="task-list">
+<li><label><input type="checkbox"/>l’incident majeur est <strong>déclaré</strong> dans GLPI (ticket de priorité très haute, suivi « PRA déclenché à … ») et un <strong>premier message</strong> est envoyé à la direction et aux utilisateurs ;</label></li>
+<li><label><input type="checkbox"/>srv-lnx-01 a été <strong>isolée</strong> du réseau avant toute autre action, et les <strong>preuves</strong> sont conservées (la note laissée par l’attaquant, la liste des fichiers touchés, les extraits de journaux, une sauvegarde de la VM compromise <strong>protégée</strong> contre la suppression) ;</label></li>
+<li><label><input type="checkbox"/>le <strong>point d’entrée</strong> de l’attaquant est identifié et fermé ;</label></li>
+<li><label><input type="checkbox"/>l’intranet est restauré <strong>à partir d’un état sain</strong>, avec les données <strong>les plus récentes possible</strong>, sans porte dérobée ;</label></li>
+<li><label><input type="checkbox"/>le service est <strong>vérifié</strong> côté utilisateur (scénario web Zabbix vert, <code>BASE-OK</code>, expéditions présentes), puis remis en réseau ;</label></li>
+<li><label><input type="checkbox"/>la <strong>fin d’incident</strong> est annoncée ;</label></li>
+<li><label><input type="checkbox"/>le <strong>RTO</strong> et le <strong>RPO</strong> réels sont mesurés.</label></li>
+</ul>
+<details>
+<summary>
+Repères, si vous êtes bloqué depuis plus de 15 minutes
+</summary>
+<ul>
+<li><strong>Isoler</strong> sans éteindre : Proxmox, srv-lnx-01 → <strong>Matériel</strong> → <strong>Périphérique réseau</strong> → Modifier → <strong>Déconnecter</strong>. La console Proxmox reste utilisable.</li>
+<li><strong>Preuves</strong> : la note laissée dans <code>/var/www/intranet/LISEZMOI.txt</code>, les fichiers de l’intranet modifiés et l’heure de leur altération (<code>ls -l --time-style=full-iso /var/www/intranet/</code>), l’état de la base (<code>sudo mariadb -e 'SHOW DATABASES'</code>), <code>sudo journalctl --since '-2 hours'</code>. Les journaux de srv-lnx-01 sont aussi sur sup-lnx-01, hors de portée de l’attaquant : <code>sudo grep -E 'Accepted|sudo' /var/log/hexalog/srv-lnx-01/auth.log | tail</code>. Puis une sauvegarde PBS de la VM compromise, notes <code>PREUVE - NE PAS RESTAURER</code>, et <strong>Changer la protection</strong> pour l’empêcher d’être supprimée.</li>
+<li><strong>Point d’entrée</strong> : par où arrive-t-on sur srv-lnx-01 ? Avec quelle clé (empreinte dans la ligne <code>Accepted publickey</code>) ? Comparez avec l’empreinte de <strong>votre</strong> clé (<code>ssh-keygen -lf</code> sur votre PC) et cherchez la même empreinte dans le journal de sup-lnx-01 (<code>/var/log/auth.log</code>). Que contiennent les fichiers <code>authorized_keys</code> de sysadmin, sur srv-lnx-01 <strong>et</strong> sur sup-lnx-01 ?</li>
+<li><strong>Restaurer sain</strong> : la dernière sauvegarde PBS <strong>antérieure</strong> à l’attaque (pas celle de la preuve !), restaurée <strong>à la place</strong> de N20 (VM arrêtée, <em>Démarrer après la restauration</em> décoché). La configuration restaurée reconnecte la carte réseau : déconnectez-la de nouveau <strong>avant</strong> le premier démarrage. Puis cherchez ce que l’attaquant aurait pu laisser si la sauvegarde était plus récente : <code>authorized_keys</code>, <code>systemctl list-timers</code>, <code>/etc/systemd/system/</code>, comptes (<code>/etc/passwd</code>).</li>
+<li><strong>Données récentes</strong> : la sauvegarde PBS date d’avant l’exercice ; les exports copiés sur sup-lnx-01 sont plus récents. Récupérez le dernier export <strong>antérieur à l’attaque</strong> sur votre PC (<code>scp sup-lnx-01:/srv/copies/srv-lnx-01/intranet-AAAAMMJJ-HHMM.sql.gz .</code>), puis envoyez-le sur srv-lnx-01 une fois reconnectée, et restaurez-le (<code>zcat … | sudo mariadb intranet</code>), après avoir vérifié qu’il est plus récent que la sauvegarde PBS.</li>
+<li><strong>Mesurer</strong> : RTO = heure de rétablissement vérifié − heure du sinistre (heure de la note de rançon) ; RPO = heure du sinistre − heure de la dernière expédition restaurée (<code>SELECT MAX(cree_le) FROM expeditions</code>).</li>
+</ul>
+</details>
+<h3 id="d.4-vos-mesures">D.4, Vos mesures</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Objectif (partie A)</th>
+<th>Réel</th>
+<th>Écart</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Heure du sinistre</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Détection (par qui, à quelle heure)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Déclaration du PRA</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Isolement</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Restauration de la VM terminée</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Données restaurées jusqu’à (heure)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Service vérifié et remis en réseau</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>RTO</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>RPO</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="partie-e.-le-retour-dexpérience-20-min">Partie E. Le retour d’expérience (20 min)</h2>
+<ol type="1">
+<li>Rédigez le <strong>compte rendu après incident</strong> (modèle de la page <a href="../modeles.html">Modèles de livrables</a>) : chronologie, point d’entrée, ce qui a fonctionné, ce qui a manqué dans le PRA et dans la fiche de reprise, au moins <strong>quatre actions</strong> avec un responsable et une date. Pensez aux secrets à changer, à l’accès d’administration, à la supervision des connexions inhabituelles.</li>
+<li>Corrigez votre fiche de reprise et votre PRA avec ce que l’exercice a appris. Notez en tête la date du test et son résultat.</li>
+<li>Remettez le lab en ordre : carte réseau de srv-lnx-01 connectée, scénario web vert, plus aucun problème Zabbix lié à l’exercice, <code>authorized_keys</code> propres sur toutes les VM. Puis snapshots <code>11-apres-pra</code> de toutes les VM.</li>
+</ol>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Analyse d’impact complète pour quatre services, avec DMIA, PDMA, RTO, RPO justifiés et un ordre de reprise.</label></li>
+<li><label><input type="checkbox"/>Tableau des écarts entre objectifs et capacités, avec des propositions chiffrées.</label></li>
+<li><label><input type="checkbox"/>PRA commencé ; fiche de reprise de l’intranet détaillée, utilisée et corrigée.</label></li>
+<li><label><input type="checkbox"/>Exercice : déclaration, isolement, preuves protégées, point d’entrée fermé, restauration saine, données récentes, vérification, communication.</label></li>
+<li><label><input type="checkbox"/>RTO et RPO réels mesurés et comparés aux objectifs.</label></li>
+<li><label><input type="checkbox"/>Compte rendu après incident avec au moins quatre actions.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Votre RPO réel est-il conforme à l’objectif ? Qu’est-ce qui l’a déterminé exactement ?</li>
+<li>Pourquoi a-t-on isolé srv-lnx-01 sans l’éteindre ?</li>
+<li>Pourquoi ne fallait-il pas restaurer la dernière sauvegarde PBS, prise juste après l’attaque ?</li>
+<li>Si vous aviez seulement restauré les fichiers de l’intranet et la base sur la VM compromise, qu’est-ce qui serait resté ?</li>
+<li>Où se trouvaient les preuves de l’entrée de l’attaquant ? Que se serait-il passé sans la centralisation des journaux ?</li>
+<li>Quelles mesures auraient empêché l’attaque, ou l’auraient détectée tout de suite ?</li>
+<li>Qu’est-ce que l’exercice vous a appris que la rédaction du PRA ne vous avait pas montré ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>La restauration sur N20 est refusée : <em>VM is running</em></td>
+<td>arrêter d’abord la VM (<em>Arrêter</em>, ou <em>Stop</em> si elle ne répond pas)</td>
+</tr>
+<tr class="even">
+<td>La restauration est refusée : <em>protected</em> ou <em>locked</em></td>
+<td>une sauvegarde ou une tâche est en cours sur la VM : attendre la fin (journal des tâches en bas de l’écran)</td>
+</tr>
+<tr class="odd">
+<td>La VM restaurée n’a pas de réseau</td>
+<td>normal si la carte est déconnectée ; la reconnecter <strong>après</strong> les vérifications</td>
+</tr>
+<tr class="even">
+<td><code>scp sup-lnx-01:/srv/copies/…</code> : <em>Permission denied</em></td>
+<td>dossier non lisible par <code>sysadmin</code> : vérifier <code>chgrp sudo</code> dans le script de copie (TP 10, D.4)</td>
+</tr>
+<tr class="odd">
+<td>Les exports copiés sont aussi chiffrés</td>
+<td>impossible : sup-lnx-01 tire les copies en lecture seule et sans <code>--delete</code> ; vérifiez que vous regardez bien sur sup-lnx-01</td>
+</tr>
+<tr class="even">
+<td><code>zcat … | sudo mariadb intranet</code> : <em>Unknown database</em></td>
+<td>la restauration PBS a déjà remis la base ; sinon : <code>sudo mariadb -e "CREATE DATABASE intranet"</code> puis réimporter, et vérifier les droits du compte <code>intranet</code></td>
+</tr>
+<tr class="odd">
+<td>Le scénario web reste rouge après la restauration</td>
+<td>la carte réseau est encore déconnectée, ou le cache des problèmes : attendre deux cycles du scénario</td>
+</tr>
+</tbody>
+</table></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s11-pra.html" data-seance="11"><span class="dir">‹ Page précédente</span><span class="titre">Séance 11 : Plan de reprise d&#x27;activité</span></a><a class="next" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="dir">Page suivante ›</span><span class="titre">Séance 12 : Documenter le MCO et réviser</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

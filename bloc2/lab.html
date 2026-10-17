@@ -1,0 +1,616 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le lab Proxmox d'Hexalog | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="La référence du lab du bloc : le serveur Proxmox et votre espace, votre numéro, le plan d'adressage, les ports qui mènent à vos machines depuis votre PC, les machines virtuelles, les conventions et le">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="kind-page">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="lab.html">Le lab</a>
+    <a href="memo.html">Aide-mémoire</a>
+    <a href="glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="index.html"><span>Accueil et progression</span></a></div><div class="nav-item active"><a class="nav-link" href="lab.html"><span>Le lab Proxmox d'Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp/tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp/tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp/tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp/tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp/tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d'un outil</span></a><a class="nav-tp" href="tp/tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp/tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp/tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d'astreinte</span></a><a class="nav-tp" href="tp/tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d'activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp/tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d'activité</span></a><a class="nav-tp" href="tp/tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp/tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="index.html">Accueil</a><span class="sep">›</span><span>Le lab Proxmox d'Hexalog</span></div>
+<header class="hero">
+  <span class="surtitre">Référence du lab</span>
+  <h1>Le lab Proxmox d'Hexalog</h1>
+  <p class="lead">La référence du lab du bloc : le serveur Proxmox et votre espace, votre numéro, le plan d'adressage, les ports qui mènent à vos machines depuis votre PC, les machines virtuelles, les conventions et le dépannage. À garder ouvert pendant les TP.</p>
+  
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#le-serveur-proxmox-et-votre-espace">Le serveur Proxmox et votre espace</a></li><li><a href="#architecture-cible">Architecture cible</a></li><li><a href="#plan-dadressage-noms-et-numéros-de-vm">Plan d’adressage, noms et numéros de VM</a></li><li><a href="#accéder-à-vos-machines-depuis-votre-pc">Accéder à vos machines depuis votre PC</a></li><li><a href="#les-machines-virtuelles">Les machines virtuelles</a></li><li><a href="#conventions">Conventions</a></li><li><a href="#les-flux-de-supervision">Les flux de supervision</a></li><li><a href="#évolution-du-lab-séance-par-séance">Évolution du lab séance par séance</a></li><li><a href="#bonnes-pratiques">Bonnes pratiques</a></li><li><a href="#dépannage-proxmox">Dépannage Proxmox</a></li></ul></nav>
+<article class="content">
+<h2 id="le-serveur-proxmox-et-votre-espace">Le serveur Proxmox et votre espace</h2>
+<p>Dans ce bloc, les machines ne tournent plus sur votre PC : elles tournent sur un serveur de virtualisation <strong>Proxmox VE</strong>, un hyperviseur de type 1 (installé directement sur le matériel, voir <a data-seance="1" href="cours/s01-supervision-mco.html#proxmox">cours 1</a>). Votre PC ne sert plus qu’à vous y connecter : un navigateur et un client SSH suffisent.</p>
+<p>Chaque étudiant dispose d’un espace isolé des autres :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Élément</th>
+<th>Valeur</th>
+<th>Exemple pour l’étudiant 3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Votre numéro</td>
+<td><strong>N</strong>, donné par M. CHADEYRON en séance 1 (1 à 5 ; 9 est réservé aux démonstrations)</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>Adresse du serveur</td>
+<td><code>PROXMOX</code>, donnée en séance 1</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Interface d’administration</td>
+<td><code>https://PROXMOX:8006</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Compte Proxmox</td>
+<td><code>etuN</code>, domaine <em>Proxmox VE authentication server</em></td>
+<td><code>etu3</code></td>
+</tr>
+<tr class="odd">
+<td>Pool (dossier de vos VM)</td>
+<td><code>etuN</code></td>
+<td><code>etu3</code></td>
+</tr>
+<tr class="even">
+<td>Réseau virtuel (VNet)</td>
+<td><code>hexaN</code>, réseau <code>10.20.N.0/24</code></td>
+<td><code>hexa3</code>, <code>10.20.3.0/24</code></td>
+</tr>
+<tr class="odd">
+<td>Passerelle</td>
+<td><code>10.20.N.1</code> : le serveur Proxmox lui-même, qui fait la traduction d’adresses (NAT) vers Internet</td>
+<td><code>10.20.3.1</code></td>
+</tr>
+<tr class="even">
+<td>Stockage des sauvegardes</td>
+<td><code>pbs-etuN</code> (à partir de la séance 10)</td>
+<td><code>pbs-etu3</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Vous ne voyez et ne pouvez modifier que vos propres VM. Les réseaux des étudiants sont isolés les uns des autres : votre <code>10.20.N.0/24</code> ne voit pas celui du voisin.</p>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>Dans tous les TP, remplacez N par votre numéro</strong></p>
+<p>Une adresse notée <code>10.20.N.20</code> s’écrit <code>10.20.3.20</code> pour l’étudiant 3 ; un port noté <code>1N022</code> s’écrit <code>13022</code> ; une VM notée <code>N20</code> porte le numéro <code>320</code>. Notez vos valeurs une fois pour toutes dans le tableau « Mes adresses » de votre journal de bord.</p>
+</div></div>
+<h2 id="architecture-cible">Architecture cible</h2>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-932678" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1872.87109375px;" viewBox="0 0 1872.87109375 559.6671752929688" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-932678{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-932678 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-932678 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-932678 .error-icon{fill:#f5f6f8;}#mmd0-932678 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-932678 .edge-thickness-normal{stroke-width:1px;}#mmd0-932678 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-932678 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-932678 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-932678 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-932678 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-932678 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-932678 .marker.cross{stroke:#4a5563;}#mmd0-932678 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-932678 p{margin:0;}#mmd0-932678 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-932678 .cluster-label text{fill:#1f3a5f;}#mmd0-932678 .cluster-label span{color:#1f3a5f;}#mmd0-932678 .cluster-label span p{background-color:transparent;}#mmd0-932678 .label text,#mmd0-932678 span{fill:#1d2530;color:#1d2530;}#mmd0-932678 .node rect,#mmd0-932678 .node circle,#mmd0-932678 .node ellipse,#mmd0-932678 .node polygon,#mmd0-932678 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-932678 .rough-node .label text,#mmd0-932678 .node .label text,#mmd0-932678 .image-shape .label,#mmd0-932678 .icon-shape .label{text-anchor:middle;}#mmd0-932678 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-932678 .rough-node .label,#mmd0-932678 .node .label,#mmd0-932678 .image-shape .label,#mmd0-932678 .icon-shape .label{text-align:center;}#mmd0-932678 .node.clickable{cursor:pointer;}#mmd0-932678 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-932678 .arrowheadPath{fill:#000000;}#mmd0-932678 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-932678 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-932678 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-932678 .edgeLabel p{background-color:#ffffff;}#mmd0-932678 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-932678 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-932678 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-932678 .cluster text{fill:#1f3a5f;}#mmd0-932678 .cluster span{color:#1f3a5f;}#mmd0-932678 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-932678 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-932678 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-932678 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-932678 rect.text{fill:none;stroke-width:0;}#mmd0-932678 .icon-shape,#mmd0-932678 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-932678 .icon-shape p,#mmd0-932678 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-932678 .icon-shape .label rect,#mmd0-932678 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-932678 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-932678 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-932678 .node .neo-node{stroke:#1f3a5f;}#mmd0-932678 [data-look="neo"].node rect,#mmd0-932678 [data-look="neo"].cluster rect,#mmd0-932678 [data-look="neo"].node polygon{stroke:url(#mmd0-932678-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-932678 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-932678 [data-look="neo"].node path{stroke:url(#mmd0-932678-gradient);stroke-width:1px;}#mmd0-932678 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-932678 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-932678 [data-look="neo"].node circle{stroke:url(#mmd0-932678-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-932678 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-932678 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-932678-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-932678 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-932678-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-932678 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-932678_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-932678_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-932678_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-932678_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-932678_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-932678_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-932678_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-932678_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-932678_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-932678_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-932678_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-932678_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-932678-PVE" data-look="classic"><rect style="" x="8" y="149" width="1760.38671875" height="402.6671905517578"></rect><g class="cluster-label " transform="translate(780.443359375, 149)"><foreignObject width="215.5" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Serveur Proxmox VE (PROXMOX)</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-932678-NET" data-look="classic"><rect style="" x="305.26171875" y="174" width="1443.125" height="183"></rect><g class="cluster-label " transform="translate(875.06640625, 174)"><foreignObject width="303.515625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>VNet hexaN : 10.20.N.0/24, passerelle 10.20.N.1</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M1149.637,68.645L1329.965,113.5L1329.965,149L1329.965,174L1329.965,195" id="mmd0-932678-L_PC_SUP_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_SUP_0" data-points="W3sieCI6MTE0OS42MzY3MTg3NSwieSI6NjguNjQ1MzczMzU2NDg3MjN9LHsieCI6MTMyOS45NjQ4NDM3NSwieSI6MTEzLjV9LHsieCI6MTMyOS45NjQ4NDM3NSwieSI6MTQ5fSx7IngiOjEzMjkuOTY0ODQzNzUsInkiOjE3NH0seyJ4IjoxMzI5Ljk2NDg0Mzc1LCJ5IjoxOTl9XQ==" data-look="classic" marker-end="url(#mmd0-932678_flowchart-v2-pointEnd)"></path><path d="M943.434,69.16L768.684,113.5L768.684,149L768.684,174L768.684,216" id="mmd0-932678-L_PC_L1_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_L1_0" data-points="W3sieCI6OTQzLjQzMzU5Mzc1LCJ5Ijo2OS4xNjAyMjc3NTIwMDMzOH0seyJ4Ijo3NjguNjgzNTkzNzUsInkiOjExMy41fSx7IngiOjc2OC42ODM1OTM3NSwieSI6MTQ5fSx7IngiOjc2OC42ODM1OTM3NSwieSI6MTc0fSx7IngiOjc2OC42ODM1OTM3NSwieSI6MjIwfV0=" data-look="classic" marker-end="url(#mmd0-932678_flowchart-v2-pointEnd)"></path><path d="M1046.535,78L1046.535,113.5L1046.535,149L1046.535,174L1046.535,216" id="mmd0-932678-L_PC_L2_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_L2_0" data-points="W3sieCI6MTA0Ni41MzUxNTYyNSwieSI6Nzh9LHsieCI6MTA0Ni41MzUxNTYyNSwieSI6MTEzLjV9LHsieCI6MTA0Ni41MzUxNTYyNSwieSI6MTQ5fSx7IngiOjEwNDYuNTM1MTU2MjUsInkiOjE3NH0seyJ4IjoxMDQ2LjUzNTE1NjI1LCJ5IjoyMjB9XQ==" data-look="classic" marker-end="url(#mmd0-932678_flowchart-v2-pointEnd)"></path><path d="M1149.637,55.884L1610.676,113.5L1610.676,149L1610.676,174L1610.676,216" id="mmd0-932678-L_PC_PW_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_PW_0" data-points="W3sieCI6MTE0OS42MzY3MTg3NSwieSI6NTUuODg0NDgyNzU4NjIwNjl9LHsieCI6MTYxMC42NzU3ODEyNSwieSI6MTEzLjV9LHsieCI6MTYxMC42NzU3ODEyNSwieSI6MTQ5fSx7IngiOjE2MTAuNjc1NzgxMjUsInkiOjE3NH0seyJ4IjoxNjEwLjY3NTc4MTI1LCJ5IjoyMjB9XQ==" data-look="classic" marker-end="url(#mmd0-932678_flowchart-v2-pointEnd)"></path><path d="M1098.324,357L1098.324,357L1098.324,392.5L1799.615,473.354" id="mmd0-932678-L_NET_I_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_NET_I_0" data-points="W3sieCI6MTA5OC4zMjQyMTg3NSwieSI6MzU3fSx7IngiOjEwOTguMzI0MjE4NzUsInkiOjM1N30seyJ4IjoxMDk4LjMyNDIxODc1LCJ5IjozOTIuNX0seyJ4IjoxODAzLjU4OTAyNjIwNjUyODYsInkiOjQ3My44MTI1NDE1Njc3NDgzfV0=" data-look="classic" marker-end="url(#mmd0-932678_flowchart-v2-pointEnd)"></path><path d="M943.434,55.57L468.262,113.5L468.262,145" id="mmd0-932678-L_PC_PVE_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_PVE_0" data-points="W3sieCI6OTQzLjQzMzU5Mzc1LCJ5Ijo1NS41Njk1OTAyNDAzNDM2OX0seyJ4Ijo0NjguMjYxNzE4NzUsInkiOjExMy41fSx7IngiOjQ2OC4yNjE3MTg3NSwieSI6MTQ5fSx7IngiOjQ2OC4yNjE3MTg3NSwieSI6MTc0fSx7IngiOjQwOC43MjUyMDMzNDM2NDIxNCwieSI6MTQ5LjAwMDAwNzYyOTM5NDUzfV0=" data-look="classic" marker-end="url(#mmd0-932678_flowchart-v2-pointEnd)"></path><path d="M431.477,357L431.477,357L431.477,392.5L431.477,424" id="mmd0-932678-L_NET_PBS_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_NET_PBS_0" data-points="W3sieCI6NDMxLjQ3NjU2MjUsInkiOjM1N30seyJ4Ijo0MzEuNDc2NTYyNSwieSI6MzU3fSx7IngiOjQzMS40NzY1NjI1LCJ5IjozOTIuNX0seyJ4Ijo0MzEuNDc2NTYyNSwieSI6NDI4fV0=" data-look="classic" marker-end="url(#mmd0-932678_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(1329.96484375, 113.5)"><g class="label" data-id="L_PC_SUP_0" transform="translate(-78.6015625, -10.5)"><foreignObject width="157.203125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>1N022 SSH · 1N080 web</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(768.68359375, 113.5)"><g class="label" data-id="L_PC_L1_0" transform="translate(-45.921875, -10.5)"><foreignObject width="91.84375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>1N020 intranet</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(1046.53515625, 113.5)"><g class="label" data-id="L_PC_L2_0" transform="translate(-38.53125, -10.5)"><foreignObject width="77.0625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>1N081 GLPI</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(1610.67578125, 113.5)"><g class="label" data-id="L_PC_PW_0" transform="translate(-41.890625, -10.5)"><foreignObject width="83.78125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>1N443 PRTG</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(1098.32421875, 357)"><g class="label" data-id="L_NET_I_0" transform="translate(-13.484375, -10.5)"><foreignObject width="26.96875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>NAT</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(688.22811, 86.68288)"><g class="label" data-id="L_PC_PVE_0" transform="translate(-34.640625, -10.5)"><foreignObject width="69.28125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>https :8006</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(431.4765625, 357)"><g class="label" data-id="L_NET_PBS_0" transform="translate(-40.0859375, -10.5)"><foreignObject width="80.171875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>sauvegardes</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-932678-flowchart-PC-0" data-look="classic" transform="translate(1046.53515625, 43)"><rect class="basic label-container" style="" x="-103.1015625" y="-35" width="206.203125" height="70"></rect><g class="label" style="" transform="translate(-75.1015625, -21)"><rect></rect><foreignObject width="150.203125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Votre PC<br>navigateur et client SSH</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-932678-flowchart-TPL-1" data-look="classic" transform="translate(171, 477.3335952758789)"><rect class="basic label-container" style="" x="-128" y="-45.5" width="256" height="91"></rect><g class="label" style="" transform="translate(-100, -31.5)"><rect></rect><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Modèles<br>9000 TPL-DEB13, 9001 TPL-WS2025</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-932678-flowchart-DC-2" data-look="classic" transform="translate(468.26171875, 265.5)"><rect class="basic label-container" style="" x="-128" y="-56" width="256" height="112"></rect><g class="label" style="" transform="translate(-100, -42)"><rect></rect><foreignObject width="200" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>srv-win-01 · 10.20.N.10<br>Windows Server 2025<br>contrôleur de domaine hexalog.local, DNS</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-932678-flowchart-L1-3" data-look="classic" transform="translate(768.68359375, 265.5)"><rect class="basic label-container" style="" x="-122.421875" y="-45.5" width="244.84375" height="91"></rect><g class="label" style="" transform="translate(-94.421875, -31.5)"><rect></rect><foreignObject width="188.84375" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>srv-lnx-01 · 10.20.N.20<br>Debian 13<br>intranet : nginx, PHP, MariaDB</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-932678-flowchart-L2-4" data-look="classic" transform="translate(1046.53515625, 265.5)"><rect class="basic label-container" style="" x="-105.4296875" y="-45.5" width="210.859375" height="91"></rect><g class="label" style="" transform="translate(-77.4296875, -31.5)"><rect></rect><foreignObject width="154.859375" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>srv-lnx-02 · 10.20.N.21<br>Debian 13<br>GLPI, gestion des tickets</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-932678-flowchart-SUP-5" data-look="classic" transform="translate(1329.96484375, 265.5)"><rect class="basic label-container" style="" x="-128" y="-66.5" width="256" height="133"></rect><g class="label" style="" transform="translate(-100, -52.5)"><rect></rect><foreignObject width="200" height="105"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>sup-lnx-01 · 10.20.N.40<br>Debian 13<br>Nagios, Zabbix, journaux centralisés<br>point d'entrée SSH</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-932678-flowchart-PW-6" data-look="classic" transform="translate(1610.67578125, 265.5)"><rect class="basic label-container" style="" x="-102.7109375" y="-45.5" width="205.421875" height="91"></rect><g class="label" style="" transform="translate(-74.7109375, -31.5)"><rect></rect><foreignObject width="149.421875" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>sup-win-01 · 10.20.N.41<br>Windows Server 2025<br>PRTG</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-932678-flowchart-PBS-7" data-look="classic" transform="translate(431.4765625, 477.3335952758789)"><path d="M0,14.222395861400011 a82.4765625,14.222395861400011 0,0,0 164.953125,0 a82.4765625,14.222395861400011 0,0,0 -164.953125,0 l0,70.22239586140002 a82.4765625,14.222395861400011 0,0,0 164.953125,0 l0,-70.22239586140002" class="basic label-container outer-path" style="" label-offset-y="14.222395861400011" transform="translate(-82.4765625, -49.33359379210002)"></path><g class="label" style="" transform="translate(-75.4765625, -11.666666666666666)"><rect></rect><foreignObject width="150.953125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Proxmox Backup Server<br>espace pbs-etuN</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-932678-flowchart-I-9" data-look="classic" transform="translate(1834.12890625, 477.3335952758789)"><circle class="basic label-container" style="" r="30.7421875" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-23.7421875, -10.5)"><rect></rect><foreignObject width="47.484375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Internet</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-932678-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-932678-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-932678-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<h2 id="plan-dadressage-noms-et-numéros-de-vm">Plan d’adressage, noms et numéros de VM</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Machine (nom dans Proxmox)</th>
+<th>Nom DNS</th>
+<th>Adresse</th>
+<th>Numéro de VM</th>
+<th>Créée en séance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Passerelle (serveur Proxmox)</td>
+<td></td>
+<td>10.20.N.1</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>srv-win-01</code></td>
+<td><code>srv-win-01.hexalog.local</code></td>
+<td>10.20.N.10</td>
+<td>N10</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td><code>srv-lnx-01</code></td>
+<td><code>srv-lnx-01.hexalog.local</code> (alias <code>intranet</code>)</td>
+<td>10.20.N.20</td>
+<td>N20</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td><code>srv-lnx-02</code></td>
+<td><code>srv-lnx-02.hexalog.local</code> (alias <code>glpi</code>)</td>
+<td>10.20.N.21</td>
+<td>N21</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td><code>sup-lnx-01</code></td>
+<td><code>sup-lnx-01.hexalog.local</code></td>
+<td>10.20.N.40</td>
+<td>N40</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td><code>sup-win-01</code></td>
+<td><code>sup-win-01.hexalog.local</code></td>
+<td>10.20.N.41</td>
+<td>N41</td>
+<td>6</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Masque</strong> : <code>/24</code> (255.255.255.0) ; <strong>passerelle</strong> : <code>10.20.N.1</code>.</li>
+<li><strong>DNS</strong> : <code>10.20.N.10</code> (le contrôleur de domaine) puis <code>DNS-SECOURS</code>, l’adresse d’un DNS de secours donnée en séance 1. Le second sert tant que le contrôleur de domaine n’existe pas encore, ou s’il est éteint.</li>
+<li><strong>Domaine</strong> : <code>hexalog.local</code> (nom NetBIOS <code>HEXALOG</code>), comme au BLOC 1.</li>
+<li>Dans Proxmox, <strong>le nom de la VM devient le nom d’hôte</strong> des VM Debian (par cloud-init) : on l’écrit donc en minuscules. Dans les textes, on parle de SRV-LNX-01 comme au BLOC 1 : c’est la même machine que <code>srv-lnx-01</code>.</li>
+<li><strong>Numéro de test</strong> : <code>N99</code> est réservé aux tests de restauration (séances 10 et 11). Une VM restaurée sous ce numéro garde l’adresse de l’original : on la démarre toujours <strong>carte réseau déconnectée</strong>, puis on la supprime.</li>
+</ul>
+<h2 id="accéder-à-vos-machines-depuis-votre-pc">Accéder à vos machines depuis votre PC</h2>
+<p>Vos VM ont des adresses privées, invisibles depuis votre PC. Le serveur Proxmox <strong>redirige</strong> quelques ports vers elles (redirection de ports, comme <code>web-srv</code> au BLOC 1) :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Port sur PROXMOX</th>
+<th>Mène à</th>
+<th>Usage</th>
+<th>Séances</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>1N022</code></td>
+<td><code>10.20.N.40:22</code> (sup-lnx-01)</td>
+<td>SSH : point d’entrée de l’administration, puis rebond vers les autres VM Linux</td>
+<td>à partir de 1</td>
+</tr>
+<tr class="even">
+<td><code>1N080</code></td>
+<td><code>10.20.N.40:80</code> (sup-lnx-01)</td>
+<td>Nagios <code>/nagios4</code>, Zabbix <code>/zabbix</code></td>
+<td>à partir de 3</td>
+</tr>
+<tr class="odd">
+<td><code>1N020</code></td>
+<td><code>10.20.N.20:80</code> (srv-lnx-01)</td>
+<td>l’intranet, vu comme un utilisateur</td>
+<td>à partir de 1</td>
+</tr>
+<tr class="even">
+<td><code>1N081</code></td>
+<td><code>10.20.N.21:80</code> (srv-lnx-02)</td>
+<td>GLPI</td>
+<td>à partir de 8</td>
+</tr>
+<tr class="odd">
+<td><code>1N443</code></td>
+<td><code>10.20.N.41:443</code> (sup-win-01)</td>
+<td>PRTG</td>
+<td>6</td>
+</tr>
+</tbody>
+</table></div>
+<p>Exemples pour l’étudiant 3 : <code>ssh -p 13022 sysadmin@PROXMOX</code>, <code>http://PROXMOX:13080/zabbix</code>, <code>http://PROXMOX:13020/</code>.</p>
+<p>Les machines Windows s’administrent par la <strong>console</strong> de Proxmox (bouton <em>Console</em>, dans le navigateur).</p>
+<h3 id="le-fichier-de-configuration-ssh-de-votre-pc">Le fichier de configuration SSH de votre PC</h3>
+<p>Comme au TP 12 du BLOC 1, on donne un nom court à chaque machine et on rebondit par le point d’entrée. Sous Windows, le fichier est <code>C:\Users\&lt;vous&gt;\.ssh\config</code> (sans extension) ; sous Linux, <code>~/.ssh/config</code>. Remplacez <code>PROXMOX</code> et <code>N</code> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : ~/.ssh/config</span><button class="copy" type="button">Copier</button></div><pre class="sshconfig"><code># Lab Proxmox, BLOC 2
+Host sup-lnx-01
+    HostName PROXMOX
+    Port 1N022
+    User sysadmin
+    IdentityFile ~/.ssh/id_ed25519
+
+Host srv-lnx-01
+    HostName 10.20.N.20
+    User sysadmin
+    ProxyJump sup-lnx-01
+
+Host srv-lnx-02
+    HostName 10.20.N.21
+    User sysadmin
+    ProxyJump sup-lnx-01</code></pre></div>
+<p>Puis <code>ssh sup-lnx-01</code> ou <code>ssh srv-lnx-01</code>. Votre clé privée reste sur votre PC ; la clé publique est déposée dans les VM par cloud-init (TP 1).</p>
+<h2 id="les-machines-virtuelles">Les machines virtuelles</h2>
+<div class="table-wrap"><table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>VM</th>
+<th>Modèle d’origine</th>
+<th>vCPU</th>
+<th>Mémoire</th>
+<th>Disque</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>srv-win-01</code></td>
+<td>9001 TPL-WS2025 (clone lié)</td>
+<td>2</td>
+<td>3 Go</td>
+<td>40 Go</td>
+<td>contrôleur de domaine <code>hexalog.local</code>, DNS</td>
+</tr>
+<tr class="even">
+<td><code>srv-lnx-01</code></td>
+<td>9000 TPL-DEB13 (clone lié)</td>
+<td>1</td>
+<td>1 Go</td>
+<td>10 Go</td>
+<td>intranet (nginx, PHP-FPM, MariaDB), agents de supervision</td>
+</tr>
+<tr class="odd">
+<td><code>srv-lnx-02</code></td>
+<td>9000 TPL-DEB13 (clone lié)</td>
+<td>1</td>
+<td>1,5 Go</td>
+<td>12 Go</td>
+<td>GLPI (Apache, PHP, MariaDB)</td>
+</tr>
+<tr class="even">
+<td><code>sup-lnx-01</code></td>
+<td>9000 TPL-DEB13 (clone lié)</td>
+<td>2</td>
+<td>3 Go</td>
+<td>20 Go</td>
+<td>Nagios, Zabbix (serveur, base, interface), réception des journaux</td>
+</tr>
+<tr class="odd">
+<td><code>sup-win-01</code></td>
+<td>9001 TPL-WS2025 (clone lié)</td>
+<td>2</td>
+<td>4 Go</td>
+<td>40 Go</td>
+<td>PRTG ; éteinte en dehors de la séance 6</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les <strong>modèles</strong> (<em>templates</em>) ont été préparés par M. CHADEYRON :</p>
+<ul>
+<li><strong>9000 TPL-DEB13</strong> : Debian 13 « cloud » (image officielle <code>genericcloud</code>), avec l’agent invité QEMU. Elle se configure au premier démarrage par <strong>cloud-init</strong> : nom, compte, clé SSH, adresse IP, DNS, tout se règle dans l’onglet <em>Cloud-Init</em> de la VM, sans installation. Sa console est une console texte (<em>xterm.js</em>), dans laquelle le copier-coller fonctionne.</li>
+<li><strong>9001 TPL-WS2025</strong> : Windows Server 2025 Standard (expérience de bureau), en français, avec les pilotes VirtIO et l’agent invité, <strong>généralisé</strong> par <code>sysprep</code> : au premier démarrage, Windows demande la langue, le clavier et le mot de passe du compte Administrateur.</li>
+</ul>
+<p>Les modèles n’ont <strong>pas de carte réseau</strong> : vous en ajoutez une, branchée sur votre VNet <code>hexaN</code>, à chaque clonage.</p>
+<h3 id="quelles-vm-allumer-à-chaque-séance">Quelles VM allumer à chaque séance</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Séances</th>
+<th>VM nécessaires</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 et 2</td>
+<td>srv-win-01, srv-lnx-01, sup-lnx-01</td>
+</tr>
+<tr class="even">
+<td>3 à 5</td>
+<td>srv-win-01, srv-lnx-01, sup-lnx-01</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>les mêmes + sup-win-01 (éteinte ensuite)</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>srv-win-01, srv-lnx-01, sup-lnx-01</td>
+</tr>
+<tr class="odd">
+<td>8 à 13</td>
+<td>srv-win-01, srv-lnx-01, srv-lnx-02, sup-lnx-01</td>
+</tr>
+</tbody>
+</table></div>
+<p>La mémoire du serveur est partagée par toute la classe : <strong>éteignez vos VM en fin de séance</strong> (bouton <em>Arrêter</em>, pas <em>Stop</em>).</p>
+<h2 id="conventions">Conventions</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Élément</th>
+<th>Convention</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nom de VM dans Proxmox</td>
+<td><code>type-système-NN</code>, en minuscules</td>
+<td><code>srv-lnx-01</code></td>
+</tr>
+<tr class="even">
+<td>Numéro de VM</td>
+<td>N suivi des deux derniers chiffres de l’adresse</td>
+<td><code>320</code> pour 10.20.3.20</td>
+</tr>
+<tr class="odd">
+<td>Snapshot</td>
+<td><code>NN-description</code> (NN = numéro de séance)</td>
+<td><code>04-avant-zabbix</code></td>
+</tr>
+<tr class="even">
+<td>Hôte dans Nagios et Zabbix</td>
+<td>le nom d’hôte, en minuscules</td>
+<td><code>srv-lnx-01</code></td>
+</tr>
+<tr class="odd">
+<td>Ticket GLPI</td>
+<td>titre court : <em>service, symptôme</em></td>
+<td><code>Intranet, page d'erreur 502</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="comptes-et-mots-de-passe">Comptes et mots de passe</h3>
+<ul>
+<li><strong>VM Debian</strong> : le compte <code>sysadmin</code>, créé par cloud-init ; connexion SSH <strong>par clé uniquement</strong> (l’image Debian refuse les mots de passe en SSH), mot de passe de lab pour la console.</li>
+<li><strong>Windows Server</strong> : <code>Administrateur</code>, puis <code>HEXALOG\Administrateur</code> après la création du domaine.</li>
+<li><strong>Interfaces web</strong> : <code>nagiosadmin</code> (Nagios), <code>Admin</code> (Zabbix), <code>glpi</code> (GLPI), <code>prtgadmin</code> (PRTG). Leur mot de passe par défaut est <strong>changé dès l’installation</strong> pour le mot de passe de lab.</li>
+<li>Le <strong>mot de passe de lab</strong> est donné en séance 1. Il ne sert que dans le lab : ne le réutilisez jamais ailleurs, et n’utilisez jamais un mot de passe personnel dans le lab.</li>
+</ul>
+<h2 id="les-flux-de-supervision">Les flux de supervision</h2>
+<div class="table-wrap"><table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Destination</th>
+<th>Port</th>
+<th>Protocole</th>
+<th>Usage</th>
+<th>Séance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>sup-lnx-01</td>
+<td>toutes</td>
+<td>ICMP</td>
+<td>ping</td>
+<td>l’hôte répond-il ?</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>sup-lnx-01</td>
+<td>srv-lnx-01</td>
+<td>161/udp</td>
+<td>SNMP</td>
+<td>interrogation SNMP</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>sup-lnx-01</td>
+<td>srv-lnx-01</td>
+<td>5666/tcp</td>
+<td>NRPE</td>
+<td>agent Nagios</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>sup-lnx-01</td>
+<td>srv-win-01</td>
+<td>5693/tcp</td>
+<td>NCPA (HTTPS)</td>
+<td>agent Nagios pour Windows (facultatif)</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>sup-lnx-01</td>
+<td>srv-lnx-01, srv-lnx-02, srv-win-01</td>
+<td>10050/tcp</td>
+<td>Zabbix</td>
+<td>l’agent répond au serveur (contrôles passifs)</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>agents</td>
+<td>sup-lnx-01</td>
+<td>10051/tcp</td>
+<td>Zabbix</td>
+<td>l’agent envoie au serveur (contrôles actifs)</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>sup-win-01</td>
+<td>srv-win-01</td>
+<td>135/tcp + ports dynamiques</td>
+<td>WMI (RPC)</td>
+<td>PRTG</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>sup-win-01</td>
+<td>srv-lnx-01</td>
+<td>161/udp</td>
+<td>SNMP</td>
+<td>PRTG</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>srv-lnx-01, srv-lnx-02</td>
+<td>sup-lnx-01</td>
+<td>514/tcp</td>
+<td>syslog</td>
+<td>journaux centralisés</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>toutes les VM Linux</td>
+<td>serveur Proxmox (10.20.N.1)</td>
+<td>123/udp</td>
+<td>NTP</td>
+<td>mise à l’heure</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>sup-lnx-01</td>
+<td>srv-lnx-02</td>
+<td>80/tcp</td>
+<td>HTTP (API)</td>
+<td>Zabbix ouvre des tickets dans GLPI (facultatif)</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>serveur Proxmox</td>
+<td>Proxmox Backup Server</td>
+<td>8007/tcp</td>
+<td>HTTPS</td>
+<td>sauvegardes des VM</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>sup-lnx-01</td>
+<td>srv-lnx-01</td>
+<td>22/tcp</td>
+<td>SSH (rsync en lecture seule)</td>
+<td>copie tirée des exports de la base</td>
+<td>10</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="évolution-du-lab-séance-par-séance">Évolution du lab séance par séance</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Séance</th>
+<th>Ce qui est ajouté</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>sup-lnx-01, srv-lnx-01 (intranet), srv-win-01 (domaine <code>hexalog.local</code>, DNS)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>plugins de supervision sur sup-lnx-01 ; agent SNMP (v2c restreint, v3) sur srv-lnx-01</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Nagios Core sur sup-lnx-01 ; NRPE sur srv-lnx-01 ; notifications locales</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Zabbix 7.0 (serveur, MariaDB, interface) sur sup-lnx-01 ; agents 2 sur srv-lnx-01 et srv-win-01</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>déclencheurs, actions, scénario web, hôte SNMP, tableau de bord Hexalog</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>sup-win-01 avec PRTG (éteinte ensuite)</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>rsyslog central ; heure commune ; détection dans les journaux ; mises à jour automatiques limitées à la sécurité ; un changement de bout en bout</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>srv-lnx-02 avec GLPI ; catégories, priorités, SLA ; liaison Zabbix → GLPI (facultative)</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>aucune nouvelle machine : incidents réels sur votre lab</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>sauvegardes des VM dans Proxmox Backup Server ; activité simulée et export horaire de la base de l’intranet ; copie tirée sur sup-lnx-01 ; supervision des sauvegardes</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>PRA d’Hexalog ; exercice de reprise après un rançongiciel simulé</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>dossier de MCO, mise en conformité, snapshots <code>12-lab-final</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="bonnes-pratiques">Bonnes pratiques</h2>
+<ul>
+<li><strong>Éteindre proprement</strong> : bouton <em>Arrêter</em> (<em>Shutdown</em>) de Proxmox, ou <code>sudo poweroff</code>. Le bouton <em>Stop</em> équivaut à couper le courant.</li>
+<li><strong>Snapshot</strong> avant chaque étape risquée, avec un nom numéroté ; supprimer de temps en temps ceux devenus inutiles. Un snapshot reste sur le même serveur que la VM : <strong>ce n’est pas une sauvegarde</strong> (séance 10).</li>
+<li><strong>Ne pas surdimensionner</strong> : le serveur est partagé ; les tailles du tableau suffisent.</li>
+<li><strong>Supervision par adresse IP</strong> : dans Nagios et Zabbix, on déclare les hôtes par leur adresse, pour qu’une panne du DNS ne fasse pas croire que tout est tombé.</li>
+<li><strong>Noter</strong> dans le journal de bord toute modification, même petite : pendant l’exercice d’astreinte, vous serez content de savoir ce qui a changé.</li>
+</ul>
+<h2 id="dépannage-proxmox">Dépannage Proxmox</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Échec de connexion à <code>https://PROXMOX:8006</code></td>
+<td>choisir le domaine <em>Proxmox VE authentication server</em> (et non <em>Linux PAM</em>) ; accepter le certificat (autosigné)</td>
+</tr>
+<tr class="even">
+<td>Le pont <code>hexaN</code> n’apparaît pas dans la liste</td>
+<td>vous avez choisi un autre nœud ou une autre zone ; sinon, prévenir M. CHADEYRON (droit <code>SDN.Use</code> manquant)</td>
+</tr>
+<tr class="odd">
+<td>Le clonage échoue (« permission check failed »)</td>
+<td>choisir <strong>votre</strong> pool <code>etuN</code> comme destination, et le numéro de VM de la convention</td>
+</tr>
+<tr class="even">
+<td>La VM Debian démarre mais n’a ni adresse, ni compte</td>
+<td>onglet <em>Cloud-Init</em> incomplet, ou modifié VM allumée : compléter, <strong>Régénérer l’image</strong>, puis redémarrer</td>
+</tr>
+<tr class="odd">
+<td><code>Permission denied (publickey)</code> en SSH</td>
+<td>la clé publique n’est pas dans l’onglet <em>Cloud-Init</em> (ou ce n’est pas celle de votre PC) : la coller, régénérer l’image, redémarrer</td>
+</tr>
+<tr class="even">
+<td>La console d’une VM Debian reste noire</td>
+<td>appuyer sur Entrée ; la console est sur le port série, choisir <em>xterm.js</em></td>
+</tr>
+<tr class="odd">
+<td>Le clavier de la console Windows n’est pas en AZERTY</td>
+<td>choisir le clavier <em>Français</em> pendant la première configuration de Windows ; sinon, Paramètres → Heure et langue → Langue et région</td>
+</tr>
+<tr class="even">
+<td><code>apt update</code> échoue (pas d’Internet)</td>
+<td><code>ip route</code> (passerelle 10.20.N.1 ?), <code>resolvectl status</code> (DNS ?), <code>ping -c 2 DNS-SECOURS</code> ; si toute la classe est touchée, prévenir M. CHADEYRON</td>
+</tr>
+<tr class="odd">
+<td>Le port redirigé ne répond pas</td>
+<td>la VM est-elle allumée, avec la bonne adresse ? le service écoute-t-il (<code>ss -tlnp</code>) ?</td>
+</tr>
+<tr class="even">
+<td>« Out of memory » au démarrage d’une VM</td>
+<td>le serveur est plein : éteindre les VM inutiles (sup-win-01 en dehors de la séance 6)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Si le serveur Proxmox est indisponible</strong></p>
+<p>Tous les TP fonctionnent aussi sur VirtualBox, avec le réseau NAT <code>LAB-HEXALOG</code> du BLOC 1 : remplacez alors <code>10.20.N.</code> par <code>10.10.10.</code>, accédez aux VM par des redirections de ports de VirtualBox, et sautez les parties propres à Proxmox (cloud-init, Proxmox Backup Server). M. CHADEYRON vous donnera les consignes le jour venu.</p>
+</div></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="index.html"><span class="dir">‹ Page précédente</span><span class="titre">Accueil</span></a><a class="next" href="cours/s01-supervision-mco.html" data-seance="1"><span class="dir">Page suivante ›</span><span class="titre">Séance 1 : Superviser et maintenir : les enjeux</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="assets/app.js"></script>
+
+
+</body></html>

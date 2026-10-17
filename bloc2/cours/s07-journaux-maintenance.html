@@ -1,0 +1,533 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 7 : Journaux centralisés et maintenance préventive | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Les journaux racontent ce qui s'est passé ; encore faut-il qu'ils soient au même endroit, à la même heure, conservés assez longtemps et lus par quelqu'un, ou par un outil. La maintenance préventive, e">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d'Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="../tp/tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="../tp/tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="../tp/tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="../tp/tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="../tp/tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d'un outil</span></a><a class="nav-tp" href="../tp/tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item active" data-seance="7"><a class="nav-link" href="s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="../tp/tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="../tp/tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d'astreinte</span></a><a class="nav-tp" href="../tp/tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d'activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="../tp/tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d'activité</span></a><a class="nav-tp" href="../tp/tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="../tp/tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Maintenance et incidents</span><span class="sep">›</span><span>Séance 7</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 7</span>
+  <h1>Journaux centralisés et maintenance préventive</h1>
+  <p class="lead">Les journaux racontent ce qui s'est passé ; encore faut-il qu'ils soient au même endroit, à la même heure, conservés assez longtemps et lus par quelqu'un, ou par un outil. La maintenance préventive, elle, évite que l'incident se produise : mises à jour, changements préparés et tracés, surveillance de la capacité. Cette séance traite les deux, parce qu'elles relèvent du même travail quotidien d'exploitation.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 4 et 5 (Zabbix, maintenance), BLOC 1 séance 13 (journaux et audit)</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp07-journaux-maintenance.html" data-seance="7">TP 7 : Centraliser les journaux et planifier la maintenance</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#pourquoi">1. Pourquoi centraliser les journaux</a></li><li><a href="#syslog">2. syslog, journald et rsyslog</a></li><li><a href="#fiabilite">3. Fiabiliser : l’heure et le transport</a></li><li><a href="#conserver">4. Conserver et protéger</a></li><li><a href="#detecter">5. Détecter dans les journaux</a></li><li><a href="#preventive">6. La maintenance préventive</a></li><li><a href="#changements">7. La gestion des changements</a></li><li><a href="#capacite">8. La capacité</a></li><li><a href="#à-retenir">9. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<div class="callout info avis-exemples"><div class="callout-body"><p class="callout-titre"><strong>Les commandes de ce cours sont des exemples</strong></p><p>Les blocs marqués <span class="code-exemple">Exemple</span> montrent des commandes et des fichiers pour expliquer comment les choses fonctionnent. Lisez-les, mais ne les tapez pas pendant le cours. Vous ferez les manipulations pendant le <a data-seance="7" href="../tp/tp07-journaux-maintenance.html">TP 7</a>, dans l'ordre et sur les machines indiquées : certaines n'ont de sens qu'après les étapes précédentes.</p></div></div><h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Expliquer pourquoi et comment centraliser les journaux : syslog, journald, rsyslog, transport fiable, heure commune.</li>
+<li>Choisir une durée de conservation et protéger les journaux, qui sont des données personnelles.</li>
+<li>Détecter automatiquement un événement dans un journal (Linux et Windows) avec Zabbix.</li>
+<li>Organiser la maintenance préventive : plan de maintenance, politique de mises à jour, mises à jour automatiques.</li>
+<li>Conduire un changement : demande de changement, analyse de risque, retour arrière, fenêtre de maintenance, traçabilité.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>45 min</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>3 h</td>
+<td><a data-seance="7" href="../tp/tp07-journaux-maintenance.html">TP 7 : Centraliser les journaux et planifier la maintenance</a></td>
+</tr>
+<tr class="odd">
+<td>15 min</td>
+<td>Quiz</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="pourquoi">1. Pourquoi centraliser les journaux</h2>
+<p>Au BLOC 1, vous avez lu les journaux machine par machine : <code>journalctl</code> sur chaque Debian, l’Observateur d’événements sur chaque Windows. Cela suffit pour dépanner une machine ; pas pour exploiter un système d’information.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Besoin</th>
+<th>Ce que la centralisation apporte</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Corréler</strong></td>
+<td>reconstituer une intervention ou une attaque qui traverse plusieurs machines (le rebond par le bastion du BLOC 1) en lisant un seul endroit, dans l’ordre chronologique</td>
+</tr>
+<tr class="even">
+<td><strong>Survivre à la machine</strong></td>
+<td>un serveur qui ne démarre plus, un disque perdu, une VM restaurée : ses journaux sont encore lisibles ailleurs</td>
+</tr>
+<tr class="odd">
+<td><strong>Résister à l’effacement</strong></td>
+<td>un attaquant qui obtient les droits d’administration efface d’abord les traces locales (événement 1102 sous Windows) ; la copie centrale, sur une machine qu’il ne contrôle pas, reste</td>
+</tr>
+<tr class="even">
+<td><strong>Détecter</strong></td>
+<td>un outil lit les journaux en continu et alerte : connexions refusées en rafale, erreurs disque, service qui redémarre en boucle</td>
+</tr>
+<tr class="odd">
+<td><strong>Conserver</strong></td>
+<td>une seule politique de rotation, d’archivage et de durée de conservation, au lieu d’autant de réglages que de machines</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="syslog">2. syslog, journald et rsyslog</h2>
+<h3 id="le-protocole-syslog">Le protocole syslog</h3>
+<p><strong>syslog</strong> est le format et le protocole historiques des journaux sous Unix, normalisé par la RFC 5424. Chaque message porte une <strong>facilité</strong> (qui l’émet) et une <strong>sévérité</strong> (sa gravité), combinées dans un nombre, la <strong>priorité</strong> (facilité × 8 + sévérité).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Sévérité</th>
+<th>Nom</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td><code>emerg</code></td>
+<td>le système est inutilisable</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>alert</code></td>
+<td>action immédiate nécessaire</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>crit</code></td>
+<td>erreur matérielle grave</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>err</code></td>
+<td>erreur d’un service</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td><code>warning</code></td>
+<td>avertissement</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td><code>notice</code></td>
+<td>événement normal mais notable</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td><code>info</code></td>
+<td>information</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td><code>debug</code></td>
+<td>mise au point</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Facilité</th>
+<th>Émetteur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>kern</code></td>
+<td>le noyau</td>
+</tr>
+<tr class="even">
+<td><code>auth</code>, <code>authpriv</code></td>
+<td>authentification : SSH, sudo, connexions</td>
+</tr>
+<tr class="odd">
+<td><code>daemon</code></td>
+<td>les services</td>
+</tr>
+<tr class="even">
+<td><code>cron</code></td>
+<td>les tâches planifiées</td>
+</tr>
+<tr class="odd">
+<td><code>mail</code></td>
+<td>la messagerie (Postfix)</td>
+</tr>
+<tr class="even">
+<td><code>user</code></td>
+<td>les programmes utilisateur, la commande <code>logger</code></td>
+</tr>
+<tr class="odd">
+<td><code>local0</code> à <code>local7</code></td>
+<td>libres, pour les applications et les équipements réseau</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le transport : <strong>UDP 514</strong> (historique, sans garantie : un message perdu est perdu), <strong>TCP 514</strong> (fiable), <strong>TLS sur 6514</strong> (chiffré et authentifié), ou <strong>RELP</strong> (protocole de rsyslog avec accusés de réception).</p>
+<h3 id="sous-debian-13">Sous Debian 13</h3>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-489346" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 908.84375px;" viewBox="0 0 908.84375 206" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-489346{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-489346 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-489346 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-489346 .error-icon{fill:#f5f6f8;}#mmd0-489346 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-489346 .edge-thickness-normal{stroke-width:1px;}#mmd0-489346 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-489346 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-489346 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-489346 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-489346 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-489346 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-489346 .marker.cross{stroke:#4a5563;}#mmd0-489346 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-489346 p{margin:0;}#mmd0-489346 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-489346 .cluster-label text{fill:#1f3a5f;}#mmd0-489346 .cluster-label span{color:#1f3a5f;}#mmd0-489346 .cluster-label span p{background-color:transparent;}#mmd0-489346 .label text,#mmd0-489346 span{fill:#1d2530;color:#1d2530;}#mmd0-489346 .node rect,#mmd0-489346 .node circle,#mmd0-489346 .node ellipse,#mmd0-489346 .node polygon,#mmd0-489346 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-489346 .rough-node .label text,#mmd0-489346 .node .label text,#mmd0-489346 .image-shape .label,#mmd0-489346 .icon-shape .label{text-anchor:middle;}#mmd0-489346 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-489346 .rough-node .label,#mmd0-489346 .node .label,#mmd0-489346 .image-shape .label,#mmd0-489346 .icon-shape .label{text-align:center;}#mmd0-489346 .node.clickable{cursor:pointer;}#mmd0-489346 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-489346 .arrowheadPath{fill:#000000;}#mmd0-489346 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-489346 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-489346 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-489346 .edgeLabel p{background-color:#ffffff;}#mmd0-489346 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-489346 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-489346 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-489346 .cluster text{fill:#1f3a5f;}#mmd0-489346 .cluster span{color:#1f3a5f;}#mmd0-489346 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-489346 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-489346 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-489346 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-489346 rect.text{fill:none;stroke-width:0;}#mmd0-489346 .icon-shape,#mmd0-489346 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-489346 .icon-shape p,#mmd0-489346 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-489346 .icon-shape .label rect,#mmd0-489346 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-489346 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-489346 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-489346 .node .neo-node{stroke:#1f3a5f;}#mmd0-489346 [data-look="neo"].node rect,#mmd0-489346 [data-look="neo"].cluster rect,#mmd0-489346 [data-look="neo"].node polygon{stroke:url(#mmd0-489346-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-489346 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-489346 [data-look="neo"].node path{stroke:url(#mmd0-489346-gradient);stroke-width:1px;}#mmd0-489346 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-489346 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-489346 [data-look="neo"].node circle{stroke:url(#mmd0-489346-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-489346 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-489346 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-489346-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-489346 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-489346-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-489346 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-489346_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-489346_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-489346_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-489346_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-489346_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-489346_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-489346_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-489346_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-489346_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-489346_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-489346_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-489346_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M186.969,103L211.969,103L232.969,103" id="mmd0-489346-L_P_J_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_P_J_0" data-points="W3sieCI6MTg2Ljk2ODc1LCJ5IjoxMDN9LHsieCI6MjExLjk2ODc1LCJ5IjoxMDN9LHsieCI6MjM2Ljk2ODc1LCJ5IjoxMDN9XQ==" data-look="classic" marker-end="url(#mmd0-489346_flowchart-v2-pointEnd)"></path><path d="M380.922,103L447.945,103L510.969,103" id="mmd0-489346-L_J_R_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_J_R_0" data-points="W3sieCI6MzgwLjkyMTg3NSwieSI6MTAzfSx7IngiOjQ0Ny45NDUzMTI1LCJ5IjoxMDN9LHsieCI6NTE0Ljk2ODc1LCJ5IjoxMDN9XQ==" data-look="classic" marker-end="url(#mmd0-489346_flowchart-v2-pointEnd)"></path><path d="M640.219,70.362L692.719,43L741.219,43" id="mmd0-489346-L_R_F_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_R_F_0" data-points="W3sieCI6NjQwLjIxODc1LCJ5Ijo3MC4zNjE1NjM1MTc5MTUzfSx7IngiOjY5Mi43MTg3NSwieSI6NDN9LHsieCI6NzQ1LjIxODc1LCJ5Ijo0M31d" data-look="classic" marker-end="url(#mmd0-489346_flowchart-v2-pointEnd)"></path><path d="M640.219,135.638L692.719,163L743.563,163" id="mmd0-489346-L_R_C_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_R_C_0" data-points="W3sieCI6NjQwLjIxODc1LCJ5IjoxMzUuNjM4NDM2NDgyMDg0N30seyJ4Ijo2OTIuNzE4NzUsInkiOjE2M30seyJ4Ijo3NDcuNTYyNSwieSI6MTYzfV0=" data-look="classic" marker-end="url(#mmd0-489346_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_P_J_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(447.9453125, 103)"><g class="label" data-id="L_J_R_0" transform="translate(-42.0234375, -10.5)"><foreignObject width="84.046875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>socket syslog</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_R_F_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(692.71875, 163)"><g class="label" data-id="L_R_C_0" transform="translate(-27.5, -10.5)"><foreignObject width="55" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>TCP 514</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-489346-flowchart-P-0" data-look="classic" transform="translate(97.484375, 103)"><rect class="basic label-container" style="" x="-89.484375" y="-35" width="178.96875" height="70"></rect><g class="label" style="" transform="translate(-61.484375, -21)"><rect></rect><foreignObject width="122.96875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Programmes<br>sshd, sudo, nginx…</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-489346-flowchart-J-1" data-look="classic" transform="translate(308.9453125, 103)"><rect class="basic label-container" style="" x="-71.9765625" y="-45.5" width="143.953125" height="91"></rect><g class="label" style="" transform="translate(-43.9765625, -31.5)"><rect></rect><foreignObject width="87.953125" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>journald<br>journal binaire<br>journalctl</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-489346-flowchart-R-3" data-look="classic" transform="translate(577.59375, 103)"><rect class="basic label-container" style="" x="-62.625" y="-35" width="125.25" height="70"></rect><g class="label" style="" transform="translate(-34.625, -21)"><rect></rect><foreignObject width="69.25" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>rsyslog<br>(à installer)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-489346-flowchart-F-5" data-look="classic" transform="translate(823.03125, 43)"><rect class="basic label-container" style="" x="-77.8125" y="-35" width="155.625" height="70"></rect><g class="label" style="" transform="translate(-49.8125, -21)"><rect></rect><foreignObject width="99.625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>/var/log/syslog<br>/var/log/auth.log</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-489346-flowchart-C-7" data-look="classic" transform="translate(823.03125, 163)"><rect class="basic label-container" style="" x="-75.46875" y="-35" width="150.9375" height="70"></rect><g class="label" style="" transform="translate(-47.46875, -21)"><rect></rect><foreignObject width="94.9375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Serveur central<br>sup-lnx-01</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-489346-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-489346-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-489346-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<ul>
+<li><strong>journald</strong> (systemd) reçoit tous les messages et les range dans un journal binaire, interrogé par <code>journalctl</code>. C’est le seul système de journalisation de l’image cloud de Debian : il n’y a ni <code>/var/log/syslog</code>, ni <code>/var/log/auth.log</code>.</li>
+<li><strong>rsyslog</strong>, une fois installé, reçoit une copie de chaque message, écrit les fichiers texte habituels et sait <strong>les envoyer à un autre serveur</strong> et <strong>en recevoir</strong> : c’est lui qui fait la centralisation. Ses fichiers sont lisibles par le groupe <code>adm</code>.</li>
+</ul>
+<h3 id="la-configuration-de-rsyslog">La configuration de rsyslog</h3>
+<p>rsyslog lit <code>/etc/rsyslog.conf</code>, puis les fichiers <code>/etc/rsyslog.d/*.conf</code>. On n’écrit que dans ce dossier, comme pour SSH et Zabbix. On vérifie la syntaxe avant de redémarrer : <code>sudo rsyslogd -N1</code>.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Rôle</th>
+<th>Ce qu’on configure</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>client</strong></td>
+<td>une action <code>omfwd</code> : tout envoyer au serveur central, en TCP, avec une <strong>file d’attente sur disque</strong> qui garde les messages si le serveur est injoignable et les renvoie ensuite</td>
+</tr>
+<tr class="even">
+<td><strong>serveur</strong></td>
+<td>un module d’entrée <code>imtcp</code> sur le port 514, la liste des machines autorisées à envoyer, et un <strong>modèle de chemin</strong> : un dossier par machine (<code>/var/log/hexalog/srv-lnx-01/auth.log</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>Le nom de la machine vient du message</strong></p>
+<p>Le serveur range les messages d’après le nom de machine <strong>écrit dans le message</strong> : n’importe quelle machine autorisée peut prétendre s’appeler autrement. Le TP utilise l’option <code>secpath-replace</code>, qui interdit les <code>/</code> dans ce nom (sinon un message forgé pourrait écrire ailleurs sur le disque), et limite les émetteurs au réseau du lab. En production, on chiffre et on authentifie les émetteurs (TLS avec certificats).</p>
+</div></div>
+<h3 id="windows">Windows</h3>
+<p>Windows ne parle pas syslog. Ses journaux (Système, Application, Sécurité, et les journaux des rôles) se centralisent :</p>
+<ul>
+<li>par le <strong>transfert d’événements Windows</strong> (<em>Windows Event Forwarding</em>) : un serveur collecteur s’<strong>abonne</strong> aux événements choisis des autres machines (console <em>Observateur d’événements → Abonnements</em>) ;</li>
+<li>par un <strong>agent</strong> qui lit les journaux et les envoie : agent Zabbix (clé <code>eventlog[]</code>), NXLog, Winlogbeat, agent Wazuh.</li>
+</ul>
+<h3 id="au-delà-siem-et-plateformes-de-journaux">Au-delà : SIEM et plateformes de journaux</h3>
+<p>Quand le volume grossit, on passe à des outils d’<strong>indexation</strong> et de <strong>recherche</strong> (Graylog, OpenSearch, Grafana Loki, Splunk), puis à un <strong>SIEM</strong> (<em>Security Information and Event Management</em> : Wazuh, Splunk ES, Microsoft Sentinel), qui corrèle les événements de sécurité et alerte selon des règles de détection. Un <strong>SOC</strong> (centre opérationnel de sécurité) est l’équipe qui exploite le SIEM. Dans une PME comme Hexalog, rsyslog et quelques règles dans l’outil de supervision sont un premier pas réaliste.</p>
+<h2 id="fiabilite">3. Fiabiliser : l’heure et le transport</h2>
+<p>Une chronologie n’a de sens que si toutes les machines sont <strong>à la même heure</strong>. Sinon, la connexion au bastion semble avoir eu lieu après la commande lancée sur le serveur.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Élément</th>
+<th>Réglage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Synchronisation</td>
+<td>chaque machine se règle sur un serveur <strong>NTP</strong> (port UDP 123) : <code>systemd-timesyncd</code> sur les images cloud de Debian, <code>chrony</code> sur Proxmox, le service <em>Temps Windows</em> (W32Time) sous Windows. Dans un domaine Active Directory, les postes et serveurs se règlent sur les contrôleurs de domaine</td>
+</tr>
+<tr class="even">
+<td>Vérification</td>
+<td><code>timedatectl</code> (ligne <em>System clock synchronized: yes</em>), <code>w32tm /query /status</code> ; Zabbix compare l’heure de chaque hôte à la sienne (déclencheur <em>System time is out of sync</em>)</td>
+</tr>
+<tr class="odd">
+<td>Fuseau horaire</td>
+<td>horodatage au format ISO 8601 avec le décalage (<code>2027-01-26T10:42:07.512+01:00</code>) : pas d’ambiguïté, même au changement d’heure</td>
+</tr>
+<tr class="even">
+<td>Transport</td>
+<td>TCP plutôt qu’UDP, file d’attente sur disque côté client, et supervision du serveur de journaux lui-même (espace disque, service actif)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="conserver">4. Conserver et protéger</h2>
+<h3 id="la-rotation">La rotation</h3>
+<p>Un journal grandit sans fin. <strong>logrotate</strong> (lancé chaque jour par un minuteur systemd) renomme le fichier courant (<code>auth.log</code> → <code>auth.log.1</code>), compresse les anciens, et supprime ceux qui dépassent la durée prévue. Sa configuration par fichier ou par dossier se trouve dans <code>/etc/logrotate.d/</code>.</p>
+<h3 id="combien-de-temps">Combien de temps ?</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Ce qu’elle dit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>CNIL</strong>, recommandation sur la journalisation (délibération 2021-122)</td>
+<td>conserver les journaux d’accès et d’actions sur les données personnelles <strong>de six mois à un an</strong> en règle générale ; jusqu’à trois ans dans certains cas justifiés ; les analyser automatiquement ; en protéger l’accès</td>
+</tr>
+<tr class="even">
+<td><strong>ANSSI</strong>, recommandations sur la journalisation</td>
+<td>centraliser, synchroniser l’heure, protéger l’intégrité et la disponibilité des journaux, définir et documenter la durée de conservation</td>
+</tr>
+<tr class="odd">
+<td>Obligations sectorielles</td>
+<td>les hébergeurs et fournisseurs d’accès ont des obligations légales de conservation de certaines données de connexion ; d’autres secteurs (santé, finance) ont leurs règles</td>
+</tr>
+</tbody>
+</table></div>
+<p>La durée se décide, se justifie et s’écrit dans la politique de journalisation : trop court, on ne peut plus enquêter ; trop long, on conserve des données personnelles sans raison.</p>
+<h3 id="des-données-personnelles">Des données personnelles</h3>
+<p>Un journal contient des identifiants, des adresses IP, des heures de connexion : ce sont des <strong>données personnelles</strong> (RGPD). D’où les règles : une <strong>finalité</strong> claire (sécurité, exploitation), un <strong>accès restreint</strong> (le groupe <code>adm</code>, quelques administrateurs), une <strong>durée</strong> limitée, et la protection contre la modification, y compris par les administrateurs dont les actions sont tracées.</p>
+<h2 id="detecter">5. Détecter dans les journaux</h2>
+<p>L’outil de supervision peut lire un journal et créer un problème quand un motif apparaît.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Système</th>
+<th>Clé Zabbix</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Linux</td>
+<td><code>log[fichier,motif,,,skip]</code></td>
+<td><code>log[/var/log/auth.log,"Invalid user|Failed password|authenticating user",,,skip]</code> : les connexions SSH refusées</td>
+</tr>
+<tr class="even">
+<td>Windows</td>
+<td><code>eventlog[journal,,,,identifiant,,skip]</code></td>
+<td><code>eventlog[Security,,,,4625,,skip]</code> : les ouvertures de session refusées</td>
+</tr>
+</tbody>
+</table></div>
+<p>Trois points communs :</p>
+<ul>
+<li>ce sont des contrôles <strong>actifs</strong> : l’agent lit le journal lui-même et envoie les lignes trouvées (il faut donc <code>ServerActive=</code> et un <code>Hostname=</code> identique au nom de l’hôte) ;</li>
+<li>l’option <code>skip</code> évite de relire tout l’historique à la création de l’élément : seules les nouvelles lignes comptent ;</li>
+<li>l’agent doit avoir le <strong>droit de lire</strong> le journal : sous Debian, le compte <code>zabbix</code> doit être membre du groupe <code>adm</code> ; sous Windows, l’agent tourne sous le compte <em>Système local</em>, qui lit le journal Sécurité.</li>
+</ul>
+<p>Le déclencheur compte les lignes sur une période : <code>count(/srv-lnx-01/log[…],5m)&gt;=5</code> signale au moins cinq refus en cinq minutes. Avec la clé SSH obligatoire, une tentative par mot de passe ne réussira pas, mais elle révèle quelqu’un qui cherche : c’est ce genre de signal faible que la supervision des journaux fait remonter.</p>
+<h2 id="preventive">6. La maintenance préventive</h2>
+<h3 id="le-plan-de-maintenance">Le plan de maintenance</h3>
+<p>Les tâches préventives sont <strong>listées, planifiées, attribuées et prouvées</strong>. Extrait du plan d’Hexalog :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Tâche</th>
+<th>Fréquence</th>
+<th>Responsable</th>
+<th>Preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Correctifs de sécurité Linux</td>
+<td>quotidienne, automatique</td>
+<td>(automatique)</td>
+<td>journal de <code>unattended-upgrades</code>, supervision des mises à jour en attente</td>
+</tr>
+<tr class="even">
+<td>Mises à jour complètes Linux et Windows</td>
+<td>mensuelle, après le deuxième mardi</td>
+<td>administrateur</td>
+<td>demande de changement, journal des modifications</td>
+</tr>
+<tr class="odd">
+<td>Revue des alertes et des tableaux de bord</td>
+<td>quotidienne</td>
+<td>astreinte</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Vérification des sauvegardes</td>
+<td>quotidienne ; <strong>test de restauration</strong> trimestriel</td>
+<td>administrateur</td>
+<td>rapport de test (séance 10)</td>
+</tr>
+<tr class="odd">
+<td>Revue de l’espace disque et des tendances</td>
+<td>mensuelle</td>
+<td>administrateur</td>
+<td>graphiques de tendance</td>
+</tr>
+<tr class="even">
+<td>Expiration des certificats et des licences</td>
+<td>mensuelle</td>
+<td>administrateur</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Revue des comptes et des accès</td>
+<td>semestrielle</td>
+<td>responsable sécurité</td>
+<td>rapport de revue (BLOC 1, séance 13)</td>
+</tr>
+<tr class="even">
+<td>Revue des journaux de sécurité</td>
+<td>hebdomadaire</td>
+<td>administrateur</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="les-mises-à-jour">Les mises à jour</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th></th>
+<th>Debian</th>
+<th>Windows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rythme</td>
+<td>correctifs de sécurité au fil de l’eau (<code>trixie-security</code>) ; <strong>versions intermédiaires</strong> (13.1, 13.2…) environ tous les deux mois</td>
+<td>correctifs <strong>cumulatifs mensuels</strong>, publiés le deuxième mardi du mois (<em>Patch Tuesday</em>) ; correctifs hors cycle pour les failles exploitées</td>
+</tr>
+<tr class="even">
+<td>Outils</td>
+<td><code>apt</code>, et <strong><code>unattended-upgrades</code></strong> pour les mises à jour automatiques</td>
+<td>Windows Update ; en entreprise : WSUS (déclaré obsolète par Microsoft depuis 2024 mais toujours présent), Windows Update for Business, Intune, Azure Update Manager</td>
+</tr>
+<tr class="odd">
+<td>Redémarrage</td>
+<td>nécessaire pour un nouveau noyau : <code>/run/reboot-required</code> ; <code>needrestart</code> liste les services à relancer</td>
+<td>souvent nécessaire ; heures d’activité, redémarrage planifié</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sur l’image cloud de Debian, <strong>les mises à jour automatiques sont actives par défaut</strong>, et elles installent les correctifs de sécurité <strong>et</strong> ceux des versions intermédiaires, chaque matin. C’est confortable, mais une mise à jour non prévue peut changer un comportement sans que personne ne le sache. La politique d’Hexalog, appliquée au TP : <strong>sécurité automatique, le reste pendant la maintenance mensuelle</strong>, avec demande de changement.</p>
+<p>Pour décider de l’urgence d’un correctif : la <strong>CVE</strong> (identifiant de la vulnérabilité), son score <strong>CVSS</strong> (gravité de 0 à 10), et surtout le fait qu’elle soit <strong>exploitée</strong> (catalogue KEV de la CISA américaine, alertes du <strong>CERT-FR</strong>). Un équipement exposé sur Internet avec une faille exploitée se corrige dans la journée.</p>
+<h3 id="étendre-la-supervision-les-paramètres-utilisateur">Étendre la supervision : les paramètres utilisateur</h3>
+<p>Le modèle Linux de Zabbix ne compte pas les mises à jour en attente. Un <strong>paramètre utilisateur</strong> (<em>UserParameter</em>) ajoute une clé à l’agent : une ligne de configuration associe un nom à une commande dont la sortie devient la valeur.</p>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Fichier : /etc/zabbix/zabbix_agent2.d/hexalog-maj.conf</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb2"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="dt">UserParameter</span><span class="ot">=</span><span class="st">hexalog.maj.attente,apt-get -s -o Debug::NoLocking=true upgrade | grep -c '^Inst' || true</span></span></code></pre></div></div>
+<p><code>apt-get -s</code> <strong>simule</strong> une mise à jour sans rien installer ; <code>grep -c</code> compte les paquets. C’est l’équivalent, pour Zabbix, du plugin Nagios écrit au TP 2.</p>
+<h2 id="changements">7. La gestion des changements</h2>
+<p>La moitié des incidents viennent d’un <strong>changement</strong> : une mise à jour, une modification de configuration, un redémarrage. La gestion des changements (ITIL 4 parle d’<em>habilitation des changements</em>) vise à changer <strong>souvent</strong> et <strong>sans casse</strong>.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Type de changement</th>
+<th>Définition</th>
+<th>Exemple chez Hexalog</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Standard</strong></td>
+<td>fréquent, à faible risque, procédure éprouvée</td>
+<td>ajouter un utilisateur, appliquer les correctifs de sécurité automatiques</td>
+<td>pré-autorisé</td>
+</tr>
+<tr class="even">
+<td><strong>Normal</strong></td>
+<td>à évaluer à chaque fois</td>
+<td>mise à jour mensuelle des serveurs, nouvelle version de Zabbix</td>
+<td>responsable, ou comité (<strong>CAB</strong>, <em>Change Advisory Board</em>)</td>
+</tr>
+<tr class="odd">
+<td><strong>Urgent</strong></td>
+<td>à faire tout de suite, pour corriger un incident ou une faille exploitée</td>
+<td>correctif d’une faille du serveur web exposée</td>
+<td>procédure accélérée, régularisée après</td>
+</tr>
+</tbody>
+</table></div>
+<p>Une <strong>demande de changement</strong> (RFC, <em>Request for Change</em>) répond aux questions : quoi, pourquoi, sur quoi (machines, services), quel <strong>impact</strong> pendant l’intervention, quel <strong>risque</strong>, comment on <strong>teste</strong>, comment on <strong>revient en arrière</strong>, quand (<strong>fenêtre de maintenance</strong>), qui prévenir. Après le changement : vérification, clôture, et une ligne dans le <strong>journal des modifications</strong>.</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd1-449696" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1405.703125px;" viewBox="0 0 1405.703125 266" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd1-449696{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd1-449696 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd1-449696 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd1-449696 .error-icon{fill:#f5f6f8;}#mmd1-449696 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd1-449696 .edge-thickness-normal{stroke-width:1px;}#mmd1-449696 .edge-thickness-thick{stroke-width:3.5px;}#mmd1-449696 .edge-pattern-solid{stroke-dasharray:0;}#mmd1-449696 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd1-449696 .edge-pattern-dashed{stroke-dasharray:3;}#mmd1-449696 .edge-pattern-dotted{stroke-dasharray:2;}#mmd1-449696 .marker{fill:#4a5563;stroke:#4a5563;}#mmd1-449696 .marker.cross{stroke:#4a5563;}#mmd1-449696 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd1-449696 p{margin:0;}#mmd1-449696 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd1-449696 .cluster-label text{fill:#1f3a5f;}#mmd1-449696 .cluster-label span{color:#1f3a5f;}#mmd1-449696 .cluster-label span p{background-color:transparent;}#mmd1-449696 .label text,#mmd1-449696 span{fill:#1d2530;color:#1d2530;}#mmd1-449696 .node rect,#mmd1-449696 .node circle,#mmd1-449696 .node ellipse,#mmd1-449696 .node polygon,#mmd1-449696 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd1-449696 .rough-node .label text,#mmd1-449696 .node .label text,#mmd1-449696 .image-shape .label,#mmd1-449696 .icon-shape .label{text-anchor:middle;}#mmd1-449696 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd1-449696 .rough-node .label,#mmd1-449696 .node .label,#mmd1-449696 .image-shape .label,#mmd1-449696 .icon-shape .label{text-align:center;}#mmd1-449696 .node.clickable{cursor:pointer;}#mmd1-449696 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd1-449696 .arrowheadPath{fill:#000000;}#mmd1-449696 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd1-449696 .flowchart-link{stroke:#4a5563;fill:none;}#mmd1-449696 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd1-449696 .edgeLabel p{background-color:#ffffff;}#mmd1-449696 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd1-449696 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd1-449696 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd1-449696 .cluster text{fill:#1f3a5f;}#mmd1-449696 .cluster span{color:#1f3a5f;}#mmd1-449696 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd1-449696 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd1-449696 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd1-449696 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd1-449696 rect.text{fill:none;stroke-width:0;}#mmd1-449696 .icon-shape,#mmd1-449696 .image-shape{background-color:#ffffff;text-align:center;}#mmd1-449696 .icon-shape p,#mmd1-449696 .image-shape p{background-color:#ffffff;padding:2px;}#mmd1-449696 .icon-shape .label rect,#mmd1-449696 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd1-449696 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd1-449696 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd1-449696 .node .neo-node{stroke:#1f3a5f;}#mmd1-449696 [data-look="neo"].node rect,#mmd1-449696 [data-look="neo"].cluster rect,#mmd1-449696 [data-look="neo"].node polygon{stroke:url(#mmd1-449696-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-449696 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd1-449696 [data-look="neo"].node path{stroke:url(#mmd1-449696-gradient);stroke-width:1px;}#mmd1-449696 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-449696 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd1-449696 [data-look="neo"].node circle{stroke:url(#mmd1-449696-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-449696 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd1-449696 [data-look="neo"].icon-shape .icon{fill:url(#mmd1-449696-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-449696 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd1-449696-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-449696 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd1-449696_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-449696_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-449696_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-449696_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd1-449696_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-449696_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-449696_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-449696_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-449696_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-449696_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-449696_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd1-449696_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M225.109,108.25L250.109,108.25L271.109,108.25" id="mmd1-449696-L_D_E_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_E_0" data-points="W3sieCI6MjI1LjEwOTM3NSwieSI6MTA4LjI1fSx7IngiOjI1MC4xMDkzNzUsInkiOjEwOC4yNX0seyJ4IjoyNzUuMTA5Mzc1LCJ5IjoxMDguMjV9XQ==" data-look="classic" marker-end="url(#mmd1-449696_flowchart-v2-pointEnd)"></path><path d="M422.156,108.25L447.156,108.25L468.156,108.25" id="mmd1-449696-L_E_V_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_E_V_0" data-points="W3sieCI6NDIyLjE1NjI1LCJ5IjoxMDguMjV9LHsieCI6NDQ3LjE1NjI1LCJ5IjoxMDguMjV9LHsieCI6NDcyLjE1NjI1LCJ5IjoxMDguMjV9XQ==" data-look="classic" marker-end="url(#mmd1-449696_flowchart-v2-pointEnd)"></path><path d="M549.453,86.984L607.398,43L682.867,43" id="mmd1-449696-L_V_X_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_V_X_0" data-points="W3sieCI6NTQ5LjQ1MzA4MjIxMzg5ODMsInkiOjg2Ljk4NDMzMjIxMzg5ODIxfSx7IngiOjYwNy4zOTg0Mzc1LCJ5Ijo0M30seyJ4Ijo2ODYuODY3MTg3NSwieSI6NDN9XQ==" data-look="classic" marker-end="url(#mmd1-449696_flowchart-v2-pointEnd)"></path><path d="M549.453,129.516L607.398,173.5L640.078,173.5" id="mmd1-449696-L_V_P_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_V_P_0" data-points="W3sieCI6NTQ5LjQ1MzA4MjIxMzg5ODMsInkiOjEyOS41MTU2Njc3ODYxMDE3N30seyJ4Ijo2MDcuMzk4NDM3NSwieSI6MTczLjV9LHsieCI6NjQ0LjA3ODEyNSwieSI6MTczLjV9XQ==" data-look="classic" marker-end="url(#mmd1-449696_flowchart-v2-pointEnd)"></path><path d="M849.484,173.5L874.484,173.5L895.484,173.5" id="mmd1-449696-L_P_R_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_P_R_0" data-points="W3sieCI6ODQ5LjQ4NDM3NSwieSI6MTczLjV9LHsieCI6ODc0LjQ4NDM3NSwieSI6MTczLjV9LHsieCI6ODk5LjQ4NDM3NSwieSI6MTczLjV9XQ==" data-look="classic" marker-end="url(#mmd1-449696_flowchart-v2-pointEnd)"></path><path d="M1096.359,131.941L1140.039,113.5L1179.719,113.5" id="mmd1-449696-L_R_C_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_R_C_0" data-points="W3sieCI6MTA5Ni4zNTkzNzUsInkiOjEzMS45NDA5ODczMDE0MTI4fSx7IngiOjExNDAuMDM5MDYyNSwieSI6MTEzLjV9LHsieCI6MTE4My43MTg3NSwieSI6MTEzLjV9XQ==" data-look="classic" marker-end="url(#mmd1-449696_flowchart-v2-pointEnd)"></path><path d="M1096.359,215.059L1140.039,233.5L1215.523,233.5" id="mmd1-449696-L_R_B_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_R_B_0" data-points="W3sieCI6MTA5Ni4zNTkzNzUsInkiOjIxNS4wNTkwMTI2OTg1ODcyfSx7IngiOjExNDAuMDM5MDYyNSwieSI6MjMzLjV9LHsieCI6MTIxOS41MjM0Mzc1LCJ5IjoyMzMuNX1d" data-look="classic" marker-end="url(#mmd1-449696_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_D_E_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_E_V_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(607.3984375, 43)"><g class="label" data-id="L_V_X_0" transform="translate(-11.6796875, -10.5)"><foreignObject width="23.359375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>non</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(607.3984375, 173.5)"><g class="label" data-id="L_V_P_0" transform="translate(-9.34375, -10.5)"><foreignObject width="18.6875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>oui</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_P_R_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_R_C_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(1140.0390625, 233.5)"><g class="label" data-id="L_R_B_0" transform="translate(-18.6796875, -10.5)"><foreignObject width="37.359375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>échec</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd1-449696-flowchart-D-0" data-look="classic" transform="translate(116.5546875, 108.25)"><rect class="basic label-container" style="" x="-108.5546875" y="-35" width="217.109375" height="70"></rect><g class="label" style="" transform="translate(-80.5546875, -21)"><rect></rect><foreignObject width="161.109375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Demande de changement<br>(RFC)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-449696-flowchart-E-1" data-look="classic" transform="translate(348.6328125, 108.25)"><rect class="basic label-container" style="" x="-73.5234375" y="-45.5" width="147.046875" height="91"></rect><g class="label" style="" transform="translate(-45.5234375, -31.5)"><rect></rect><foreignObject width="91.046875" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Évaluation<br>impact, risque,<br>retour arrière</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-449696-flowchart-V-3" data-look="classic" transform="translate(521.4375, 108.25)"><polygon points="49.28125,0 98.5625,-49.28125 49.28125,-98.5625 0,-49.28125" class="label-container" transform="translate(-48.78125, 49.28125)"></polygon><g class="label" style="" transform="translate(-24.78125, -10.5)"><rect></rect><foreignObject width="49.5625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Validé ?</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-449696-flowchart-X-5" data-look="classic" transform="translate(746.78125, 43)"><rect class="basic label-container" style="" x="-59.9140625" y="-35" width="119.828125" height="70"></rect><g class="label" style="" transform="translate(-31.9140625, -21)"><rect></rect><foreignObject width="63.828125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Refusé ou<br>à revoir</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-449696-flowchart-P-7" data-look="classic" transform="translate(746.78125, 173.5)"><rect class="basic label-container" style="" x="-102.703125" y="-45.5" width="205.40625" height="91"></rect><g class="label" style="" transform="translate(-74.703125, -31.5)"><rect></rect><foreignObject width="149.40625" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Planifié :<br>fenêtre, communication,<br>maintenance Zabbix</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-449696-flowchart-R-9" data-look="classic" transform="translate(997.921875, 173.5)"><rect class="basic label-container" style="" x="-98.4375" y="-45.5" width="196.875" height="91"></rect><g class="label" style="" transform="translate(-70.4375, -31.5)"><rect></rect><foreignObject width="140.875" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Réalisé :<br>snapshot, intervention,<br>vérifications</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-449696-flowchart-C-11" data-look="classic" transform="translate(1290.7109375, 113.5)"><rect class="basic label-container" style="" x="-106.9921875" y="-45.5" width="213.984375" height="91"></rect><g class="label" style="" transform="translate(-78.9921875, -31.5)"><rect></rect><foreignObject width="157.984375" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Clôturé :<br>journal des modifications,<br>bilan</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-449696-flowchart-B-13" data-look="classic" transform="translate(1290.7109375, 233.5)"><rect class="basic label-container" style="" x="-71.1875" y="-24.5" width="142.375" height="49"></rect><g class="label" style="" transform="translate(-43.1875, -10.5)"><rect></rect><foreignObject width="86.375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Retour arrière</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd1-449696-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd1-449696-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd1-449696-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<p>La <strong>période de maintenance</strong> de Zabbix (séance 5) est l’outil technique de la fenêtre de maintenance : elle suspend les notifications sur les hôtes concernés. Le snapshot Proxmox pris juste avant est le <strong>plan de retour arrière</strong> le plus simple, à condition de le supprimer une fois le changement validé.</p>
+<h2 id="capacite">8. La capacité</h2>
+<p>La maintenance <strong>prévisionnelle</strong> s’appuie sur les tendances. Zabbix calcule une prévision avec deux fonctions :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Fonction</th>
+<th>Sens</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>timeleft(/hôte/clé,période,seuil)</code></td>
+<td>temps restant avant que la valeur atteigne le seuil, au rythme observé sur la période</td>
+<td><code>timeleft(/srv-lnx-01/vfs.fs.dependent.size[/,pused],1h,100)&lt;1d</code> : <code>/</code> sera plein dans moins d’un jour</td>
+</tr>
+<tr class="even">
+<td><code>forecast(/hôte/clé,période,horizon)</code></td>
+<td>valeur prévue dans l’horizon donné</td>
+<td><code>forecast(/srv-lnx-01/vfs.fs.dependent.size[/,pused],1h,1d)&gt;95</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Les modèles Linux de Zabbix utilisent déjà <code>timeleft()</code> dans leurs déclencheurs d’espace disque. La revue mensuelle des tendances (disque, mémoire, base de Zabbix elle-même) permet de commander un disque <strong>avant</strong> d’en avoir besoin.</p>
+<h2 id="à-retenir">9. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Centraliser pour corréler, survivre à la machine, résister à l’effacement, détecter, conserver.</li>
+<li>syslog : facilité + sévérité ; UDP 514, TCP 514, TLS 6514. Debian 13 cloud : journald seul ; rsyslog écrit les fichiers, envoie (<code>omfwd</code>, file d’attente sur disque) et reçoit (<code>imtcp</code>). <code>rsyslogd -N1</code> avant de redémarrer.</li>
+<li>Windows : abonnements (WEF) ou agent (<code>eventlog[]</code>).</li>
+<li>Même heure partout (NTP) ; rotation par logrotate ; durée de conservation justifiée (CNIL : six mois à un an) ; journaux = données personnelles.</li>
+<li>Détection : <code>log[]</code> et <code>eventlog[]</code>, contrôles actifs, <code>skip</code>, droit de lecture (<code>adm</code>), <code>count(…,5m)</code>.</li>
+<li>Plan de maintenance ; politique de mises à jour ; <code>unattended-upgrades</code> actif par défaut sur l’image cloud ; CVE, CVSS, failles exploitées, CERT-FR.</li>
+<li>Changement standard, normal, urgent ; RFC avec impact, risque, test, retour arrière, fenêtre ; journal des modifications.</li>
+<li>Capacité : <code>timeleft()</code>, <code>forecast()</code>, revue des tendances.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Citez trois raisons de centraliser les journaux.</li>
+<li>Un message a la facilité <code>auth</code> (4) et la sévérité <code>warning</code> (4). Quelle est sa priorité syslog ?</li>
+<li>Pourquoi préfère-t-on TCP à UDP pour envoyer les journaux, et à quoi sert la file d’attente sur disque du client ?</li>
+<li>Sur une VM créée depuis l’image cloud de Debian, <code>ls /var/log/auth.log</code> ne trouve rien. Est-ce normal ? Où sont les journaux ?</li>
+<li>Pourquoi l’heure de toutes les machines doit-elle être synchronisée ?</li>
+<li>Combien de temps conserver les journaux de connexion à l’intranet ? Sur quoi vous appuyez-vous ?</li>
+<li>Un élément <code>log[/var/log/auth.log,…]</code> reste <em>Non supporté</em> avec le message <em>Cannot open file</em>. Que manque-t-il ?</li>
+<li>Pourquoi les éléments <code>log[]</code> et <code>eventlog[]</code> sont-ils toujours des contrôles actifs ?</li>
+<li>Quelle est la différence entre un changement standard et un changement normal ? Donnez un exemple de chaque.</li>
+<li>Que doit contenir une demande de changement pour la mise à jour mensuelle d’un serveur ?</li>
+<li>Que signifie <code>timeleft(/srv-lnx-01/vfs.fs.dependent.size[/,pused],1h,100)&lt;7d</code> ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Corréler les événements de plusieurs machines ; lire les journaux d’une machine perdue ; résister à l’effacement des traces ; détecter automatiquement ; appliquer une seule politique de conservation.</li>
+<li>4 × 8 + 4 = <strong>36</strong>.</li>
+<li>TCP garantit la remise (UDP perd silencieusement les messages) ; la file d’attente garde les messages tant que le serveur est injoignable, puis les renvoie.</li>
+<li>Oui : l’image cloud n’a que journald ; les journaux sont dans le journal binaire (<code>journalctl</code>). Le fichier apparaît une fois rsyslog installé.</li>
+<li>Pour reconstituer une chronologie fiable entre machines (et parce que Kerberos et TLS refusent les écarts d’heure trop grands).</li>
+<li>Par exemple six mois à un an, selon la recommandation de la CNIL sur la journalisation, en l’écrivant dans la politique de journalisation avec sa justification.</li>
+<li>Le droit de lecture : le compte <code>zabbix</code> n’est pas membre du groupe <code>adm</code> (ou l’agent n’a pas été redémarré après l’ajout).</li>
+<li>Parce que c’est l’agent qui lit le fichier en continu, retient où il en est et envoie les nouvelles lignes ; le serveur ne peut pas demander « les nouvelles lignes depuis la dernière fois ».</li>
+<li>Standard : fréquent, à faible risque, procédure éprouvée, pré-autorisé (créer un compte). Normal : évalué et validé à chaque fois (mise à jour mensuelle, nouvelle version d’un logiciel).</li>
+<li>Les machines et services concernés, la raison, l’impact pendant l’intervention, le risque, les tests, le retour arrière (snapshot), la fenêtre, les personnes prévenues, puis la clôture.</li>
+<li>Au rythme de remplissage observé sur la dernière heure, <code>/</code> serait plein dans moins de 7 jours.</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp06-prtg-choix.html" data-seance="6"><span class="dir">‹ Page précédente</span><span class="titre">TP 6 : PRTG, puis comparer les trois outils</span></a><a class="next" href="../tp/tp07-journaux-maintenance.html" data-seance="7"><span class="dir">Page suivante ›</span><span class="titre">TP 7 : Centraliser les journaux et planifier la maintenance</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>

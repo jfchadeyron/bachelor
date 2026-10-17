@@ -1,0 +1,463 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 10 : Sauvegarder et restaurer | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Une sauvegarde ne vaut que par la restauration qu'elle permet. Cette séance explique contre quoi on se protège, pourquoi un snapshot n'est pas une sauvegarde, comment combiner sauvegardes complètes et">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d'Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="../tp/tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="../tp/tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="../tp/tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="../tp/tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="../tp/tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d'un outil</span></a><a class="nav-tp" href="../tp/tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="../tp/tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="../tp/tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d'astreinte</span></a><a class="nav-tp" href="../tp/tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d'activité</div><div class="nav-item active" data-seance="10"><a class="nav-link" href="s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="../tp/tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d'activité</span></a><a class="nav-tp" href="../tp/tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="../tp/tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module D : Sauvegarde et reprise d'activité</span><span class="sep">›</span><span>Séance 10</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 10</span>
+  <h1>Sauvegarder et restaurer</h1>
+  <p class="lead">Une sauvegarde ne vaut que par la restauration qu'elle permet. Cette séance explique contre quoi on se protège, pourquoi un snapshot n'est pas une sauvegarde, comment combiner sauvegardes complètes et incrémentales, la règle 3-2-1-1-0, la cohérence des données d'une base, la conservation, et le fonctionnement de Proxmox Backup Server. Le TP sauvegarde Hexalog à plusieurs niveaux, supervise les sauvegardes et prouve qu'on sait restaurer, en mesurant le temps que cela prend.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 1 (Proxmox), 7 et 8 (maintenance, incidents) ; BLOC 1 (snapshots)</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp10-sauvegarde.html" data-seance="10">TP 10 : Sauvegarder Hexalog et prouver la restauration</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#menaces">1. Contre quoi sauvegarde-t-on ?</a></li><li><a href="#snapshot">2. Snapshot, réplication, sauvegarde</a></li><li><a href="#types">3. Les types de sauvegarde</a></li><li><a href="#regle">4. La règle 3-2-1-1-0</a></li><li><a href="#coherence">5. La cohérence des données</a></li><li><a href="#conservation">6. La conservation</a></li><li><a href="#pbs">7. Proxmox Backup Server</a></li><li><a href="#restaurer">8. Restaurer, et le prouver</a></li><li><a href="#superviser">9. Superviser les sauvegardes</a></li><li><a href="#à-retenir">10. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Identifier les menaces contre lesquelles on sauvegarde, et ce qu’il faut sauvegarder pour chaque service.</li>
+<li>Distinguer snapshot, réplication et sauvegarde ; sauvegardes complète, différentielle, incrémentale.</li>
+<li>Appliquer la règle 3-2-1-1-0 et une politique de conservation.</li>
+<li>Garantir la cohérence des données : système de fichiers figé, sauvegarde applicative d’une base.</li>
+<li>Utiliser Proxmox Backup Server : sauvegarde, restauration de fichiers, restauration complète.</li>
+<li>Superviser les sauvegardes et organiser des tests de restauration réguliers.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>45 min</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>3 h</td>
+<td><a data-seance="10" href="../tp/tp10-sauvegarde.html">TP 10 : Sauvegarder Hexalog et prouver la restauration</a></td>
+</tr>
+<tr class="odd">
+<td>15 min</td>
+<td>Quiz</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="menaces">1. Contre quoi sauvegarde-t-on ?</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Menace</th>
+<th>Exemple</th>
+<th>Ce qui protège</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Erreur humaine</td>
+<td>un fichier supprimé, une table vidée par une mauvaise requête</td>
+<td>une sauvegarde récente, restaurable finement (un fichier, une table)</td>
+</tr>
+<tr class="even">
+<td>Panne matérielle</td>
+<td>disque, contrôleur, serveur entier</td>
+<td>redondance (RAID, grappe) <strong>et</strong> sauvegarde sur un autre matériel</td>
+</tr>
+<tr class="odd">
+<td>Défaut logiciel</td>
+<td>une mise à jour qui corrompt la base</td>
+<td>une sauvegarde antérieure au changement</td>
+</tr>
+<tr class="even">
+<td><strong>Rançongiciel</strong></td>
+<td>toutes les données chiffrées, les sauvegardes accessibles chiffrées ou supprimées aussi</td>
+<td>une copie <strong>hors ligne</strong> ou <strong>immuable</strong>, que l’attaquant ne peut pas atteindre</td>
+</tr>
+<tr class="odd">
+<td>Sinistre</td>
+<td>incendie, inondation, vol du serveur</td>
+<td>une copie <strong>hors site</strong></td>
+</tr>
+<tr class="even">
+<td>Litige, obligation légale</td>
+<td>retrouver une facture d’il y a trois ans</td>
+<td>une conservation longue (archivage)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>La redondance n'est pas une sauvegarde</strong></p>
+<p>Un RAID 1 copie instantanément sur le second disque… y compris la suppression d’un fichier ou le chiffrement par un rançongiciel. La redondance protège contre la <strong>panne</strong> ; seule une sauvegarde, copie <strong>indépendante et datée</strong>, permet de <strong>revenir en arrière</strong>.</p>
+</div></div>
+<h2 id="snapshot">2. Snapshot, réplication, sauvegarde</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th></th>
+<th>Snapshot</th>
+<th>Réplication</th>
+<th>Sauvegarde</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Principe</td>
+<td>un point de retour, sur le <strong>même stockage</strong> que la VM</td>
+<td>une copie tenue à jour en continu sur un autre serveur</td>
+<td>une copie <strong>indépendante</strong>, datée, sur un <strong>autre stockage</strong></td>
+</tr>
+<tr class="even">
+<td>Si le stockage est perdu</td>
+<td>perdu avec lui</td>
+<td>la copie reste</td>
+<td>la copie reste</td>
+</tr>
+<tr class="odd">
+<td>Si une erreur est commise</td>
+<td>on revient au snapshot (s’il est récent)</td>
+<td>l’erreur est <strong>répliquée</strong> aussitôt</td>
+<td>on restaure une version antérieure</td>
+</tr>
+<tr class="even">
+<td>Durée de vie</td>
+<td>courte : le temps d’une intervention (il ralentit la VM et grossit)</td>
+<td>permanente</td>
+<td>selon la politique de conservation</td>
+</tr>
+<tr class="odd">
+<td>Usage</td>
+<td>retour arrière d’un changement (séance 7)</td>
+<td>reprise rapide (haute disponibilité)</td>
+<td><strong>restauration</strong> après tout type de perte</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="types">3. Les types de sauvegarde</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Contenu</th>
+<th>Sauvegarde</th>
+<th>Restauration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Complète</strong></td>
+<td>tout</td>
+<td>longue, volumineuse</td>
+<td>simple : une seule sauvegarde</td>
+</tr>
+<tr class="even">
+<td><strong>Différentielle</strong></td>
+<td>ce qui a changé depuis la <strong>dernière complète</strong></td>
+<td>de plus en plus longue au fil des jours</td>
+<td>la complète + la dernière différentielle</td>
+</tr>
+<tr class="odd">
+<td><strong>Incrémentale</strong></td>
+<td>ce qui a changé depuis la <strong>dernière sauvegarde</strong>, quelle qu’elle soit</td>
+<td>courte</td>
+<td>la complète + <strong>toutes</strong> les incrémentales depuis</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les outils récents (Proxmox Backup Server, Veeam, restic, BorgBackup) combinent les avantages : chaque sauvegarde n’envoie que ce qui a changé (<strong>incrémentale permanente</strong>), mais elle est stockée comme une sauvegarde complète grâce à la <strong>déduplication</strong> : les données sont découpées en blocs (<em>chunks</em>), identifiés par leur empreinte ; un bloc déjà présent n’est jamais stocké deux fois. Chaque sauvegarde se restaure seule, et dix VM clonées du même modèle ne prennent guère plus de place qu’une.</p>
+<h2 id="regle">4. La règle 3-2-1-1-0</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Chiffre</th>
+<th>Règle</th>
+<th>Chez Hexalog (lab)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>3</strong></td>
+<td>trois exemplaires des données : l’original et deux copies</td>
+<td>la VM, sa sauvegarde dans Proxmox Backup Server, la copie des sauvegardes de la base sur une autre VM</td>
+</tr>
+<tr class="even">
+<td><strong>2</strong></td>
+<td>sur deux supports ou systèmes différents</td>
+<td>le stockage de Proxmox et celui de Proxmox Backup Server</td>
+</tr>
+<tr class="odd">
+<td><strong>1</strong></td>
+<td>une copie <strong>hors site</strong></td>
+<td>(absente du lab : synchronisation vers un second serveur de sauvegarde, dans un autre bâtiment ou chez un prestataire)</td>
+</tr>
+<tr class="even">
+<td><strong>1</strong></td>
+<td>une copie <strong>hors ligne</strong> (déconnectée) ou <strong>immuable</strong> (impossible à modifier ou supprimer pendant une durée)</td>
+<td>(absente du lab : bande, disque déconnecté, stockage objet avec verrouillage)</td>
+</tr>
+<tr class="odd">
+<td><strong>0</strong></td>
+<td>zéro erreur : les sauvegardes sont <strong>vérifiées</strong> et les restaurations <strong>testées</strong></td>
+<td>vérification des sauvegardes, tests de restauration du TP</td>
+</tr>
+</tbody>
+</table></div>
+<p>L’ANSSI insiste, dans ses guides sur la sauvegarde et sur les rançongiciels, sur les <strong>sauvegardes déconnectées</strong> : un attaquant qui obtient les droits d’administration cherche d’abord les sauvegardes, pour les détruire avant de chiffrer.</p>
+<h2 id="coherence">5. La cohérence des données</h2>
+<p>Sauvegarder une VM pendant qu’elle travaille, c’est photographier un système en mouvement.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Niveau</th>
+<th>Ce qu’on obtient</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cohérence « après coupure » (<em>crash-consistent</em>)</td>
+<td>l’état d’une machine dont on aurait coupé le courant : le système redémarre, mais une base peut avoir des transactions à moitié écrites</td>
+<td>une copie des disques sans précaution</td>
+</tr>
+<tr class="even">
+<td>Cohérence du système de fichiers</td>
+<td>les écritures en attente sont terminées, les systèmes de fichiers figés pendant l’instant de la copie</td>
+<td>l’<strong>agent invité QEMU</strong> : Proxmox lui demande <code>fs-freeze</code> avant la sauvegarde et <code>fs-thaw</code> après</td>
+</tr>
+<tr class="odd">
+<td><strong>Cohérence applicative</strong></td>
+<td>une image exacte de la base à un instant, transactions comprises</td>
+<td>un outil de la base : <code>mariadb-dump --single-transaction</code> ; pour Active Directory, la sauvegarde de l’<strong>état du système</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Pour une base de données, on combine les deux : la VM est sauvegardée entière (pour tout reconstruire), et la base est <strong>exportée</strong> régulièrement par son propre outil (pour restaurer finement une table, et pour une cohérence garantie). L’export est plus fréquent que la sauvegarde de la VM : c’est lui qui fixe la perte de données maximale (séance 11).</p>
+<h3 id="que-sauvegarder-pour-chaque-service">Que sauvegarder pour chaque service ?</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Service</th>
+<th>Ce qui compte</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intranet (srv-lnx-01)</td>
+<td>la base <code>intranet</code> (export), <code>/var/www/intranet</code>, la configuration nginx et PHP</td>
+</tr>
+<tr class="even">
+<td>GLPI (srv-lnx-02)</td>
+<td>la base <code>glpi</code>, <code>/etc/glpi</code> (dont la clé de chiffrement <code>glpicrypt.key</code>), <code>/var/lib/glpi/files</code> (documents joints)</td>
+</tr>
+<tr class="odd">
+<td>Zabbix (sup-lnx-01)</td>
+<td>la base <code>zabbix</code> : la configuration est précieuse, l’historique beaucoup moins (et très volumineux)</td>
+</tr>
+<tr class="even">
+<td>Active Directory (srv-win-01)</td>
+<td>l’état du système ; au moins deux contrôleurs de domaine en production</td>
+</tr>
+<tr class="odd">
+<td>Toutes</td>
+<td><code>/etc</code>, les scripts maison, la documentation d’exploitation, <strong>et les procédures de restauration elles-mêmes</strong>, consultables même si tout est arrêté</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="conservation">6. La conservation</h2>
+<p>Garder toutes les sauvegardes coûte cher ; n’en garder qu’une est dangereux (une corruption découverte trois jours plus tard a déjà atteint la seule sauvegarde). On applique une rotation de type <strong>GFS</strong> (<em>grand-père, père, fils</em>) :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Règle (Proxmox)</th>
+<th>Sens</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>keep-last</code></td>
+<td>les N dernières</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td><code>keep-daily</code></td>
+<td>une par jour, sur N jours</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td><code>keep-weekly</code></td>
+<td>une par semaine, sur N semaines</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td><code>keep-monthly</code></td>
+<td>une par mois, sur N mois</td>
+<td>6</td>
+</tr>
+</tbody>
+</table></div>
+<p>Avec ces valeurs, on peut revenir à hier, à la semaine dernière ou à il y a cinq mois, avec une vingtaine de sauvegardes seulement. L’opération qui applique ces règles s’appelle <strong>élagage</strong> (<em>prune</em>) ; dans Proxmox Backup Server, le <strong>ramasse-miettes</strong> (<em>garbage collection</em>) libère ensuite les blocs qui ne servent plus à aucune sauvegarde.</p>
+<h2 id="pbs">7. Proxmox Backup Server</h2>
+<p><strong>Proxmox Backup Server</strong> (PBS) est le serveur de sauvegarde de l’éditeur de Proxmox VE, libre lui aussi.</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-593204" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1325.84375px;" viewBox="0 0 1325.84375 332.3120422363281" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-593204{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-593204 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-593204 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-593204 .error-icon{fill:#f5f6f8;}#mmd0-593204 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-593204 .edge-thickness-normal{stroke-width:1px;}#mmd0-593204 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-593204 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-593204 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-593204 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-593204 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-593204 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-593204 .marker.cross{stroke:#4a5563;}#mmd0-593204 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-593204 p{margin:0;}#mmd0-593204 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-593204 .cluster-label text{fill:#1f3a5f;}#mmd0-593204 .cluster-label span{color:#1f3a5f;}#mmd0-593204 .cluster-label span p{background-color:transparent;}#mmd0-593204 .label text,#mmd0-593204 span{fill:#1d2530;color:#1d2530;}#mmd0-593204 .node rect,#mmd0-593204 .node circle,#mmd0-593204 .node ellipse,#mmd0-593204 .node polygon,#mmd0-593204 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-593204 .rough-node .label text,#mmd0-593204 .node .label text,#mmd0-593204 .image-shape .label,#mmd0-593204 .icon-shape .label{text-anchor:middle;}#mmd0-593204 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-593204 .rough-node .label,#mmd0-593204 .node .label,#mmd0-593204 .image-shape .label,#mmd0-593204 .icon-shape .label{text-align:center;}#mmd0-593204 .node.clickable{cursor:pointer;}#mmd0-593204 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-593204 .arrowheadPath{fill:#000000;}#mmd0-593204 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-593204 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-593204 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-593204 .edgeLabel p{background-color:#ffffff;}#mmd0-593204 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-593204 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-593204 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-593204 .cluster text{fill:#1f3a5f;}#mmd0-593204 .cluster span{color:#1f3a5f;}#mmd0-593204 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-593204 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-593204 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-593204 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-593204 rect.text{fill:none;stroke-width:0;}#mmd0-593204 .icon-shape,#mmd0-593204 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-593204 .icon-shape p,#mmd0-593204 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-593204 .icon-shape .label rect,#mmd0-593204 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-593204 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-593204 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-593204 .node .neo-node{stroke:#1f3a5f;}#mmd0-593204 [data-look="neo"].node rect,#mmd0-593204 [data-look="neo"].cluster rect,#mmd0-593204 [data-look="neo"].node polygon{stroke:url(#mmd0-593204-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-593204 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-593204 [data-look="neo"].node path{stroke:url(#mmd0-593204-gradient);stroke-width:1px;}#mmd0-593204 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-593204 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-593204 [data-look="neo"].node circle{stroke:url(#mmd0-593204-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-593204 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-593204 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-593204-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-593204 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-593204-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-593204 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-593204_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-593204_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-593204_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-593204_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-593204_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-593204_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-593204_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-593204_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-593204_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-593204_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-593204_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-593204_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-593204-PBS" data-look="classic"><rect style="" x="783.59375" y="8" width="534.25" height="191.20069885253906"></rect><g class="cluster-label " transform="translate(975.2421875, 8)"><foreignObject width="150.953125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Proxmox Backup Server</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-593204-PVE" data-look="classic"><rect style="" x="8" y="24.733566284179688" width="559.8125" height="161"></rect><g class="cluster-label " transform="translate(222.546875, 24.733566284179688)"><foreignObject width="130.71875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Serveur Proxmox VE</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M175.359,105.234L255.992,105.234L332.625,105.234" id="mmd0-593204-L_VM_Q_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_VM_Q_0" data-points="W3sieCI6MTc1LjM1OTM3NSwieSI6MTA1LjIzMzU2NjI4NDE3OTY5fSx7IngiOjI1NS45OTIxODc1LCJ5IjoxMDUuMjMzNTY2Mjg0MTc5Njl9LHsieCI6MzM2LjYyNSwieSI6MTA1LjIzMzU2NjI4NDE3OTY5fV0=" data-look="classic" marker-end="url(#mmd0-593204_flowchart-v2-pointEnd)"></path><path d="M542.813,105.234L567.813,105.234L675.703,105.234L783.594,105.234L804.594,105.234" id="mmd0-593204-L_Q_DS_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_Q_DS_0" data-points="W3sieCI6NTQyLjgxMjUsInkiOjEwNS4yMzM1NjYyODQxNzk2OX0seyJ4Ijo1NjcuODEyNSwieSI6MTA1LjIzMzU2NjI4NDE3OTY5fSx7IngiOjY3NS43MDMxMjUsInkiOjEwNS4yMzM1NjYyODQxNzk2OX0seyJ4Ijo3ODMuNTkzNzUsInkiOjEwNS4yMzM1NjYyODQxNzk2OX0seyJ4Ijo4MDguNTkzNzUsInkiOjEwNS4yMzM1NjYyODQxNzk2OX1d" data-look="classic" marker-end="url(#mmd0-593204_flowchart-v2-pointEnd)"></path><path d="M958.797,97.534L1032.438,89.984L1106.078,89.984" id="mmd0-593204-L_DS_J_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_DS_J_0" data-points="W3sieCI6OTU4Ljc5Njg3NSwieSI6OTcuNTMzNjczOTU3OTAyMDV9LHsieCI6MTAzMi40Mzc1LCJ5Ijo4OS45ODM1NjYyODQxNzk2OX0seyJ4IjoxMTA2LjA3ODEyNSwieSI6ODkuOTgzNTY2Mjg0MTc5Njl9XQ==" data-look="classic"></path><path d="M958.797,121.256L1032.438,136.967L1144.422,243.451" id="mmd0-593204-L_DS_R_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_DS_R_0" data-points="W3sieCI6OTU4Ljc5Njg3NSwieSI6MTIxLjI1NjE5MjA4ODU3MTd9LHsieCI6MTAzMi40Mzc1LCJ5IjoxMzYuOTY3MTMyNTY4MzU5Mzh9LHsieCI6MTE0Ny4zMjAzMTI1LCJ5IjoyNDYuMjA3NjEwMzkzMDQ4ODR9XQ==" data-look="classic" marker-end="url(#mmd0-593204_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(255.9921875, 105.23356628417969)"><g class="label" data-id="L_VM_Q_0" transform="translate(-55.6328125, -10.5)"><foreignObject width="111.265625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>fs-freeze / fs-thaw</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(675.703125, 105.23356628417969)"><g class="label" data-id="L_Q_DS_0" transform="translate(-82.890625, -21)"><foreignObject width="165.78125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>HTTPS 8007<br>blocs nouveaux seulement</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_DS_J_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(1032.4375, 136.96713256835938)"><g class="label" data-id="L_DS_R_0" transform="translate(-48.640625, -10.5)"><foreignObject width="97.28125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>synchronisation</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-593204-flowchart-VM-0" data-look="classic" transform="translate(104.1796875, 105.23356628417969)"><rect class="basic label-container" style="" x="-71.1796875" y="-35" width="142.359375" height="70"></rect><g class="label" style="" transform="translate(-43.1796875, -21)"><rect></rect><foreignObject width="86.359375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>VM srv-lnx-01<br>agent invité</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-593204-flowchart-Q-1" data-look="classic" transform="translate(439.71875, 105.23356628417969)"><rect class="basic label-container" style="" x="-103.09375" y="-45.5" width="206.1875" height="91"></rect><g class="label" style="" transform="translate(-75.09375, -31.5)"><rect></rect><foreignObject width="150.1875" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>QEMU<br>carte des blocs modifiés<br>(dirty bitmap)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-593204-flowchart-DS-2" data-look="classic" transform="translate(883.6953125, 105.23356628417969)"><path d="M0,13.644751036166468 a75.1015625,13.644751036166468 0,0,0 150.203125,0 a75.1015625,13.644751036166468 0,0,0 -150.203125,0 l0,90.64475103616647 a75.1015625,13.644751036166468 0,0,0 150.203125,0 l0,-90.64475103616647" class="basic label-container outer-path" style="" label-offset-y="13.644751036166468" transform="translate(-75.1015625, -58.9671265542497)"></path><g class="label" style="" transform="translate(-68.1015625, -22.166666666666664)"><rect></rect><foreignObject width="136.203125" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Datastore<br>blocs dédupliqués,<br>espace de noms etuN</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-593204-flowchart-J-3" data-look="classic" transform="translate(1199.4609375, 89.98356628417969)"><rect class="basic label-container" style="" x="-93.3828125" y="-35" width="186.765625" height="70"></rect><g class="label" style="" transform="translate(-65.3828125, -21)"><rect></rect><foreignObject width="130.765625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Vérification, élagage,<br>ramasse-miettes</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-593204-flowchart-R-4" data-look="classic" transform="translate(1199.4609375, 279.25637435913086)"><path d="M0,11.37045113806733 a52.140625,11.37045113806733 0,0,0 104.28125,0 a52.140625,11.37045113806733 0,0,0 -104.28125,0 l0,67.37045113806732 a52.140625,11.37045113806733 0,0,0 104.28125,0 l0,-67.37045113806732" class="basic label-container outer-path" style="" label-offset-y="11.37045113806733" transform="translate(-52.140625, -45.05567670710099)"></path><g class="label" style="" transform="translate(-45.140625, -11.666666666666666)"><rect></rect><foreignObject width="90.28125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>PBS distant<br>copie hors site</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-593204-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-593204-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-593204-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Fonction</th>
+<th>Intérêt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Déduplication par blocs</td>
+<td>chaque sauvegarde est complète, mais ne stocke que ce qui est nouveau</td>
+</tr>
+<tr class="even">
+<td><strong>Carte des blocs modifiés</strong> (<em>dirty bitmap</em>)</td>
+<td>tant que la VM n’a pas été arrêtée, QEMU sait quels blocs ont changé depuis la dernière sauvegarde : la suivante ne lit que ceux-là (quelques secondes au lieu de minutes)</td>
+</tr>
+<tr class="odd">
+<td>Vérification</td>
+<td>relecture des blocs pour détecter une corruption du stockage</td>
+</tr>
+<tr class="even">
+<td>Restauration de fichiers</td>
+<td>parcourir une sauvegarde de VM et récupérer un seul fichier, sans restaurer la VM</td>
+</tr>
+<tr class="odd">
+<td>Restauration complète, restauration « en direct »</td>
+<td>recréer la VM ; ou la démarrer pendant que la restauration se poursuit</td>
+</tr>
+<tr class="even">
+<td>Espaces de noms, droits</td>
+<td>un même datastore partagé entre plusieurs équipes (ici, un espace par étudiant)</td>
+</tr>
+<tr class="odd">
+<td>Chiffrement côté client, synchronisation vers un autre PBS</td>
+<td>confidentialité ; copie hors site</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dans le lab, chaque étudiant voit un stockage <code>pbs-etuN</code>, rangé dans son espace de noms sur le serveur de sauvegarde de la salle.</p>
+<h2 id="restaurer">8. Restaurer, et le prouver</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Restauration</th>
+<th>Exemple</th>
+<th>Outil</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D’un fichier</td>
+<td><code>index.php</code> supprimé par erreur</td>
+<td>restauration de fichiers de PBS</td>
+</tr>
+<tr class="even">
+<td>D’une base ou d’une table</td>
+<td>une requête a vidé une table</td>
+<td>l’export de la base</td>
+</tr>
+<tr class="odd">
+<td>D’une VM complète</td>
+<td>disque corrompu, VM détruite</td>
+<td>restauration PBS, sur le même numéro ou un nouveau</td>
+</tr>
+<tr class="even">
+<td>De tout le service ailleurs</td>
+<td>sinistre du site</td>
+<td>PRA (séance 11)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Une sauvegarde <strong>jamais restaurée</strong> est une hypothèse. Le <strong>test de restauration</strong> se planifie (au moins chaque trimestre, après chaque changement important de l’outil), se fait <strong>à l’écart de la production</strong> (un autre numéro de VM, carte réseau débranchée, pour ne pas créer deux machines avec la même adresse), se <strong>chronomètre</strong> (ce sera la base du RTO réel, séance 11) et se <strong>documente</strong> dans un rapport.</p>
+<h2 id="superviser">9. Superviser les sauvegardes</h2>
+<p>Une sauvegarde qui échoue en silence depuis trois semaines est découverte le jour où l’on en a besoin. On supervise :</p>
+<ul>
+<li><strong>le résultat de chaque tâche</strong> : notifications de Proxmox par courriel, état des tâches ;</li>
+<li><strong>l’âge de la dernière sauvegarde réussie</strong> : un fichier témoin mis à jour en fin de sauvegarde, et un déclencheur Zabbix <code>now()-last(/hôte/vfs.file.time[témoin])&gt;…</code> ;</li>
+<li><strong>la taille</strong> : une sauvegarde soudain beaucoup plus grosse (tout a changé : chiffrement par un rançongiciel ?) ou beaucoup plus petite (un dossier n’est plus sauvegardé) ;</li>
+<li><strong>l’espace libre</strong> du stockage de sauvegarde.</li>
+</ul>
+<h3 id="pousser-ou-tirer">Pousser ou tirer ?</h3>
+<p>Si la machine sauvegardée <strong>pousse</strong> ses copies vers un serveur, elle détient les identifiants de ce serveur : un attaquant qui la compromet peut effacer les copies. Si c’est le serveur de sauvegarde qui vient <strong>tirer</strong> les copies, avec un accès en <strong>lecture seule</strong>, la machine compromise ne peut rien contre elles. Le TP met en place une copie tirée.</p>
+<h2 id="à-retenir">10. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Sauvegarder contre l’erreur humaine, la panne, le défaut logiciel, le rançongiciel, le sinistre ; la redondance n’est pas une sauvegarde.</li>
+<li>Snapshot : même stockage, court terme ; réplication : copie l’erreur ; sauvegarde : copie indépendante et datée.</li>
+<li>Complète, différentielle, incrémentale ; incrémentale permanente + déduplication.</li>
+<li>3-2-1-1-0 : trois exemplaires, deux supports, un hors site, un hors ligne ou immuable, zéro erreur (vérification et tests).</li>
+<li>Cohérence : <code>fs-freeze</code> par l’agent invité ; export applicatif (<code>mariadb-dump --single-transaction</code>) ; état du système pour AD.</li>
+<li>Conservation GFS (<code>keep-last</code>, <code>keep-daily</code>, <code>keep-weekly</code>, <code>keep-monthly</code>), élagage, ramasse-miettes.</li>
+<li>PBS : déduplication, dirty bitmap, vérification, restauration de fichiers, espaces de noms, synchronisation.</li>
+<li>Tester la restauration à l’écart de la production, la chronométrer, la documenter ; superviser l’âge et la taille des sauvegardes ; tirer plutôt que pousser.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Pourquoi un RAID 1 ne remplace-t-il pas une sauvegarde ?</li>
+<li>Citez deux raisons de ne pas garder un snapshot pendant des semaines.</li>
+<li>Une sauvegarde complète le dimanche, incrémentale du lundi au samedi. Le samedi soir, de quoi a-t-on besoin pour restaurer ? Et avec des différentielles ?</li>
+<li>Que signifient les deux « 1 » et le « 0 » de la règle 3-2-1-1-0 ?</li>
+<li>Pourquoi exporter la base avec <code>mariadb-dump --single-transaction</code> alors que la VM entière est déjà sauvegardée ?</li>
+<li>Que fait l’agent invité QEMU pendant une sauvegarde ?</li>
+<li>Pourquoi la deuxième sauvegarde d’une VM dans PBS est-elle beaucoup plus rapide que la première ? Que se passe-t-il si la VM a été arrêtée entre les deux ?</li>
+<li>Pour GLPI, quels éléments faut-il sauvegarder, en plus de la base ?</li>
+<li>Comment tester la restauration complète de srv-lnx-01 sans perturber la production ?</li>
+<li>Pourquoi est-il plus sûr que le serveur de sauvegarde « tire » les copies plutôt que la machine les « pousse » ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Il recopie instantanément toutes les modifications, y compris les suppressions, les corruptions et le chiffrement : il protège de la panne d’un disque, pas du retour en arrière.</li>
+<li>Il est sur le même stockage (perdu avec lui) ; il grossit et ralentit la VM ; il donne une fausse impression de sécurité.</li>
+<li>La complète du dimanche et les six incrémentales du lundi au samedi. Avec des différentielles : la complète et la seule différentielle du samedi.</li>
+<li>Un exemplaire hors site ; un exemplaire hors ligne ou immuable ; zéro erreur lors des vérifications et des tests de restauration.</li>
+<li>Pour une cohérence applicative garantie (transactions comprises), pour restaurer finement une table sans restaurer toute la VM, et pour pouvoir exporter plus souvent que la VM n’est sauvegardée.</li>
+<li>Sur demande de Proxmox, il fige les systèmes de fichiers (<code>fs-freeze</code>) pendant l’instant de la copie, puis les libère (<code>fs-thaw</code>) : les écritures en cours sont terminées.</li>
+<li>QEMU tient la carte des blocs modifiés depuis la dernière sauvegarde : seuls ces blocs sont lus et envoyés. Si la VM a été arrêtée, la carte est perdue : tout le disque est relu (mais seuls les blocs nouveaux sont stockés grâce à la déduplication).</li>
+<li><code>/etc/glpi</code> (configuration et clé de chiffrement) et <code>/var/lib/glpi/files</code> (documents joints).</li>
+<li>Restaurer sur un autre numéro de VM, carte réseau débranchée (déconnectée) avant le premier démarrage, vérifier les données par la console, chronométrer, puis supprimer la VM de test.</li>
+<li>La machine sauvegardée n’a alors aucun identifiant du serveur de sauvegarde : si elle est compromise, l’attaquant ne peut pas effacer les copies, auxquelles le serveur accède en lecture seule.</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp09-astreinte.html" data-seance="9"><span class="dir">‹ Page précédente</span><span class="titre">TP 9 : Une matinée d'astreinte chez Hexalog</span></a><a class="next" href="../tp/tp10-sauvegarde.html" data-seance="10"><span class="dir">Page suivante ›</span><span class="titre">TP 10 : Sauvegarder Hexalog et prouver la restauration</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>

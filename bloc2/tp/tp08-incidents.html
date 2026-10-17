@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 8 : Mettre en place GLPI et traiter des incidents | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous créez srv-lnx-02, vous y installez GLPI 11, vous organisez le centre de services d&#x27;Hexalog (groupes, techniciens, demandeurs, catégories, priorités, délais), puis vous traitez une série de demand">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item active" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp active" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Maintenance et incidents</span><span class="sep">›</span><a href="../cours/s08-incidents.html" data-seance="8">Séance 8</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 8</span>
+  <h1>TP 8 : Mettre en place GLPI et traiter des incidents</h1>
+  <p class="lead">Vous créez srv-lnx-02, vous y installez GLPI 11, vous organisez le centre de services d'Hexalog (groupes, techniciens, demandeurs, catégories, priorités, délais), puis vous traitez une série de demandes comme le ferait le support : enregistrer, qualifier, attribuer, escalader, résoudre, relier, capitaliser. Pour finir, Zabbix ouvre lui-même les tickets des pannes graves.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>srv-lnx-02 (créée dans ce TP), srv-lnx-01, sup-lnx-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s08-incidents.html" data-seance="8">Séance 8 : Gestion des incidents</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-créer-et-superviser-srv-lnx-02-25-min">Partie A. Créer et superviser srv-lnx-02 (25 min)</a></li><li><a href="#partie-b.-installer-glpi-45-min">Partie B. Installer GLPI (45 min)</a></li><li><a href="#partie-c.-organiser-le-centre-de-services-35-min">Partie C. Organiser le centre de services (35 min)</a></li><li><a href="#partie-d.-une-matinée-au-centre-de-services-45-min">Partie D. Une matinée au centre de services (45 min)</a></li><li><a href="#partie-e.-zabbix-ouvre-les-tickets-35-min-recommandé">Partie E. Zabbix ouvre les tickets (35 min, recommandé)</a></li><li><a href="#partie-f.-les-indicateurs-facultatif-10-min">Partie F. Les indicateurs (facultatif, 10 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Chez Hexalog, les demandes arrivent par téléphone, par courriel, dans le couloir ; certaines se perdent, personne ne sait combien de temps prend une réparation. La direction décide d’un <strong>point de contact unique</strong> et d’un outil de tickets : GLPI.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p><strong>Socle</strong> : parties A à D. <strong>Recommandé</strong> : partie E (Zabbix ouvre les tickets). <strong>Facultatif</strong> : C.4 (délais), partie F et « Pour aller plus loin ».</p>
+<p>Dans les commandes, remplacez <code>3</code> par votre numéro N dans les <code>sed</code>, et <code>N</code> par votre numéro dans les adresses.</p>
+</div></div>
+<h2 id="partie-a.-créer-et-superviser-srv-lnx-02-25-min">Partie A. Créer et superviser srv-lnx-02 (25 min)</h2>
+<h3 id="a.1-la-vm">A.1, La VM</h3>
+<p>Comme au TP 1 : clic droit sur <code>9000 (TPL-DEB13)</code> → <strong>Cloner</strong> : ID <code>N21</code>, nom <code>srv-lnx-02</code>, <strong>clone lié</strong>, pool <code>etuN</code>. Puis :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Réglage</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mémoire, processeurs</td>
+<td><code>1536</code> Mio, 1 cœur</td>
+</tr>
+<tr class="even">
+<td>Disque</td>
+<td>redimensionner : incrément de <code>2</code> Gio (12 Gio)</td>
+</tr>
+<tr class="odd">
+<td>Carte réseau</td>
+<td>pont <code>hexaN</code>, VirtIO, sans pare-feu</td>
+</tr>
+<tr class="even">
+<td>Cloud-Init</td>
+<td><code>sysadmin</code>, mot de passe de lab, domaine <code>hexalog.local</code>, DNS <code>10.20.N.10 DNS-SECOURS</code>, votre clé publique, adresse <code>10.20.N.21/24</code>, passerelle <code>10.20.N.1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Régénérer l’image</strong>, démarrer, puis depuis votre PC : <code>ssh srv-lnx-02 hostname</code> (le bloc <code>Host srv-lnx-02</code> est déjà dans votre fichier <code>config</code>, page <a href="../lab.html">Le lab Proxmox d’Hexalog</a>). Attendez la fin de cloud-init : <code>ssh srv-lnx-02 cloud-init status --wait</code>.</p>
+<h3 id="a.2-la-supervision-et-les-journaux-dès-la-naissance">A.2, La supervision et les journaux, dès la naissance</h3>
+<p>Une machine qui entre en production entre aussi dans la supervision et dans la centralisation des journaux, <strong>le jour même</strong>.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-02 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> zabbix-agent2 rsyslog</span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/zabbix/zabbix_agent2.d/hexalog.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="st"># Hexalog : serveur Zabbix autorisé, et nom de l'hôte dans Zabbix</span></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="st">Server=10.20.N.40</span></span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="st">ServerActive=10.20.N.40</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a><span class="st">Hostname=srv-lnx-02</span></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb1-8"><a aria-hidden="true" href="#cb1-8" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/rsyslog.d/90-vers-sup-lnx-01.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb1-9"><a aria-hidden="true" href="#cb1-9" tabindex="-1"></a><span class="st"># Hexalog : copie de tous les journaux vers le serveur central</span></span>
+<span id="cb1-10"><a aria-hidden="true" href="#cb1-10" tabindex="-1"></a><span class="st">action(type="omfwd" target="10.20.N.40" port="514" protocol="tcp"</span></span>
+<span id="cb1-11"><a aria-hidden="true" href="#cb1-11" tabindex="-1"></a><span class="st">       queue.type="LinkedList" queue.filename="vers-sup-lnx-01"</span></span>
+<span id="cb1-12"><a aria-hidden="true" href="#cb1-12" tabindex="-1"></a><span class="st">       queue.maxDiskSpace="100m" queue.saveOnShutdown="on"</span></span>
+<span id="cb1-13"><a aria-hidden="true" href="#cb1-13" tabindex="-1"></a><span class="st">       action.resumeRetryCount="-1")</span></span>
+<span id="cb1-14"><a aria-hidden="true" href="#cb1-14" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb1-15"><a aria-hidden="true" href="#cb1-15" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./'</span> /etc/zabbix/zabbix_agent2.d/hexalog.conf /etc/rsyslog.d/90-vers-sup-lnx-01.conf</span>
+<span id="cb1-16"><a aria-hidden="true" href="#cb1-16" tabindex="-1"></a><span class="fu">sudo</span> rsyslogd <span class="at">-N1</span> <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> systemctl restart rsyslog zabbix-agent2</span>
+<span id="cb1-17"><a aria-hidden="true" href="#cb1-17" tabindex="-1"></a><span class="ex">logger</span> <span class="st">"TP8 : srv-lnx-02 entre en service"</span></span></code></pre></div></div>
+<p>Dans Zabbix, créez l’hôte <code>srv-lnx-02</code> (nom visible <code>SRV-LNX-02 GLPI</code>), groupe <code>Hexalog/Linux</code>, modèles <code>Linux by Zabbix agent</code> et <code>ICMP Ping</code>, interface agent <code>10.20.N.21:10050</code>. Vérifiez la pastille ZBX, et l’arrivée du message dans <code>/var/log/hexalog/srv-lnx-02/</code> sur sup-lnx-01.</p>
+<p>Pensez aussi à <strong>Nagios</strong> (fichier <code>hexalog-hotes.cfg</code> du TP 3) : ajoutez l’hôte <code>srv-lnx-02</code> au groupe <code>hexalog-linux</code>, vérifiez avec <code>nagios4 -v</code>, rechargez. Il hérite du service <em>PING</em>.</p>
+<h2 id="partie-b.-installer-glpi-45-min">Partie B. Installer GLPI (45 min)</h2>
+<p>Snapshot <code>08-avant-glpi</code> de srv-lnx-02.</p>
+<h3 id="b.1-apache-php-et-mariadb">B.1, Apache, PHP et MariaDB</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-02 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> apache2 php8.4-fpm mariadb-server</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> php8.4-<span class="dt">{curl</span><span class="op">,</span><span class="dt">gd</span><span class="op">,</span><span class="dt">intl</span><span class="op">,</span><span class="dt">mysql</span><span class="op">,</span><span class="dt">zip</span><span class="op">,</span><span class="dt">bcmath</span><span class="op">,</span><span class="dt">mbstring</span><span class="op">,</span><span class="dt">xml</span><span class="op">,</span><span class="dt">bz2</span><span class="op">,</span><span class="dt">ldap}</span></span></code></pre></div></div>
+<p>La deuxième commande installe les extensions de PHP demandées par GLPI (les accolades sont développées par le shell : <code>php8.4-curl</code>, <code>php8.4-gd</code>…).</p>
+<h3 id="b.2-la-base-de-données">B.2, La base de données</h3>
+<p>Choisissez le mot de passe du compte <code>glpi</code> de la base (ici <code>Glpi-Lab-Mdp!</code>, notez le vôtre) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-02 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> mariadb <span class="op">&lt;&lt;'SQL'</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="st">CREATE DATABASE glpi CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="st">CREATE USER 'glpi'@'localhost' IDENTIFIED BY 'Glpi-Lab-Mdp!';</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="st">GRANT ALL PRIVILEGES ON glpi.* TO 'glpi'@'localhost';</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="st">GRANT SELECT ON mysql.time_zone_name TO 'glpi'@'localhost';</span></span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="op">SQL</span></span>
+<span id="cb3-7"><a aria-hidden="true" href="#cb3-7" tabindex="-1"></a><span class="ex">mariadb-tzinfo-to-sql</span> /usr/share/zoneinfo <span class="kw">|</span> <span class="fu">sudo</span> mariadb mysql</span></code></pre></div></div>
+<p>La dernière commande charge les fuseaux horaires dans MariaDB : GLPI s’en sert pour afficher les dates dans le fuseau de chaque utilisateur.</p>
+<h3 id="b.3-les-fichiers-de-glpi">B.3, Les fichiers de GLPI</h3>
+<p>Vérifiez sur <code>https://github.com/glpi-project/glpi/releases</code> la dernière version 11.0.x et adaptez la première ligne.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-02 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="va">VERSION</span><span class="op">=</span>11.0.8</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSLO</span> https://github.com/glpi-project/glpi/releases/download/<span class="va">$VERSION</span>/glpi-<span class="va">$VERSION</span>.tgz</span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="fu">sudo</span> tar <span class="at">-xzf</span> glpi-<span class="va">$VERSION</span>.tgz <span class="at">-C</span> /var/www/</span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/glpi /var/lib/glpi /var/log/glpi</span>
+<span id="cb4-6"><a aria-hidden="true" href="#cb4-6" tabindex="-1"></a><span class="fu">sudo</span> mv /var/www/glpi/config/<span class="pp">*</span> /etc/glpi/ <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">;</span> <span class="fu">sudo</span> rmdir /var/www/glpi/config</span>
+<span id="cb4-7"><a aria-hidden="true" href="#cb4-7" tabindex="-1"></a><span class="fu">sudo</span> mv /var/www/glpi/files /var/lib/glpi/</span>
+<span id="cb4-8"><a aria-hidden="true" href="#cb4-8" tabindex="-1"></a><span class="fu">sudo</span> chown <span class="at">-R</span> www-data:www-data /var/www/glpi /etc/glpi /var/lib/glpi /var/log/glpi</span></code></pre></div></div>
+<p>On sépare, comme le recommande GLPI, le <strong>code</strong> (<code>/var/www/glpi</code>), la <strong>configuration</strong> (<code>/etc/glpi</code>), les <strong>données</strong> (<code>/var/lib/glpi/files</code> : documents joints, sessions, cache) et les <strong>journaux</strong> (<code>/var/log/glpi</code>). Seul le dossier <code>public</code> sera servi par le serveur web : le reste n’est pas accessible depuis un navigateur. Deux petits fichiers indiquent à GLPI où sont rangées les choses :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-02 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> tee /var/www/glpi/inc/downstream.php <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="st">&lt;?php</span></span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="st">define('GLPI_CONFIG_DIR', '/etc/glpi/');</span></span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="st">if (file_exists(GLPI_CONFIG_DIR . '/local_define.php')) {</span></span>
+<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a><span class="st">    require_once GLPI_CONFIG_DIR . '/local_define.php';</span></span>
+<span id="cb5-6"><a aria-hidden="true" href="#cb5-6" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb5-7"><a aria-hidden="true" href="#cb5-7" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb5-8"><a aria-hidden="true" href="#cb5-8" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/glpi/local_define.php <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb5-9"><a aria-hidden="true" href="#cb5-9" tabindex="-1"></a><span class="st">&lt;?php</span></span>
+<span id="cb5-10"><a aria-hidden="true" href="#cb5-10" tabindex="-1"></a><span class="st">define('GLPI_VAR_DIR', '/var/lib/glpi/files');</span></span>
+<span id="cb5-11"><a aria-hidden="true" href="#cb5-11" tabindex="-1"></a><span class="st">define('GLPI_LOG_DIR', '/var/log/glpi');</span></span>
+<span id="cb5-12"><a aria-hidden="true" href="#cb5-12" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb5-13"><a aria-hidden="true" href="#cb5-13" tabindex="-1"></a><span class="fu">sudo</span> chown www-data:www-data /var/www/glpi/inc/downstream.php /etc/glpi/local_define.php</span>
+<span id="cb5-14"><a aria-hidden="true" href="#cb5-14" tabindex="-1"></a><span class="bu">cd</span> /var/www/glpi <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> <span class="at">-u</span> www-data php bin/console system:check_requirements <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">'REQUIRED|SECURITY'</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> OK</span></code></pre></div></div>
+<p>La dernière commande vérifie les prérequis : il ne doit rester que la ligne <em>Security configuration for sessions</em> (réglée en B.4), éventuellement marquée <em>SKIPPED</em>.</p>
+<h3 id="b.4-le-site-web">B.4, Le site web</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-02 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/apache2/sites-available/glpi.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="st"># GLPI d'Hexalog : seul le dossier public est servi</span></span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="st">&lt;VirtualHost *:80&gt;</span></span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="st">    ServerName glpi.hexalog.local</span></span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="st">    DocumentRoot /var/www/glpi/public</span></span>
+<span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a aria-hidden="true" href="#cb6-7" tabindex="-1"></a><span class="st">    &lt;Directory /var/www/glpi/public&gt;</span></span>
+<span id="cb6-8"><a aria-hidden="true" href="#cb6-8" tabindex="-1"></a><span class="st">        Require all granted</span></span>
+<span id="cb6-9"><a aria-hidden="true" href="#cb6-9" tabindex="-1"></a><span class="st">        RewriteEngine On</span></span>
+<span id="cb6-10"><a aria-hidden="true" href="#cb6-10" tabindex="-1"></a><span class="st">        # transmettre l'en-tête Authorization à PHP (utilisé par l'API)</span></span>
+<span id="cb6-11"><a aria-hidden="true" href="#cb6-11" tabindex="-1"></a><span class="st">        RewriteCond %{HTTP:Authorization} ^(.+)$</span></span>
+<span id="cb6-12"><a aria-hidden="true" href="#cb6-12" tabindex="-1"></a><span class="st">        RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]</span></span>
+<span id="cb6-13"><a aria-hidden="true" href="#cb6-13" tabindex="-1"></a><span class="st">        # tout ce qui n'est pas un fichier existant passe par le routeur de GLPI</span></span>
+<span id="cb6-14"><a aria-hidden="true" href="#cb6-14" tabindex="-1"></a><span class="st">        RewriteCond %{REQUEST_FILENAME} !-f</span></span>
+<span id="cb6-15"><a aria-hidden="true" href="#cb6-15" tabindex="-1"></a><span class="st">        RewriteRule ^(.*)$ index.php [QSA,L]</span></span>
+<span id="cb6-16"><a aria-hidden="true" href="#cb6-16" tabindex="-1"></a><span class="st">    &lt;/Directory&gt;</span></span>
+<span id="cb6-17"><a aria-hidden="true" href="#cb6-17" tabindex="-1"></a></span>
+<span id="cb6-18"><a aria-hidden="true" href="#cb6-18" tabindex="-1"></a><span class="st">    &lt;FilesMatch \.php$&gt;</span></span>
+<span id="cb6-19"><a aria-hidden="true" href="#cb6-19" tabindex="-1"></a><span class="st">        SetHandler "proxy:unix:/run/php/php8.4-fpm.sock|fcgi://localhost/"</span></span>
+<span id="cb6-20"><a aria-hidden="true" href="#cb6-20" tabindex="-1"></a><span class="st">    &lt;/FilesMatch&gt;</span></span>
+<span id="cb6-21"><a aria-hidden="true" href="#cb6-21" tabindex="-1"></a></span>
+<span id="cb6-22"><a aria-hidden="true" href="#cb6-22" tabindex="-1"></a><span class="st">    ErrorLog ${APACHE_LOG_DIR}/glpi-erreurs.log</span></span>
+<span id="cb6-23"><a aria-hidden="true" href="#cb6-23" tabindex="-1"></a><span class="st">    CustomLog ${APACHE_LOG_DIR}/glpi-acces.log combined</span></span>
+<span id="cb6-24"><a aria-hidden="true" href="#cb6-24" tabindex="-1"></a><span class="st">&lt;/VirtualHost&gt;</span></span>
+<span id="cb6-25"><a aria-hidden="true" href="#cb6-25" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb6-26"><a aria-hidden="true" href="#cb6-26" tabindex="-1"></a><span class="fu">sudo</span> a2enmod rewrite proxy_fcgi setenvif</span>
+<span id="cb6-27"><a aria-hidden="true" href="#cb6-27" tabindex="-1"></a><span class="fu">sudo</span> a2enconf php8.4-fpm</span>
+<span id="cb6-28"><a aria-hidden="true" href="#cb6-28" tabindex="-1"></a><span class="fu">sudo</span> a2dissite 000-default</span>
+<span id="cb6-29"><a aria-hidden="true" href="#cb6-29" tabindex="-1"></a><span class="fu">sudo</span> a2ensite glpi</span>
+<span id="cb6-30"><a aria-hidden="true" href="#cb6-30" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/^session.cookie_httponly =.*/session.cookie_httponly = On/; s/^session.cookie_samesite =.*/session.cookie_samesite = Lax/'</span> /etc/php/8.4/fpm/php.ini</span>
+<span id="cb6-31"><a aria-hidden="true" href="#cb6-31" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-E</span> <span class="st">'^session.cookie_(httponly|samesite)'</span> /etc/php/8.4/fpm/php.ini</span>
+<span id="cb6-32"><a aria-hidden="true" href="#cb6-32" tabindex="-1"></a><span class="fu">sudo</span> apache2ctl configtest</span>
+<span id="cb6-33"><a aria-hidden="true" href="#cb6-33" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart php8.4-fpm apache2</span></code></pre></div></div>
+<p>Résultat attendu : <code>session.cookie_httponly = On</code>, <code>session.cookie_samesite = Lax</code>, <code>Syntax OK</code>. Les deux réglages de PHP empêchent un script malveillant de lire le cookie de session, et le navigateur de l’envoyer depuis un autre site.</p>
+<h3 id="b.5-lassistant-dinstallation">B.5, L’assistant d’installation</h3>
+<p>Depuis votre PC : <code>http://PROXMOX:1N081/</code>.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Étape</th>
+<th>Réglage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Langue</td>
+<td><strong>Français</strong></td>
+</tr>
+<tr class="even">
+<td>Licence</td>
+<td>accepter</td>
+</tr>
+<tr class="odd">
+<td>Installation ou mise à jour</td>
+<td><strong>Installer</strong></td>
+</tr>
+<tr class="even">
+<td>Vérification de la compatibilité</td>
+<td>tout doit être vert ; l’avertissement sur HTTPS est normal dans le lab</td>
+</tr>
+<tr class="odd">
+<td>Connexion à la base</td>
+<td>serveur <code>localhost</code>, utilisateur <code>glpi</code>, son mot de passe</td>
+</tr>
+<tr class="even">
+<td>Base</td>
+<td>sélectionner <code>glpi</code> existante</td>
+</tr>
+<tr class="odd">
+<td>Fin</td>
+<td>l’assistant initialise la base (une minute), puis propose de se connecter</td>
+</tr>
+</tbody>
+</table></div>
+<p>Connectez-vous avec <code>glpi</code> / <code>glpi</code>. Un bandeau signale les <strong>comptes par défaut</strong> (<code>glpi</code>, <code>tech</code>, <code>normal</code>, <code>post-only</code>) et le fichier d’installation encore présent. Corrigez les deux, tout de suite :</p>
+<ol type="1">
+<li><strong>Administration → Utilisateurs</strong> : changez le mot de passe de <code>glpi</code> (mot de passe de lab) ; <strong>désactivez</strong> <code>tech</code>, <code>normal</code> et <code>post-only</code> (case <em>Actif</em> : Non), dont les mots de passe sont connus de tous.</li>
+<li>Supprimez le programme d’installation, qui permettrait de réinstaller GLPI par-dessus vos données :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-02 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> rm /var/www/glpi/install/install.php</span></code></pre></div></div>
+<ol start="3" type="1">
+<li>Dans Zabbix, ajoutez à srv-lnx-02 un <strong>scénario web</strong> <code>GLPI</code> (une étape <code>Accueil</code>, URL <code>http://10.20.N.21/</code>, chaîne requise <code>GLPI</code>, code <code>200</code>) et son déclencheur <code>GLPI : la page d'accueil ne répond pas</code> (Haut), comme au TP 5.</li>
+</ol>
+<h2 id="partie-c.-organiser-le-centre-de-services-35-min">Partie C. Organiser le centre de services (35 min)</h2>
+<h3 id="c.1-les-groupes-et-les-techniciens">C.1, Les groupes et les techniciens</h3>
+<p><strong>Administration → Groupes → Ajouter</strong> : <code>Support N1</code> (le point de contact), puis <code>Exploitation N2</code> (les administrateurs). Dans chaque groupe, laissez cochées les options qui le rendent <em>demandeur</em>, <em>observateur</em> et <em>attribuable</em> pour les tickets.</p>
+<p><strong>Administration → Utilisateurs → Ajouter</strong> :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Identifiant</th>
+<th>Nom, prénom</th>
+<th>Profil (entité racine, récursif)</th>
+<th>Groupe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>n1.martin</code></td>
+<td>Martin, Inès</td>
+<td>Technician</td>
+<td>Support N1</td>
+</tr>
+<tr class="even">
+<td><code>n2.fournier</code></td>
+<td>Fournier, Nicolas</td>
+<td>Technician</td>
+<td>Exploitation N2</td>
+</tr>
+<tr class="odd">
+<td><code>c.dubois</code></td>
+<td>Dubois, Claire</td>
+<td>Self-Service</td>
+<td>(aucun)</td>
+</tr>
+<tr class="even">
+<td><code>e.garcia</code></td>
+<td>Garcia, Emma</td>
+<td>Self-Service</td>
+<td>(aucun)</td>
+</tr>
+<tr class="odd">
+<td><code>k.benali</code></td>
+<td>Benali, Karim</td>
+<td>Self-Service</td>
+<td>(aucun)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Donnez à chacun le mot de passe de lab (onglet <em>Utilisateur</em>, champs <em>Mot de passe</em>) ; le profil et le groupe s’ajoutent dans les onglets <strong>Habilitations</strong> et <strong>Groupes</strong> de l’utilisateur.</p>
+<h3 id="c.2-les-catégories">C.2, Les catégories</h3>
+<p><strong>Configuration → Intitulés → Assistance → Catégories ITIL → Ajouter</strong>, avec le <strong>groupe responsable</strong> de chacune :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Catégorie</th>
+<th>Groupe responsable</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intranet</td>
+<td>Exploitation N2</td>
+</tr>
+<tr class="even">
+<td>Comptes et accès</td>
+<td>Support N1</td>
+</tr>
+<tr class="odd">
+<td>Postes et impression</td>
+<td>Support N1</td>
+</tr>
+<tr class="even">
+<td>Réseau</td>
+<td>Exploitation N2</td>
+</tr>
+<tr class="odd">
+<td>Supervision et alertes</td>
+<td>Exploitation N2</td>
+</tr>
+<tr class="even">
+<td>Sauvegardes</td>
+<td>Exploitation N2</td>
+</tr>
+</tbody>
+</table></div>
+<p>Puis <strong>Administration → Entités</strong> → <em>Entité racine</em> → onglet <strong>Assistance</strong> → <em>Assignation automatique des tickets, changements et problèmes</em> : <strong>Basée sur la catégorie puis sur le matériel</strong>. Un ticket de la catégorie <em>Intranet</em> arrive ainsi directement chez Exploitation N2.</p>
+<h3 id="c.3-la-matrice-de-priorité">C.3, La matrice de priorité</h3>
+<p><strong>Configuration → Générale → Assistance</strong> : retrouvez la <strong>matrice de calcul de la priorité</strong> du cours. Ne la modifiez pas ; vérifiez trois cases de votre choix avec le tableau du cours.</p>
+<h3 id="c.4-des-délais-dengagement-facultatif-15-min">C.4, Des délais d’engagement (facultatif, 15 min)</h3>
+<ol type="1">
+<li><strong>Configuration → Niveaux de services → Ajouter</strong> : <code>Hexalog interne</code>, calendrier <em>Default</em> (jours ouvrés).</li>
+<li>Dans ce niveau de services, onglet <strong>SLA → Ajouter</strong> : <code>Prise en charge 30 min</code> (type <strong>TTO</strong>, durée 30 minutes), puis <code>Rétablissement 4 h</code> (type <strong>TTR</strong>, 4 heures).</li>
+<li><strong>Administration → Règles → Règles métier pour les tickets → Ajouter</strong> : nom <code>SLA des incidents prioritaires</code>, opérateur logique <strong>OU</strong> ; critères <em>Priorité</em> <strong>est</strong> <em>Très haute</em>, <em>Priorité</em> <strong>est</strong> <em>Haute</em> ; actions <em>SLA TTO</em> = <code>Prise en charge 30 min</code>, <em>SLA TTR</em> = <code>Rétablissement 4 h</code>. Activez la règle.</li>
+</ol>
+<h2 id="partie-d.-une-matinée-au-centre-de-services-45-min">Partie D. Une matinée au centre de services (45 min)</h2>
+<p>Vous êtes Inès Martin (<code>n1.martin</code>, support N1), puis Nicolas Fournier (<code>n2.fournier</code>, exploitation N2). Ouvrez GLPI dans <strong>deux navigateurs</strong> (ou une fenêtre de navigation privée) pour être à la fois technicien et utilisateur quand il le faut. Pour chaque situation : créez le ticket, choisissez le <strong>type</strong> (incident ou demande), la <strong>catégorie</strong>, l’<strong>urgence</strong> et l’<strong>impact</strong> (la priorité se calcule), puis faites vivre le ticket jusqu’à sa clôture. Notez dans votre journal de bord la priorité obtenue et votre justification.</p>
+<h3 id="d.1-8-h-52-appel-de-claire-dubois">D.1, 8 h 52, appel de Claire Dubois</h3>
+<blockquote>
+<p>« L’intranet affiche “Base de données indisponible” depuis que je suis arrivée. Les préparateurs ne voient plus les expéditions du jour, les camions partent à 10 h. »</p>
+</blockquote>
+<ol type="1">
+<li>Reproduisez la panne sur votre lab : <code>sudo systemctl stop mariadb</code> sur srv-lnx-01.</li>
+<li>En tant que <code>n1.martin</code> : <strong>Assistance → Créer un ticket</strong>, demandeur <code>c.dubois</code>, source <em>Téléphone</em>, titre court (<em>service, symptôme</em> : <code>Intranet, base de données indisponible</code>), description avec les mots de la demandeuse. Catégorie <em>Intranet</em> : le ticket est attribué automatiquement à Exploitation N2.</li>
+<li>Ajoutez un <strong>suivi</strong> : ce que vous avez vérifié (la page s’affiche, le message d’erreur, un problème Zabbix est-il ouvert ?).</li>
+<li>En tant que <code>n2.fournier</code> : prenez le ticket en charge (bouton <strong>M’associer</strong> de la zone <em>Attribué à</em>, ou ajoutez-vous comme technicien), ajoutez une <strong>tâche</strong> (diagnostic : <code>systemctl status mariadb</code>, journal), rétablissez (<code>sudo systemctl start mariadb</code>), puis saisissez la <strong>solution</strong> (cause et action).</li>
+<li>En tant que <code>c.dubois</code> (navigateur privé, <code>http://PROXMOX:1N081/</code>) : ouvrez le ticket résolu et <strong>approuvez la solution</strong> : le ticket est clos.</li>
+</ol>
+<h3 id="d.2-9-h-05-et-9-h-10-deux-autres-appels">D.2, 9 h 05 et 9 h 10, deux autres appels</h3>
+<p>Emma Garcia, puis Karim Benali, signalent aussi que l’intranet ne marche pas. Créez leurs tickets, puis reliez-les au premier : dans chacun, onglet <strong>Ticket</strong>, <em>Tickets liés</em> → <strong>Duplique</strong> le ticket de D.1. Pourquoi ne pas les traiter un par un ? Quel message auriez-vous envoyé à tous les salariés à 9 h (cours, partie 6) ? Rédigez-le dans le suivi du premier ticket.</p>
+<h3 id="d.3-9-h-30-courriel-de-karim-benali">D.3, 9 h 30, courriel de Karim Benali</h3>
+<blockquote>
+<p>« Bonjour, Léa Fontaine arrive lundi au service RH comme chargée de recrutement. Pouvez-vous lui créer ses accès (session, intranet) ? »</p>
+</blockquote>
+<p>Est-ce un incident ? Créez le ticket du bon type, dans la bonne catégorie, avec une urgence et un impact réalistes. Ajoutez une <strong>tâche</strong> planifiée pour vendredi.</p>
+<h3 id="d.4-10-h-15-par-le-portail">D.4, 10 h 15, par le portail</h3>
+<p>Connectez-vous en tant que <code>e.garcia</code> et créez vous-même un ticket : « L’imprimante de l’entrepôt affiche un bourrage papier, l’autre imprimante fonctionne. » Repassez en <code>n1.martin</code> : retrouvez-le dans la liste, qualifiez-le, résolvez-le (« bourrage retiré, test d’impression réalisé »).</p>
+<h3 id="d.5-11-h-la-troisième-fois-ce-mois-ci">D.5, 11 h, la troisième fois ce mois-ci</h3>
+<p>Le disque de srv-lnx-01 a été plein trois fois ce mois-ci, à cause de fichiers d’exportation oubliés dans <code>/var/tmp</code> (vous l’avez simulé aux TP 5 et 7).</p>
+<ol type="1">
+<li>Créez un <strong>problème</strong> (<strong>Assistance → Problèmes → Ajouter</strong>) : <code>srv-lnx-01, disque plein à répétition</code>. Liez-y le ticket de D.1 (onglet <em>Tickets</em>).</li>
+<li>Dans l’onglet <em>Analyse</em> du problème, remplissez les <strong>causes</strong> avec la méthode des cinq pourquoi, et le <strong>symptôme</strong>. Dans <em>Solution</em>, indiquez la solution de contournement et la correction définitive proposée.</li>
+<li>Rédigez un article de <strong>base de connaissances</strong> (<strong>Outils → Base de connaissances → Ajouter</strong>) : « srv-lnx-01 : le disque est plein, que faire ? », visible des techniciens : comment le constater, quoi supprimer sans risque, qui prévenir.</li>
+</ol>
+<h2 id="partie-e.-zabbix-ouvre-les-tickets-35-min-recommandé">Partie E. Zabbix ouvre les tickets (35 min, recommandé)</h2>
+<p>Les pannes graves doivent arriver dans GLPI sans que personne n’ait à les recopier. On utilise le type de média <strong>GLPi</strong> de Zabbix, qui passe par l’API de GLPI (cours, partie 9).</p>
+<h3 id="e.1-dans-glpi-lapi-un-client-et-un-compte-dédiés">E.1, Dans GLPI : l’API, un client et un compte dédiés</h3>
+<ol type="1">
+<li><strong>Configuration → Générale → API</strong> : <strong>Activer l’API</strong> : Oui → Sauvegarder.</li>
+<li><strong>Configuration → Clients OAuth → Ajouter</strong> : nom <code>Zabbix</code>, <em>Grants</em> : <strong>Password</strong>, <em>Scopes</em> : <strong>api</strong> → Ajouter. Notez l’<strong>identifiant</strong> et le <strong>secret</strong> du client affichés sur la fiche (traitez le secret comme un mot de passe).</li>
+<li><strong>Administration → Profils → Ajouter</strong> : nom <code>Zabbix (API)</code>, <strong>Interface du profil</strong> : <em>Interface standard</em> → Ajouter. Puis onglet <strong>Assistance</strong> du profil : ligne <em>Tickets</em> : <strong>Créer</strong>, <strong>Mettre à jour</strong>, <strong>Voir tous les tickets</strong> ; ligne <em>Suivis</em> : <strong>Ajouter (demandeur)</strong> → Sauvegarder.</li>
+<li><strong>Administration → Utilisateurs → Ajouter</strong> : identifiant <code>zabbix-api</code>, un mot de passe long, profil <code>Zabbix (API)</code> sur l’entité racine (récursif).</li>
+</ol>
+<p>Ce compte ne peut que créer et mettre à jour des tickets : si ses identifiants fuient, l’attaquant ne peut ni lire la configuration, ni administrer GLPI. C’est le moindre privilège appliqué à une intégration.</p>
+<h3 id="e.2-dans-zabbix-le-type-de-média-le-destinataire-laction">E.2, Dans Zabbix : le type de média, le destinataire, l’action</h3>
+<ol type="1">
+<li><strong>Administration → Macros</strong> : ajoutez la macro globale <code>{$ZABBIX.URL}</code> = <code>http://10.20.N.40/zabbix</code> (elle sert à mettre un lien vers le problème dans le ticket).</li>
+<li><strong>Alertes → Types de média</strong> → <strong>GLPi</strong> : renseignez les paramètres, puis cochez <em>Activé</em> → <strong>Actualiser</strong> :</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Paramètre</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>glpi_url</code></td>
+<td><code>http://10.20.N.21</code> (sans chemin)</td>
+</tr>
+<tr class="even">
+<td><code>glpi_legacy_api</code></td>
+<td><code>false</code></td>
+</tr>
+<tr class="odd">
+<td><code>glpi_client_id</code>, <code>glpi_client_secret</code></td>
+<td>les valeurs notées en E.1</td>
+</tr>
+<tr class="even">
+<td><code>glpi_username</code>, <code>glpi_password</code></td>
+<td><code>zabbix-api</code> et son mot de passe</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="3" type="1">
+<li><strong>Utilisateurs → Utilisateurs</strong> → <code>Admin</code> → <strong>Média</strong> → <strong>Ajouter</strong> : type <em>GLPi</em>, envoyer à <code>glpi</code> (n’importe quelle valeur), sévérités <strong>Haut</strong> et <strong>Désastre</strong> seulement.</li>
+<li>Ouvrez l’action <em>Report problems to Zabbix administrators</em> (TP 5) → onglet <strong>Opérations</strong> : modifiez l’opération et choisissez <em>Envoyer uniquement à</em> : <strong>Courriel</strong>. Sinon, elle enverrait aussi vers GLPI, et chaque panne créerait deux tickets.</li>
+<li><strong>Alertes → Actions → Actions de déclencheur → Créer une action</strong> : nom <code>Tickets GLPI</code>, condition <em>Sévérité du déclencheur</em> <strong>est supérieure ou égale à</strong> <em>Haut</em>. Onglet <strong>Opérations</strong> : envoyer à l’utilisateur <code>Admin</code>, <em>uniquement à</em> <strong>GLPi</strong> ; <em>Opérations de récupération</em> et <em>Opérations de mise à jour</em> : <strong>Notifier toutes les personnes concernées</strong> → Ajouter.</li>
+</ol>
+<h3 id="e.3-vérifier">E.3, Vérifier</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop nginx</span></code></pre></div></div>
+<p>En une à deux minutes : problème <em>Nginx: Process is not running</em> dans Zabbix, puis un <strong>nouveau ticket</strong> dans GLPI (<strong>Assistance → Tickets</strong>), avec le nom du problème et une urgence déduite de la sévérité. Dans Zabbix, <strong>acquittez</strong> le problème avec le message « pris en charge par n2.fournier » : un <strong>suivi</strong> apparaît dans le ticket. Redémarrez nginx : le ticket passe à l’état <strong>Résolu</strong>. <strong>Rapports → Journal des actions</strong> montre chaque appel au webhook et son résultat.</p>
+<p>Snapshots <code>08-glpi</code> de srv-lnx-02, sup-lnx-01 et srv-lnx-01.</p>
+<h2 id="partie-f.-les-indicateurs-facultatif-10-min">Partie F. Les indicateurs (facultatif, 10 min)</h2>
+<p><strong>Assistance → Statistiques</strong> → <em>Global</em> : nombre de tickets ouverts, résolus, clos, délais moyens de prise en compte et de résolution sur la journée. Lesquels de ces chiffres présenteriez-vous chaque mois à la directrice ? Lesquels sont faussés par un TP de deux heures ?</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>srv-lnx-02 supervisée par Zabbix (pastille verte, scénario web GLPI) et par Nagios ; ses journaux arrivent sur sup-lnx-01.</label></li>
+<li><label><input type="checkbox"/>GLPI accessible depuis le PC ; mot de passe de <code>glpi</code> changé ; <code>tech</code>, <code>normal</code>, <code>post-only</code> désactivés ; <code>install.php</code> supprimé.</label></li>
+<li><label><input type="checkbox"/>Deux groupes, deux techniciens, trois demandeurs ; six catégories avec groupe responsable ; attribution automatique par catégorie.</label></li>
+<li><label><input type="checkbox"/>Tickets D.1 à D.4 traités jusqu’à la résolution ou la clôture, avec type, catégorie, urgence, impact, suivis et solution ; doublons liés.</label></li>
+<li><label><input type="checkbox"/>Un problème lié à un ticket, avec analyse des causes, et un article de base de connaissances.</label></li>
+<li><label><input type="checkbox"/>(Recommandé) Un arrêt de nginx crée un ticket, l’acquittement ajoute un suivi, le rétablissement le résout.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Pourquoi séparer le code, la configuration, les données et les journaux de GLPI dans quatre dossiers ? Lesquels faudra-t-il sauvegarder (séance 10) ?</li>
+<li>Pourquoi désactiver les comptes <code>tech</code>, <code>normal</code> et <code>post-only</code> plutôt que de seulement changer leur mot de passe ?</li>
+<li>Quelle priorité avez-vous obtenue pour D.1 et D.4 ? Justifiez l’impact et l’urgence choisis.</li>
+<li>En D.2, quel est l’intérêt de relier les tickets plutôt que de les fermer ?</li>
+<li>Le ticket de D.1 est résolu. Le problème de D.5 l’est-il aussi ? Quelle est la différence entre la solution du ticket et celle du problème ?</li>
+<li>Pourquoi l’action <code>Tickets GLPI</code> ne concerne-t-elle que les sévérités Haut et Désastre ? Que se passerait-il avec <em>Avertissement</em> ?</li>
+<li>Quels droits a le compte <code>zabbix-api</code> ? Pourquoi ne pas utiliser le compte <code>glpi</code> ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>curl</code> du fichier <code>.tgz</code> : erreur 404</td>
+<td>numéro de version inexistant : vérifier la page des versions</td>
+</tr>
+<tr class="even">
+<td>La page affiche le code PHP, ou <em>Service Unavailable</em></td>
+<td><code>a2enconf php8.4-fpm</code> oublié, ou PHP-FPM arrêté : <code>systemctl status php8.4-fpm</code></td>
+</tr>
+<tr class="odd">
+<td>Erreur 404 sur toutes les pages sauf l’accueil</td>
+<td>module <code>rewrite</code> non activé, ou <code>DocumentRoot</code> ne pointe pas sur <code>public</code></td>
+</tr>
+<tr class="even">
+<td>L’assistant ne peut pas se connecter à la base</td>
+<td>mot de passe du compte <code>glpi</code> ; serveur <code>localhost</code></td>
+</tr>
+<tr class="odd">
+<td><em>Le répertoire … n’est pas accessible en écriture</em></td>
+<td><code>chown -R www-data:www-data</code> des quatre dossiers (B.3)</td>
+</tr>
+<tr class="even">
+<td>Avertissement sur les fuseaux horaires</td>
+<td>B.2 : <code>GRANT SELECT ON mysql.time_zone_name</code> et <code>mariadb-tzinfo-to-sql</code></td>
+</tr>
+<tr class="odd">
+<td>Le ticket n’est pas attribué automatiquement</td>
+<td>groupe responsable absent de la catégorie (C.2), ou réglage de l’entité (C.2, dernier point)</td>
+</tr>
+<tr class="even">
+<td>Le demandeur ne peut pas approuver la solution</td>
+<td>il est connecté avec un autre compte ; ou le ticket n’est pas encore <em>Résolu</em></td>
+</tr>
+<tr class="odd">
+<td>Aucun ticket créé par Zabbix</td>
+<td><strong>Rapports → Journal des actions</strong> : message d’erreur du webhook. Média <em>GLPi</em> de <code>Admin</code> absent ou sévérité non cochée ; action <code>Tickets GLPI</code> désactivée</td>
+</tr>
+<tr class="even">
+<td>Journal des actions : <em>invalid_client</em> ou <em>invalid_grant</em></td>
+<td>identifiant ou secret du client OAuth recopiés avec une erreur ; <em>Grants</em> sans <strong>Password</strong> ; mot de passe de <code>zabbix-api</code></td>
+</tr>
+<tr class="odd">
+<td>Journal des actions : <em>ERROR_RIGHT_MISSING</em>, <em>The High-Level API is disabled</em></td>
+<td>E.1, point 1 : API non activée</td>
+</tr>
+<tr class="even">
+<td>Journal des actions : droits insuffisants</td>
+<td>profil <code>Zabbix (API)</code> sans <em>Créer</em> sur les tickets, ou sans <em>Ajouter (demandeur)</em> sur les suivis</td>
+</tr>
+<tr class="odd">
+<td>Deux tickets pour une seule panne</td>
+<td>l’action du TP 5 envoie encore vers tous les médias (E.2, point 4)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<ul>
+<li><strong>Collecteur de courriels</strong> : GLPI peut transformer des courriels en tickets (<strong>Configuration → Collecteurs</strong>). Il faut une boîte aux lettres accessible en IMAP : que faudrait-il ajouter au lab ?</li>
+<li><strong>Annuaire</strong> : <strong>Configuration → Authentification → Annuaires LDAP</strong> : branchez GLPI sur <code>hexalog.local</code> (serveur <code>10.20.N.10</code>, port 389, <code>DC=hexalog,DC=local</code>) pour que les salariés se connectent avec leur compte du domaine. Quel compte de l’annuaire GLPI doit-il utiliser pour lire les utilisateurs, avec quels droits ?</li>
+<li><strong>Inventaire</strong> : l’agent GLPI (<code>glpi-agent</code>) remonte l’inventaire matériel et logiciel des machines ; installez-le sur srv-lnx-01 et observez la fiche créée dans <strong>Parc → Ordinateurs</strong>.</li>
+<li><strong>Enregistrement automatique Zabbix</strong> (TP 4, « Pour aller plus loin ») : refaites l’ajout de srv-lnx-02 à Zabbix avec une action d’<em>autoregistration</em> et <code>HostMetadata=hexalog-linux</code>.</li>
+</ul>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s08-incidents.html" data-seance="8"><span class="dir">‹ Page précédente</span><span class="titre">Séance 8 : Gestion des incidents</span></a><a class="next" href="../cours/s09-astreinte.html" data-seance="9"><span class="dir">Page suivante ›</span><span class="titre">Séance 9 : Exercice d&#x27;astreinte</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

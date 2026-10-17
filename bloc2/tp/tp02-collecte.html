@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 2 : Plugins de supervision et SNMP | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous utilisez à la main les plugins de supervision depuis sup-lnx-01 pour tester les services d&#x27;Hexalog, vous écrivez votre propre plugin, vous installez un agent SNMP sécurisé sur srv-lnx-01 et vous ">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item active" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp active" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module A : Fondamentaux et lab</span><span class="sep">›</span><a href="../cours/s02-collecte.html" data-seance="2">Séance 2</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 2</span>
+  <h1>TP 2 : Plugins de supervision et SNMP</h1>
+  <p class="lead">Vous utilisez à la main les plugins de supervision depuis sup-lnx-01 pour tester les services d'Hexalog, vous écrivez votre propre plugin, vous installez un agent SNMP sécurisé sur srv-lnx-01 et vous l'interrogez en v2c puis en v3. Vous terminez par la matrice de supervision d'Hexalog, qui guidera les séances suivantes.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>sup-lnx-01, srv-lnx-01, srv-win-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s02-collecte.html" data-seance="2">Séance 2 : Collecter les mesures : ICMP, SNMP, agents</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-point-de-départ-5-min">Partie A. Point de départ (5 min)</a></li><li><a href="#partie-b.-les-plugins-à-la-main-50-min">Partie B. Les plugins à la main (50 min)</a></li><li><a href="#partie-c.-un-agent-snmp-sur-srv-lnx-01-30-min">Partie C. Un agent SNMP sur srv-lnx-01 (30 min)</a></li><li><a href="#partie-d.-interroger-en-snmp-depuis-sup-lnx-01-40-min">Partie D. Interroger en SNMP depuis sup-lnx-01 (40 min)</a></li><li><a href="#partie-e.-le-plugin-check_snmp-facultatif-15-min">Partie E. Le plugin check_snmp (facultatif, 15 min)</a></li><li><a href="#partie-f.-la-matrice-de-supervision-dhexalog-30-min">Partie F. La matrice de supervision d’Hexalog (30 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Avant d’installer un outil, le responsable informatique d’Hexalog veut savoir <strong>quoi</strong> surveiller et <strong>comment</strong> l’obtenir. Vous testez les méthodes de collecte vues en cours sur le lab, et vous produisez la <strong>matrice de supervision</strong> : pour chaque service, les indicateurs, la méthode, les seuils et les personnes à prévenir.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p>Commencez par terminer le TP 1 si besoin (parties F.5 à F.7). <strong>Socle</strong> : parties B, C, D (sans D.4 ni D.5) et F. <strong>Facultatif</strong> : D.4 (noms des MIB), D.5 (écoute du réseau), partie E.</p>
+</div></div>
+<h2 id="partie-a.-point-de-départ-5-min">Partie A. Point de départ (5 min)</h2>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 2 10.20.N.10</span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 2 10.20.N.20</span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> http://10.20.N.20/sante.php</span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="ex">resolvectl</span> query intranet.hexalog.local</span></code></pre></div></div>
+<p>Les quatre commandes doivent réussir. Sinon, terminez le TP 1.</p>
+<h2 id="partie-b.-les-plugins-à-la-main-50-min">Partie B. Les plugins à la main (50 min)</h2>
+<h3 id="b.1-installer-les-plugins">B.1, Installer les plugins</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> monitoring-plugins</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="fu">ls</span> /usr/lib/nagios/plugins/</span></code></pre></div></div>
+<h3 id="b.2-tester-les-services-dhexalog">B.2, Tester les services d’Hexalog</h3>
+<p>Lancez chaque commande, puis <code>echo $?</code> pour voir le <strong>code retour</strong>. Notez dans un tableau de votre journal : la commande, la ligne affichée, le code, l’état correspondant.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="bu">cd</span> /usr/lib/nagios/plugins</span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="ex">./check_ping</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-w</span> 100,20% <span class="at">-c</span> 500,60% <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="ex">./check_ssh</span> <span class="at">-H</span> 10.20.N.20 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="ex">./check_tcp</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-p</span> 80 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="ex">./check_tcp</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-p</span> 3306 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="ex">./check_http</span> <span class="at">-I</span> 10.20.N.20 <span class="at">-u</span> /sante.php <span class="at">-s</span> BASE-OK <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb3-7"><a aria-hidden="true" href="#cb3-7" tabindex="-1"></a><span class="ex">./check_http</span> <span class="at">-I</span> 10.20.N.20 <span class="at">-u</span> /sante.php <span class="at">-s</span> TOTO <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb3-8"><a aria-hidden="true" href="#cb3-8" tabindex="-1"></a><span class="ex">./check_dns</span> <span class="at">-H</span> intranet.hexalog.local <span class="at">-s</span> 10.20.N.10 <span class="at">-a</span> 10.20.N.20 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb3-9"><a aria-hidden="true" href="#cb3-9" tabindex="-1"></a><span class="ex">./check_tcp</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-p</span> 389 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb3-10"><a aria-hidden="true" href="#cb3-10" tabindex="-1"></a><span class="ex">./check_tcp</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-p</span> 88 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span></code></pre></div></div>
+<p>Points à observer :</p>
+<ul>
+<li><code>check_tcp -p 3306</code> est <strong>CRITIQUE</strong> : MariaDB n’écoute que sur la machine elle-même (<code>127.0.0.1</code>). Ce n’est pas une panne, c’est un réglage de sécurité. On ne supervise donc pas la base « de l’extérieur » par son port, mais par la page de santé, ou par un agent (TP 3 et 4).</li>
+<li>La sixième commande cherche un texte absent : le service répond, mais pas <strong>comme attendu</strong>.</li>
+<li><code>check_dns</code> vérifie à la fois que le DNS répond et que la réponse est la bonne (<code>-a</code>).</li>
+</ul>
+<h3 id="b.3-seuils-et-données-de-performance">B.3, Seuils et données de performance</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="bu">cd</span> /usr/lib/nagios/plugins</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="ex">./check_ping</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-w</span> 0.1,20% <span class="at">-c</span> 500,60% <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="ex">./check_http</span> <span class="at">-I</span> 10.20.N.20 <span class="at">-u</span> / <span class="at">-w</span> 0.001 <span class="at">-c</span> 2 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="ex">./check_disk</span> <span class="at">-w</span> 20% <span class="at">-c</span> 10% <span class="at">-p</span> / <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="ex">./check_load</span> <span class="at">-r</span> <span class="at">-w</span> 0.8,0.7,0.6 <span class="at">-c</span> 1.5,1.2,1.0 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb4-6"><a aria-hidden="true" href="#cb4-6" tabindex="-1"></a><span class="ex">./check_procs</span> <span class="at">-C</span> apache2 <span class="at">-c</span> 1: <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span></code></pre></div></div>
+<ol type="1">
+<li>Les deux premières commandes passent en <strong>WARNING</strong> : le seuil d’avertissement est volontairement irréaliste (0,1 ms de temps de réponse au ping, 1 ms pour une page web). Changez-le pour obtenir OK.</li>
+<li>Repérez, dans chaque ligne, les <strong>données de performance</strong> après la barre verticale. Pour <code>check_disk</code>, expliquez les quatre nombres qui suivent la valeur.</li>
+<li><code>check_procs -C apache2 -c 1:</code> est CRITIQUE : il n’y a aucun processus <code>apache2</code> sur sup-lnx-01 (il viendra avec Nagios). Expliquez la notation <code>1:</code>.</li>
+</ol>
+<h3 id="b.4-écrire-votre-plugin">B.4, Écrire votre plugin</h3>
+<p>Un plugin n’est qu’un programme qui respecte le contrat du cours. Écrivez <code>check_intranet</code> : il charge la page de santé, vérifie le code HTTP et le texte, mesure le temps de réponse, et répond selon les règles suivantes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>État</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>code 200, <code>BASE-OK</code>, moins de 1 s</td>
+<td>OK</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>code 200, <code>BASE-OK</code>, 1 s ou plus</td>
+<td>WARNING</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>autre code, ou <code>BASE-OK</code> absent</td>
+<td>CRITICAL</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>aucune réponse (délai dépassé, connexion refusée)</td>
+<td>CRITICAL</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>argument manquant</td>
+<td>UNKNOWN</td>
+<td>3</td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /usr/local/lib/nagios/check_intranet</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="co"># check_intranet : teste la page de santé de l'intranet d'Hexalog</span></span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="co"># Usage : check_intranet &lt;adresse&gt;</span></span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="va">HOTE</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">-z</span> <span class="st">"</span><span class="va">$HOTE</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-6"><a aria-hidden="true" href="#cb5-6" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"UNKNOWN - usage : </span><span class="va">$0</span><span class="st"> &lt;adresse&gt;"</span></span>
+<span id="cb5-7"><a aria-hidden="true" href="#cb5-7" tabindex="-1"></a>    <span class="bu">exit</span> 3</span>
+<span id="cb5-8"><a aria-hidden="true" href="#cb5-8" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb5-9"><a aria-hidden="true" href="#cb5-9" tabindex="-1"></a><span class="va">RES</span><span class="op">=</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-m</span> 5 <span class="at">-o</span> /tmp/sante.<span class="va">$$</span> <span class="at">-w</span> <span class="st">"%{http_code} %{time_total}"</span> <span class="st">"http://</span><span class="va">$HOTE</span><span class="st">/sante.php"</span><span class="va">)</span></span>
+<span id="cb5-10"><a aria-hidden="true" href="#cb5-10" tabindex="-1"></a><span class="va">CODE</span><span class="op">=</span><span class="va">${RES</span><span class="op">%</span> <span class="pp">*</span><span class="va">}</span></span>
+<span id="cb5-11"><a aria-hidden="true" href="#cb5-11" tabindex="-1"></a><span class="va">TEMPS</span><span class="op">=</span><span class="va">${RES</span><span class="op">#</span><span class="pp">*</span> <span class="va">}</span></span>
+<span id="cb5-12"><a aria-hidden="true" href="#cb5-12" tabindex="-1"></a><span class="va">CORPS</span><span class="op">=</span><span class="va">$(</span><span class="fu">cat</span> /tmp/sante.<span class="va">$$</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null<span class="va">)</span> <span class="kw">;</span> <span class="fu">rm</span> <span class="at">-f</span> /tmp/sante.<span class="va">$$</span></span>
+<span id="cb5-13"><a aria-hidden="true" href="#cb5-13" tabindex="-1"></a><span class="va">PERF</span><span class="op">=</span><span class="st">"temps=</span><span class="va">${TEMPS}</span><span class="st">s;1;5;0"</span></span>
+<span id="cb5-14"><a aria-hidden="true" href="#cb5-14" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$CODE</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"000"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-15"><a aria-hidden="true" href="#cb5-15" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"CRITICAL - intranet injoignable | </span><span class="va">$PERF</span><span class="st">"</span></span>
+<span id="cb5-16"><a aria-hidden="true" href="#cb5-16" tabindex="-1"></a>    <span class="bu">exit</span> 2</span>
+<span id="cb5-17"><a aria-hidden="true" href="#cb5-17" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb5-18"><a aria-hidden="true" href="#cb5-18" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$CODE</span><span class="st">"</span> <span class="ot">!=</span> <span class="st">"200"</span> <span class="bu">]</span> <span class="kw">||</span> <span class="ot">! </span><span class="bu">echo</span> <span class="st">"</span><span class="va">$CORPS</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-q</span> BASE-OK<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-19"><a aria-hidden="true" href="#cb5-19" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"CRITICAL - code HTTP </span><span class="va">$CODE</span><span class="st">, réponse : </span><span class="va">$CORPS</span><span class="st"> | </span><span class="va">$PERF</span><span class="st">"</span></span>
+<span id="cb5-20"><a aria-hidden="true" href="#cb5-20" tabindex="-1"></a>    <span class="bu">exit</span> 2</span>
+<span id="cb5-21"><a aria-hidden="true" href="#cb5-21" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb5-22"><a aria-hidden="true" href="#cb5-22" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$TEMPS</span><span class="st"> &gt;= 1"</span> <span class="kw">|</span> <span class="fu">bc</span><span class="va">)</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"1"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-23"><a aria-hidden="true" href="#cb5-23" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"WARNING - intranet lent : </span><span class="va">${TEMPS}</span><span class="st"> s | </span><span class="va">$PERF</span><span class="st">"</span></span>
+<span id="cb5-24"><a aria-hidden="true" href="#cb5-24" tabindex="-1"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb5-25"><a aria-hidden="true" href="#cb5-25" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb5-26"><a aria-hidden="true" href="#cb5-26" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"OK - </span><span class="va">$CORPS</span><span class="st"> en </span><span class="va">${TEMPS}</span><span class="st"> s | </span><span class="va">$PERF</span><span class="st">"</span></span>
+<span id="cb5-27"><a aria-hidden="true" href="#cb5-27" tabindex="-1"></a><span class="bu">exit</span> 0</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> bc</span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /usr/local/lib/nagios</span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="fu">sudo</span> nano /usr/local/lib/nagios/check_intranet      <span class="co"># coller le script ci-dessus</span></span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="fu">sudo</span> chmod 755 /usr/local/lib/nagios/check_intranet</span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="ex">/usr/local/lib/nagios/check_intranet</span> 10.20.N.20 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a><span class="ex">/usr/local/lib/nagios/check_intranet</span> <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb6-7"><a aria-hidden="true" href="#cb6-7" tabindex="-1"></a><span class="ex">/usr/local/lib/nagios/check_intranet</span> 10.20.N.99 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span></code></pre></div></div>
+<p>Provoquez enfin une vraie panne et observez votre plugin passer en CRITIQUE, puis revenir à OK :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop mariadb</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="ex">/usr/local/lib/nagios/check_intranet</span> 10.20.N.20 <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> systemctl start mariadb</span></code></pre></div></div>
+<h2 id="partie-c.-un-agent-snmp-sur-srv-lnx-01-30-min">Partie C. Un agent SNMP sur srv-lnx-01 (30 min)</h2>
+<h3 id="c.1-installer-et-configurer-snmpd">C.1, Installer et configurer snmpd</h3>
+<p>La configuration de Debian n’écoute que sur la machine elle-même. On la remplace par une configuration courte et explicite :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> snmpd</span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="fu">sudo</span> cp /etc/snmp/snmpd.conf /etc/snmp/snmpd.conf.origine</span>
+<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/snmp/snmpd.conf</span></code></pre></div></div>
+<p>Remplacez tout le contenu par (avec votre numéro à la place de N) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : /etc/snmp/snmpd.conf (srv-lnx-01)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="co"># Agent SNMP de SRV-LNX-01 (Hexalog)</span></span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="dt">sysLocation    Hexalog, serveur virtuel Proxmox</span></span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a><span class="dt">sysContact     Service informatique &lt;informatique@hexalog.local&gt;</span></span>
+<span id="cb11-4"><a aria-hidden="true" href="#cb11-4" tabindex="-1"></a><span class="dt">agentaddress   udp:161</span></span>
+<span id="cb11-5"><a aria-hidden="true" href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a aria-hidden="true" href="#cb11-6" tabindex="-1"></a><span class="co"># SNMPv2c : lecture seule, depuis la machine elle-même et le serveur de supervision</span></span>
+<span id="cb11-7"><a aria-hidden="true" href="#cb11-7" tabindex="-1"></a><span class="dt">rocommunity    hexalog-lecture 127.0.0.1</span></span>
+<span id="cb11-8"><a aria-hidden="true" href="#cb11-8" tabindex="-1"></a><span class="dt">rocommunity    hexalog-lecture 10.20.N.40</span></span>
+<span id="cb11-9"><a aria-hidden="true" href="#cb11-9" tabindex="-1"></a></span>
+<span id="cb11-10"><a aria-hidden="true" href="#cb11-10" tabindex="-1"></a><span class="co"># SNMPv3 : utilisateur authentifié et chiffré, lecture seule</span></span>
+<span id="cb11-11"><a aria-hidden="true" href="#cb11-11" tabindex="-1"></a><span class="dt">rouser         supervision authpriv</span></span></code></pre></div></div>
+<h3 id="c.2-créer-lutilisateur-snmpv3">C.2, Créer l’utilisateur SNMPv3</h3>
+<p>L’utilisateur v3 se déclare, <strong>service arrêté</strong>, dans le fichier de données de snmpd (et non dans le fichier de configuration) : au démarrage, snmpd remplace cette ligne par une version où les mots de passe n’apparaissent plus en clair. Choisissez deux mots de passe d’au moins 8 caractères (notez-les dans votre journal, ils resserviront) ; ici <code>Snmp-Auth-Hexalog</code> et <code>Snmp-Chiff-Hexalog</code>.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop snmpd</span>
+<span id="cb12-2"><a aria-hidden="true" href="#cb12-2" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'createUser supervision SHA-256 "Snmp-Auth-Hexalog" AES "Snmp-Chiff-Hexalog"'</span> <span class="kw">|</span> <span class="fu">sudo</span> tee <span class="at">-a</span> /var/lib/snmp/snmpd.conf</span>
+<span id="cb12-3"><a aria-hidden="true" href="#cb12-3" tabindex="-1"></a><span class="fu">sudo</span> systemctl start snmpd</span>
+<span id="cb12-4"><a aria-hidden="true" href="#cb12-4" tabindex="-1"></a><span class="fu">sudo</span> ss <span class="at">-ulnp</span> <span class="kw">|</span> <span class="fu">grep</span> 161</span>
+<span id="cb12-5"><a aria-hidden="true" href="#cb12-5" tabindex="-1"></a><span class="fu">sudo</span> grep <span class="at">-E</span> <span class="st">'createUser|usmUser'</span> /var/lib/snmp/snmpd.conf</span></code></pre></div></div>
+<p>Résultat attendu : snmpd écoute sur <code>0.0.0.0:161</code> ; dans le fichier de données, la ligne <code>createUser</code> a disparu au profit d’une ligne <code>usmUser</code> (clés dérivées, mots de passe illisibles). Si la ligne <code>createUser</code> est encore là, snmpd n’a pas été redémarré.</p>
+<h3 id="c.3-tester-sur-la-machine-elle-même">C.3, Tester sur la machine elle-même</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a aria-hidden="true" href="#cb13-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> snmp</span>
+<span id="cb13-2"><a aria-hidden="true" href="#cb13-2" tabindex="-1"></a><span class="ex">snmpget</span> <span class="at">-v2c</span> <span class="at">-c</span> hexalog-lecture 127.0.0.1 .1.3.6.1.2.1.1.5.0 .1.3.6.1.2.1.1.3.0</span></code></pre></div></div>
+<h2 id="partie-d.-interroger-en-snmp-depuis-sup-lnx-01-40-min">Partie D. Interroger en SNMP depuis sup-lnx-01 (40 min)</h2>
+<h3 id="d.1-snmpv2c">D.1, SNMPv2c</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a aria-hidden="true" href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> snmp</span>
+<span id="cb14-2"><a aria-hidden="true" href="#cb14-2" tabindex="-1"></a><span class="ex">snmpget</span> <span class="at">-v2c</span> <span class="at">-c</span> hexalog-lecture 10.20.N.20 .1.3.6.1.2.1.1.5.0</span>
+<span id="cb14-3"><a aria-hidden="true" href="#cb14-3" tabindex="-1"></a><span class="ex">snmpwalk</span> <span class="at">-v2c</span> <span class="at">-c</span> hexalog-lecture 10.20.N.20 .1.3.6.1.2.1.1</span>
+<span id="cb14-4"><a aria-hidden="true" href="#cb14-4" tabindex="-1"></a><span class="ex">snmpwalk</span> <span class="at">-v2c</span> <span class="at">-c</span> hexalog-lecture 10.20.N.20 .1.3.6.1.4.1.2021.10.1.3</span>
+<span id="cb14-5"><a aria-hidden="true" href="#cb14-5" tabindex="-1"></a><span class="ex">snmpwalk</span> <span class="at">-v2c</span> <span class="at">-c</span> hexalog-lecture 10.20.N.20 .1.3.6.1.2.1.25.2.3.1.3</span></code></pre></div></div>
+<ol type="1">
+<li>Identifiez dans le parcours de <code>system</code> : la description, le temps de fonctionnement, le contact, le nom, l’emplacement.</li>
+<li>Quelles sont les trois valeurs de charge ?</li>
+<li>La dernière commande liste les espaces de stockage : notez l’<strong>index</strong> de la ligne <code>/</code>. Lisez sa taille et son utilisation (en blocs, dont la taille est donnée par <code>.1.3.6.1.2.1.25.2.3.1.4</code>) et calculez le pourcentage utilisé :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a aria-hidden="true" href="#cb15-1" tabindex="-1"></a><span class="va">I</span><span class="op">=</span>31        <span class="co"># remplacer par l'index de la ligne « / »</span></span>
+<span id="cb15-2"><a aria-hidden="true" href="#cb15-2" tabindex="-1"></a><span class="ex">snmpget</span> <span class="at">-v2c</span> <span class="at">-c</span> hexalog-lecture 10.20.N.20 .1.3.6.1.2.1.25.2.3.1.4.<span class="va">$I</span> .1.3.6.1.2.1.25.2.3.1.5.<span class="va">$I</span> .1.3.6.1.2.1.25.2.3.1.6.<span class="va">$I</span></span></code></pre></div></div>
+<p>Comparez avec <code>df -h /</code> sur srv-lnx-01.</p>
+<h3 id="d.2-ce-qui-doit-échouer">D.2, Ce qui doit échouer</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a aria-hidden="true" href="#cb16-1" tabindex="-1"></a><span class="ex">snmpget</span> <span class="at">-v2c</span> <span class="at">-c</span> public 10.20.N.20 .1.3.6.1.2.1.1.5.0</span>
+<span id="cb16-2"><a aria-hidden="true" href="#cb16-2" tabindex="-1"></a><span class="ex">snmpget</span> <span class="at">-v2c</span> <span class="at">-c</span> mauvaise 10.20.N.20 .1.3.6.1.2.1.1.5.0</span></code></pre></div></div>
+<p>Les deux échouent par <code>Timeout</code> : un agent SNMP v2c ne répond pas du tout à une communauté inconnue. Le message ne dit pas « refusé » : en diagnostic, un délai dépassé peut donc venir d’une machine éteinte, d’un pare-feu, d’un service arrêté <strong>ou</strong> d’une mauvaise communauté.</p>
+<h3 id="d.3-snmpv3-authentifié-et-chiffré">D.3, SNMPv3 authentifié et chiffré</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a aria-hidden="true" href="#cb17-1" tabindex="-1"></a><span class="ex">snmpget</span> <span class="at">-v3</span> <span class="at">-l</span> authPriv <span class="at">-u</span> supervision <span class="at">-a</span> SHA-256 <span class="at">-A</span> <span class="st">"Snmp-Auth-Hexalog"</span> <span class="at">-x</span> AES <span class="at">-X</span> <span class="st">"Snmp-Chiff-Hexalog"</span> 10.20.N.20 .1.3.6.1.2.1.1.5.0</span>
+<span id="cb17-2"><a aria-hidden="true" href="#cb17-2" tabindex="-1"></a><span class="ex">snmpget</span> <span class="at">-v3</span> <span class="at">-l</span> authPriv <span class="at">-u</span> supervision <span class="at">-a</span> SHA-256 <span class="at">-A</span> <span class="st">"mauvais-mot-de-passe"</span> <span class="at">-x</span> AES <span class="at">-X</span> <span class="st">"Snmp-Chiff-Hexalog"</span> 10.20.N.20 .1.3.6.1.2.1.1.5.0</span></code></pre></div></div>
+<p>La seconde commande répond <code>Authentication failure</code> : contrairement à v2c, SNMPv3 signale l’erreur d’authentification. Pour éviter de répéter les paramètres, on peut les ranger dans <code>~/.snmp/snmp.conf</code> (fichier lisible par vous seul) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Fichier : ~/.snmp/snmp.conf (sup-lnx-01)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb18"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb18-1"><a aria-hidden="true" href="#cb18-1" tabindex="-1"></a><span class="dt">defVersion 3</span></span>
+<span id="cb18-2"><a aria-hidden="true" href="#cb18-2" tabindex="-1"></a><span class="dt">defSecurityName supervision</span></span>
+<span id="cb18-3"><a aria-hidden="true" href="#cb18-3" tabindex="-1"></a><span class="dt">defSecurityLevel authPriv</span></span>
+<span id="cb18-4"><a aria-hidden="true" href="#cb18-4" tabindex="-1"></a><span class="dt">defAuthType SHA-256</span></span>
+<span id="cb18-5"><a aria-hidden="true" href="#cb18-5" tabindex="-1"></a><span class="dt">defAuthPassphrase Snmp-Auth-Hexalog</span></span>
+<span id="cb18-6"><a aria-hidden="true" href="#cb18-6" tabindex="-1"></a><span class="dt">defPrivType AES</span></span>
+<span id="cb18-7"><a aria-hidden="true" href="#cb18-7" tabindex="-1"></a><span class="dt">defPrivPassphrase Snmp-Chiff-Hexalog</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a aria-hidden="true" href="#cb19-1" tabindex="-1"></a><span class="fu">chmod</span> 600 ~/.snmp/snmp.conf</span>
+<span id="cb19-2"><a aria-hidden="true" href="#cb19-2" tabindex="-1"></a><span class="ex">snmpwalk</span> 10.20.N.20 .1.3.6.1.2.1.1</span></code></pre></div></div>
+<h3 id="d.4-les-noms-des-mib-facultatif">D.4, Les noms des MIB (facultatif)</h3>
+<p>Les MIB standard sont dans le dépôt <em>non-free</em> de Debian. Ajoutez ce composant, installez le paquet, puis autorisez le chargement des MIB :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a aria-hidden="true" href="#cb20-1" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/^Components: main$/Components: main non-free/'</span> /etc/apt/sources.list.d/debian.sources</span>
+<span id="cb20-2"><a aria-hidden="true" href="#cb20-2" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb20-3"><a aria-hidden="true" href="#cb20-3" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> snmp-mibs-downloader</span>
+<span id="cb20-4"><a aria-hidden="true" href="#cb20-4" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/^mibs :/#mibs :/'</span> /etc/snmp/snmp.conf</span>
+<span id="cb20-5"><a aria-hidden="true" href="#cb20-5" tabindex="-1"></a><span class="ex">snmpwalk</span> 10.20.N.20 system</span>
+<span id="cb20-6"><a aria-hidden="true" href="#cb20-6" tabindex="-1"></a><span class="ex">snmpwalk</span> 10.20.N.20 hrStorageDescr</span>
+<span id="cb20-7"><a aria-hidden="true" href="#cb20-7" tabindex="-1"></a><span class="ex">snmptranslate</span> <span class="at">-On</span> HOST-RESOURCES-MIB::hrStorageUsed</span>
+<span id="cb20-8"><a aria-hidden="true" href="#cb20-8" tabindex="-1"></a><span class="ex">snmptranslate</span> <span class="at">-Td</span> UCD-SNMP-MIB::laLoad</span></code></pre></div></div>
+<p>Les OID s’affichent maintenant avec leur nom. <code>snmptranslate</code> traduit dans les deux sens et affiche la description d’un objet.</p>
+<h3 id="d.5-ce-que-voit-quelquun-qui-écoute-facultatif">D.5, Ce que voit quelqu’un qui écoute (facultatif)</h3>
+<p>Sur srv-lnx-01, écoutez le port 161 pendant que sup-lnx-01 envoie une requête v2c, puis une requête v3 :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a aria-hidden="true" href="#cb21-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> tcpdump</span>
+<span id="cb21-2"><a aria-hidden="true" href="#cb21-2" tabindex="-1"></a><span class="fu">sudo</span> tcpdump <span class="at">-i</span> eth0 <span class="at">-n</span> <span class="at">-A</span> <span class="at">-c</span> 4 udp port 161</span></code></pre></div></div>
+<p>En v2c, la communauté <code>hexalog-lecture</code> et le nom de la machine apparaissent en clair dans le paquet. En v3 <code>authPriv</code>, on ne lit que le nom d’utilisateur ; le contenu est chiffré.</p>
+<h2 id="partie-e.-le-plugin-check_snmp-facultatif-15-min">Partie E. Le plugin check_snmp (facultatif, 15 min)</h2>
+<p><code>check_snmp</code> lit un OID et le compare à des seuils : c’est ainsi que Nagios supervise un équipement en SNMP.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a aria-hidden="true" href="#cb22-1" tabindex="-1"></a><span class="bu">cd</span> /usr/lib/nagios/plugins</span>
+<span id="cb22-2"><a aria-hidden="true" href="#cb22-2" tabindex="-1"></a><span class="ex">./check_snmp</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-P</span> 2c <span class="at">-C</span> hexalog-lecture <span class="at">-o</span> .1.3.6.1.4.1.2021.10.1.5.1 <span class="at">-w</span> 80 <span class="at">-c</span> 150 <span class="at">-l</span> <span class="st">"charge x100"</span> <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb22-3"><a aria-hidden="true" href="#cb22-3" tabindex="-1"></a><span class="ex">./check_snmp</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-P</span> 3 <span class="at">-L</span> authPriv <span class="at">-U</span> supervision <span class="at">-a</span> SHA-256 <span class="at">-A</span> <span class="st">"Snmp-Auth-Hexalog"</span> <span class="at">-x</span> AES <span class="at">-X</span> <span class="st">"Snmp-Chiff-Hexalog"</span> <span class="at">-o</span> .1.3.6.1.2.1.1.3.0 <span class="at">-l</span> <span class="st">"fonctionne depuis"</span> <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"code </span><span class="va">$?</span><span class="st">"</span></span></code></pre></div></div>
+<p>L’OID <code>…2021.10.1.5.1</code> donne la charge sur 1 minute multipliée par 100 (un entier, plus facile à comparer). Pendant qu’une commande tourne, quelqu’un qui lance <code>ps aux</code> sur sup-lnx-01 voit les mots de passe dans la ligne de commande : à la séance 3, ils seront rangés dans un fichier protégé de Nagios.</p>
+<h2 id="partie-f.-la-matrice-de-supervision-dhexalog-30-min">Partie F. La matrice de supervision d’Hexalog (30 min)</h2>
+<p>Complétez le modèle « Matrice de supervision » de la page <a href="../modeles.html">Modèles de livrables</a>, pour au moins <strong>douze</strong> indicateurs couvrant toutes les couches. Exemples de lignes à compléter (vous fixez les seuils et les justifiez) :</p>
+<div class="table-wrap"><table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>Service ou ressource</th>
+<th>Indicateur</th>
+<th>Méthode</th>
+<th>Avertissement</th>
+<th>Critique</th>
+<th>Durée avant alerte</th>
+<th>Qui est prévenu, comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intranet</td>
+<td>page de santé <code>BASE-OK</code> en moins de 1 s</td>
+<td>boîte noire, HTTP depuis sup-lnx-01</td>
+<td>&gt; 1 s</td>
+<td>absent, code ≠ 200</td>
+<td>2 contrôles</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Intranet</td>
+<td>processus nginx, PHP-FPM, MariaDB</td>
+<td>boîte blanche, agent</td>
+<td></td>
+<td>0 processus</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>srv-lnx-01</td>
+<td>espace libre sur <code>/</code></td>
+<td>agent ou SNMP</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>srv-lnx-01</td>
+<td>charge</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>srv-win-01</td>
+<td>résolution de <code>intranet.hexalog.local</code></td>
+<td>boîte noire, DNS</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>srv-win-01</td>
+<td>annuaire joignable (LDAP 389, Kerberos 88)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>srv-win-01</td>
+<td>services NTDS, DNS, Netlogon, KDC</td>
+<td>agent</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>sup-lnx-01</td>
+<td>la supervision elle-même fonctionne-t-elle ?</td>
+<td>?</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>La dernière ligne n’est pas une plaisanterie : qui surveille le surveillant ? Proposez une réponse.</p>
+<p>Snapshots <code>02-snmp</code> de srv-lnx-01 et sup-lnx-01.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Tableau des plugins rempli (commande, sortie, code, état), avec au moins un exemple de chaque état OK, WARNING, CRITICAL, UNKNOWN.</label></li>
+<li><label><input type="checkbox"/><code>check_intranet</code> renvoie OK, puis CRITICAL MariaDB arrêtée, puis UNKNOWN sans argument.</label></li>
+<li><label><input type="checkbox"/>snmpd répond en v2c depuis sup-lnx-01, refuse <code>public</code>, et répond en v3 <code>authPriv</code>.</label></li>
+<li><label><input type="checkbox"/>Pourcentage d’utilisation de <code>/</code> calculé à partir de SNMP et comparé à <code>df</code>.</label></li>
+<li><label><input type="checkbox"/>Matrice de supervision : au moins douze indicateurs, toutes les couches, seuils justifiés.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Pourquoi ne peut-on pas superviser MariaDB depuis sup-lnx-01 avec <code>check_tcp -p 3306</code> ? Est-ce un problème ?</li>
+<li>Votre plugin <code>check_intranet</code> met 4 secondes à répondre parce que srv-lnx-01 est surchargé. Quel état renvoie-t-il ? Et si la réponse n’arrive jamais ?</li>
+<li>Une requête SNMP v2c renvoie <code>Timeout</code>. Citez quatre causes possibles.</li>
+<li>Quels sont les deux mots de passe de l’utilisateur SNMPv3, et à quoi sert chacun ?</li>
+<li>Pourquoi a-t-on écrit <code>rocommunity hexalog-lecture 10.20.N.40</code> plutôt que <code>rocommunity hexalog-lecture</code> ?</li>
+<li>Qui surveille le serveur de supervision ? Proposez deux solutions.</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>check_http: Invalid hostname/address</code></td>
+<td><code>-I</code> attend une adresse ; <code>-H</code> un nom (envoyé dans l’en-tête <code>Host</code>)</td>
+</tr>
+<tr class="even">
+<td><code>check_dns</code> répond CRITICAL avec la bonne adresse</td>
+<td>l’option <code>-a</code> attend exactement l’adresse renvoyée ; vérifiez N</td>
+</tr>
+<tr class="odd">
+<td>Le plugin écrit <code>bc: command not found</code></td>
+<td><code>sudo apt install -y bc</code></td>
+</tr>
+<tr class="even">
+<td><code>snmpget</code> : <code>Timeout</code> depuis sup-lnx-01, mais OK en local</td>
+<td>adresse de sup-lnx-01 absente de <code>rocommunity</code>, ou <code>agentaddress</code> non modifié (snmpd n’écoute que sur 127.0.0.1) : <code>sudo ss -ulnp | grep 161</code></td>
+</tr>
+<tr class="odd">
+<td><code>Authentication failure</code> en v3</td>
+<td>mot de passe ou algorithme différent (<code>SHA-256</code> et <code>AES</code> des deux côtés) ; utilisateur créé alors que snmpd tournait</td>
+</tr>
+<tr class="even">
+<td><code>Unknown user name</code> en v3</td>
+<td>la ligne <code>createUser</code> n’a pas été lue : arrêter snmpd, vérifier <code>/var/lib/snmp/snmpd.conf</code>, redémarrer</td>
+</tr>
+<tr class="odd">
+<td><code>snmpwalk … system</code> : <code>Unknown Object Identifier</code></td>
+<td>MIB non installées ou <code>mibs :</code> encore actif dans <code>/etc/snmp/snmp.conf</code> (partie D.4) ; utiliser l’OID numérique</td>
+</tr>
+<tr class="even">
+<td><code>apt install snmp-mibs-downloader</code> : paquet introuvable</td>
+<td>composant <code>non-free</code> non ajouté, ou <code>apt update</code> oublié</td>
+</tr>
+</tbody>
+</table></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s02-collecte.html" data-seance="2"><span class="dir">‹ Page précédente</span><span class="titre">Séance 2 : Collecter les mesures : ICMP, SNMP, agents</span></a><a class="next" href="../cours/s03-nagios.html" data-seance="3"><span class="dir">Page suivante ›</span><span class="titre">Séance 3 : Nagios Core : hôtes, services, états</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

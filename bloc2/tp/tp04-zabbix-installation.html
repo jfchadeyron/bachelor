@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 4 : Installer Zabbix et ses agents | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous installez Zabbix 7.0 LTS sur sup-lnx-01 (serveur, base MariaDB, interface web), vous installez l&#x27;agent 2 sur srv-lnx-01 et srv-win-01, puis vous raccordez les deux serveurs avec les modèles fourn">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item active" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp active" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module B : Outils de supervision</span><span class="sep">›</span><a href="../cours/s04-zabbix-installation.html" data-seance="4">Séance 4</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 4</span>
+  <h1>TP 4 : Installer Zabbix et ses agents</h1>
+  <p class="lead">Vous installez Zabbix 7.0 LTS sur sup-lnx-01 (serveur, base MariaDB, interface web), vous installez l'agent 2 sur srv-lnx-01 et srv-win-01, puis vous raccordez les deux serveurs avec les modèles fournis : système, nginx, PHP-FPM, MariaDB, services Windows. À la fin, vous comparez l'effort et le résultat avec Nagios.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>sup-lnx-01, srv-lnx-01, srv-win-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s04-zabbix-installation.html" data-seance="4">Séance 4 : Zabbix : architecture et agents</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-préparer-sup-lnx-01-10-min">Partie A. Préparer sup-lnx-01 (10 min)</a></li><li><a href="#partie-b.-installer-le-serveur-zabbix-40-min">Partie B. Installer le serveur Zabbix (40 min)</a></li><li><a href="#partie-c.-lassistant-de-linterface-web-15-min">Partie C. L’assistant de l’interface web (15 min)</a></li><li><a href="#partie-d.-lagent-2-sur-srv-lnx-01-25-min">Partie D. L’agent 2 sur srv-lnx-01 (25 min)</a></li><li><a href="#partie-e.-raccorder-srv-lnx-01-25-min">Partie E. Raccorder srv-lnx-01 (25 min)</a></li><li><a href="#partie-f.-lagent-2-sur-srv-win-01-35-min">Partie F. L’agent 2 sur srv-win-01 (35 min)</a></li><li><a href="#partie-g.-chiffrer-les-échanges-avec-lagent-de-srv-lnx-01-facultatif-20-min">Partie G. Chiffrer les échanges avec l’agent de srv-lnx-01 (facultatif, 20 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Nagios fonctionne, mais le responsable informatique voudrait des <strong>graphiques</strong>, un <strong>historique</strong> pour anticiper, et une configuration moins fastidieuse. Vous installez Zabbix à côté de Nagios, sur sup-lnx-01, pour les comparer.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p><strong>Socle</strong> : parties A à F. <strong>Facultatif</strong> : partie G (chiffrement de l’agent) et « Pour aller plus loin ».</p>
+<p>Comptez cinq minutes d’attente pendant l’import du schéma de la base : profitez-en pour lire la partie E.</p>
+</div></div>
+<h2 id="partie-a.-préparer-sup-lnx-01-10-min">Partie A. Préparer sup-lnx-01 (10 min)</h2>
+<ol type="1">
+<li>Snapshot <code>04-avant-zabbix</code> de sup-lnx-01.</li>
+<li>Créez la locale française, nécessaire à l’interface de Zabbix en français :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/^# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/'</span> /etc/locale.gen</span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="fu">sudo</span> locale-gen</span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="ex">locale</span> <span class="at">-a</span> <span class="kw">|</span> <span class="fu">grep</span> fr_FR</span></code></pre></div></div>
+<h2 id="partie-b.-installer-le-serveur-zabbix-40-min">Partie B. Installer le serveur Zabbix (40 min)</h2>
+<h3 id="b.1-le-dépôt-et-les-paquets">B.1, Le dépôt et les paquets</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSLO</span> https://repo.zabbix.com/zabbix/7.0/debian/pool/main/z/zabbix-release/zabbix-release_latest_7.0+debian13_all.deb</span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="fu">sudo</span> dpkg <span class="at">-i</span> zabbix-release_latest_7.0+debian13_all.deb</span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> mariadb-server zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent2 zabbix-get</span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a><span class="ex">apt</span> policy zabbix-server-mysql <span class="kw">|</span> <span class="fu">head</span> <span class="at">-4</span></span></code></pre></div></div>
+<p>La dernière commande montre que le paquet vient de <code>repo.zabbix.com</code> (version 7.0.x la plus récente), et non de Debian.</p>
+<h3 id="b.2-la-base-de-données">B.2, La base de données</h3>
+<p>Choisissez un mot de passe pour le compte <code>zabbix</code> de la base (ici <code>Zabbix-Lab-Mdp!</code> ; notez le vôtre) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> mariadb <span class="op">&lt;&lt;'SQL'</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="st">CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="st">CREATE USER zabbix@localhost IDENTIFIED BY 'Zabbix-Lab-Mdp!';</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="st">GRANT ALL PRIVILEGES ON zabbix.* TO zabbix@localhost;</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="st">SET GLOBAL log_bin_trust_function_creators = 1;</span></span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="op">SQL</span></span>
+<span id="cb3-7"><a aria-hidden="true" href="#cb3-7" tabindex="-1"></a><span class="bu">time</span> zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz <span class="kw">|</span> <span class="ex">mariadb</span> <span class="at">--default-character-set</span><span class="op">=</span>utf8mb4 <span class="at">-uzabbix</span> <span class="at">-p</span> zabbix</span>
+<span id="cb3-8"><a aria-hidden="true" href="#cb3-8" tabindex="-1"></a><span class="fu">sudo</span> mariadb <span class="at">-e</span> <span class="st">"SET GLOBAL log_bin_trust_function_creators = 0;"</span></span>
+<span id="cb3-9"><a aria-hidden="true" href="#cb3-9" tabindex="-1"></a><span class="fu">sudo</span> mariadb <span class="at">-e</span> <span class="st">"SELECT COUNT(*) AS tables FROM information_schema.tables WHERE table_schema='zabbix';"</span></span></code></pre></div></div>
+<p><code>mariadb -p</code> demande le mot de passe du compte <code>zabbix</code>. L’import dure quelques minutes et n’affiche rien tant qu’il n’est pas fini : n’interrompez pas. Résultat attendu : environ 200 tables. L’option <code>log_bin_trust_function_creators</code> n’est utile que pendant l’import ; on la remet à 0.</p>
+<h3 id="b.3-démarrer-le-serveur">B.3, Démarrer le serveur</h3>
+<p>Dans <code>/etc/zabbix/zabbix_server.conf</code>, trouvez la ligne <code># DBPassword=</code> (avec <code>Ctrl+W</code> dans nano), retirez le <code>#</code> et indiquez le mot de passe :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/zabbix/zabbix_server.conf</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">sudo</span> grep <span class="at">-E</span> <span class="st">'^DB(Name|User|Password)='</span> /etc/zabbix/zabbix_server.conf</span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable <span class="at">--now</span> zabbix-server zabbix-agent2</span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart apache2</span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="fu">sudo</span> tail <span class="at">-n</span> 5 /var/log/zabbix/zabbix_server.log</span></code></pre></div></div>
+<p>Résultat attendu : les lignes <code>server #… started […]</code>. Une erreur <code>Access denied for user 'zabbix'</code> signale un mot de passe différent de celui de la base.</p>
+<h2 id="partie-c.-lassistant-de-linterface-web-15-min">Partie C. L’assistant de l’interface web (15 min)</h2>
+<p>Depuis votre PC, ouvrez <code>http://PROXMOX:1N080/zabbix</code> :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Étape</th>
+<th>Réglage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Welcome</em> (Bienvenue)</td>
+<td>langue par défaut : <strong>Français (fr_FR)</strong></td>
+</tr>
+<tr class="even">
+<td>Vérification des prérequis</td>
+<td>tout doit être <em>OK</em></td>
+</tr>
+<tr class="odd">
+<td>Configurer la connexion à la base de données</td>
+<td>type <strong>MySQL</strong>, hôte <code>localhost</code>, port <code>0</code> (par défaut), base <code>zabbix</code>, utilisateur <code>zabbix</code>, son mot de passe ; <em>Stocker les informations d’identification dans</em> : <strong>Texte brut</strong></td>
+</tr>
+<tr class="even">
+<td>Paramètres</td>
+<td>nom du serveur Zabbix : <code>Hexalog</code> ; fuseau horaire par défaut : <code>Europe/Paris</code> ; thème au choix</td>
+</tr>
+<tr class="odd">
+<td>Résumé pré-installation, Installer</td>
+<td>l’assistant écrit <code>/etc/zabbix/web/zabbix.conf.php</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Connectez-vous avec <code>Admin</code> / <code>zabbix</code>, puis <strong>changez immédiatement ce mot de passe</strong> pour le mot de passe de lab : <strong>Paramètres utilisateur → Profil → Changer le mot de passe</strong> (<em>User settings → Profile</em>). Le mot de passe par défaut de Zabbix est connu de tous les attaquants.</p>
+<p>Ouvrez <strong>Surveillance → Hôtes</strong> (<em>Monitoring → Hosts</em>) : l’hôte <code>Zabbix server</code> (sup-lnx-01 elle-même) est déjà supervisé par son agent ; sa pastille <strong>ZBX</strong> doit devenir verte en une minute.</p>
+<h2 id="partie-d.-lagent-2-sur-srv-lnx-01-25-min">Partie D. L’agent 2 sur srv-lnx-01 (25 min)</h2>
+<h3 id="d.1-installer-et-régler-lagent">D.1, Installer et régler l’agent</h3>
+<p>Debian fournit l’agent 2 en version 7.0 : il est compatible avec le serveur 7.0 du dépôt de Zabbix (un agent ne doit jamais être plus récent que son serveur).</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> zabbix-agent2</span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/zabbix/zabbix_agent2.d/hexalog.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="st"># Hexalog : serveur Zabbix autorisé, et nom de l'hôte dans Zabbix</span></span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="st">Server=10.20.N.40</span></span>
+<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a><span class="st">ServerActive=10.20.N.40</span></span>
+<span id="cb5-6"><a aria-hidden="true" href="#cb5-6" tabindex="-1"></a><span class="st">Hostname=srv-lnx-01</span></span>
+<span id="cb5-7"><a aria-hidden="true" href="#cb5-7" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb5-8"><a aria-hidden="true" href="#cb5-8" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./g'</span> /etc/zabbix/zabbix_agent2.d/hexalog.conf     <span class="co"># votre numéro</span></span>
+<span id="cb5-9"><a aria-hidden="true" href="#cb5-9" tabindex="-1"></a><span class="fu">sudo</span> zabbix_agent2 <span class="at">-T</span> <span class="at">-c</span> /etc/zabbix/zabbix_agent2.conf</span>
+<span id="cb5-10"><a aria-hidden="true" href="#cb5-10" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart zabbix-agent2</span>
+<span id="cb5-11"><a aria-hidden="true" href="#cb5-11" tabindex="-1"></a><span class="fu">sudo</span> ss <span class="at">-tlnp</span> <span class="kw">|</span> <span class="fu">grep</span> 10050</span>
+<span id="cb5-12"><a aria-hidden="true" href="#cb5-12" tabindex="-1"></a><span class="ex">zabbix_agent2</span> <span class="at">-t</span> agent.hostname <span class="at">-c</span> /etc/zabbix/zabbix_agent2.conf</span>
+<span id="cb5-13"><a aria-hidden="true" href="#cb5-13" tabindex="-1"></a><span class="ex">zabbix_agent2</span> <span class="at">-t</span> <span class="st">'web.page.get[localhost,basic_status,80]'</span> <span class="at">-c</span> /etc/zabbix/zabbix_agent2.conf</span></code></pre></div></div>
+<p>Résultat attendu : <code>Validation successful</code>, l’agent écoute sur 10050, <code>agent.hostname</code> vaut <code>srv-lnx-01</code>, et l’agent lit la page d’état de nginx (préparée par le script d’installation de l’intranet).</p>
+<h3 id="d.2-un-compte-de-supervision-pour-mariadb">D.2, Un compte de supervision pour MariaDB</h3>
+<p>Le modèle MariaDB lit les compteurs de la base avec un compte en <strong>lecture seule</strong>, qui ne voit aucune donnée des tables :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> mariadb <span class="op">&lt;&lt;'SQL'</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="st">CREATE USER 'zbx_monitor'@'localhost' IDENTIFIED BY 'Zbx-Monitor-Lab!';</span></span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="st">GRANT REPLICATION CLIENT, PROCESS, SHOW DATABASES, SHOW VIEW ON *.* TO 'zbx_monitor'@'localhost';</span></span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="op">SQL</span></span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="ex">zabbix_agent2</span> <span class="at">-t</span> <span class="st">'mysql.ping["tcp://localhost:3306","zbx_monitor","Zbx-Monitor-Lab!"]'</span> <span class="at">-c</span> /etc/zabbix/zabbix_agent2.conf</span></code></pre></div></div>
+<p>Résultat attendu : <code>[s|1]</code>.</p>
+<h3 id="d.3-tester-depuis-le-serveur">D.3, Tester depuis le serveur</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="ex">zabbix_get</span> <span class="at">-s</span> 10.20.N.20 <span class="at">-k</span> agent.version</span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="ex">zabbix_get</span> <span class="at">-s</span> 10.20.N.20 <span class="at">-k</span> <span class="st">'system.cpu.load[all,avg1]'</span></span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="ex">zabbix_get</span> <span class="at">-s</span> 10.20.N.20 <span class="at">-k</span> <span class="st">'vfs.fs.size[/,pused]'</span></span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a><span class="ex">zabbix_get</span> <span class="at">-s</span> 10.20.N.20 <span class="at">-k</span> <span class="st">'proc.num[nginx]'</span></span></code></pre></div></div>
+<h2 id="partie-e.-raccorder-srv-lnx-01-25-min">Partie E. Raccorder srv-lnx-01 (25 min)</h2>
+<p><strong>Collecte de données → Hôtes</strong> (<em>Data collection → Hosts</em>) → <strong>Créer un hôte</strong> :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nom de l’hôte</td>
+<td><code>srv-lnx-01</code> (identique à <code>Hostname=</code> de l’agent)</td>
+</tr>
+<tr class="even">
+<td>Nom visible</td>
+<td><code>SRV-LNX-01 intranet</code></td>
+</tr>
+<tr class="odd">
+<td>Modèles</td>
+<td><code>Linux by Zabbix agent</code>, <code>Nginx by Zabbix agent</code>, <code>PHP-FPM by Zabbix agent</code>, <code>MySQL by Zabbix agent 2</code>, <code>ICMP Ping</code></td>
+</tr>
+<tr class="even">
+<td>Groupes d’hôtes</td>
+<td>tapez <code>Hexalog/Linux</code> et choisissez <em>(nouveau)</em></td>
+</tr>
+<tr class="odd">
+<td>Interfaces</td>
+<td><strong>Ajouter → Agent</strong> : IP <code>10.20.N.20</code>, port <code>10050</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Onglet <strong>Macros</strong> (<em>Macros</em>) : ajoutez les trois macros du modèle MariaDB :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Macro</th>
+<th>Valeur</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>{$MYSQL.DSN}</code></td>
+<td><code>tcp://localhost:3306</code></td>
+<td>Texte</td>
+</tr>
+<tr class="even">
+<td><code>{$MYSQL.USER}</code></td>
+<td><code>zbx_monitor</code></td>
+<td>Texte</td>
+</tr>
+<tr class="odd">
+<td><code>{$MYSQL.PASSWORD}</code></td>
+<td><code>Zbx-Monitor-Lab!</code></td>
+<td><strong>Texte secret</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Cliquez sur <strong>Ajouter</strong>. Puis :</p>
+<ol type="1">
+<li><strong>Surveillance → Hôtes</strong> : la pastille <strong>ZBX</strong> de srv-lnx-01 passe au vert en une à deux minutes.</li>
+<li><strong>Surveillance → Dernières données</strong>, filtre sur l’hôte <code>srv-lnx-01</code> : retrouvez la charge, la mémoire disponible, l’espace utilisé de <code>/</code>, les connexions actives de nginx, les processus actifs de PHP-FPM, l’état de MariaDB. Cliquez sur <strong>Graphique</strong> à côté d’une valeur.</li>
+<li><strong>Collecte de données → Hôtes</strong> : notez, sur la ligne de srv-lnx-01, le nombre d’<strong>éléments</strong>, de <strong>déclencheurs</strong>, de <strong>graphiques</strong> et de <strong>règles de découverte</strong> créés par les cinq modèles. Combien de lignes de configuration Nagios auraient été nécessaires pour la même chose ?</li>
+</ol>
+<h2 id="partie-f.-lagent-2-sur-srv-win-01-35-min">Partie F. L’agent 2 sur srv-win-01 (35 min)</h2>
+<ol type="1">
+<li>Sur srv-win-01 (console Proxmox), ouvrez Edge et téléchargez le programme d’installation de l’agent 2 pour Windows : <code>https://cdn.zabbix.com/zabbix/binaries/stable/7.0/latest/zabbix_agent2-7.0-latest-windows-amd64-openssl.msi</code></li>
+<li>Lancez-le et renseignez :</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Écran de l’installateur</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Host name</em></td>
+<td><code>srv-win-01</code> (en minuscules, comme dans Zabbix)</td>
+</tr>
+<tr class="even">
+<td><em>Zabbix server IP/DNS</em></td>
+<td><code>10.20.N.40</code></td>
+</tr>
+<tr class="odd">
+<td><em>Agent listen port</em></td>
+<td><code>10050</code></td>
+</tr>
+<tr class="even">
+<td><em>Server or Proxy for active checks</em></td>
+<td><code>10.20.N.40</code></td>
+</tr>
+<tr class="odd">
+<td><em>Enable PSK</em></td>
+<td>non coché (voir partie G)</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="3" type="1">
+<li>Vérifiez le service : <code>services.msc</code> → <strong>Zabbix Agent 2</strong> → <em>En cours d’exécution</em>, démarrage <em>Automatique</em>.</li>
+<li>Pare-feu : <code>wf.msc</code> → <strong>Règles de trafic entrant</strong>. S’il n’existe pas de règle pour l’agent, créez-en une : <strong>Nouvelle règle → Port → TCP 10050 → Autoriser la connexion → profil Domaine</strong>, nom <code>Zabbix agent</code>, puis dans ses propriétés, onglet <strong>Étendue</strong>, limitez l’<strong>adresse IP distante</strong> à <code>10.20.N.40</code>.</li>
+<li>Test depuis le serveur :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="ex">zabbix_get</span> <span class="at">-s</span> 10.20.N.10 <span class="at">-k</span> agent.version</span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="ex">zabbix_get</span> <span class="at">-s</span> 10.20.N.10 <span class="at">-k</span> <span class="st">'service.info[DNS,state]'</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="ex">zabbix_get</span> <span class="at">-s</span> 10.20.N.10 <span class="at">-k</span> <span class="st">'service.info[NTDS,state]'</span></span></code></pre></div></div>
+<p>Résultat attendu : la version de l’agent, puis <code>0</code> pour les deux services (0 = en cours d’exécution).</p>
+<ol start="6" type="1">
+<li>Dans Zabbix, créez l’hôte <code>srv-win-01</code> : nom visible <code>SRV-WIN-01 controleur de domaine</code>, modèles <code>Windows by Zabbix agent</code> et <code>ICMP Ping</code>, groupe <code>Hexalog/Windows</code> (nouveau), interface <strong>Agent</strong> <code>10.20.N.10:10050</code>.</li>
+<li>Après quelques minutes, dans <strong>Dernières données</strong> de srv-win-01, filtrez sur le nom <code>DNS</code> puis <code>NTDS</code> : la découverte a créé un élément d’état pour chaque service Windows en démarrage automatique.</li>
+</ol>
+<p>Snapshots <code>04-zabbix</code> de sup-lnx-01, srv-lnx-01 et srv-win-01.</p>
+<h2 id="partie-g.-chiffrer-les-échanges-avec-lagent-de-srv-lnx-01-facultatif-20-min">Partie G. Chiffrer les échanges avec l’agent de srv-lnx-01 (facultatif, 20 min)</h2>
+<p>Par défaut, les échanges entre serveur et agent circulent en clair. On les chiffre avec une <strong>clé partagée</strong> (PSK).</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="ex">openssl</span> rand <span class="at">-hex</span> 32 <span class="kw">|</span> <span class="fu">sudo</span> tee /etc/zabbix/hexalog.psk</span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="fu">sudo</span> chown zabbix:zabbix /etc/zabbix/hexalog.psk</span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="fu">sudo</span> chmod 640 /etc/zabbix/hexalog.psk</span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="fu">sudo</span> tee <span class="at">-a</span> /etc/zabbix/zabbix_agent2.d/hexalog.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb9-5"><a aria-hidden="true" href="#cb9-5" tabindex="-1"></a><span class="st">TLSConnect=psk</span></span>
+<span id="cb9-6"><a aria-hidden="true" href="#cb9-6" tabindex="-1"></a><span class="st">TLSAccept=psk</span></span>
+<span id="cb9-7"><a aria-hidden="true" href="#cb9-7" tabindex="-1"></a><span class="st">TLSPSKIdentity=PSK-SRV-LNX-01</span></span>
+<span id="cb9-8"><a aria-hidden="true" href="#cb9-8" tabindex="-1"></a><span class="st">TLSPSKFile=/etc/zabbix/hexalog.psk</span></span>
+<span id="cb9-9"><a aria-hidden="true" href="#cb9-9" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb9-10"><a aria-hidden="true" href="#cb9-10" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart zabbix-agent2</span>
+<span id="cb9-11"><a aria-hidden="true" href="#cb9-11" tabindex="-1"></a><span class="fu">sudo</span> cat /etc/zabbix/hexalog.psk</span></code></pre></div></div>
+<p>Dans Zabbix : hôte srv-lnx-01 → onglet <strong>Chiffrement</strong> : <em>Connexion à l’hôte</em> <strong>PSK</strong>, <em>Connexion de l’hôte</em> : cochez <strong>PSK</strong> (et décochez <em>Pas de chiffrement</em>), identité <code>PSK-SRV-LNX-01</code>, clé PSK : la valeur affichée. Vérifiez que la pastille ZBX reste verte. Puis :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="ex">zabbix_get</span> <span class="at">-s</span> 10.20.N.20 <span class="at">-k</span> agent.version</span></code></pre></div></div>
+<p>Sans les options de chiffrement, <code>zabbix_get</code> est maintenant refusé. Avec : <code>zabbix_get -s 10.20.N.20 -k agent.version --tls-connect psk --tls-psk-identity PSK-SRV-LNX-01 --tls-psk-file &lt;fichier contenant la clé&gt;</code>.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/><code>http://PROXMOX:1N080/zabbix</code> : connexion avec <code>Admin</code> et le <strong>nouveau</strong> mot de passe ; l’ancien est refusé.</label></li>
+<li><label><input type="checkbox"/>Pastille ZBX verte pour <code>Zabbix server</code>, <code>srv-lnx-01</code> et <code>srv-win-01</code>.</label></li>
+<li><label><input type="checkbox"/>Dernières données de srv-lnx-01 : système, nginx, PHP-FPM et MariaDB remontent des valeurs.</label></li>
+<li><label><input type="checkbox"/>Dernières données de srv-win-01 : processeur, mémoire, disques, services DNS et NTDS.</label></li>
+<li><label><input type="checkbox"/>Tableau comparatif Nagios / Zabbix commencé dans le journal de bord (nombre de contrôles, temps passé, ce que l’on voit).</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Pourquoi installer le serveur depuis le dépôt de Zabbix plutôt que depuis Debian ? Pourquoi a-t-on pu installer l’agent de Debian sur srv-lnx-01 ?</li>
+<li>À quoi sert le compte <code>zbx_monitor</code> ? Pourquoi ne pas utiliser le compte <code>root</code> de MariaDB, ou le compte <code>intranet</code> de l’application ?</li>
+<li>Pourquoi le mot de passe de <code>zbx_monitor</code> est-il une macro de type <em>Texte secret</em> ?</li>
+<li>Les contrôles de srv-lnx-01 sont passifs : quelle machine ouvre les connexions, vers quel port ? Quelle règle de pare-feu faudrait-il si srv-lnx-01 avait UFW ?</li>
+<li>Combien d’éléments les modèles ont-ils créés pour srv-lnx-01 ? Sont-ils tous utiles ? Citez-en un qui vous paraît superflu.</li>
+<li>Un déclencheur <em>Number of installed packages has been changed</em> apparaît dans <strong>Surveillance → Problèmes</strong> après l’installation de l’agent. Est-ce une panne ? Que faudrait-il en faire ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>L’assistant indique une locale manquante, ou le français n’est pas proposé</td>
+<td>partie A non faite ; puis <code>sudo systemctl restart apache2</code></td>
+</tr>
+<tr class="even">
+<td>L’assistant ne peut pas se connecter à la base</td>
+<td>mot de passe ou nom de base différents ; hôte <code>localhost</code></td>
+</tr>
+<tr class="odd">
+<td>Le tableau de bord affiche <em>Zabbix server is not running</em></td>
+<td><code>sudo systemctl status zabbix-server</code> ; <code>sudo tail /var/log/zabbix/zabbix_server.log</code> (souvent <code>DBPassword</code> manquant ou faux)</td>
+</tr>
+<tr class="even">
+<td><code>zabbix_get</code> : <em>Received empty response… access permissions</em></td>
+<td>l’adresse de sup-lnx-01 n’est pas dans <code>Server=</code> (N mal remplacé ?), ou chiffrement PSK exigé</td>
+</tr>
+<tr class="odd">
+<td><code>zabbix_get</code> : <em>Connection refused</em> ou délai dépassé</td>
+<td>agent arrêté ; sous Windows, pare-feu (port 10050)</td>
+</tr>
+<tr class="even">
+<td>Pastille ZBX rouge, message <em>Get value from agent failed</em></td>
+<td>adresse ou port de l’interface, pare-feu, <code>Server=</code></td>
+</tr>
+<tr class="odd">
+<td>Pastille ZBX grise</td>
+<td>l’hôte n’a pas encore été contrôlé : attendre une minute</td>
+</tr>
+<tr class="even">
+<td>Éléments MariaDB en <em>Non supporté</em></td>
+<td>macros <code>{$MYSQL.*}</code> absentes ou fausses ; tester <code>mysql.ping</code> avec <code>zabbix_agent2 -t</code> (D.2)</td>
+</tr>
+<tr class="odd">
+<td>Éléments nginx ou PHP-FPM en <em>Non supporté</em></td>
+<td>page d’état inaccessible : <code>curl http://localhost/basic_status</code> et <code>curl http://localhost/status</code> <strong>sur srv-lnx-01</strong></td>
+</tr>
+<tr class="even">
+<td>Pas de valeurs ICMP</td>
+<td><code>fping</code> absent du serveur, ou ICMP refusé par le pare-feu Windows (TP 1, F.6)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<ul>
+<li><strong>Enregistrement automatique</strong> : avec une action d’<em>autoregistration</em> et <code>HostMetadata=hexalog-linux</code> dans la configuration de l’agent, un nouvel agent actif crée lui-même son hôte dans Zabbix, avec les bons modèles. Testez-le à la séance 8 avec srv-lnx-02.</li>
+<li><strong>L’API</strong> : Zabbix se pilote entièrement par une API JSON-RPC (<code>/zabbix/api_jsonrpc.php</code>). Créez un jeton d’API (<strong>Utilisateurs → Tokens API</strong>) et listez vos hôtes avec <code>curl</code> et la méthode <code>host.get</code>.</li>
+</ul>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="dir">‹ Page précédente</span><span class="titre">Séance 4 : Zabbix : architecture et agents</span></a><a class="next" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="dir">Page suivante ›</span><span class="titre">Séance 5 : Zabbix : déclencheurs, alertes, tableaux de bord</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

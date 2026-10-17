@@ -1,0 +1,290 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 9 : Exercice d'astreinte | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Tout ce que vous avez mis en place depuis le début du bloc sert ce matin. Des incidents réels vont se produire sur votre lab, sans prévenir, parfois deux à la fois. Le cours, court, rappelle comment s">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d'Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="../tp/tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="../tp/tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="../tp/tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="../tp/tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="../tp/tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d'un outil</span></a><a class="nav-tp" href="../tp/tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="../tp/tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="../tp/tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item active" data-seance="9"><a class="nav-link" href="s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d'astreinte</span></a><a class="nav-tp" href="../tp/tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d'activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="../tp/tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d'activité</span></a><a class="nav-tp" href="../tp/tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="../tp/tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Maintenance et incidents</span><span class="sep">›</span><span>Séance 9</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 9</span>
+  <h1>Exercice d'astreinte</h1>
+  <p class="lead">Tout ce que vous avez mis en place depuis le début du bloc sert ce matin. Des incidents réels vont se produire sur votre lab, sans prévenir, parfois deux à la fois. Le cours, court, rappelle comment s'organise une astreinte, la méthode de diagnostic qui évite de tourner en rond, les commandes qui font gagner du temps, et ce qu'on attend de vous : rétablir, mais aussi enregistrer, communiquer et expliquer.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 3 à 8 (supervision, journaux, GLPI)</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp09-astreinte.html" data-seance="9">TP 9 : Une matinée d'astreinte chez Hexalog</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#astreinte">1. L’astreinte</a></li><li><a href="#methode">2. La méthode de diagnostic</a></li><li><a href="#outils">3. La boîte à outils</a></li><li><a href="#fiches">4. Les fiches réflexes</a></li><li><a href="#priorites">5. Plusieurs incidents à la fois</a></li><li><a href="#attendus">6. Ce qui est attendu pendant l’exercice</a></li><li><a href="#à-retenir">7. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<div class="callout info avis-exemples"><div class="callout-body"><p class="callout-titre"><strong>Les commandes de ce cours sont des exemples</strong></p><p>Les blocs marqués <span class="code-exemple">Exemple</span> montrent des commandes et des fichiers pour expliquer comment les choses fonctionnent. Lisez-les, mais ne les tapez pas pendant le cours. Vous ferez les manipulations pendant le <a data-seance="9" href="../tp/tp09-astreinte.html">TP 9</a>, dans l'ordre et sur les machines indiquées : certaines n'ont de sens qu'après les étapes précédentes.</p></div></div><h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Organiser une astreinte : outils, accès, procédures, main courante.</li>
+<li>Appliquer une méthode de diagnostic structurée, couche par couche, une hypothèse à la fois.</li>
+<li>Rédiger et utiliser une fiche réflexe.</li>
+<li>Traiter plusieurs incidents en même temps, par ordre de priorité.</li>
+<li>Mesurer sa propre réactivité (MTTA, MTTR) et rédiger un compte rendu après incident.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>30 min</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>20 min</td>
+<td>Préparation : vérification du lab, fiches réflexes</td>
+</tr>
+<tr class="odd">
+<td>2 h 30</td>
+<td><a data-seance="9" href="../tp/tp09-astreinte.html">TP 9 : Une matinée d’astreinte chez Hexalog</a> : l’astreinte</td>
+</tr>
+<tr class="even">
+<td>40 min</td>
+<td>Analyse, compte rendu, bilan collectif</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="astreinte">1. L’astreinte</h2>
+<p>L’<strong>astreinte</strong> est la période pendant laquelle un salarié, sans être au travail, doit pouvoir intervenir (le Code du travail en fixe le cadre : compensation, information à l’avance). En informatique, elle couvre les nuits, les week-ends, les jours fériés, pour les services dont l’interruption coûte cher.</p>
+<p>Pour qu’une astreinte fonctionne, il faut :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Élément</th>
+<th>Concrètement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Être <strong>prévenu</strong></td>
+<td>des alertes fiables et sobres (séance 5), sur un canal qu’on ne rate pas, avec escalade si personne n’acquitte</td>
+</tr>
+<tr class="even">
+<td>Pouvoir <strong>intervenir</strong></td>
+<td>un accès distant qui marche (point d’entrée, clés, VPN), testé avant le début de l’astreinte</td>
+</tr>
+<tr class="odd">
+<td>Savoir <strong>quoi faire</strong></td>
+<td>des <strong>fiches réflexes</strong> pour les pannes connues, la documentation à jour, les contacts (fournisseurs, responsables)</td>
+</tr>
+<tr class="even">
+<td><strong>Tracer</strong></td>
+<td>une <strong>main courante</strong> : chaque événement, chaque action, avec l’heure</td>
+</tr>
+<tr class="odd">
+<td><strong>Passer le relais</strong></td>
+<td>un point de fin d’astreinte : ce qui s’est passé, ce qui reste ouvert</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="methode">2. La méthode de diagnostic</h2>
+<p>Le dépannage au hasard (« je redémarre et on verra ») fait perdre du temps, détruit les indices et peut aggraver la panne. La démarche :</p>
+<ol type="1">
+<li><strong>Identifier le symptôme</strong> : qu’est-ce qui ne marche pas, pour qui, depuis quand ? Le reformuler précisément.</li>
+<li><strong>Collecter</strong> : alertes, tableaux de bord, journaux, ce qui a <strong>changé</strong> récemment (journal des modifications, mises à jour, déploiements).</li>
+<li><strong>Reproduire</strong> : constater soi-même (<code>curl</code>, <code>ping</code>, une connexion).</li>
+<li><strong>Formuler des hypothèses</strong>, les classer de la plus probable à la moins probable, et de la plus facile à tester à la plus difficile.</li>
+<li><strong>Tester une hypothèse à la fois</strong>, par une commande qui la confirme ou l’élimine.</li>
+<li><strong>Corriger</strong>, une seule chose à la fois.</li>
+<li><strong>Vérifier</strong> que le service est rétabli <strong>pour l’utilisateur</strong> (pas seulement que le service tourne).</li>
+<li><strong>Documenter</strong> : ticket, main courante, base de connaissances.</li>
+</ol>
+<h3 id="couche-par-couche">Couche par couche</h3>
+<p>Pour un service web comme l’intranet, on suit le chemin d’une requête :</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-408202" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1373.4375px;" viewBox="0 0 1373.4375 107" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-408202{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-408202 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-408202 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-408202 .error-icon{fill:#f5f6f8;}#mmd0-408202 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-408202 .edge-thickness-normal{stroke-width:1px;}#mmd0-408202 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-408202 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-408202 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-408202 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-408202 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-408202 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-408202 .marker.cross{stroke:#4a5563;}#mmd0-408202 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-408202 p{margin:0;}#mmd0-408202 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-408202 .cluster-label text{fill:#1f3a5f;}#mmd0-408202 .cluster-label span{color:#1f3a5f;}#mmd0-408202 .cluster-label span p{background-color:transparent;}#mmd0-408202 .label text,#mmd0-408202 span{fill:#1d2530;color:#1d2530;}#mmd0-408202 .node rect,#mmd0-408202 .node circle,#mmd0-408202 .node ellipse,#mmd0-408202 .node polygon,#mmd0-408202 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-408202 .rough-node .label text,#mmd0-408202 .node .label text,#mmd0-408202 .image-shape .label,#mmd0-408202 .icon-shape .label{text-anchor:middle;}#mmd0-408202 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-408202 .rough-node .label,#mmd0-408202 .node .label,#mmd0-408202 .image-shape .label,#mmd0-408202 .icon-shape .label{text-align:center;}#mmd0-408202 .node.clickable{cursor:pointer;}#mmd0-408202 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-408202 .arrowheadPath{fill:#000000;}#mmd0-408202 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-408202 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-408202 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-408202 .edgeLabel p{background-color:#ffffff;}#mmd0-408202 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-408202 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-408202 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-408202 .cluster text{fill:#1f3a5f;}#mmd0-408202 .cluster span{color:#1f3a5f;}#mmd0-408202 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-408202 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-408202 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-408202 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-408202 rect.text{fill:none;stroke-width:0;}#mmd0-408202 .icon-shape,#mmd0-408202 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-408202 .icon-shape p,#mmd0-408202 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-408202 .icon-shape .label rect,#mmd0-408202 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-408202 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-408202 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-408202 .node .neo-node{stroke:#1f3a5f;}#mmd0-408202 [data-look="neo"].node rect,#mmd0-408202 [data-look="neo"].cluster rect,#mmd0-408202 [data-look="neo"].node polygon{stroke:url(#mmd0-408202-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-408202 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-408202 [data-look="neo"].node path{stroke:url(#mmd0-408202-gradient);stroke-width:1px;}#mmd0-408202 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-408202 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-408202 [data-look="neo"].node circle{stroke:url(#mmd0-408202-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-408202 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-408202 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-408202-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-408202 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-408202-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-408202 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-408202_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-408202_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-408202_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-408202_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-408202_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-408202_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-408202_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-408202_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-408202_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-408202_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-408202_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-408202_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M129.391,53.5L154.391,53.5L175.391,53.5" id="mmd0-408202-L_U_DNS_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_U_DNS_0" data-points="W3sieCI6MTI5LjM5MDYyNSwieSI6NTMuNX0seyJ4IjoxNTQuMzkwNjI1LCJ5Ijo1My41fSx7IngiOjE3OS4zOTA2MjUsInkiOjUzLjV9XQ==" data-look="classic" marker-end="url(#mmd0-408202_flowchart-v2-pointEnd)"></path><path d="M367.703,53.5L392.703,53.5L413.703,53.5" id="mmd0-408202-L_DNS_NET_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_DNS_NET_0" data-points="W3sieCI6MzY3LjcwMzEyNSwieSI6NTMuNX0seyJ4IjozOTIuNzAzMTI1LCJ5Ijo1My41fSx7IngiOjQxNy43MDMxMjUsInkiOjUzLjV9XQ==" data-look="classic" marker-end="url(#mmd0-408202_flowchart-v2-pointEnd)"></path><path d="M551.547,53.5L576.547,53.5L597.547,53.5" id="mmd0-408202-L_NET_WEB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_NET_WEB_0" data-points="W3sieCI6NTUxLjU0Njg3NSwieSI6NTMuNX0seyJ4Ijo1NzYuNTQ2ODc1LCJ5Ijo1My41fSx7IngiOjYwMS41NDY4NzUsInkiOjUzLjV9XQ==" data-look="classic" marker-end="url(#mmd0-408202_flowchart-v2-pointEnd)"></path><path d="M771.172,53.5L796.172,53.5L817.172,53.5" id="mmd0-408202-L_WEB_PHP_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_WEB_PHP_0" data-points="W3sieCI6NzcxLjE3MTg3NSwieSI6NTMuNX0seyJ4Ijo3OTYuMTcxODc1LCJ5Ijo1My41fSx7IngiOjgyMS4xNzE4NzUsInkiOjUzLjV9XQ==" data-look="classic" marker-end="url(#mmd0-408202_flowchart-v2-pointEnd)"></path><path d="M951.094,53.5L976.094,53.5L997.094,53.5" id="mmd0-408202-L_PHP_DB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PHP_DB_0" data-points="W3sieCI6OTUxLjA5Mzc1LCJ5Ijo1My41fSx7IngiOjk3Ni4wOTM3NSwieSI6NTMuNX0seyJ4IjoxMDAxLjA5Mzc1LCJ5Ijo1My41fV0=" data-look="classic" marker-end="url(#mmd0-408202_flowchart-v2-pointEnd)"></path><path d="M1147.359,53.5L1172.359,53.5L1193.359,53.5" id="mmd0-408202-L_DB_SYS_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_DB_SYS_0" data-points="W3sieCI6MTE0Ny4zNTkzNzUsInkiOjUzLjV9LHsieCI6MTE3Mi4zNTkzNzUsInkiOjUzLjV9LHsieCI6MTE5Ny4zNTkzNzUsInkiOjUzLjV9XQ==" data-look="classic" marker-end="url(#mmd0-408202_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_U_DNS_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_DNS_NET_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_NET_WEB_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_WEB_PHP_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_PHP_DB_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_DB_SYS_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-408202-flowchart-U-0" data-look="classic" transform="translate(68.6953125, 53.5)"><rect class="basic label-container" style="" x="-60.6953125" y="-35" width="121.390625" height="70"></rect><g class="label" style="" transform="translate(-32.6953125, -21)"><rect></rect><foreignObject width="65.390625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Utilisateur<br>navigateur</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-408202-flowchart-DNS-1" data-look="classic" transform="translate(273.546875, 53.5)"><rect class="basic label-container" style="" x="-94.15625" y="-45.5" width="188.3125" height="91"></rect><g class="label" style="" transform="translate(-66.15625, -31.5)"><rect></rect><foreignObject width="132.3125" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Nom<br>intranet.hexalog.local<br>résolu ?</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-408202-flowchart-NET-3" data-look="classic" transform="translate(484.625, 53.5)"><rect class="basic label-container" style="" x="-66.921875" y="-45.5" width="133.84375" height="91"></rect><g class="label" style="" transform="translate(-38.921875, -31.5)"><rect></rect><foreignObject width="77.84375" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Réseau<br>ping, port 80<br>ouvert ?</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-408202-flowchart-WEB-5" data-look="classic" transform="translate(686.359375, 53.5)"><rect class="basic label-container" style="" x="-84.8125" y="-45.5" width="169.625" height="91"></rect><g class="label" style="" transform="translate(-56.8125, -31.5)"><rect></rect><foreignObject width="113.625" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>nginx<br>actif, configuration<br>valide ?</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-408202-flowchart-PHP-7" data-look="classic" transform="translate(886.1328125, 53.5)"><rect class="basic label-container" style="" x="-64.9609375" y="-45.5" width="129.921875" height="91"></rect><g class="label" style="" transform="translate(-36.9609375, -31.5)"><rect></rect><foreignObject width="73.921875" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>PHP-FPM<br>actif, socket<br>joignable ?</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-408202-flowchart-DB-9" data-look="classic" transform="translate(1074.2265625, 53.5)"><rect class="basic label-container" style="" x="-73.1328125" y="-45.5" width="146.265625" height="91"></rect><g class="label" style="" transform="translate(-45.1328125, -31.5)"><rect></rect><foreignObject width="90.265625" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>MariaDB<br>active, compte<br>accepté ?</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-408202-flowchart-SYS-11" data-look="classic" transform="translate(1281.3984375, 53.5)"><rect class="basic label-container" style="" x="-84.0390625" y="-45.5" width="168.078125" height="91"></rect><g class="label" style="" transform="translate(-56.0390625, -31.5)"><rect></rect><foreignObject width="112.078125" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Système<br>disque, mémoire,<br>processeur, heure</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-408202-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-408202-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-408202-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<p>On peut partir de l’utilisateur et descendre, ou partir du système et remonter : l’important est de <strong>ne pas sauter d’étage</strong> et de savoir, à chaque étage, quel test le confirme. La supervision fait déjà une partie du travail : un problème Zabbix sur PHP-FPM et rien sur nginx indique où chercher.</p>
+<div class="callout tip"><div class="callout-body"><p class="callout-titre"><strong>Trois questions qui font gagner du temps</strong></p>
+<ul>
+<li><strong>Qu’est-ce qui a changé ?</strong> La majorité des pannes suit un changement.</li>
+<li><strong>Est-ce que ça marche ailleurs ?</strong> Un seul utilisateur, un seul site, ou tout le monde ?</li>
+<li><strong>Qu’est-ce que dit le journal, exactement ?</strong> Lire le message en entier, avec l’heure, avant de chercher sur Internet.</li>
+</ul>
+</div></div>
+<h2 id="outils">3. La boîte à outils</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Linux</th>
+<th>Windows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Le service tourne-t-il ?</td>
+<td><code>systemctl status &lt;service&gt;</code>, <code>systemctl --failed</code></td>
+<td><code>services.msc</code></td>
+</tr>
+<tr class="even">
+<td>Que dit-il ?</td>
+<td><code>journalctl -u &lt;service&gt; -n 50</code>, <code>journalctl -p err --since "-1h"</code> ; <code>/var/log/nginx/error.log</code></td>
+<td>Observateur d’événements : Système, Application, journal du rôle (DNS Server…)</td>
+</tr>
+<tr class="odd">
+<td>Sa configuration est-elle valide ?</td>
+<td><code>nginx -t</code>, <code>php-fpm8.4 -t</code>, <code>rsyslogd -N1</code>, <code>nagios4 -v</code>, <code>apache2ctl configtest</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Écoute-t-il ?</td>
+<td><code>ss -tlnp</code>, <code>ss -xlp</code> (sockets locaux)</td>
+<td><code>netstat -ano</code></td>
+</tr>
+<tr class="odd">
+<td>Répond-il ?</td>
+<td><code>curl -v http://…</code>, <code>zabbix_get</code>, plugins Nagios</td>
+<td>navigateur, <code>nslookup</code></td>
+</tr>
+<tr class="even">
+<td>Le nom se résout-il ?</td>
+<td><code>resolvectl query &lt;nom&gt;</code></td>
+<td><code>nslookup &lt;nom&gt;</code> ; console DNS</td>
+</tr>
+<tr class="odd">
+<td>Le réseau passe-t-il ?</td>
+<td><code>ip -br a</code>, <code>ip route</code>, <code>ping</code></td>
+<td><code>ncpa.cpl</code>, <code>ping</code> ; <code>wf.msc</code> (pare-feu)</td>
+</tr>
+<tr class="even">
+<td>Les ressources ?</td>
+<td><code>df -h</code>, <code>du -xh / --max-depth=2 | sort -h</code>, <code>free -h</code>, <code>top</code>, <code>ps aux --sort=-%cpu</code></td>
+<td>Gestionnaire des tâches, Moniteur de ressources</td>
+</tr>
+<tr class="odd">
+<td>L’heure ?</td>
+<td><code>timedatectl</code></td>
+<td><code>w32tm /query /status</code></td>
+</tr>
+<tr class="even">
+<td>Qu’est-ce qui a changé ?</td>
+<td>journal des modifications, <code>/var/log/apt/history.log</code>, <code>ls -lt /etc/...</code></td>
+<td>historique des mises à jour, journal Système</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="fiches">4. Les fiches réflexes</h2>
+<p>Une <strong>fiche réflexe</strong> (<em>runbook</em>) est une procédure courte pour une situation connue, utilisable à 3 h du matin par quelqu’un qui n’a pas construit le système.</p>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Fichier : fiche-reflexe-intranet-base-ko.md</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb2"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu"># Fiche réflexe : intranet « Base de données indisponible »</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a>Symptôme : l'intranet s'affiche avec le message en rouge ; sante.php répond BASE-KO (code 500).</span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a>Alerte associée : Zabbix « Intranet : le parcours utilisateur échoue (étape 2) ».</span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a>Priorité habituelle : très haute en journée (les préparateurs sont bloqués).</span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a aria-hidden="true" href="#cb2-7" tabindex="-1"></a><span class="ss">1. </span>MariaDB tourne-t-elle ?            ssh srv-lnx-01 'systemctl is-active mariadb'</span>
+<span id="cb2-8"><a aria-hidden="true" href="#cb2-8" tabindex="-1"></a>   Non → sudo systemctl start mariadb ; si échec : journalctl -u mariadb -n 50, puis df -h</span>
+<span id="cb2-9"><a aria-hidden="true" href="#cb2-9" tabindex="-1"></a><span class="ss">2. </span>L'application peut-elle se connecter ?  sudo tail -n 20 /var/log/nginx/error.log</span>
+<span id="cb2-10"><a aria-hidden="true" href="#cb2-10" tabindex="-1"></a>   « Access denied for user 'intranet' » → le mot de passe de config.php et celui de la base diffèrent</span>
+<span id="cb2-11"><a aria-hidden="true" href="#cb2-11" tabindex="-1"></a><span class="ss">3. </span>Vérifier : curl -s http://10.20.N.20/sante.php → BASE-OK</span>
+<span id="cb2-12"><a aria-hidden="true" href="#cb2-12" tabindex="-1"></a><span class="ss">4. </span>Ticket : cause, action, heure de rétablissement ; prévenir les utilisateurs.</span>
+<span id="cb2-13"><a aria-hidden="true" href="#cb2-13" tabindex="-1"></a>Escalade : si non rétabli en 30 min → responsable informatique.</span></code></pre></div></div>
+<h2 id="priorites">5. Plusieurs incidents à la fois</h2>
+<p>Quand deux alertes arrivent ensemble, on ne traite pas « la première arrivée » ni « la plus facile » : on traite <strong>la plus prioritaire</strong> (impact × urgence), après avoir vérifié en une minute que les deux ne sont pas <strong>la même panne</strong> vue deux fois (dépendances, cause commune). On enregistre l’autre tout de suite, pour qu’elle ne soit pas oubliée, et on prévient si son délai risque d’être dépassé.</p>
+<h2 id="attendus">6. Ce qui est attendu pendant l’exercice</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Critère</th>
+<th>Ce qu’on regarde</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Détection et prise en charge</td>
+<td>chaque incident a un ticket ; délai entre l’alerte (ou l’appel) et la prise en charge</td>
+</tr>
+<tr class="even">
+<td>Qualification</td>
+<td>type, catégorie, impact, urgence, priorité cohérents</td>
+</tr>
+<tr class="odd">
+<td>Diagnostic</td>
+<td>la démarche est visible dans les suivis : hypothèses, tests, résultats</td>
+</tr>
+<tr class="even">
+<td>Rétablissement</td>
+<td>le service est rétabli <strong>et vérifié</strong> ; la cause est corrigée, ou le contournement est signalé comme tel</td>
+</tr>
+<tr class="odd">
+<td>Communication</td>
+<td>les « utilisateurs » qui appellent sont informés ; un message pour l’incident le plus grave</td>
+</tr>
+<tr class="even">
+<td>Main courante</td>
+<td>complète et horodatée</td>
+</tr>
+<tr class="odd">
+<td>Analyse</td>
+<td>un compte rendu après incident, sans recherche de coupable, avec des actions</td>
+</tr>
+</tbody>
+</table></div>
+<p>Vos indicateurs personnels, calculés à la fin : <strong>MTTA</strong> (moyenne des délais de prise en charge) et <strong>MTTR</strong> (moyenne des délais de rétablissement).</p>
+<h2 id="à-retenir">7. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Astreinte = être prévenu, pouvoir intervenir, savoir quoi faire, tracer, passer le relais.</li>
+<li>Méthode : symptôme, collecte, reproduction, hypothèses, un test à la fois, une correction à la fois, vérification côté utilisateur, documentation.</li>
+<li>Couche par couche, sans sauter d’étage ; « qu’est-ce qui a changé ? ».</li>
+<li>Fiche réflexe : symptôme, alerte, vérifications dans l’ordre, correction, vérification, escalade.</li>
+<li>Plusieurs incidents : vérifier la cause commune, traiter le plus prioritaire, enregistrer les autres.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Citez quatre conditions pour qu’une astreinte fonctionne.</li>
+<li>Pourquoi ne faut-il pas redémarrer un service en premier réflexe ?</li>
+<li>L’intranet répond <code>502 Bad Gateway</code>. À quel étage du schéma regardez-vous en premier, et avec quelle commande ?</li>
+<li>Le service nginx est actif et la page s’affiche, mais avec le message « Base de données indisponible ». Quelles sont vos deux premières hypothèses ?</li>
+<li>Deux alertes arrivent en même temps : « srv-win-01 ne répond plus au ping » et « Intranet : temps de réponse supérieur à 1 s ». Que faites-vous dans la première minute ?</li>
+<li>Que doit contenir une main courante ?</li>
+<li>Qu’est-ce que le MTTA ? Comment le calculerez-vous à la fin de l’exercice ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Être prévenu (alertes fiables, escalade) ; pouvoir intervenir (accès distant testé) ; savoir quoi faire (fiches réflexes, documentation, contacts) ; tracer (main courante) ; passer le relais.</li>
+<li>On perd les indices (état, messages, processus en cause), la panne peut revenir sans qu’on sache pourquoi, et un redémarrage peut aggraver (base de données corrompue, disque plein qui empêche le redémarrage).</li>
+<li>Entre nginx et PHP-FPM : nginx a reçu la requête mais n’arrive pas à joindre PHP-FPM. <code>systemctl status php8.4-fpm</code>, puis <code>sudo tail /var/log/nginx/error.log</code> et <code>ss -xlp | grep php</code>.</li>
+<li>MariaDB est arrêtée ; ou l’application n’arrive pas à s’authentifier (mot de passe, compte), voire le disque est plein.</li>
+<li>Vérifier qu’il ne s’agit pas de la même cause (réseau, serveur Proxmox surchargé, DNS…), évaluer l’impact de chacune, enregistrer les deux, puis traiter la plus prioritaire : un contrôleur de domaine injoignable touche toute l’entreprise, mais un ping refusé n’est pas forcément une panne (pare-feu) : on teste aussitôt un autre service du serveur.</li>
+<li>Chaque événement et chaque action, avec l’heure, la machine, qui a fait quoi, le résultat.</li>
+<li>Le temps moyen entre l’alerte (ou l’appel) et la prise en charge : moyenne, sur tous les incidents, de l’écart entre l’heure de détection et l’heure où vous avez pris le ticket.</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp08-incidents.html" data-seance="8"><span class="dir">‹ Page précédente</span><span class="titre">TP 8 : Mettre en place GLPI et traiter des incidents</span></a><a class="next" href="../tp/tp09-astreinte.html" data-seance="9"><span class="dir">Page suivante ›</span><span class="titre">TP 9 : Une matinée d'astreinte chez Hexalog</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>

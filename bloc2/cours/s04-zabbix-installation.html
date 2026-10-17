@@ -1,0 +1,537 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 4 : Zabbix : architecture et agents | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Zabbix réunit dans un seul outil ce que Nagios laisse à des modules : la collecte, l'historique des mesures dans une base de données, les seuils, les alertes, les graphiques et les tableaux de bord, l">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d'Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="../tp/tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="../tp/tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="../tp/tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item active" data-seance="4"><a class="nav-link" href="s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="../tp/tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="../tp/tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d'un outil</span></a><a class="nav-tp" href="../tp/tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="../tp/tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="../tp/tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d'astreinte</span></a><a class="nav-tp" href="../tp/tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d'activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="../tp/tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d'activité</span></a><a class="nav-tp" href="../tp/tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="../tp/tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module B : Outils de supervision</span><span class="sep">›</span><span>Séance 4</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 4</span>
+  <h1>Zabbix : architecture et agents</h1>
+  <p class="lead">Zabbix réunit dans un seul outil ce que Nagios laisse à des modules : la collecte, l'historique des mesures dans une base de données, les seuils, les alertes, les graphiques et les tableaux de bord, le tout configuré par une interface web. Cette séance présente son architecture, son vocabulaire (hôtes, éléments, déclencheurs, modèles, macros) et ses agents ; le TP l'installe et supervise les serveurs Linux et Windows d'Hexalog.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 2 et 3 (collecte, agents, états)</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp04-zabbix-installation.html" data-seance="4">TP 4 : Installer Zabbix et ses agents</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#presentation">1. Zabbix en quelques mots</a></li><li><a href="#architecture">2. L’architecture</a></li><li><a href="#modele">3. Le modèle de données</a></li><li><a href="#agents">4. Les agents</a></li><li><a href="#installation">5. Installer Zabbix</a></li><li><a href="#modeles">6. Les modèles fournis</a></li><li><a href="#interface">7. Se repérer dans l’interface</a></li><li><a href="#comparaison">8. Nagios et Zabbix</a></li><li><a href="#à-retenir">9. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<div class="callout info avis-exemples"><div class="callout-body"><p class="callout-titre"><strong>Les commandes de ce cours sont des exemples</strong></p><p>Les blocs marqués <span class="code-exemple">Exemple</span> montrent des commandes et des fichiers pour expliquer comment les choses fonctionnent. Lisez-les, mais ne les tapez pas pendant le cours. Vous ferez les manipulations pendant le <a data-seance="4" href="../tp/tp04-zabbix-installation.html">TP 4</a>, dans l'ordre et sur les machines indiquées : certaines n'ont de sens qu'après les étapes précédentes.</p></div></div><h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Décrire l’architecture de Zabbix : serveur, base de données, interface web, agents, proxys.</li>
+<li>Expliquer le modèle de données : hôte, interface, élément, déclencheur, problème, modèle, macro, découverte.</li>
+<li>Distinguer contrôles passifs et actifs de l’agent, et sécuriser un agent.</li>
+<li>Installer Zabbix 7.0 LTS depuis le dépôt officiel et raccorder des hôtes Linux et Windows à l’aide des modèles fournis.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>45 min</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>3 h</td>
+<td><a data-seance="4" href="../tp/tp04-zabbix-installation.html">TP 4 : Installer Zabbix et ses agents</a></td>
+</tr>
+<tr class="odd">
+<td>15 min</td>
+<td>Quiz</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="presentation">1. Zabbix en quelques mots</h2>
+<p>Zabbix est un logiciel libre (licence AGPL depuis la version 7.0) développé par la société lettone Zabbix SIA, qui vend du support et des formations. Il sort une version <strong>LTS</strong> (<em>Long Term Support</em>) tous les deux ans environ, maintenue cinq ans :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Version</th>
+<th>Sortie</th>
+<th>Fin de support complet</th>
+<th>Fin de support limité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.0 LTS</td>
+<td>février 2022</td>
+<td>février 2025</td>
+<td>février 2027</td>
+</tr>
+<tr class="even">
+<td><strong>7.0 LTS</strong></td>
+<td>juin 2024</td>
+<td>juin 2027</td>
+<td>juin 2029</td>
+</tr>
+<tr class="odd">
+<td>8.0 LTS</td>
+<td>en préparation (version candidate à l’automne 2026)</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Le bloc utilise la <strong>7.0 LTS</strong>, la plus diffusée en entreprise aujourd’hui. Entre deux LTS paraissent des versions intermédiaires (7.2, 7.4), maintenues quelques mois seulement : on les évite en production.</p>
+<h2 id="architecture">2. L’architecture</h2>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-123253" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1008.78125px;" viewBox="0 0 1008.78125 480.2966613769531" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-123253{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-123253 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-123253 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-123253 .error-icon{fill:#f5f6f8;}#mmd0-123253 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-123253 .edge-thickness-normal{stroke-width:1px;}#mmd0-123253 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-123253 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-123253 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-123253 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-123253 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-123253 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-123253 .marker.cross{stroke:#4a5563;}#mmd0-123253 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-123253 p{margin:0;}#mmd0-123253 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-123253 .cluster-label text{fill:#1f3a5f;}#mmd0-123253 .cluster-label span{color:#1f3a5f;}#mmd0-123253 .cluster-label span p{background-color:transparent;}#mmd0-123253 .label text,#mmd0-123253 span{fill:#1d2530;color:#1d2530;}#mmd0-123253 .node rect,#mmd0-123253 .node circle,#mmd0-123253 .node ellipse,#mmd0-123253 .node polygon,#mmd0-123253 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-123253 .rough-node .label text,#mmd0-123253 .node .label text,#mmd0-123253 .image-shape .label,#mmd0-123253 .icon-shape .label{text-anchor:middle;}#mmd0-123253 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-123253 .rough-node .label,#mmd0-123253 .node .label,#mmd0-123253 .image-shape .label,#mmd0-123253 .icon-shape .label{text-align:center;}#mmd0-123253 .node.clickable{cursor:pointer;}#mmd0-123253 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-123253 .arrowheadPath{fill:#000000;}#mmd0-123253 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-123253 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-123253 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-123253 .edgeLabel p{background-color:#ffffff;}#mmd0-123253 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-123253 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-123253 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-123253 .cluster text{fill:#1f3a5f;}#mmd0-123253 .cluster span{color:#1f3a5f;}#mmd0-123253 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-123253 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-123253 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-123253 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-123253 rect.text{fill:none;stroke-width:0;}#mmd0-123253 .icon-shape,#mmd0-123253 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-123253 .icon-shape p,#mmd0-123253 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-123253 .icon-shape .label rect,#mmd0-123253 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-123253 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-123253 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-123253 .node .neo-node{stroke:#1f3a5f;}#mmd0-123253 [data-look="neo"].node rect,#mmd0-123253 [data-look="neo"].cluster rect,#mmd0-123253 [data-look="neo"].node polygon{stroke:url(#mmd0-123253-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-123253 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-123253 [data-look="neo"].node path{stroke:url(#mmd0-123253-gradient);stroke-width:1px;}#mmd0-123253 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-123253 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-123253 [data-look="neo"].node circle{stroke:url(#mmd0-123253-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-123253 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-123253 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-123253-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-123253 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-123253-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-123253 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-123253_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-123253_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-123253_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-123253_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-123253_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-123253_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-123253_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-123253_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-123253_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-123253_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-123253_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-123253_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-123253-SUP" data-look="classic"><rect style="" x="181.703125" y="8" width="819.078125" height="239.2966594696045"></rect><g class="cluster-label " transform="translate(558.5546875, 8)"><foreignObject width="65.375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>sup-lnx-01</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M652.028,133.534L724.477,109.343L822.787,97.488" id="mmd0-123253-L_S_DB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_S_DB_0" data-points="W3sieCI6NjQ4LjIzNDM3NSwieSI6MTM0LjgwMDc4NTg3NzM3NTd9LHsieCI6NzI0LjQ3NjU2MjUsInkiOjEwOS4zNDMzMTg5MzkyMDg5OH0seyJ4Ijo4MjYuNzU3ODEyNSwieSI6OTcuMDA4ODcyNTMzNjM3MjZ9XQ==" data-look="classic" marker-start="url(#mmd0-123253_flowchart-v2-pointStart)" marker-end="url(#mmd0-123253_flowchart-v2-pointEnd)"></path><path d="M357.848,70.454L425.602,58.797L572.766,58.797L724.477,58.797L822.827,77.291" id="mmd0-123253-L_W_DB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_W_DB_0" data-points="W3sieCI6MzUzLjkwNjI1LCJ5Ijo3MS4xMzI2NjMzNDA5ODg1MX0seyJ4Ijo0MjUuNjAxNTYyNSwieSI6NTguNzk2NjU5NDY5NjA0NDl9LHsieCI6NTcyLjc2NTYyNSwieSI6NTguNzk2NjU5NDY5NjA0NDl9LHsieCI6NzI0LjQ3NjU2MjUsInkiOjU4Ljc5NjY1OTQ2OTYwNDQ5fSx7IngiOjgyNi43NTc4MTI1LCJ5Ijo3OC4wMzAwNjQzMTUwOTcxMn1d" data-look="classic" marker-start="url(#mmd0-123253_flowchart-v2-pointStart)" marker-end="url(#mmd0-123253_flowchart-v2-pointEnd)"></path><path d="M353.906,91.522L425.602,99.047L493.601,127.211" id="mmd0-123253-L_W_S_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_W_S_0" data-points="W3sieCI6MzUzLjkwNjI1LCJ5Ijo5MS41MjE2OTcxMDgwNjAyNH0seyJ4Ijo0MjUuNjAxNTYyNSwieSI6OTkuMDQ2NjU5NDY5NjA0NDl9LHsieCI6NDk3LjI5Njg3NSwieSI6MTI4Ljc0MTg3NjY1MTA3OTIyfV0=" data-look="classic" marker-end="url(#mmd0-123253_flowchart-v2-pointEnd)"></path><path d="M131.703,83.797L156.703,83.797L181.703,83.797L202.703,83.797" id="mmd0-123253-L_U_W_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_U_W_0" data-points="W3sieCI6MTMxLjcwMzEyNSwieSI6ODMuNzk2NjU5NDY5NjA0NDl9LHsieCI6MTU2LjcwMzEyNSwieSI6ODMuNzk2NjU5NDY5NjA0NDl9LHsieCI6MTgxLjcwMzEyNSwieSI6ODMuNzk2NjU5NDY5NjA0NDl9LHsieCI6MjA2LjcwMzEyNSwieSI6ODMuNzk2NjU5NDY5NjA0NDl9XQ==" data-look="classic" marker-end="url(#mmd0-123253_flowchart-v2-pointEnd)"></path><path d="M648.234,159.899L724.477,159.797L848.973,279.524" id="mmd0-123253-L_S_A1_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_S_A1_0" data-points="W3sieCI6NjQ4LjIzNDM3NSwieSI6MTU5Ljg5ODg0ODA1OTk2MDg0fSx7IngiOjcyNC40NzY1NjI1LCJ5IjoxNTkuNzk2NjU5NDY5NjA0NX0seyJ4Ijo4NTEuODU1OTAyNzc3Nzc3OCwieSI6MjgyLjI5NjY1OTQ2OTYwNDV9XQ==" data-look="classic" marker-end="url(#mmd0-123253_flowchart-v2-pointEnd)"></path><path d="M312.747,282.297L425.602,160.547L493.297,160.295" id="mmd0-123253-L_A2_S_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A2_S_0" data-points="W3sieCI6MzEyLjc0NzM3MDkxMzA3ODE2LCJ5IjoyODIuMjk2NjU5NDY5NjA0NX0seyJ4Ijo0MjUuNjAxNTYyNSwieSI6MTYwLjU0NjY1OTQ2OTYwNDV9LHsieCI6NDk3LjI5Njg3NSwieSI6MTYwLjI4MDMzODE4OTU0MDc3fV0=" data-look="classic" marker-end="url(#mmd0-123253_flowchart-v2-pointEnd)"></path><path d="M648.234,188.254L724.477,216.797L866.683,399.142" id="mmd0-123253-L_S_SN_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_S_SN_0" data-points="W3sieCI6NjQ4LjIzNDM3NSwieSI6MTg4LjI1MzU1MjIxNTY4NDZ9LHsieCI6NzI0LjQ3NjU2MjUsInkiOjIxNi43OTY2NTk0Njk2MDQ1fSx7IngiOjg2OS4xNDMwOTg5NTgzMzMzLCJ5Ijo0MDIuMjk2NjU5NDY5NjA0NX1d" data-look="classic" marker-end="url(#mmd0-123253_flowchart-v2-pointEnd)"></path><path d="M303.368,402.297L425.602,216.797L493.565,190.567" id="mmd0-123253-L_P_S_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_P_S_0" data-points="W3sieCI6MzAzLjM2NzY4MzUzMTc0NiwieSI6NDAyLjI5NjY1OTQ2OTYwNDV9LHsieCI6NDI1LjYwMTU2MjUsInkiOjIxNi43OTY2NTk0Njk2MDQ1fSx7IngiOjQ5Ny4yOTY4NzUsInkiOjE4OS4xMjY0OTIwMzU2OTQ2fV0=" data-look="classic" marker-end="url(#mmd0-123253_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_S_DB_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_W_DB_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(425.6015625, 99.04665946960449)"><g class="label" data-id="L_W_S_0" transform="translate(-46.6953125, -10.5)"><foreignObject width="93.390625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>état du serveur</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_U_W_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(724.4765625, 159.7966594696045)"><g class="label" data-id="L_S_A1_0" transform="translate(-43.5859375, -10.5)"><foreignObject width="87.171875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>passif : 10050</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(425.6015625, 160.5466594696045)"><g class="label" data-id="L_A2_S_0" transform="translate(-38.140625, -10.5)"><foreignObject width="76.28125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>actif : 10051</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(724.4765625, 216.7966594696045)"><g class="label" data-id="L_S_SN_0" transform="translate(-51.2421875, -10.5)"><foreignObject width="102.484375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>SNMP : 161/udp</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(425.6015625, 216.7966594696045)"><g class="label" data-id="L_P_S_0" transform="translate(-19.46875, -10.5)"><foreignObject width="38.9375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>10051</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-123253-flowchart-S-0" data-look="classic" transform="translate(572.765625, 160)"><rect class="basic label-container" style="" x="-75.46875" y="-35" width="150.9375" height="70"></rect><g class="label" style="" transform="translate(-47.46875, -21)"><rect></rect><foreignObject width="94.9375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Serveur Zabbix<br>zabbix_server</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-123253-flowchart-DB-1" data-look="classic" transform="translate(888.25, 89.59331893920898)"><path d="M0,12.398399596748789 a61.4921875,12.398399596748789 0,0,0 122.984375,0 a61.4921875,12.398399596748789 0,0,0 -122.984375,0 l0,68.39839959674879 a61.4921875,12.398399596748789 0,0,0 122.984375,0 l0,-68.39839959674879" class="basic label-container outer-path" style="" label-offset-y="12.398399596748789" transform="translate(-61.4921875, -46.59759939512318)"></path><g class="label" style="" transform="translate(-54.4921875, -11.666666666666666)"><rect></rect><foreignObject width="108.984375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Base de données<br>MariaDB</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-123253-flowchart-W-2" data-look="classic" transform="translate(280.3046875, 83.79665946960449)"><rect class="basic label-container" style="" x="-73.6015625" y="-35" width="147.203125" height="70"></rect><g class="label" style="" transform="translate(-45.6015625, -21)"><rect></rect><foreignObject width="91.203125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Interface web<br>PHP + Apache</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-123253-flowchart-A1-3" data-look="classic" transform="translate(888.25, 317.2966594696045)"><rect class="basic label-container" style="" x="-58.734375" y="-35" width="117.46875" height="70"></rect><g class="label" style="" transform="translate(-30.734375, -21)"><rect></rect><foreignObject width="61.46875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Agent 2<br>srv-lnx-01</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-123253-flowchart-A2-4" data-look="classic" transform="translate(280.3046875, 317.2966594696045)"><rect class="basic label-container" style="" x="-60.2890625" y="-35" width="120.578125" height="70"></rect><g class="label" style="" transform="translate(-32.2890625, -21)"><rect></rect><foreignObject width="64.578125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Agent 2<br>srv-win-01</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-123253-flowchart-SN-5" data-look="classic" transform="translate(888.25, 426.7966594696045)"><rect class="basic label-container" style="" x="-87.53125" y="-24.5" width="175.0625" height="49"></rect><g class="label" style="" transform="translate(-59.53125, -10.5)"><rect></rect><foreignObject width="119.0625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Équipement SNMP</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-123253-flowchart-P-6" data-look="classic" transform="translate(280.3046875, 437.2966594696045)"><rect class="basic label-container" style="" x="-68.8515625" y="-35" width="137.703125" height="70"></rect><g class="label" style="" transform="translate(-40.8515625, -21)"><rect></rect><foreignObject width="81.703125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Proxy Zabbix<br>(site distant)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-123253-flowchart-U-7" data-look="classic" transform="translate(69.8515625, 83.79665946960449)"><rect class="basic label-container" style="" x="-61.8515625" y="-24.5" width="123.703125" height="49"></rect><g class="label" style="" transform="translate(-33.8515625, -10.5)"><rect></rect><foreignObject width="67.703125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Navigateur</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-123253-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-123253-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-123253-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Composant</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Serveur</strong> (<code>zabbix_server</code>)</td>
+<td>le cœur : des processus spécialisés interrogent les agents (<em>pollers</em>), reçoivent les données envoyées (<em>trappers</em>), font les pings (<em>pingers</em>, avec <code>fping</code>), évaluent les déclencheurs, envoient les alertes (<em>alerters</em>), purgent l’historique (<em>housekeeper</em>)</td>
+</tr>
+<tr class="even">
+<td><strong>Base de données</strong></td>
+<td><strong>toute</strong> la configuration et <strong>toutes</strong> les mesures : MariaDB/MySQL ou PostgreSQL (avec l’extension TimescaleDB pour les gros volumes)</td>
+</tr>
+<tr class="odd">
+<td><strong>Interface web</strong></td>
+<td>application PHP : configuration, visualisation, tableaux de bord ; elle ne lit que la base (et interroge le serveur pour son état)</td>
+</tr>
+<tr class="even">
+<td><strong>Agent</strong> (<code>zabbix_agentd</code>, en C) et <strong>agent 2</strong> (<code>zabbix_agent2</code>, en Go)</td>
+<td>collectent sur la machine supervisée ; l’agent 2 ajoute des greffons (<em>plugins</em>) : MySQL, PostgreSQL, Docker, Redis, certificats…</td>
+</tr>
+<tr class="odd">
+<td><strong>Proxy</strong></td>
+<td>collecte pour le compte du serveur dans un site distant ou un réseau isolé, garde les données si le lien tombe, puis les transmet</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ports à retenir : <strong>10050</strong> (l’agent écoute, contrôles passifs) et <strong>10051</strong> (le serveur ou le proxy écoute : agents actifs, proxys, envois par <code>zabbix_sender</code>).</p>
+<h2 id="modele">3. Le modèle de données</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Terme</th>
+<th>Sens</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Hôte</strong> (<em>host</em>)</td>
+<td>une machine ou un équipement supervisé</td>
+<td><code>srv-lnx-01</code></td>
+</tr>
+<tr class="even">
+<td><strong>Groupe d’hôtes</strong></td>
+<td>regroupement, aussi utilisé pour les droits et les actions ; les groupes peuvent s’imbriquer avec <code>/</code></td>
+<td><code>Hexalog/Linux</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Interface</strong></td>
+<td>comment joindre l’hôte : Agent, SNMP, IPMI, JMX</td>
+<td>Agent <code>10.20.N.20:10050</code></td>
+</tr>
+<tr class="even">
+<td><strong>Élément</strong> (<em>item</em>)</td>
+<td><strong>une</strong> mesure : une <strong>clé</strong>, un intervalle, un type de valeur, une durée de conservation</td>
+<td><code>vfs.fs.size[/,pused]</code> toutes les minutes</td>
+</tr>
+<tr class="odd">
+<td><strong>Déclencheur</strong> (<em>trigger</em>)</td>
+<td>une <strong>expression</strong> logique sur des éléments, avec une <strong>sévérité</strong></td>
+<td><code>last(/srv-lnx-01/vfs.fs.size[/,pused])&gt;90</code></td>
+</tr>
+<tr class="even">
+<td><strong>Problème</strong>, <strong>événement</strong></td>
+<td>un déclencheur qui passe à l’état PROBLÈME crée un événement et un problème, jusqu’à son rétablissement</td>
+<td>« FS [/]: Space is critically low »</td>
+</tr>
+<tr class="odd">
+<td><strong>Action</strong></td>
+<td>ce qu’on fait quand un problème apparaît : notifier, escalader, exécuter un script</td>
+<td>courriel à l’astreinte (séance 5)</td>
+</tr>
+<tr class="even">
+<td><strong>Modèle</strong> (<em>template</em>)</td>
+<td>un ensemble prêt à l’emploi d’éléments, déclencheurs, graphiques, règles de découverte, macros, qu’on <strong>lie</strong> à des hôtes</td>
+<td><code>Linux by Zabbix agent</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Macro utilisateur</strong></td>
+<td>une variable <code>{$NOM}</code>, définie dans un modèle et redéfinissable sur un hôte</td>
+<td><code>{$VFS.FS.PUSED.MAX.WARN}</code> = 80</td>
+</tr>
+<tr class="even">
+<td><strong>Découverte de bas niveau</strong> (LLD)</td>
+<td>une règle qui découvre les objets d’un hôte (systèmes de fichiers, interfaces, services Windows) et crée pour chacun éléments et déclencheurs à partir de <strong>prototypes</strong></td>
+<td>un élément « espace utilisé » par système de fichiers trouvé</td>
+</tr>
+<tr class="odd">
+<td><strong>Étiquette</strong> (<em>tag</em>)</td>
+<td>une paire nom-valeur attachée aux problèmes, pour filtrer et router les alertes</td>
+<td><code>service:intranet</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="des-clés-pour-tout">Des clés pour tout</h3>
+<p>Chaque mesure d’un agent est désignée par une <strong>clé</strong>, éventuellement avec des paramètres entre crochets :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Clé</th>
+<th>Mesure</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>agent.ping</code></td>
+<td>l’agent répond (1)</td>
+</tr>
+<tr class="even">
+<td><code>system.cpu.load[all,avg1]</code></td>
+<td>charge sur 1 minute</td>
+</tr>
+<tr class="odd">
+<td><code>vm.memory.size[pavailable]</code></td>
+<td>pourcentage de mémoire disponible</td>
+</tr>
+<tr class="even">
+<td><code>vfs.fs.size[/,pused]</code></td>
+<td>pourcentage utilisé du système de fichiers <code>/</code></td>
+</tr>
+<tr class="odd">
+<td><code>proc.num[nginx]</code></td>
+<td>nombre de processus nginx</td>
+</tr>
+<tr class="even">
+<td><code>net.tcp.service[http,,80]</code></td>
+<td>le service HTTP local répond</td>
+</tr>
+<tr class="odd">
+<td><code>web.page.get[localhost,basic_status,80]</code></td>
+<td>contenu d’une page web, lue par l’agent</td>
+</tr>
+<tr class="even">
+<td><code>service.info[DNS,state]</code></td>
+<td>état du service Windows DNS</td>
+</tr>
+<tr class="odd">
+<td><code>eventlog[Security,,,,4625]</code></td>
+<td>les événements 4625 du journal Sécurité de Windows</td>
+</tr>
+<tr class="even">
+<td><code>log[/var/log/auth.log,"Failed password"]</code></td>
+<td>les lignes d’un fichier journal contenant un motif</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="historique-et-tendances">Historique et tendances</h3>
+<p>Zabbix garde chaque valeur dans l’<strong>historique</strong> pendant une durée courte (souvent 7 à 31 jours), puis seulement des <strong>tendances</strong> (minimum, moyenne, maximum par heure) pendant un an ou plus. Le <em>housekeeper</em> supprime régulièrement les données expirées. C’est ce stockage qui permet les graphiques sur un an et la maintenance prévisionnelle (« le disque sera plein dans 20 jours »), mais c’est aussi lui qui fait grossir la base : le dimensionnement de la base est le principal souci d’exploitation de Zabbix.</p>
+<h2 id="agents">4. Les agents</h2>
+<h3 id="passif-ou-actif">Passif ou actif</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th></th>
+<th>Contrôle passif</th>
+<th>Contrôle actif</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Qui ouvre la connexion</td>
+<td>le serveur, vers l’agent (port 10050)</td>
+<td>l’agent, vers le serveur (port 10051)</td>
+</tr>
+<tr class="even">
+<td>Fonctionnement</td>
+<td>le serveur demande une valeur, l’agent répond</td>
+<td>l’agent demande au serveur la liste de ses éléments, les mesure lui-même et envoie les résultats par lots</td>
+</tr>
+<tr class="odd">
+<td>Réglage de l’agent</td>
+<td><code>Server=</code> : adresses autorisées à l’interroger</td>
+<td><code>ServerActive=</code> : où envoyer ; <code>Hostname=</code> : doit être <strong>identique</strong> au nom de l’hôte dans Zabbix</td>
+</tr>
+<tr class="even">
+<td>Intérêts</td>
+<td>simple ; le serveur sait tout de suite si l’agent ne répond pas</td>
+<td>traverse un pare-feu ou une NAT dans un seul sens ; charge moindre pour le serveur ; indispensable pour lire des journaux (<code>log[]</code>, <code>eventlog[]</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les modèles existent en deux variantes (<code>Linux by Zabbix agent</code> et <code>Linux by Zabbix agent active</code>). Dans le lab, on utilise les contrôles passifs, plus faciles à diagnostiquer, et les contrôles actifs pour les journaux (séance 7).</p>
+<h3 id="configurer-et-tester">Configurer et tester</h3>
+<p>Sous Debian, la configuration est dans <code>/etc/zabbix/zabbix_agent2.conf</code>, qui inclut les fichiers de <code>/etc/zabbix/zabbix_agent2.d/</code>. Comme pour SSH au BLOC 1, on ne modifie pas le fichier du paquet : on dépose un fichier à soi, qui remplace les valeurs par défaut.</p>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Fichier : /etc/zabbix/zabbix_agent2.d/hexalog.conf</span><span class="code-note">à lire, pas à taper</span></div><div class="sourceCode" id="cb2"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="dt">Server</span><span class="ot">=</span><span class="st">10.20.N.40</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="dt">ServerActive</span><span class="ot">=</span><span class="st">10.20.N.40</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="dt">Hostname</span><span class="ot">=</span><span class="st">srv-lnx-01</span></span></code></pre></div></div>
+<p>Deux outils de test :</p>
+<ul>
+<li><code>zabbix_agent2 -t &lt;clé&gt;</code> sur la machine supervisée : l’agent calcule la valeur localement ;</li>
+<li><code>zabbix_get -s &lt;adresse&gt; -k &lt;clé&gt;</code> sur le serveur : on interroge l’agent par le réseau, exactement comme le fera le serveur.</li>
+</ul>
+<h3 id="sécuriser-lagent">Sécuriser l’agent</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Mesure</th>
+<th>Réglage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>seules les adresses du serveur et du proxy peuvent l’interroger</td>
+<td><code>Server=</code></td>
+</tr>
+<tr class="even">
+<td>chiffrer et authentifier les échanges</td>
+<td><code>TLSConnect</code>, <code>TLSAccept</code> avec une clé partagée (PSK) ou des certificats</td>
+</tr>
+<tr class="odd">
+<td>interdire certaines clés</td>
+<td><code>DenyKey=</code>, <code>AllowKey=</code> ; la clé <code>system.run</code> (exécuter une commande) est <strong>désactivée</strong> par défaut</td>
+</tr>
+<tr class="even">
+<td>compte sans privilèges</td>
+<td>l’agent tourne sous le compte <code>zabbix</code> ; on évite <code>AllowRoot</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="installation">5. Installer Zabbix</h2>
+<p>Debian 13 contient Zabbix 7.0, mais le <strong>dépôt officiel</strong> de Zabbix fournit des correctifs plus récents : c’est la méthode recommandée par l’éditeur pour le serveur. Les étapes :</p>
+<ol type="1">
+<li>installer le paquet <code>zabbix-release</code>, qui déclare le dépôt, puis le serveur, l’interface, la configuration Apache, les scripts SQL et l’agent 2 ;</li>
+<li>créer la base <code>zabbix</code> (jeu de caractères <code>utf8mb4</code>, collation <code>utf8mb4_bin</code>) et son compte, puis <strong>importer le schéma</strong> (environ 200 tables, quelques minutes) ;</li>
+<li>indiquer le mot de passe de la base au serveur (<code>DBPassword</code> dans <code>/etc/zabbix/zabbix_server.conf</code>) et le démarrer ;</li>
+<li>terminer par l’<strong>assistant</strong> de l’interface web, qui écrit <code>/etc/zabbix/web/zabbix.conf.php</code> ;</li>
+<li>se connecter avec <code>Admin</code> / <code>zabbix</code> et <strong>changer ce mot de passe immédiatement</strong>.</li>
+</ol>
+<p>Pour une interface en français, la locale <code>fr_FR.UTF-8</code> doit exister sur le serveur. La traduction est incomplète : certains libellés restent en anglais, d’où les deux noms donnés dans les TP, par exemple <strong>Collecte de données → Hôtes</strong> (<em>Data collection → Hosts</em>).</p>
+<h2 id="modeles">6. Les modèles fournis</h2>
+<p>Zabbix livre plusieurs centaines de modèles. Ceux du bloc :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Modèle</th>
+<th>Lié à</th>
+<th>Ce qu’il apporte</th>
+<th>À régler</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Linux by Zabbix agent</code></td>
+<td>srv-lnx-01</td>
+<td>processeur, charge, mémoire, systèmes de fichiers et interfaces (découverts), redémarrages, heure</td>
+<td>rien ; certains déclencheurs informatifs</td>
+</tr>
+<tr class="even">
+<td><code>Nginx by Zabbix agent</code></td>
+<td>srv-lnx-01</td>
+<td>connexions, requêtes, processus, à partir de la page <code>basic_status</code></td>
+<td>page, hôte et port par macros (valeurs par défaut correctes ici)</td>
+</tr>
+<tr class="odd">
+<td><code>PHP-FPM by Zabbix agent</code></td>
+<td>srv-lnx-01</td>
+<td>file d’attente, processus actifs, lenteurs, à partir de <code>/status</code> et <code>/ping</code></td>
+<td>idem</td>
+</tr>
+<tr class="even">
+<td><code>MySQL by Zabbix agent 2</code></td>
+<td>srv-lnx-01</td>
+<td>disponibilité, connexions, requêtes, tampons de MariaDB</td>
+<td><code>{$MYSQL.DSN}</code>, <code>{$MYSQL.USER}</code>, <code>{$MYSQL.PASSWORD}</code></td>
+</tr>
+<tr class="odd">
+<td><code>Windows by Zabbix agent</code></td>
+<td>srv-win-01</td>
+<td>processeur, mémoire, disques, et <strong>chaque service Windows en démarrage automatique</strong> (découvert), avec un déclencheur s’il est arrêté</td>
+<td>rien</td>
+</tr>
+<tr class="even">
+<td><code>ICMP Ping</code></td>
+<td>tous</td>
+<td>joignabilité, pertes, temps de réponse (par <code>fping</code> depuis le serveur)</td>
+<td>rien</td>
+</tr>
+<tr class="odd">
+<td><code>Linux by SNMP</code></td>
+<td>un hôte SNMP</td>
+<td>les mêmes indicateurs, lus en SNMP (séance 5)</td>
+<td>interface et identifiants SNMP</td>
+</tr>
+</tbody>
+</table></div>
+<p>Lier un modèle crée en une fois des dizaines d’éléments et de déclencheurs : c’est la grande différence avec Nagios. La contrepartie est qu’il faut <strong>relire</strong> ce qu’ils surveillent et ajuster seuils et alertes (séance 5) : un modèle ne connaît pas votre contexte.</p>
+<h2 id="interface">7. Se repérer dans l’interface</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Menu</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Tableaux de bord</strong> (<em>Dashboards</em>)</td>
+<td>vues synthétiques ; le tableau <em>Global view</em> par défaut</td>
+</tr>
+<tr class="even">
+<td><strong>Surveillance → Problèmes</strong> (<em>Monitoring → Problems</em>)</td>
+<td>l’écran de l’astreinte : problèmes en cours, sévérité, durée, acquittement</td>
+</tr>
+<tr class="odd">
+<td><strong>Surveillance → Hôtes</strong></td>
+<td>disponibilité des interfaces (pastille <strong>ZBX</strong> verte, rouge ou grise), accès aux graphiques et tableaux de bord de chaque hôte</td>
+</tr>
+<tr class="even">
+<td><strong>Surveillance → Dernières données</strong> (<em>Latest data</em>)</td>
+<td>dernière valeur de chaque élément, et graphique en un clic</td>
+</tr>
+<tr class="odd">
+<td><strong>Collecte de données → Hôtes</strong> (<em>Data collection → Hosts</em>)</td>
+<td>configuration des hôtes, de leurs éléments, déclencheurs, scénarios web</td>
+</tr>
+<tr class="even">
+<td><strong>Collecte de données → Modèles</strong>, <strong>Maintenance</strong>, <strong>Découverte</strong></td>
+<td>modèles ; périodes de maintenance ; découverte réseau</td>
+</tr>
+<tr class="odd">
+<td><strong>Alertes → Actions</strong>, <strong>Types de média</strong></td>
+<td>qui prévenir, comment (séance 5)</td>
+</tr>
+<tr class="even">
+<td><strong>Utilisateurs</strong>, <strong>Administration</strong></td>
+<td>comptes, groupes, rôles ; réglages généraux, macros globales, file d’attente</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="comparaison">8. Nagios et Zabbix</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th></th>
+<th>Nagios Core</th>
+<th>Zabbix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Configuration</td>
+<td>fichiers texte</td>
+<td>interface web (et API)</td>
+</tr>
+<tr class="even">
+<td>Mesures</td>
+<td>état du dernier contrôle ; données de performance à exploiter avec un module</td>
+<td>historique et tendances de chaque valeur dans une base</td>
+</tr>
+<tr class="odd">
+<td>Seuils</td>
+<td>dans la ligne de commande du plugin</td>
+<td>dans des déclencheurs, séparés de la collecte</td>
+</tr>
+<tr class="even">
+<td>Graphiques, tableaux de bord</td>
+<td>modules externes</td>
+<td>intégrés</td>
+</tr>
+<tr class="odd">
+<td>Découverte</td>
+<td>non</td>
+<td>découverte réseau et de bas niveau</td>
+</tr>
+<tr class="even">
+<td>Agent</td>
+<td>NRPE, NCPA</td>
+<td>agent, agent 2</td>
+</tr>
+<tr class="odd">
+<td>Ressources</td>
+<td>très léger</td>
+<td>base de données à dimensionner</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="à-retenir">9. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Zabbix 7.0 LTS : serveur, base de données (toute la configuration et toutes les mesures), interface PHP, agents, proxys.</li>
+<li>Hôte, interface, élément (clé), déclencheur (expression + sévérité), problème, action, modèle, macro, découverte de bas niveau, étiquette.</li>
+<li>Historique (court) et tendances (longues) : la base grossit, le <em>housekeeper</em> purge.</li>
+<li>Agent passif : le serveur interroge le port 10050 (<code>Server=</code>) ; actif : l’agent envoie au port 10051 (<code>ServerActive=</code>, <code>Hostname=</code> identique au nom de l’hôte).</li>
+<li><code>zabbix_agent2 -t</code> sur la machine, <code>zabbix_get</code> depuis le serveur.</li>
+<li>Un modèle crée des dizaines de contrôles d’un coup : relire et ajuster.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Où Zabbix range-t-il sa configuration et ses mesures ?</li>
+<li>Que fait un proxy Zabbix, et dans quel cas en installe-t-on un ?</li>
+<li>Différence entre un élément et un déclencheur ?</li>
+<li>Que représente la clé <code>vfs.fs.size[/,pused]</code> ?</li>
+<li>Un agent est réglé avec <code>Server=10.20.3.40</code>. Que se passe-t-il si on l’interroge avec <code>zabbix_get</code> depuis <code>10.20.3.20</code> ?</li>
+<li>En contrôle actif, pourquoi <code>Hostname=</code> doit-il être identique au nom de l’hôte dans l’interface ?</li>
+<li>Pourquoi la base d’un Zabbix grossit-elle avec le temps, et comment limite-t-on sa taille ?</li>
+<li>À quoi sert une macro comme <code>{$VFS.FS.PUSED.MAX.WARN}</code> dans un modèle ?</li>
+<li>Que crée la découverte de bas niveau sur un serveur Windows lié au modèle <code>Windows by Zabbix agent</code> ?</li>
+<li>Citez deux avantages de Zabbix sur Nagios, et un inconvénient.</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Dans la base de données (MariaDB ou PostgreSQL), pour les deux.</li>
+<li>Il collecte pour le compte du serveur dans un site distant ou un réseau isolé, garde les données en cas de coupure et les transmet ensuite ; on l’installe pour un site distant, une zone isolée par un pare-feu, ou pour répartir la charge.</li>
+<li>L’élément <strong>mesure</strong> (une valeur par intervalle) ; le déclencheur <strong>évalue</strong> une condition sur des éléments et passe à l’état problème.</li>
+<li>Le pourcentage d’espace utilisé du système de fichiers monté sur <code>/</code>.</li>
+<li>L’agent refuse : la connexion est fermée sans réponse (<code>zabbix_get</code> signale une réponse vide), et l’agent note le refus dans son journal.</li>
+<li>L’agent se présente au serveur sous ce nom pour obtenir la liste de ses éléments et envoyer ses valeurs : si le nom ne correspond à aucun hôte, le serveur ignore ses données.</li>
+<li>Chaque valeur est stockée ; on limite la durée d’historique et de tendances, et le <em>housekeeper</em> supprime ce qui a expiré. On choisit aussi des intervalles raisonnables.</li>
+<li>C’est un seuil réglable : le déclencheur du modèle l’utilise, et on peut le redéfinir sur un hôte (par exemple 85 % au lieu de 80 %) sans modifier le modèle.</li>
+<li>Un élément d’état et un déclencheur pour chaque service Windows en démarrage automatique (et pour chaque disque, chaque interface).</li>
+<li>Avantages : historique et graphiques intégrés, configuration par l’interface, modèles et découverte, agents riches. Inconvénient : plus lourd (base de données à dimensionner et à sauvegarder), plus complexe à prendre en main.</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp03-nagios.html" data-seance="3"><span class="dir">‹ Page précédente</span><span class="titre">TP 3 : Superviser Hexalog avec Nagios</span></a><a class="next" href="../tp/tp04-zabbix-installation.html" data-seance="4"><span class="dir">Page suivante ›</span><span class="titre">TP 4 : Installer Zabbix et ses agents</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>

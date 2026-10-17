@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 12 : Documenter le MCO et réviser | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Une infrastructure bien supervisée mais que seul son auteur sait exploiter n&#x27;est pas maintenue : elle est en sursis. Cette courte séance rassemble ce que vous avez produit depuis le début du bloc dans">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="../tp/tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="../tp/tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="../tp/tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="../tp/tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="../tp/tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="../tp/tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="../tp/tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="../tp/tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="../tp/tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="../tp/tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="../tp/tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item active" data-seance="12"><a class="nav-link" href="s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="../tp/tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module E : Consolidation et évaluation</span><span class="sep">›</span><span>Séance 12</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 12</span>
+  <h1>Documenter le MCO et réviser</h1>
+  <p class="lead">Une infrastructure bien supervisée mais que seul son auteur sait exploiter n'est pas maintenue : elle est en sursis. Cette courte séance rassemble ce que vous avez produit depuis le début du bloc dans un dossier de MCO, utilisable par quelqu'un d'autre, à 3 heures du matin. Elle sert aussi à remettre le lab en état et à réviser avant l'évaluation finale.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>2 h</td></tr><tr><th>Prérequis</th><td>séances 1 à 11</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp12-dossier-mco.html" data-seance="12">TP 12 : Le dossier de MCO d&#x27;Hexalog</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#dossier">1. Le dossier de MCO</a></li><li><a href="#qualites">2. Ce qui rend un dossier utilisable</a></li><li><a href="#evaluation">3. Préparer l’évaluation</a></li></ul></nav>
+<article class="content">
+<h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Connaître le contenu d’un dossier de maintien en condition opérationnelle et ce qui le rend utilisable.</li>
+<li>Mettre le lab en conformité avant l’évaluation.</li>
+<li>Réviser les notions du bloc.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>15 min</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>1 h 35</td>
+<td><a data-seance="12" href="../tp/tp12-dossier-mco.html">TP 12 : Le dossier de MCO d’Hexalog</a> : conformité du lab, dossier de MCO, relecture croisée</td>
+</tr>
+<tr class="odd">
+<td>10 min</td>
+<td>Snapshots et consignes pour l’évaluation</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="dossier">1. Le dossier de MCO</h2>
+<p>Le <strong>dossier de MCO</strong> (ou dossier d’exploitation) rassemble tout ce qu’il faut pour <strong>faire fonctionner</strong>, <strong>surveiller</strong>, <strong>réparer</strong> et <strong>reprendre</strong> le système d’information. Au BLOC 1, vous avez écrit le dossier d’exploitation de la construction d’Hexalog ; celui-ci décrit sa <strong>vie quotidienne</strong>.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Partie</th>
+<th>Contenu</th>
+<th>Produit pendant le bloc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Présentation</td>
+<td>services rendus, utilisateurs, horaires, contacts, engagements de service</td>
+<td>TP 8 (SLA), TP 11 (BIA)</td>
+</tr>
+<tr class="even">
+<td>2. Architecture</td>
+<td>schéma des machines et des flux, inventaire, plan d’adressage, matrice des flux de supervision</td>
+<td>TP 1, page du lab</td>
+</tr>
+<tr class="odd">
+<td>3. Supervision</td>
+<td><strong>matrice de supervision</strong> (quoi, comment, seuils, sévérité, qui est prévenu), outils, tableaux de bord, procédure « ajouter un serveur à la supervision »</td>
+<td>TP 2 à 6</td>
+</tr>
+<tr class="even">
+<td>4. Journaux</td>
+<td>politique de journalisation : sources, centralisation, durée de conservation et justification, accès</td>
+<td>TP 7</td>
+</tr>
+<tr class="odd">
+<td>5. Maintenance</td>
+<td>plan de maintenance préventive, politique de mises à jour, procédure de changement, journal des modifications</td>
+<td>TP 7</td>
+</tr>
+<tr class="even">
+<td>6. Incidents</td>
+<td>organisation du support (niveaux, groupes, catégories, priorités, SLA), fiches réflexes, comptes rendus après incident</td>
+<td>TP 8, 9</td>
+</tr>
+<tr class="odd">
+<td>7. Sauvegardes</td>
+<td>politique (quoi, quand, où, combien de temps), supervision des sauvegardes, rapports de tests de restauration</td>
+<td>TP 10</td>
+</tr>
+<tr class="even">
+<td>8. Continuité</td>
+<td>BIA, PRA, fiches de reprise, résultats des exercices</td>
+<td>TP 11</td>
+</tr>
+<tr class="odd">
+<td>9. Annexes</td>
+<td>modèles, références, historique des versions du dossier</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="qualites">2. Ce qui rend un dossier utilisable</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Qualité</th>
+<th>Concrètement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Exact</strong></td>
+<td>il décrit ce qui est réellement en place : on vérifie deux ou trois points au hasard (une règle, un seuil, un chemin)</td>
+</tr>
+<tr class="even">
+<td><strong>Actionnable</strong></td>
+<td>chaque procédure indique la machine, le compte, la commande ou le menu exact, le résultat attendu</td>
+</tr>
+<tr class="odd">
+<td><strong>Lisible par un tiers</strong></td>
+<td>quelqu’un qui n’a pas construit le système peut s’en servir ; pas de « comme d’habitude », pas d’abréviations non définies</td>
+</tr>
+<tr class="even">
+<td><strong>À jour et daté</strong></td>
+<td>une version, une date, un auteur ; mis à jour à chaque changement (le journal des modifications en garde la trace)</td>
+</tr>
+<tr class="odd">
+<td><strong>Accessible en cas de crise</strong></td>
+<td>une copie hors du système d’information (imprimée, ou sur un autre service), surtout pour le PRA et les contacts</td>
+</tr>
+<tr class="even">
+<td><strong>Sans secret</strong></td>
+<td>aucun mot de passe, aucune clé privée : on indique <strong>où</strong> ils sont rangés (coffre de mots de passe), jamais leur valeur</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout tip"><div class="callout-body"><p class="callout-titre"><strong>Le test du remplaçant</strong></p>
+<p>Donnez une procédure à un camarade qui ne connaît pas votre lab, et regardez-le faire sans l’aider. Chaque question qu’il vous pose est une ligne manquante.</p>
+</div></div>
+<h2 id="evaluation">3. Préparer l’évaluation</h2>
+<p>L’évaluation finale (séance 13) comporte une <strong>étude de cas</strong> sur une autre entreprise et une <strong>mise en situation</strong> sur votre lab : superviser un nouveau service, traiter des incidents, restaurer des données, et en rendre compte. Elle part de votre lab tel qu’il sera à la fin de cette séance (snapshots <code>12-lab-final</code>) : tout ce qui n’y fonctionne pas vous fera perdre du temps.</p>
+<p>La fiche de révision est dans le cours de la <a href="s13-evaluation.html">séance 13</a>.</p>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp11-pra.html" data-seance="11"><span class="dir">‹ Page précédente</span><span class="titre">TP 11 : Rédiger le PRA et l&#x27;éprouver</span></a><a class="next" href="../tp/tp12-dossier-mco.html" data-seance="12"><span class="dir">Page suivante ›</span><span class="titre">TP 12 : Le dossier de MCO d&#x27;Hexalog</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

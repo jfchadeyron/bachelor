@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossaire | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Les termes techniques du bloc, avec une définition courte et le numéro de la séance où ils sont expliqués en détail.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="kind-page">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="lab.html">Le lab</a>
+    <a href="memo.html">Aide-mémoire</a>
+    <a href="glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp/tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp/tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp/tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp/tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp/tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp/tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp/tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp/tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp/tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp/tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp/tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp/tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item active"><a class="nav-link" href="glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="index.html">Accueil</a><span class="sep">›</span><span>Glossaire</span></div>
+<header class="hero">
+  <span class="surtitre">Ressources</span>
+  <h1>Glossaire</h1>
+  <p class="lead">Les termes techniques du bloc, avec une définition courte et le numéro de la séance où ils sont expliqués en détail.</p>
+  
+</header>
+
+<article class="content">
+<p><a href="#a">A</a> | <a href="#b">B</a> | <a href="#c">C</a> | <a href="#d">D</a> | <a href="#e">E</a> | <a href="#f">F</a> | <a href="#g">G</a> | <a href="#h">H</a> | <a href="#i">I</a> | <a href="#j">J</a> | <a href="#l">L</a> | <a href="#m">M</a> | <a href="#n">N</a> | <a href="#o">O</a> | <a href="#p">P</a> | <a href="#r">R</a> | <a href="#s">S</a> | <a href="#t">T</a> | <a href="#u">U</a> | <a href="#w">W</a> | <a href="#z">Z</a></p>
+<h2 id="a">A</h2>
+<dl>
+<dt>Acquittement (acknowledge)</dt>
+<dd>
+Action par laquelle une personne signale qu’elle a pris un problème en charge : les autres le voient, les relances s’arrêtent. (S1, S3, S5)
+</dd>
+<dt>Action (Zabbix)</dt>
+<dd>
+Règle qui, lorsqu’un problème remplit des conditions (groupe d’hôtes, sévérité, étiquette), exécute des opérations : envoyer un message, escalader, lancer un script. (S5)
+</dd>
+<dt>Agent</dt>
+<dd>
+Programme installé sur une machine supervisée, qui mesure ce qui s’y passe et le transmet au serveur de supervision : agent Zabbix, NRPE, NCPA. (S2, S4)
+</dd>
+<dt>Agent invité QEMU</dt>
+<dd>
+Service installé dans une VM Proxmox qui permet à l’hyperviseur de connaître son adresse, de l’arrêter proprement et de figer ses systèmes de fichiers pendant une sauvegarde. (S1, S10)
+</dd>
+<dt>Alerte</dt>
+<dd>
+Événement qui demande l’attention de quelqu’un, transmis par un canal (courriel, SMS, ticket). Une bonne alerte est actionnable. (S1, S8)
+</dd>
+<dt>Analyse d’impact sur l’activité (BIA)</dt>
+<dd>
+Étude, menée avec les métiers, des conséquences de l’interruption de chaque service selon sa durée ; elle fixe la DMIA et la PDMA. (S11)
+</dd>
+<dt>Astreinte</dt>
+<dd>
+Période pendant laquelle une personne, hors de son temps de travail, doit pouvoir intervenir sur les incidents. (S9)
+</dd>
+</dl>
+<h2 id="b">B</h2>
+<dl>
+<dt>Base de connaissances</dt>
+<dd>
+Ensemble d’articles réutilisables (solutions, procédures) consultés par le support et parfois par les utilisateurs. (S8)
+</dd>
+<dt>Battement (flapping)</dt>
+<dd>
+Changements d’état répétés d’un contrôle (OK, CRITIQUE, OK…), signe d’un seuil mal réglé ou d’un problème intermittent. (S3)
+</dd>
+<dt>Boîte blanche, boîte noire</dt>
+<dd>
+Supervision de l’intérieur d’une machine (processeur, disques, services) ou de l’extérieur, comme un utilisateur (la page répond-elle avec le bon contenu ?). (S1)
+</dd>
+<dt>Budget d’erreur</dt>
+<dd>
+Écart entre 100 % et le SLO : l’indisponibilité « autorisée » sur la période, à partager entre pannes et maintenances. (S1)
+</dd>
+</dl>
+<h2 id="c">C</h2>
+<dl>
+<dt>CAB (comité consultatif des changements)</dt>
+<dd>
+Instance qui évalue et valide les changements normaux. (S7)
+</dd>
+<dt>Capteur (sensor)</dt>
+<dd>
+Dans PRTG, un contrôle sur un appareil, avec un état et un ou plusieurs canaux de mesure ; c’est l’unité de la licence. (S6)
+</dd>
+<dt>Centre de services (service desk)</dt>
+<dd>
+Point de contact unique entre les utilisateurs et le service informatique ; il enregistre, qualifie et résout ou escalade les demandes. (S8)
+</dd>
+<dt>Centreon</dt>
+<dd>
+Logiciel de supervision d’origine française, héritier du modèle de Nagios (plugins), avec une interface de configuration. (S1, S6)
+</dd>
+<dt>CERT-FR</dt>
+<dd>
+Centre gouvernemental français de veille, d’alerte et de réponse aux attaques informatiques ; il publie avis et alertes sur les vulnérabilités. (S7)
+</dd>
+<dt>Changement</dt>
+<dd>
+Ajout, modification ou suppression d’un élément pouvant avoir un effet sur les services ; standard, normal ou urgent. (S7)
+</dd>
+<dt>Clone lié, clone intégral</dt>
+<dd>
+Copie d’un modèle Proxmox : le clone lié ne stocke que ses différences avec le modèle (rapide, économe, dépendant) ; le clone intégral est une copie complète et indépendante. (S1)
+</dd>
+<dt>cloud-init</dt>
+<dd>
+Outil des images « cloud » qui configure la VM à son premier démarrage (nom, compte, clé SSH, adresse, DNS) à partir des réglages fournis par l’hyperviseur. (S1)
+</dd>
+<dt>Code retour</dt>
+<dd>
+Nombre renvoyé par un plugin à la fin de son exécution : 0 OK, 1 WARNING, 2 CRITICAL, 3 UNKNOWN. (S2)
+</dd>
+<dt>Cohérence applicative</dt>
+<dd>
+Sauvegarde qui donne une image exacte et utilisable d’une application à un instant (transactions comprises), obtenue avec l’outil de l’application (<code>mariadb-dump --single-transaction</code>). (S10)
+</dd>
+<dt>Communauté SNMP</dt>
+<dd>
+Mot de passe de SNMP v1 et v2c, transmis en clair ; on la limite à la lecture seule et à l’adresse du serveur de supervision. (S2)
+</dd>
+<dt>Compte rendu après incident (post-mortem, RETEX)</dt>
+<dd>
+Analyse écrite d’un incident : chronologie, détection, causes, ce qui a fonctionné ou manqué, actions avec responsable et date ; sans recherche de coupable. (S8, S9, S11)
+</dd>
+<dt>Contournement (solution de)</dt>
+<dd>
+Action qui rétablit le service sans supprimer la cause. (S8)
+</dd>
+<dt>CVE, CVSS</dt>
+<dd>
+Identifiant public d’une vulnérabilité ; score de gravité de 0 à 10. (S7)
+</dd>
+</dl>
+<h2 id="d">D</h2>
+<dl>
+<dt>Déclencheur (trigger)</dt>
+<dd>
+Dans Zabbix, expression logique sur des éléments, avec une sévérité ; quand elle devient vraie, un problème est ouvert. (S4, S5)
+</dd>
+<dt>Découverte de bas niveau (LLD)</dt>
+<dd>
+Règle Zabbix qui découvre les objets d’un hôte (systèmes de fichiers, interfaces, services Windows) et crée pour chacun éléments et déclencheurs. (S4)
+</dd>
+<dt>Déduplication</dt>
+<dd>
+Technique de sauvegarde qui découpe les données en blocs et ne stocke jamais deux fois le même bloc. (S10)
+</dd>
+<dt>Demande de changement (RFC)</dt>
+<dd>
+Document qui décrit un changement prévu : objet, justification, impact, risque, tests, retour arrière, fenêtre, validation, clôture. (S7)
+</dd>
+<dt>Demande de service</dt>
+<dd>
+Demande normale d’un utilisateur, qui n’est pas une panne (un compte, un accès, un matériel). (S8)
+</dd>
+<dt>Dépendance</dt>
+<dd>
+Relation entre deux contrôles ou déclencheurs : si la cause est en panne, la conséquence n’est pas signalée, pour n’avoir qu’une alerte par cause. (S3, S5)
+</dd>
+<dt>Dirty bitmap (carte des blocs modifiés)</dt>
+<dd>
+Liste, tenue par QEMU, des blocs d’un disque modifiés depuis la dernière sauvegarde ; elle rend les sauvegardes suivantes très rapides, tant que la VM n’est pas arrêtée. (S10)
+</dd>
+<dt>DMIA (durée maximale d’interruption admissible)</dt>
+<dd>
+Durée d’interruption au-delà de laquelle les conséquences pour l’activité deviennent inacceptables ; le RTO doit lui être inférieur. (S11)
+</dd>
+<dt>Données de performance (perfdata)</dt>
+<dd>
+Valeurs chiffrées qu’un plugin ajoute après la barre verticale, pour les graphiques : <code>étiquette=valeur;avertissement;critique;min;max</code>. (S2)
+</dd>
+</dl>
+<h2 id="e">E</h2>
+<dl>
+<dt>Élagage (prune), ramasse-miettes</dt>
+<dd>
+Suppression des sauvegardes qui dépassent la politique de conservation ; puis, dans PBS, libération des blocs qui ne servent plus. (S10)
+</dd>
+<dt>Élément (item)</dt>
+<dd>
+Dans Zabbix, une mesure : une clé, un intervalle, un type de valeur, une durée de conservation. (S4)
+</dd>
+<dt>Erreur connue</dt>
+<dd>
+Problème dont la cause est identifiée, avec ou sans correction définitive. (S8)
+</dd>
+<dt>Escalade</dt>
+<dd>
+Transfert d’un problème ou d’un ticket à un niveau plus compétent (fonctionnelle) ou à un responsable (hiérarchique), souvent après un délai. (S5, S8)
+</dd>
+<dt>Étiquette (tag)</dt>
+<dd>
+Paire nom-valeur attachée à un déclencheur ou un problème, pour filtrer, router les alertes et définir les services. (S4, S5)
+</dd>
+<dt>États SOFT et HARD</dt>
+<dd>
+Dans Nagios, un problème non encore confirmé (SOFT, Nagios reteste) ou confirmé après plusieurs échecs (HARD, qui déclenche la notification). (S3)
+</dd>
+<dt>Événement</dt>
+<dd>
+Changement d’état notable, à un instant donné : un contrôle qui passe en CRITIQUE, un trap SNMP. (S1, S8)
+</dd>
+<dt>Exercice sur table</dt>
+<dd>
+Test d’un plan de crise par le déroulement d’un scénario en réunion, sans toucher aux machines. (S11)
+</dd>
+<dt>Expression de récupération</dt>
+<dd>
+Expression Zabbix plus stricte que celle du problème, qui doit devenir vraie pour le résoudre : c’est l’hystérésis. (S5)
+</dd>
+</dl>
+<h2 id="f">F</h2>
+<dl>
+<dt>Facilité, sévérité (syslog)</dt>
+<dd>
+Origine d’un message (<code>auth</code>, <code>daemon</code>, <code>kern</code>…) et gravité (de 0 <code>emerg</code> à 7 <code>debug</code>). (S7)
+</dd>
+<dt>Fatigue d’alerte</dt>
+<dd>
+Perte d’attention causée par trop d’alertes inutiles : la vraie panne passe inaperçue. (S1)
+</dd>
+<dt>Fiche réflexe (runbook)</dt>
+<dd>
+Procédure courte pour une situation connue, utilisable par quelqu’un qui n’a pas construit le système. (S9)
+</dd>
+<dt>File d’attente (rsyslog)</dt>
+<dd>
+Mémoire tampon, éventuellement sur disque, qui garde les messages quand le serveur de destination est injoignable. (S7)
+</dd>
+</dl>
+<h2 id="g">G</h2>
+<dl>
+<dt>GFS (grand-père, père, fils)</dt>
+<dd>
+Politique de conservation qui garde des sauvegardes quotidiennes, hebdomadaires et mensuelles. (S10)
+</dd>
+<dt>GLPI</dt>
+<dd>
+Logiciel libre français de gestion des services informatiques : tickets, problèmes, changements, SLA, base de connaissances, inventaire. (S8)
+</dd>
+</dl>
+<h2 id="h">H</h2>
+<dl>
+<dt>Haute disponibilité</dt>
+<dd>
+Organisation (grappe, redondance, bascule automatique) qui réduit fortement les interruptions ; elle réplique aussi les erreurs et ne remplace pas une sauvegarde. (S11)
+</dd>
+<dt>Historique, tendances</dt>
+<dd>
+Dans Zabbix, toutes les valeurs, gardées peu de temps ; puis seulement un minimum, une moyenne et un maximum par heure, gardés longtemps. (S4)
+</dd>
+<dt>Hystérésis</dt>
+<dd>
+Écart entre le seuil de déclenchement et le seuil de retour à la normale, pour éviter le battement. (S1, S5)
+</dd>
+</dl>
+<h2 id="i">I</h2>
+<dl>
+<dt>Incident</dt>
+<dd>
+Interruption non planifiée d’un service, ou baisse de sa qualité. (S8)
+</dd>
+<dt>Incident majeur</dt>
+<dd>
+Incident à très fort impact, traité par une procédure dédiée : un responsable qui coordonne, une cellule, une communication régulière. (S8)
+</dd>
+<dt>ITIL</dt>
+<dd>
+Ensemble de bonnes pratiques de gestion des services informatiques ; ITIL 4 décrit notamment les gestions des incidents, des problèmes et des changements. (S8)
+</dd>
+</dl>
+<h2 id="j">J</h2>
+<dl>
+<dt>journald</dt>
+<dd>
+Service de journalisation de systemd, qui range tous les messages dans un journal binaire interrogé par <code>journalctl</code>. (S7)
+</dd>
+<dt>Journal (log)</dt>
+<dd>
+Lignes de texte horodatées écrites par les programmes. (S1, S7)
+</dd>
+<dt>Journal des modifications</dt>
+<dd>
+Registre daté de toutes les modifications apportées au système, avec leur auteur et leur raison. (S7)
+</dd>
+</dl>
+<h2 id="l">L</h2>
+<dl>
+<dt>logrotate</dt>
+<dd>
+Outil qui renomme, compresse et supprime les fichiers journaux selon leur âge ou leur taille. (S7)
+</dd>
+<dt>LTS (Long Term Support)</dt>
+<dd>
+Version d’un logiciel maintenue plusieurs années ; Zabbix 7.0 LTS est maintenue jusqu’en 2029. (S4)
+</dd>
+</dl>
+<h2 id="m">M</h2>
+<dl>
+<dt>Macro</dt>
+<dd>
+Variable dans Nagios (<code>$HOSTADDRESS$</code>, <code>$USER1$</code>) ou Zabbix (<code>{$VFS.FS.PUSED.MAX.WARN}</code>) ; dans Zabbix, on la redéfinit sur un hôte pour adapter un seuil sans modifier le modèle. (S3, S4, S5)
+</dd>
+<dt>Main courante</dt>
+<dd>
+Registre horodaté de tous les événements et actions d’une astreinte ou d’une crise. (S9)
+</dd>
+<dt>Maintenance (types)</dt>
+<dd>
+Corrective (palliative ou curative), préventive (systématique, conditionnelle ou prévisionnelle), évolutive. (S1, S7)
+</dd>
+<dt>Maintenance (période de), arrêt planifié</dt>
+<dd>
+Plage pendant laquelle l’outil de supervision ne notifie pas les problèmes des hôtes concernés (<em>downtime</em> dans Nagios). (S3, S5, S7)
+</dd>
+<dt>Matrice de priorité</dt>
+<dd>
+Tableau qui donne la priorité d’un ticket à partir de son impact et de son urgence. (S8)
+</dd>
+<dt>Matrice de supervision</dt>
+<dd>
+Document qui indique, pour chaque service, les indicateurs, la méthode, les seuils, la durée et les personnes à prévenir. (S2)
+</dd>
+<dt>MCO, MCS</dt>
+<dd>
+Maintien en condition opérationnelle : tout ce qui permet à un système de continuer à rendre le service attendu ; maintien en condition de sécurité : sa partie sécurité. (S1)
+</dd>
+<dt>Métrique</dt>
+<dd>
+Valeur numérique mesurée à intervalles réguliers ; une suite de métriques forme une série temporelle. (S1)
+</dd>
+<dt>MIB, OID</dt>
+<dd>
+Fichier qui décrit une branche de l’arbre des objets SNMP ; identifiant numérique d’un objet dans cet arbre (<code>.1.3.6.1.2.1.1.5.0</code>). (S2)
+</dd>
+<dt>Mode dégradé</dt>
+<dd>
+Fonctionnement provisoire de l’activité sans le service en panne (procédure manuelle, liste imprimée). (S11)
+</dd>
+<dt>Modèle (template)</dt>
+<dd>
+Dans Proxmox, une VM figée qui sert à fabriquer des clones ; dans Zabbix, un ensemble prêt à l’emploi d’éléments, de déclencheurs et de graphiques que l’on lie à des hôtes. (S1, S4)
+</dd>
+<dt>MTBF, MTTD, MTTA, MTTR</dt>
+<dd>
+Temps moyens entre deux pannes, de détection, de prise en charge, de rétablissement. Disponibilité = MTBF / (MTBF + MTTR). (S1, S9)
+</dd>
+</dl>
+<h2 id="n">N</h2>
+<dl>
+<dt>Nagios Core</dt>
+<dd>
+Logiciel libre de supervision : un ordonnanceur qui lance des plugins, retient des états et notifie ; configuration en fichiers texte. (S3)
+</dd>
+<dt>NCPA, NRPE</dt>
+<dd>
+Agents de Nagios : NCPA (multiplateforme, API HTTPS sur le port 5693) ; NRPE (Linux, port 5666, commandes prédéfinies). (S3)
+</dd>
+<dt>NTP</dt>
+<dd>
+Protocole de synchronisation de l’heure (UDP 123), indispensable pour corréler les journaux. (S7)
+</dd>
+</dl>
+<h2 id="o">O</h2>
+<dl>
+<dt>OLA (accord de niveau opérationnel)</dt>
+<dd>
+Engagement de délai entre deux équipes internes, qui permet de tenir le SLA. (S8)
+</dd>
+</dl>
+<h2 id="p">P</h2>
+<dl>
+<dt>PBS (Proxmox Backup Server)</dt>
+<dd>
+Serveur de sauvegarde de Proxmox : déduplication, sauvegardes incrémentales rapides, vérification, restauration de fichiers, espaces de noms, synchronisation. (S10)
+</dd>
+<dt>PCA (plan de continuité d’activité)</dt>
+<dd>
+Mesures pour continuer à fonctionner malgré un incident, éventuellement en mode dégradé. (S11)
+</dd>
+<dt>PDMA (perte de données maximale admissible)</dt>
+<dd>
+Quantité de données (en durée de saisie) que l’entreprise accepte de perdre ; le RPO doit lui être inférieur. (S11)
+</dd>
+<dt>Plugin (de supervision)</dt>
+<dd>
+Programme qui fait un test, affiche une ligne de résultat et sort avec un code retour ; convention de Nagios, reprise par de nombreux outils. (S2)
+</dd>
+<dt>Pool (Proxmox)</dt>
+<dd>
+Regroupement de VM et de stockages sur lequel on donne des droits. (S1)
+</dd>
+<dt>PRA (plan de reprise d’activité)</dt>
+<dd>
+Organisation et procédures pour reprendre l’activité après une interruption : quoi, dans quel ordre, en combien de temps, avec quelle perte de données, avec qui. (S11)
+</dd>
+<dt>Priorité</dt>
+<dd>
+Ordre de traitement d’un ticket, calculé à partir de l’impact et de l’urgence. (S8)
+</dd>
+<dt>Problème</dt>
+<dd>
+Cause, connue ou non, d’un ou plusieurs incidents ; sa gestion vise à la supprimer. (S8)
+</dd>
+<dt>Prometheus, Grafana</dt>
+<dd>
+Base de séries temporelles qui va lire les métriques exposées par des <em>exporters</em> ; outil de tableaux de bord. (S1, S6)
+</dd>
+<dt>Proxmox VE</dt>
+<dd>
+Hyperviseur de type 1 libre, basé sur Debian : VM KVM, conteneurs LXC, interface web, droits, réseaux virtuels, sauvegardes, grappes. (S1)
+</dd>
+<dt>Proxy (Zabbix)</dt>
+<dd>
+Composant qui collecte pour le compte du serveur dans un site distant ou un réseau isolé, et garde les données si le lien est coupé. (S4)
+</dd>
+<dt>PRTG</dt>
+<dd>
+Logiciel commercial de supervision sous Windows, à découverte automatique, vendu par nombre de capteurs. (S6)
+</dd>
+</dl>
+<h2 id="r">R</h2>
+<dl>
+<dt>Rançongiciel</dt>
+<dd>
+Logiciel malveillant qui chiffre les données (et les sauvegardes accessibles) et exige une rançon. (S10, S11)
+</dd>
+<dt>Redondance</dt>
+<dd>
+Doublement d’un composant (RAID, alimentation, serveur) pour résister à sa panne ; ce n’est pas une sauvegarde. (S10)
+</dd>
+<dt>Règle 3-2-1-1-0</dt>
+<dd>
+Trois exemplaires des données, sur deux supports, dont un hors site et un hors ligne ou immuable, et zéro erreur à la vérification. (S10)
+</dd>
+<dt>Réplication</dt>
+<dd>
+Copie tenue à jour en continu sur un autre système ; elle recopie aussi les erreurs. (S10, S11)
+</dd>
+<dt>RTO, RPO</dt>
+<dd>
+Durée maximale pour rétablir un service ; ancienneté maximale des données restaurées (perte de données). (S11)
+</dd>
+<dt>rsyslog</dt>
+<dd>
+Service de journalisation qui écrit les fichiers texte, envoie les journaux à un serveur central et en reçoit. (S7)
+</dd>
+</dl>
+<h2 id="s">S</h2>
+<dl>
+<dt>Sauvegarde complète, différentielle, incrémentale</dt>
+<dd>
+Tout ; ce qui a changé depuis la dernière complète ; ce qui a changé depuis la dernière sauvegarde. (S10)
+</dd>
+<dt>Scénario web</dt>
+<dd>
+Suite de requêtes HTTP exécutées par Zabbix comme un navigateur, avec texte et codes attendus : la supervision de l’utilisateur. (S5)
+</dd>
+<dt>SDN, VNet</dt>
+<dd>
+Réseaux virtuels de Proxmox définis dans l’interface ; un VNet est un réseau, ici privé et traduit vers Internet par le serveur. (S1)
+</dd>
+<dt>Sévérité (Zabbix)</dt>
+<dd>
+Gravité d’un déclencheur : non classé, information, avertissement, moyen, haut, désastre ; elle sert à router les alertes. (S5)
+</dd>
+<dt>SIEM</dt>
+<dd>
+Outil qui collecte et corrèle les événements de sécurité et alerte selon des règles de détection. (S7)
+</dd>
+<dt>Site froid, tiède, chaud</dt>
+<dd>
+Lieu de reprise : locaux prêts sans matériel ; matériel prêt, données à restaurer ; tout répliqué, bascule rapide. (S11)
+</dd>
+<dt>SLA, SLO, SLI</dt>
+<dd>
+Engagement contractuel de niveau de service ; objectif interne ; mesure. (S1, S8)
+</dd>
+<dt>Snapshot</dt>
+<dd>
+Point de retour d’une VM sur le même stockage ; utile le temps d’une intervention, ce n’est pas une sauvegarde. (S1, S10)
+</dd>
+<dt>SNMP</dt>
+<dd>
+Protocole standard de supervision des équipements (UDP 161, traps sur 162) ; v3 <code>authPriv</code> authentifie et chiffre. (S2)
+</dd>
+<dt>Sonde (PRTG)</dt>
+<dd>
+Composant qui réalise les contrôles : sonde locale sur le serveur central, sondes distantes dans les autres sites. (S6)
+</dd>
+<dt>syslog</dt>
+<dd>
+Format et protocole historiques des journaux sous Unix (RFC 5424). (S7)
+</dd>
+</dl>
+<h2 id="t">T</h2>
+<dl>
+<dt>Test de restauration</dt>
+<dd>
+Restauration réelle, à l’écart de la production, chronométrée et documentée, qui prouve qu’une sauvegarde est utilisable. (S10)
+</dd>
+<dt>Ticket</dt>
+<dd>
+Enregistrement d’une demande ou d’un incident dans l’outil du support, de la création à la clôture. (S8)
+</dd>
+<dt>Trap</dt>
+<dd>
+Message SNMP envoyé spontanément par un équipement au gestionnaire. (S2)
+</dd>
+<dt>TTO, TTR</dt>
+<dd>
+Délai de prise en charge ; délai de résolution d’un ticket. (S8)
+</dd>
+</dl>
+<h2 id="u">U</h2>
+<dl>
+<dt>unattended-upgrades</dt>
+<dd>
+Outil de Debian qui installe automatiquement les mises à jour des origines autorisées ; actif par défaut sur l’image cloud. (S7)
+</dd>
+<dt>UserParameter</dt>
+<dd>
+Ligne de configuration de l’agent Zabbix qui associe une clé maison à une commande. (S7)
+</dd>
+</dl>
+<h2 id="w">W</h2>
+<dl>
+<dt>Windows Event Forwarding (abonnements)</dt>
+<dd>
+Mécanisme de Windows par lequel un serveur collecteur reçoit les événements choisis d’autres machines. (S7)
+</dd>
+<dt>WMI</dt>
+<dd>
+Interface de Windows qui donne accès à l’état de la machine (processeur, disques, services) ; interrogée à distance par PRTG. (S2, S6)
+</dd>
+</dl>
+<h2 id="z">Z</h2>
+<dl>
+<dt>Zabbix</dt>
+<dd>
+Logiciel libre de supervision intégrée : collecte par agents, SNMP et HTTP, historique en base de données, déclencheurs, alertes, tableaux de bord. (S4, S5)
+</dd>
+</dl>
+
+</article>
+<nav class="prevnext"><a class="prev" href="memo.html"><span class="dir">‹ Page précédente</span><span class="titre">Aide-mémoire des commandes</span></a><a class="next" href="modeles.html"><span class="dir">Page suivante ›</span><span class="titre">Modèles de livrables</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="assets/app.js"></script>
+</body>
+</html>

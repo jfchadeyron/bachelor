@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 9 : Une matinée d&#x27;astreinte chez Hexalog | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous êtes d&#x27;astreinte. Pendant deux heures et demie, des incidents réels vont se produire sur votre lab, signalés par vos outils de supervision ou par des utilisateurs qui appellent. À vous de les dét">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item active" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp active" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Maintenance et incidents</span><span class="sep">›</span><a href="../cours/s09-astreinte.html" data-seance="9">Séance 9</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 9</span>
+  <h1>TP 9 : Une matinée d&#x27;astreinte chez Hexalog</h1>
+  <p class="lead">Vous êtes d'astreinte. Pendant deux heures et demie, des incidents réels vont se produire sur votre lab, signalés par vos outils de supervision ou par des utilisateurs qui appellent. À vous de les détecter, de les enregistrer dans GLPI, de les traiter dans le bon ordre avec méthode, de communiquer, puis d'analyser le plus grave. Personne ne vous dira ce qui a été cassé : c'est le principe.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>3 h 30 (préparation, astreinte, analyse)</td></tr><tr><th>Machines virtuelles</th><td>toutes (srv-win-01, srv-lnx-01, srv-lnx-02, sup-lnx-01)</td></tr><tr><th>Cours associé</th><td><a href="../cours/s09-astreinte.html" data-seance="9">Séance 9 : Exercice d&#x27;astreinte</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-prendre-lastreinte-10-min">Partie A. Prendre l’astreinte (10 min)</a></li><li><a href="#partie-b.-deux-fiches-réflexes-10-min">Partie B. Deux fiches réflexes (10 min)</a></li><li><a href="#partie-c.-lastreinte-2-h-30">Partie C. L’astreinte (2 h 30)</a></li><li><a href="#partie-d.-lanalyse-40-min">Partie D. L’analyse (40 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Lundi, 8 h 55. Nicolas Fournier, l’administrateur d’Hexalog, est en congé. C’est vous qui tenez l’astreinte ce matin. Vous disposez de tout ce que vous avez construit : Zabbix et ses alertes, Nagios, les journaux centralisés, GLPI, vos fiches et votre journal de bord.</p>
+<p>M. CHADEYRON joue deux rôles : il provoque les incidents sur votre lab, et il joue les <strong>utilisateurs</strong> qui appellent (« l’intranet ne marche plus », « je n’arrive pas à imprimer »). Il ne donne aucune indication technique : demandez-lui ce qu’un utilisateur saurait dire.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p>Tout est au <strong>socle</strong> : c’est un exercice complet. Il est évalué (cours, partie 6).</p>
+<ul>
+<li><strong>Préparation</strong> : 20 minutes (parties A et B).</li>
+<li><strong>Astreinte</strong> : 2 heures 30 (partie C). Les incidents arrivent l’un après l’autre, parfois deux à la fois.</li>
+<li><strong>Analyse</strong> : 40 minutes (partie D), puis bilan collectif.</li>
+</ul>
+</div></div>
+<h2 id="partie-a.-prendre-lastreinte-10-min">Partie A. Prendre l’astreinte (10 min)</h2>
+<h3 id="a.1-un-lab-en-bon-état">A.1, Un lab en bon état</h3>
+<p>L’exercice n’a de sens que si tout est vert au départ :</p>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Zabbix : <strong>Surveillance → Problèmes</strong> vide (ou seulement des informations connues et notées) ; pastilles ZBX vertes pour les quatre machines.</label></li>
+<li><label><input type="checkbox"/>Nagios : <em>Tactical Overview</em> sans problème non géré.</label></li>
+<li><label><input type="checkbox"/>GLPI : accessible ; vous savez créer un ticket en tant que <code>n2.fournier</code>.</label></li>
+<li><label><input type="checkbox"/>Courriel : <code>mail</code> sur sup-lnx-01 fonctionne ; la boîte est vide (<code>d *</code> puis <code>q</code> pour la vider).</label></li>
+<li><label><input type="checkbox"/>Journaux : les fichiers de <code>/var/log/hexalog/</code> sur sup-lnx-01 reçoivent bien les journaux de srv-lnx-01 et srv-lnx-02.</label></li>
+<li><label><input type="checkbox"/>Accès : <code>ssh sup-lnx-01</code>, <code>ssh srv-lnx-01</code>, <code>ssh srv-lnx-02</code> fonctionnent ; la console de srv-win-01 s’ouvre dans Proxmox.</label></li>
+</ul>
+<p>Corrigez ce qui ne va pas <strong>avant</strong> de commencer, et dites-le à M. CHADEYRON quand c’est prêt.</p>
+<h3 id="a.2-des-snapshots-pour-m.-chadeyron">A.2, Des snapshots, pour M. CHADEYRON</h3>
+<p>Prenez un snapshot <code>09-avant-astreinte</code> des quatre VM. Il ne vous servira pas à réparer (ce serait tricher : un snapshot efface aussi les traces) ; il permettra seulement de remettre un lab en état si l’exercice dérape.</p>
+<h3 id="a.3-votre-poste-dastreinte">A.3, Votre poste d’astreinte</h3>
+<p>Ouvrez et gardez ouverts : le tableau de bord <em>Hexalog - astreinte</em> de Zabbix, la page <em>Unhandled</em> de Nagios, la liste des tickets de GLPI, une session SSH sur sup-lnx-01 (pour <code>mail</code> et les journaux), une sur srv-lnx-01, une sur srv-lnx-02, la console de srv-win-01. Ouvrez votre <strong>main courante</strong> (modèle « Main courante d’astreinte » de la page <a href="../modeles.html">Modèles de livrables</a>) et notez l’heure de début.</p>
+<h2 id="partie-b.-deux-fiches-réflexes-10-min">Partie B. Deux fiches réflexes (10 min)</h2>
+<p>Avant que le premier incident n’arrive, rédigez deux fiches réflexes (modèle du cours, partie 4), dans votre journal de bord :</p>
+<ol type="1">
+<li><strong>Intranet indisponible</strong> (la page ne s’affiche pas du tout, ou erreur 502) ;</li>
+<li><strong>Espace disque critique sur un serveur Linux</strong>.</li>
+</ol>
+<p>Elles vous serviront pendant l’astreinte, et vous les compléterez ensuite avec ce que vous aurez appris.</p>
+<h2 id="partie-c.-lastreinte-2-h-30">Partie C. L’astreinte (2 h 30)</h2>
+<h3 id="c.1-pour-chaque-incident">C.1, Pour chaque incident</h3>
+<ol type="1">
+<li><strong>Noter l’heure</strong> de l’alerte ou de l’appel dans la main courante.</li>
+<li><strong>Enregistrer</strong> : un ticket GLPI, ou celui ouvert par Zabbix (TP 8, partie E), complété. Titre <em>service, symptôme</em> ; type, catégorie, impact, urgence. Si un utilisateur a appelé, il est le <strong>demandeur</strong>.</li>
+<li><strong>Prendre en charge</strong> : attribuez-vous le ticket (notez l’heure : c’est elle qui compte pour le MTTA) ; acquittez le problème dans Zabbix avec un message.</li>
+<li><strong>Diagnostiquer</strong> avec la méthode du cours : chaque hypothèse, le test réalisé et son résultat vont dans un <strong>suivi</strong> du ticket. Pas de correction « pour voir ».</li>
+<li><strong>Rétablir</strong>, puis <strong>vérifier côté utilisateur</strong> (page de l’intranet, scénario web, résolution de nom, connexion…).</li>
+<li><strong>Solution</strong> dans le ticket : cause, action, heure de rétablissement. S’il s’agit d’un contournement, dites-le, et ouvrez un <strong>problème</strong> si la cause reste à traiter.</li>
+<li><strong>Informer</strong> l’utilisateur qui avait appelé (M. CHADEYRON), et tous les salariés si l’incident a touché tout le monde (message du cours 8, partie 6, dans un suivi).</li>
+<li><strong>Main courante</strong> : une ligne par action importante, avec l’heure.</li>
+</ol>
+<h3 id="c.2-les-règles-du-jeu">C.2, Les règles du jeu</h3>
+<ul>
+<li>Vous pouvez utiliser tout ce que vous avez : supervision, journaux, documentation, Internet, vos TP précédents.</li>
+<li><strong>Interdit</strong> : restaurer un snapshot ou une sauvegarde pour faire disparaître une panne (sauf si un utilisateur vous le demande explicitement dans un ticket), désactiver une alerte pour qu’elle se taise, réinstaller une machine.</li>
+<li>Si plusieurs incidents sont ouverts en même temps : vérifiez d’abord qu’ils n’ont pas une cause commune, puis traitez le plus prioritaire ; enregistrez tout de suite les autres.</li>
+<li>Vous êtes bloqué depuis plus de 20 minutes sur un incident ? <strong>Escaladez</strong> : un suivi dans le ticket qui résume ce que vous avez vérifié, puis appelez M. CHADEYRON, qui joue le niveau 3. L’escalade bien faite n’est pas un échec ; elle se note.</li>
+<li>Un utilisateur qui rappelle « où en est-on ? » doit obtenir une réponse précise en moins d’une minute : c’est à cela que servent le ticket et la main courante.</li>
+</ul>
+<h3 id="c.3-à-lécoute">C.3, À l’écoute</h3>
+<p>Pendant l’astreinte, surveillez en permanence :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Où</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Problèmes Zabbix et leurs sévérités</td>
+<td>tableau de bord <em>Hexalog - astreinte</em>, <strong>Surveillance → Problèmes</strong></td>
+</tr>
+<tr class="even">
+<td>Problèmes Nagios non gérés</td>
+<td>page <em>Unhandled</em></td>
+</tr>
+<tr class="odd">
+<td>Courriels d’alerte</td>
+<td><code>mail</code> sur sup-lnx-01</td>
+</tr>
+<tr class="even">
+<td>Tickets ouverts automatiquement</td>
+<td>GLPI, <strong>Assistance → Tickets</strong></td>
+</tr>
+<tr class="odd">
+<td>Appels des utilisateurs</td>
+<td>M. CHADEYRON</td>
+</tr>
+</tbody>
+</table></div>
+<p>Toutes les sources ne signalent pas tout : certaines pannes ne se voient que dans un outil, certaines ne se voient dans aucun et arrivent par un appel. Notez, pour chaque incident, <strong>qui</strong> l’a détecté en premier : ce sera utile pour la partie D.</p>
+<h2 id="partie-d.-lanalyse-40-min">Partie D. L’analyse (40 min)</h2>
+<h3 id="d.1-vos-indicateurs-10-min">D.1, Vos indicateurs (10 min)</h3>
+<p>Complétez le tableau, à partir de la main courante et des tickets :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Incident (titre du ticket)</th>
+<th>Détecté par</th>
+<th>Heure de détection</th>
+<th>Heure de prise en charge</th>
+<th>Heure de rétablissement</th>
+<th>Délai de prise en charge</th>
+<th>Durée d’indisponibilité</th>
+<th>Priorité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Calculez votre <strong>MTTA</strong> et votre <strong>MTTR</strong>. Quel incident a été le plus long à détecter ? À résoudre ? Pourquoi ?</p>
+<h3 id="d.2-le-compte-rendu-de-lincident-le-plus-grave-25-min">D.2, Le compte rendu de l’incident le plus grave (25 min)</h3>
+<p>Choisissez l’incident qui a eu le plus fort impact. Rédigez son <strong>compte rendu après incident</strong> avec le modèle « Compte rendu après incident » de la page <a href="../modeles.html">Modèles de livrables</a> : résumé, chronologie horodatée, détection, causes (cinq pourquoi), ce qui a bien fonctionné, ce qui a manqué, <strong>au moins trois actions</strong> avec un responsable et une date. Restez factuel et sans recherche de coupable : « la configuration a été modifiée sans demande de changement », pas « quelqu’un a fait n’importe quoi ».</p>
+<h3 id="d.3-améliorer-la-supervision-5-min">D.3, Améliorer la supervision (5 min)</h3>
+<p>Pour chaque incident qui n’a <strong>pas</strong> été détecté par la supervision, ou détecté tard : quel contrôle, quel seuil ou quelle alerte aurait permis de le voir plus tôt ? Ajoutez-les à votre matrice de supervision (TP 2) ; mettez-en au moins un en place dans Zabbix ou Nagios si le temps le permet.</p>
+<p>Snapshots <code>09-apres-astreinte</code> des quatre VM.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Chaque incident a un ticket complet : type, catégorie, priorité, suivis de diagnostic, solution, heure de rétablissement.</label></li>
+<li><label><input type="checkbox"/>Les incidents signalés par un appel ont l’utilisateur comme demandeur, et il a été informé de la résolution.</label></li>
+<li><label><input type="checkbox"/>Main courante complète et horodatée.</label></li>
+<li><label><input type="checkbox"/>Tableau des indicateurs, MTTA et MTTR calculés.</label></li>
+<li><label><input type="checkbox"/>Compte rendu après incident, avec au moins trois actions datées et attribuées.</label></li>
+<li><label><input type="checkbox"/>Matrice de supervision complétée avec les contrôles qui manquaient.</label></li>
+<li><label><input type="checkbox"/>Toutes les VM sont revenues à un état normal (tout vert), sans restauration de snapshot.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Quel incident n’a été vu par aucun outil de supervision ? Pourquoi ? Que faudrait-il superviser pour le voir ?</li>
+<li>Un incident a-t-il été vu par Nagios et pas par Zabbix, ou l’inverse ? Qu’en concluez-vous sur la manière dont chaque outil a été configuré ?</li>
+<li>Si deux incidents étaient ouverts en même temps, lequel avez-vous traité en premier ? Avec le recul, était-ce le bon choix ?</li>
+<li>Quelle fiche réflexe vous a servi ? Que lui ajouteriez-vous ?</li>
+<li>Qu’est-ce qui vous a fait perdre le plus de temps ? Quelle action d’amélioration la plus utile proposez-vous à Hexalog ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<p>Il n’y a pas de tableau de dépannage pour cet exercice : c’est vous qui dépannez. Relisez la méthode et la boîte à outils du cours, et les parties « Dépannage » des TP 1 à 8 : la plupart des pannes de la matinée y ressemblent.</p>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s09-astreinte.html" data-seance="9"><span class="dir">‹ Page précédente</span><span class="titre">Séance 9 : Exercice d&#x27;astreinte</span></a><a class="next" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="dir">Page suivante ›</span><span class="titre">Séance 10 : Sauvegarder et restaurer</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 7 : Centraliser les journaux et planifier la maintenance | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous faites de sup-lnx-01 le serveur de journaux d&#x27;Hexalog, vous y envoyez les journaux de srv-lnx-01 de façon fiable, vous mettez toutes les machines à la même heure, puis Zabbix détecte les connexio">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item active" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp active" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Maintenance et incidents</span><span class="sep">›</span><a href="../cours/s07-journaux-maintenance.html" data-seance="7">Séance 7</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 7</span>
+  <h1>TP 7 : Centraliser les journaux et planifier la maintenance</h1>
+  <p class="lead">Vous faites de sup-lnx-01 le serveur de journaux d'Hexalog, vous y envoyez les journaux de srv-lnx-01 de façon fiable, vous mettez toutes les machines à la même heure, puis Zabbix détecte les connexions refusées sous Linux et sous Windows. Dans un second temps, vous appliquez la politique de mises à jour d'Hexalog, vous supervisez les mises à jour en attente, et vous conduisez un vrai changement de bout en bout : demande, snapshot, maintenance, intervention, vérification, clôture.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>sup-lnx-01, srv-lnx-01, srv-win-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s07-journaux-maintenance.html" data-seance="7">Séance 7 : Journaux centralisés et maintenance préventive</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-le-serveur-de-journaux-sur-sup-lnx-01-25-min">Partie A. Le serveur de journaux sur sup-lnx-01 (25 min)</a></li><li><a href="#partie-b.-envoyer-les-journaux-de-srv-lnx-01-30-min">Partie B. Envoyer les journaux de srv-lnx-01 (30 min)</a></li><li><a href="#partie-c.-toutes-les-machines-à-la-même-heure-15-min-recommandé">Partie C. Toutes les machines à la même heure (15 min, recommandé)</a></li><li><a href="#partie-d.-détecter-dans-les-journaux-avec-zabbix-35-min">Partie D. Détecter dans les journaux avec Zabbix (35 min)</a></li><li><a href="#partie-e.-la-politique-de-mises-à-jour-30-min">Partie E. La politique de mises à jour (30 min)</a></li><li><a href="#partie-f.-un-changement-de-bout-en-bout-40-min">Partie F. Un changement de bout en bout (40 min)</a></li><li><a href="#partie-g.-le-plan-de-maintenance-dhexalog-facultatif-15-min-sinon-à-la-maison">Partie G. Le plan de maintenance d’Hexalog (facultatif, 15 min, sinon à la maison)</a></li><li><a href="#partie-h.-anticiper-la-saturation-facultatif-20-min">Partie H. Anticiper la saturation (facultatif, 20 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Lors d’un audit, deux constats ont été faits chez Hexalog : « les journaux restent sur chaque serveur, personne ne les lit » et « les mises à jour s’installent toutes seules, sans que personne ne sache quand ni lesquelles ». Vous corrigez les deux.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p><strong>Socle</strong> : parties A, B, D (D.1 et D.2), E et F. <strong>Recommandé</strong> : C (l’heure). <strong>Facultatif</strong> : G (plan de maintenance, sinon à la maison), H (capacité), « Pour aller plus loin ».</p>
+<p>Dans les fichiers de configuration, remplacez <code>10.20.N.</code> par votre numéro (commande <code>sed</code> donnée à chaque fois, avec <code>3</code> à remplacer).</p>
+</div></div>
+<h2 id="partie-a.-le-serveur-de-journaux-sur-sup-lnx-01-25-min">Partie A. Le serveur de journaux sur sup-lnx-01 (25 min)</h2>
+<h3 id="a.1-installer-rsyslog">A.1, Installer rsyslog</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> rsyslog</span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> /var/log/syslog /var/log/auth.log</span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="fu">sudo</span> tail <span class="at">-n</span> 3 /var/log/auth.log</span></code></pre></div></div>
+<p>Les fichiers texte habituels apparaissent : rsyslog reçoit désormais une copie de tout ce que journald enregistre. Ils appartiennent au groupe <code>adm</code>.</p>
+<h3 id="a.2-recevoir-les-journaux-des-autres-machines">A.2, Recevoir les journaux des autres machines</h3>
+<p>Le serveur écoute en TCP sur le port 514, n’accepte que les machines du lab, et range les messages dans un dossier par machine, avec un fichier pour l’authentification et un pour le reste :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/rsyslog.d/10-reception-hexalog.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="st"># Hexalog : réception des journaux des serveurs (TCP 514), un dossier par machine</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="st">module(load="imtcp")</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="st">$AllowedSender TCP, 127.0.0.1, 10.20.N.0/24</span></span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a><span class="st"># secpath-replace : le nom de machine ne peut pas contenir de « / »</span></span>
+<span id="cb2-7"><a aria-hidden="true" href="#cb2-7" tabindex="-1"></a><span class="st">template(name="hx-auth" type="string"</span></span>
+<span id="cb2-8"><a aria-hidden="true" href="#cb2-8" tabindex="-1"></a><span class="st">         string="/var/log/hexalog/%HOSTNAME:::secpath-replace%/auth.log")</span></span>
+<span id="cb2-9"><a aria-hidden="true" href="#cb2-9" tabindex="-1"></a><span class="st">template(name="hx-syslog" type="string"</span></span>
+<span id="cb2-10"><a aria-hidden="true" href="#cb2-10" tabindex="-1"></a><span class="st">         string="/var/log/hexalog/%HOSTNAME:::secpath-replace%/syslog.log")</span></span>
+<span id="cb2-11"><a aria-hidden="true" href="#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a aria-hidden="true" href="#cb2-12" tabindex="-1"></a><span class="st">ruleset(name="hexalog-distants") {</span></span>
+<span id="cb2-13"><a aria-hidden="true" href="#cb2-13" tabindex="-1"></a><span class="st">    if prifilt("auth,authpriv.*") then {</span></span>
+<span id="cb2-14"><a aria-hidden="true" href="#cb2-14" tabindex="-1"></a><span class="st">        action(type="omfile" dynaFile="hx-auth" dirCreateMode="0750" dirGroup="adm"</span></span>
+<span id="cb2-15"><a aria-hidden="true" href="#cb2-15" tabindex="-1"></a><span class="st">               fileCreateMode="0640" fileGroup="adm")</span></span>
+<span id="cb2-16"><a aria-hidden="true" href="#cb2-16" tabindex="-1"></a><span class="st">    } else {</span></span>
+<span id="cb2-17"><a aria-hidden="true" href="#cb2-17" tabindex="-1"></a><span class="st">        action(type="omfile" dynaFile="hx-syslog" dirCreateMode="0750" dirGroup="adm"</span></span>
+<span id="cb2-18"><a aria-hidden="true" href="#cb2-18" tabindex="-1"></a><span class="st">               fileCreateMode="0640" fileGroup="adm")</span></span>
+<span id="cb2-19"><a aria-hidden="true" href="#cb2-19" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb2-20"><a aria-hidden="true" href="#cb2-20" tabindex="-1"></a><span class="st">    stop</span></span>
+<span id="cb2-21"><a aria-hidden="true" href="#cb2-21" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb2-22"><a aria-hidden="true" href="#cb2-22" tabindex="-1"></a></span>
+<span id="cb2-23"><a aria-hidden="true" href="#cb2-23" tabindex="-1"></a><span class="st">input(type="imtcp" port="514" ruleset="hexalog-distants")</span></span>
+<span id="cb2-24"><a aria-hidden="true" href="#cb2-24" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb2-25"><a aria-hidden="true" href="#cb2-25" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./'</span> /etc/rsyslog.d/10-reception-hexalog.conf     <span class="co"># votre numéro</span></span>
+<span id="cb2-26"><a aria-hidden="true" href="#cb2-26" tabindex="-1"></a><span class="fu">sudo</span> rsyslogd <span class="at">-N1</span></span>
+<span id="cb2-27"><a aria-hidden="true" href="#cb2-27" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart rsyslog</span>
+<span id="cb2-28"><a aria-hidden="true" href="#cb2-28" tabindex="-1"></a><span class="fu">sudo</span> ss <span class="at">-tlnp</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">':514'</span></span></code></pre></div></div>
+<p>Résultat attendu : <code>End of config validation run</code>, puis rsyslog en écoute sur <code>0.0.0.0:514</code>. Le mot-clé <code>ruleset</code> isole les messages reçus du réseau : ils ne se mélangent pas aux journaux de sup-lnx-01 elle-même.</p>
+<h3 id="a.3-la-rotation">A.3, La rotation</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/logrotate.d/hexalog <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="st"># Journaux reçus des serveurs d'Hexalog : rotation chaque semaine, 26 semaines gardées (6 mois)</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="st">/var/log/hexalog/*/*.log {</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="st">    weekly</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="st">    rotate 26</span></span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="st">    compress</span></span>
+<span id="cb3-7"><a aria-hidden="true" href="#cb3-7" tabindex="-1"></a><span class="st">    delaycompress</span></span>
+<span id="cb3-8"><a aria-hidden="true" href="#cb3-8" tabindex="-1"></a><span class="st">    missingok</span></span>
+<span id="cb3-9"><a aria-hidden="true" href="#cb3-9" tabindex="-1"></a><span class="st">    notifempty</span></span>
+<span id="cb3-10"><a aria-hidden="true" href="#cb3-10" tabindex="-1"></a><span class="st">    sharedscripts</span></span>
+<span id="cb3-11"><a aria-hidden="true" href="#cb3-11" tabindex="-1"></a><span class="st">    postrotate</span></span>
+<span id="cb3-12"><a aria-hidden="true" href="#cb3-12" tabindex="-1"></a><span class="st">        /usr/lib/rsyslog/rsyslog-rotate</span></span>
+<span id="cb3-13"><a aria-hidden="true" href="#cb3-13" tabindex="-1"></a><span class="st">    endscript</span></span>
+<span id="cb3-14"><a aria-hidden="true" href="#cb3-14" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb3-15"><a aria-hidden="true" href="#cb3-15" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb3-16"><a aria-hidden="true" href="#cb3-16" tabindex="-1"></a><span class="fu">sudo</span> logrotate <span class="at">--debug</span> /etc/logrotate.d/hexalog <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5</span></code></pre></div></div>
+<p><code>--debug</code> simule sans rien faire. La commande <code>rsyslog-rotate</code> demande à rsyslog de rouvrir ses fichiers après la rotation. Pourquoi 26 semaines ? Notez la justification (cours, partie 4) dans votre journal de bord.</p>
+<h2 id="partie-b.-envoyer-les-journaux-de-srv-lnx-01-30-min">Partie B. Envoyer les journaux de srv-lnx-01 (30 min)</h2>
+<h3 id="b.1-le-client">B.1, Le client</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> rsyslog</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/rsyslog.d/90-vers-sup-lnx-01.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="st"># Hexalog : copie de tous les journaux vers le serveur central, en TCP,</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="st"># avec une file d'attente qui garde les messages si le serveur est injoignable</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="st">action(type="omfwd" target="10.20.N.40" port="514" protocol="tcp"</span></span>
+<span id="cb4-6"><a aria-hidden="true" href="#cb4-6" tabindex="-1"></a><span class="st">       queue.type="LinkedList" queue.filename="vers-sup-lnx-01"</span></span>
+<span id="cb4-7"><a aria-hidden="true" href="#cb4-7" tabindex="-1"></a><span class="st">       queue.maxDiskSpace="100m" queue.saveOnShutdown="on"</span></span>
+<span id="cb4-8"><a aria-hidden="true" href="#cb4-8" tabindex="-1"></a><span class="st">       action.resumeRetryCount="-1")</span></span>
+<span id="cb4-9"><a aria-hidden="true" href="#cb4-9" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb4-10"><a aria-hidden="true" href="#cb4-10" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./'</span> /etc/rsyslog.d/90-vers-sup-lnx-01.conf     <span class="co"># votre numéro</span></span>
+<span id="cb4-11"><a aria-hidden="true" href="#cb4-11" tabindex="-1"></a><span class="fu">sudo</span> rsyslogd <span class="at">-N1</span></span>
+<span id="cb4-12"><a aria-hidden="true" href="#cb4-12" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart rsyslog</span>
+<span id="cb4-13"><a aria-hidden="true" href="#cb4-13" tabindex="-1"></a><span class="ex">logger</span> <span class="at">-p</span> auth.notice <span class="st">"TP7 : test d'envoi depuis </span><span class="va">$(</span><span class="fu">hostname</span><span class="va">)</span><span class="st">"</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> ls <span class="at">-l</span> /var/log/hexalog/</span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> tail <span class="at">-n</span> 3 /var/log/hexalog/srv-lnx-01/auth.log</span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="fu">sudo</span> tail <span class="at">-n</span> 3 /var/log/hexalog/srv-lnx-01/syslog.log</span></code></pre></div></div>
+<p>Résultat attendu : un dossier <code>srv-lnx-01</code>, et votre message de test dans <code>auth.log</code>, précédé de la date au format ISO 8601, du nom de la machine et du nom du programme (<code>sysadmin</code>, le nom de l’utilisateur qui a lancé <code>logger</code>).</p>
+<h3 id="b.2-que-se-passe-t-il-si-le-serveur-tombe">B.2, Que se passe-t-il si le serveur tombe ?</h3>
+<ol type="1">
+<li>Arrêtez la réception : <code>sudo systemctl stop rsyslog</code> sur <strong>sup-lnx-01</strong>.</li>
+<li>Sur srv-lnx-01, envoyez trois messages numérotés : <code>for i in 1 2 3 ; do logger "TP7 : message $i pendant la coupure" ; done</code>.</li>
+<li>Vérifiez qu’ils sont bien en local sur srv-lnx-01 (<code>sudo tail -n 3 /var/log/syslog</code>) et absents sur sup-lnx-01.</li>
+<li>Redémarrez la réception sur sup-lnx-01 (<code>sudo systemctl start rsyslog</code>), attendez une minute, puis cherchez les trois messages : <code>sudo grep "pendant la coupure" /var/log/hexalog/srv-lnx-01/syslog.log</code>.</li>
+</ol>
+<p>Ils arrivent : le client les a gardés dans sa file d’attente et réessaie régulièrement. Avec UDP, ils seraient perdus. Notez combien de temps ils ont mis à arriver.</p>
+<h3 id="b.3-suivre-une-connexion-de-bout-en-bout">B.3, Suivre une connexion de bout en bout</h3>
+<p>Depuis votre PC, ouvrez une session sur srv-lnx-01 (<code>ssh srv-lnx-01</code>), lancez <code>sudo -l</code>, déconnectez-vous. Puis retrouvez la connexion <strong>sur sup-lnx-01 seulement</strong> : dans <code>/var/log/auth.log</code> (le passage par le point d’entrée) et dans <code>/var/log/hexalog/srv-lnx-01/auth.log</code> (l’arrivée sur srv-lnx-01 et la commande <code>sudo</code>). Construisez la chronologie dans votre journal de bord : heure, machine, ligne.</p>
+<h2 id="partie-c.-toutes-les-machines-à-la-même-heure-15-min-recommandé">Partie C. Toutes les machines à la même heure (15 min, recommandé)</h2>
+<p>Le serveur Proxmox (<code>10.20.N.1</code>, la passerelle de votre réseau) sert d’horloge de référence au lab.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machines : sup-lnx-01 et srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="ex">timedatectl</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/systemd/timesyncd.conf.d</span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="bu">printf</span> <span class="st">'[Time]\nNTP=10.20.N.1\n'</span> <span class="kw">|</span> <span class="fu">sudo</span> tee /etc/systemd/timesyncd.conf.d/hexalog.conf</span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./'</span> /etc/systemd/timesyncd.conf.d/hexalog.conf     <span class="co"># votre numéro</span></span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart systemd-timesyncd</span>
+<span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a><span class="fu">sleep</span> 5 <span class="kw">;</span> <span class="ex">timedatectl</span> timesync-status</span></code></pre></div></div>
+<p>Résultat attendu : <code>Server: 10.20.N.1</code>, un décalage (<em>Offset</em>) de quelques millisecondes, et dans <code>timedatectl</code> : <em>Time zone: Europe/Paris</em>, <em>System clock synchronized: yes</em>. Si le fuseau est <code>UTC</code>, corrigez-le : <code>sudo timedatectl set-timezone Europe/Paris</code>. Si <em>Packet count</em> reste à 0, le serveur ne répond pas : prévenez M. CHADEYRON.</p>
+<p>Sur srv-win-01, dans une invite de commandes : <code>w32tm /query /status</code>. Quelle est la source de l’heure du contrôleur de domaine ? Est-ce satisfaisant pour un domaine dont tous les membres se règlent sur lui ? (Voir « Pour aller plus loin ».)</p>
+<h2 id="partie-d.-détecter-dans-les-journaux-avec-zabbix-35-min">Partie D. Détecter dans les journaux avec Zabbix (35 min)</h2>
+<h3 id="d.1-les-connexions-ssh-refusées-sur-srv-lnx-01">D.1, Les connexions SSH refusées sur srv-lnx-01</h3>
+<ol type="1">
+<li>L’agent doit pouvoir lire <code>/var/log/auth.log</code> :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> adm zabbix</span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart zabbix-agent2</span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-u</span> zabbix head <span class="at">-n</span> 1 /var/log/auth.log</span></code></pre></div></div>
+<ol start="2" type="1">
+<li>Dans Zabbix : <strong>Collecte de données → Hôtes</strong> → <code>srv-lnx-01</code> → <strong>Éléments</strong> → <strong>Créer un élément</strong> :</li>
+</ol>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nom</td>
+<td><code>SSH : connexions refusées</code></td>
+</tr>
+<tr class="even">
+<td>Type</td>
+<td><strong>Agent Zabbix (actif)</strong></td>
+</tr>
+<tr class="odd">
+<td>Clé</td>
+<td><code>log[/var/log/auth.log,"Invalid user|Failed password|authenticating user",,,skip]</code></td>
+</tr>
+<tr class="even">
+<td>Type d’information</td>
+<td><strong>Journal</strong></td>
+</tr>
+<tr class="odd">
+<td>Intervalle d’actualisation</td>
+<td><code>1m</code></td>
+</tr>
+</tbody>
+</table></div>
+<ol start="3" type="1">
+<li><strong>Déclencheurs</strong> → <strong>Créer un déclencheur</strong> : nom <code>Tentatives de connexion SSH en série sur {HOST.NAME}</code>, sévérité <strong>Moyen</strong>, expression (construite avec le bouton <strong>Ajouter</strong> : élément ci-dessus, fonction <code>count()</code>, période <code>5m</code>, résultat <code>&gt;=</code> <code>5</code>) :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : expression du déclencheur</span><button class="copy" type="button">Copier</button></div><pre class="text"><code>count(/srv-lnx-01/log[/var/log/auth.log,"Invalid user|Failed password|authenticating user",,,skip],5m)&gt;=5</code></pre></div>
+<p>Cochez <em>Permettre la fermeture manuelle</em>, ajoutez le tag <code>securite</code> = <code>ssh</code>.</p>
+<ol start="4" type="1">
+<li>Simulez quelqu’un qui cherche un compte, depuis sup-lnx-01 (qui n’a pas de clé : chaque essai est refusé) :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> 1 2 3 4 5 6 <span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a>  <span class="fu">ssh</span> <span class="at">-o</span> BatchMode=yes <span class="at">-o</span> StrictHostKeyChecking=accept-new intrus<span class="va">$i</span>@10.20.N.20 true</span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div></div>
+<p>Après une à deux minutes : <strong>Surveillance → Dernières données</strong> (l’élément montre les lignes trouvées, <em>Invalid user intrus1 from 10.20.N.40…</em>), puis <strong>Problèmes</strong>. Le problème se résout seul cinq minutes après le dernier refus. Vérifiez aussi que les mêmes lignes sont dans la copie centrale : <code>sudo grep -c "Invalid user intrus" /var/log/hexalog/srv-lnx-01/auth.log</code>.</p>
+<h3 id="d.2-les-ouvertures-de-session-refusées-sur-srv-win-01">D.2, Les ouvertures de session refusées sur srv-win-01</h3>
+<ol type="1">
+<li><strong>Auditer les échecs</strong> (sur srv-win-01, comme au TP 13 du BLOC 1) : <strong>Gestion des stratégies de groupe</strong> → <code>hexalog.local</code> → <strong>Domain Controllers</strong> → clic droit sur <strong>Default Domain Controllers Policy</strong> → <strong>Modifier</strong> → Configuration ordinateur → Stratégies → Paramètres Windows → Paramètres de sécurité → <strong>Configuration avancée de la stratégie d’audit</strong> → Stratégies d’audit → <strong>Ouverture/fermeture de session</strong> → <strong>Ouvrir la session</strong> : <em>Succès</em> et <em>Échec</em>. Puis <code>gpupdate /force</code> dans une invite de commandes.</li>
+<li>Dans Zabbix, sur l’hôte <code>srv-win-01</code>, créez l’élément :</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nom</td>
+<td><code>Sécurité : ouvertures de session refusées (4625)</code></td>
+</tr>
+<tr class="even">
+<td>Type</td>
+<td><strong>Agent Zabbix (actif)</strong></td>
+</tr>
+<tr class="odd">
+<td>Clé</td>
+<td><code>eventlog[Security,,,,4625,,skip]</code></td>
+</tr>
+<tr class="even">
+<td>Type d’information</td>
+<td><strong>Journal</strong></td>
+</tr>
+<tr class="odd">
+<td>Intervalle d’actualisation</td>
+<td><code>1m</code></td>
+</tr>
+</tbody>
+</table></div>
+<ol start="3" type="1">
+<li>Et le déclencheur <code>Ouvertures de session refusées en série sur {HOST.NAME}</code>, sévérité <strong>Moyen</strong> : <code>count(/srv-win-01/eventlog[Security,,,,4625,,skip],5m)&gt;=5</code>.</li>
+<li>Simulez des essais de mot de passe sur le partage de fichiers du contrôleur de domaine :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> smbclient</span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> 1 2 3 4 5 6 <span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a>  <span class="ex">smbclient</span> <span class="at">-L</span> //10.20.N.10 <span class="at">-U</span> <span class="st">'HEXALOG\intrus%MauvaisMotDePasse'</span> <span class="at">-m</span> SMB3 <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1</span>
+<span id="cb10-4"><a aria-hidden="true" href="#cb10-4" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div></div>
+<p>Chaque essai répond <code>NT_STATUS_LOGON_FAILURE</code>. Vérifiez dans l’<strong>Observateur d’événements</strong> de srv-win-01 (journal Sécurité, <strong>Filtrer le journal actuel</strong>, ID <code>4625</code>) : type d’ouverture de session, compte, adresse source. Puis dans Zabbix : dernières données et problème.</p>
+<h2 id="partie-e.-la-politique-de-mises-à-jour-30-min">Partie E. La politique de mises à jour (30 min)</h2>
+<h3 id="e.1-ce-qui-se-passe-aujourdhui">E.1, Ce qui se passe aujourd’hui</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="fu">cat</span> /etc/apt/apt.conf.d/20auto-upgrades</span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">'^\s*//'</span> /etc/apt/apt.conf.d/50unattended-upgrades <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">'^\s*$'</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 12</span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a><span class="ex">systemctl</span> list-timers <span class="st">'apt-daily*'</span> <span class="at">--no-pager</span></span>
+<span id="cb11-4"><a aria-hidden="true" href="#cb11-4" tabindex="-1"></a><span class="fu">sudo</span> tail <span class="at">-n</span> 15 /var/log/unattended-upgrades/unattended-upgrades.log</span>
+<span id="cb11-5"><a aria-hidden="true" href="#cb11-5" tabindex="-1"></a><span class="ex">apt</span> list <span class="at">--upgradable</span></span>
+<span id="cb11-6"><a aria-hidden="true" href="#cb11-6" tabindex="-1"></a><span class="fu">ls</span> /run/reboot-required <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">||</span> <span class="bu">echo</span> <span class="st">"pas de redémarrage demandé"</span></span></code></pre></div></div>
+<p>Répondez dans votre journal : les mises à jour automatiques sont-elles actives ? À quelle heure tournent-elles ? Quelles <strong>origines</strong> sont autorisées (cherchez <code>label=Debian</code> et <code>label=Debian-Security</code>) ? Qu’ont-elles installé depuis la création de la VM ?</p>
+<h3 id="e.2-la-politique-dhexalog-sécurité-automatique-le-reste-en-maintenance">E.2, La politique d’Hexalog : sécurité automatique, le reste en maintenance</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/apt/apt.conf.d/52hexalog-unattended <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb12-2"><a aria-hidden="true" href="#cb12-2" tabindex="-1"></a><span class="st">// Hexalog : seules les mises à jour de sécurité sont installées automatiquement ;</span></span>
+<span id="cb12-3"><a aria-hidden="true" href="#cb12-3" tabindex="-1"></a><span class="st">// les autres attendent la maintenance mensuelle (demande de changement).</span></span>
+<span id="cb12-4"><a aria-hidden="true" href="#cb12-4" tabindex="-1"></a><span class="st">#clear Unattended-Upgrade::Origins-Pattern;</span></span>
+<span id="cb12-5"><a aria-hidden="true" href="#cb12-5" tabindex="-1"></a><span class="st">Unattended-Upgrade::Origins-Pattern {</span></span>
+<span id="cb12-6"><a aria-hidden="true" href="#cb12-6" tabindex="-1"></a><span class="st">        "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";</span></span>
+<span id="cb12-7"><a aria-hidden="true" href="#cb12-7" tabindex="-1"></a><span class="st">};</span></span>
+<span id="cb12-8"><a aria-hidden="true" href="#cb12-8" tabindex="-1"></a><span class="st">Unattended-Upgrade::Automatic-Reboot "false";</span></span>
+<span id="cb12-9"><a aria-hidden="true" href="#cb12-9" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb12-10"><a aria-hidden="true" href="#cb12-10" tabindex="-1"></a><span class="ex">apt-config</span> dump <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-A2</span> <span class="st">'Origins-Pattern'</span></span>
+<span id="cb12-11"><a aria-hidden="true" href="#cb12-11" tabindex="-1"></a><span class="fu">sudo</span> unattended-upgrade <span class="at">--dry-run</span> <span class="at">--debug</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">'Allowed origins|Packages that will be upgraded|No packages found'</span></span></code></pre></div></div>
+<p>La ligne <code>#clear</code> <strong>vide</strong> la liste définie par Debian avant d’en donner une nouvelle : sans elle, les deux listes s’ajouteraient. Résultat attendu : <em>Allowed origins are: origin=Debian,codename=trixie-security,label=Debian-Security</em>. On ne modifie pas <code>50unattended-upgrades</code>, fourni par le paquet.</p>
+<h3 id="e.3-superviser-les-mises-à-jour-en-attente">E.3, Superviser les mises à jour en attente</h3>
+<ol type="1">
+<li>Ajoutez trois clés à l’agent de srv-lnx-01 (cours, partie 6) :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a aria-hidden="true" href="#cb13-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/zabbix/zabbix_agent2.d/hexalog-maj.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb13-2"><a aria-hidden="true" href="#cb13-2" tabindex="-1"></a><span class="st"># Hexalog : mises à jour en attente et redémarrage nécessaire</span></span>
+<span id="cb13-3"><a aria-hidden="true" href="#cb13-3" tabindex="-1"></a><span class="st">UserParameter=hexalog.maj.attente,apt-get -s -o Debug::NoLocking=true upgrade | grep -c '^Inst' || true</span></span>
+<span id="cb13-4"><a aria-hidden="true" href="#cb13-4" tabindex="-1"></a><span class="st">UserParameter=hexalog.maj.securite,apt-get -s -o Debug::NoLocking=true upgrade | grep '^Inst' | grep -c -- '-security' || true</span></span>
+<span id="cb13-5"><a aria-hidden="true" href="#cb13-5" tabindex="-1"></a><span class="st">UserParameter=hexalog.redemarrage,test -f /run/reboot-required &amp;&amp; echo 1 || echo 0</span></span>
+<span id="cb13-6"><a aria-hidden="true" href="#cb13-6" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb13-7"><a aria-hidden="true" href="#cb13-7" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> hexalog.maj.attente hexalog.maj.securite hexalog.redemarrage <span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb13-8"><a aria-hidden="true" href="#cb13-8" tabindex="-1"></a>  <span class="ex">zabbix_agent2</span> <span class="at">-t</span> <span class="va">$k</span> <span class="at">-c</span> /etc/zabbix/zabbix_agent2.conf</span>
+<span id="cb13-9"><a aria-hidden="true" href="#cb13-9" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb13-10"><a aria-hidden="true" href="#cb13-10" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart zabbix-agent2</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a aria-hidden="true" href="#cb14-1" tabindex="-1"></a><span class="ex">zabbix_get</span> <span class="at">-s</span> 10.20.N.20 <span class="at">-k</span> hexalog.maj.attente</span></code></pre></div></div>
+<ol start="2" type="1">
+<li>Dans Zabbix, sur srv-lnx-01, créez trois éléments de type <strong>Agent Zabbix</strong>, type d’information <em>Numérique (non signé)</em>, intervalle <code>30m</code>, délai d’expiration <code>15s</code> : <code>Mises à jour en attente</code> (<code>hexalog.maj.attente</code>), <code>Mises à jour de sécurité en attente</code> (<code>hexalog.maj.securite</code>), <code>Redémarrage nécessaire</code> (<code>hexalog.redemarrage</code>).</li>
+<li>Deux déclencheurs :</li>
+</ol>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Nom</th>
+<th>Sévérité</th>
+<th>Expression</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Correctifs de sécurité en attente depuis plus de 24 h sur {HOST.NAME}</code></td>
+<td>Avertissement</td>
+<td><code>min(/srv-lnx-01/hexalog.maj.securite,24h)&gt;0</code></td>
+</tr>
+<tr class="even">
+<td><code>Redémarrage nécessaire sur {HOST.NAME}</code></td>
+<td>Information</td>
+<td><code>last(/srv-lnx-01/hexalog.redemarrage)=1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Pourquoi le premier attend-il 24 heures ?</p>
+<h3 id="e.4-et-windows">E.4, Et Windows ?</h3>
+<p>Sur srv-win-01 : <strong>Paramètres → Windows Update</strong>. Relevez : l’état, l’<strong>historique des mises à jour</strong>, les <strong>heures d’activité</strong> (<em>Options avancées</em>), et les mises à jour proposées. Ne lancez pas le téléchargement pendant la séance : les correctifs cumulatifs pèsent plusieurs gigaoctets par machine. Quel jour du mois Microsoft publie-t-il ses correctifs ? Quand placeriez-vous la maintenance mensuelle d’Hexalog ?</p>
+<h2 id="partie-f.-un-changement-de-bout-en-bout-40-min">Partie F. Un changement de bout en bout (40 min)</h2>
+<p>La maintenance mensuelle de srv-lnx-01 est due : installer les mises à jour qui ne sont pas de sécurité, et redémarrer si nécessaire.</p>
+<h3 id="f.1-la-demande-de-changement">F.1, La demande de changement</h3>
+<p>Remplissez le modèle « Demande de changement » de la page <a href="../modeles.html">Modèles de livrables</a> : objet, justification, machines et services touchés, impact pendant l’intervention (l’intranet est-il interrompu ? combien de temps ?), risque, plan de test, <strong>plan de retour arrière</strong>, fenêtre, personnes prévenues. Faites-la relire par votre voisin, qui joue le rôle du responsable : il la valide ou demande des compléments.</p>
+<h3 id="f.2-préparer">F.2, Préparer</h3>
+<ol type="1">
+<li><strong>Snapshot</strong> <code>07-avant-maj</code> de srv-lnx-01 dans Proxmox (c’est votre retour arrière).</li>
+<li><strong>Zabbix</strong> : période de maintenance <em>avec collecte de données</em> sur srv-lnx-01, qui commence maintenant, pour 30 minutes (comme au TP 5, partie E).</li>
+<li><strong>Nagios</strong> : il supervise aussi srv-lnx-01 : page de l’hôte → <em>Schedule downtime for this host and all services</em>, 30 minutes.</li>
+</ol>
+<p>Deux outils de supervision, deux maintenances à déclarer : notez-le comme un inconvénient d’avoir plusieurs outils.</p>
+<h3 id="f.3-réaliser">F.3, Réaliser</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a aria-hidden="true" href="#cb15-1" tabindex="-1"></a><span class="fu">date</span></span>
+<span id="cb15-2"><a aria-hidden="true" href="#cb15-2" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb15-3"><a aria-hidden="true" href="#cb15-3" tabindex="-1"></a><span class="ex">apt</span> list <span class="at">--upgradable</span></span>
+<span id="cb15-4"><a aria-hidden="true" href="#cb15-4" tabindex="-1"></a><span class="fu">sudo</span> apt full-upgrade <span class="at">-y</span></span>
+<span id="cb15-5"><a aria-hidden="true" href="#cb15-5" tabindex="-1"></a><span class="fu">sudo</span> needrestart <span class="at">-r</span> l</span>
+<span id="cb15-6"><a aria-hidden="true" href="#cb15-6" tabindex="-1"></a><span class="fu">ls</span> /run/reboot-required <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">&amp;&amp;</span> <span class="fu">cat</span> /run/reboot-required.pkgs</span></code></pre></div></div>
+<p><code>needrestart -r l</code> <strong>liste</strong> les services qui utilisent encore d’anciennes bibliothèques, sans les redémarrer. Si <code>/run/reboot-required</code> existe (nouveau noyau), redémarrez : <code>sudo reboot</code>. Notez l’heure de début et de fin de l’interruption.</p>
+<h3 id="f.4-vérifier">F.4, Vérifier</h3>
+<ul>
+<li><code>curl -s http://10.20.N.20/sante.php</code> depuis sup-lnx-01 : <code>BASE-OK</code> ;</li>
+<li>Zabbix : scénario web <em>Intranet</em> en succès, pastille ZBX verte, problèmes éventuels marqués comme supprimés, <strong>aucune notification</strong> dans <strong>Rapports → Journal des actions</strong> ;</li>
+<li>Nagios : services de srv-lnx-01 OK, <em>Event Log</em> sans notification pendant le <em>downtime</em> ;</li>
+<li><code>zabbix_get -s 10.20.N.20 -k hexalog.maj.attente</code> : <code>0</code>.</li>
+</ul>
+<h3 id="f.5-clôturer">F.5, Clôturer</h3>
+<ol type="1">
+<li>Complétez la demande de changement : réalisé le, par, résultat, durée réelle de l’interruption, écarts.</li>
+<li>Ajoutez la ligne correspondante dans votre <strong>journal des modifications</strong> (modèle sur la page <a href="../modeles.html">Modèles de livrables</a>).</li>
+<li>Une fois le changement validé, <strong>supprimez le snapshot</strong> <code>07-avant-maj</code>. Pourquoi ne pas le garder « au cas où » ?</li>
+</ol>
+<h2 id="partie-g.-le-plan-de-maintenance-dhexalog-facultatif-15-min-sinon-à-la-maison">Partie G. Le plan de maintenance d’Hexalog (facultatif, 15 min, sinon à la maison)</h2>
+<p>Complétez le modèle « Plan de maintenance préventive » de la page <a href="../modeles.html">Modèles de livrables</a> pour les machines du lab : au moins dix tâches, avec la fréquence, le responsable, l’outil et la preuve. Ce plan fait partie du dossier de MCO (séance 12).</p>
+<h2 id="partie-h.-anticiper-la-saturation-facultatif-20-min">Partie H. Anticiper la saturation (facultatif, 20 min)</h2>
+<ol type="1">
+<li>Sur srv-lnx-01, créez un déclencheur <code>/ sera plein dans moins de 2 h sur {HOST.NAME}</code>, sévérité Avertissement : <code>timeleft(/srv-lnx-01/vfs.fs.dependent.size[/,pused],10m,100)&lt;2h</code>.</li>
+<li>Simulez un fichier qui grossit de 100 Mo par minute (une exportation qui s’emballe) :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a aria-hidden="true" href="#cb16-1" tabindex="-1"></a><span class="fu">sudo</span> systemd-run <span class="at">--unit</span><span class="op">=</span>export-emballe bash <span class="at">-c</span> <span class="st">'for i in $(seq 1 40) ; do fallocate -l 50M /var/tmp/export-$i.tmp ; sleep 30 ; done'</span></span>
+<span id="cb16-2"><a aria-hidden="true" href="#cb16-2" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> /</span></code></pre></div></div>
+<ol start="3" type="1">
+<li>Observez le graphique de l’espace utilisé et l’apparition du problème <strong>avant</strong> que le disque soit plein. Puis arrêtez et nettoyez : <code>sudo systemctl stop export-emballe ; sudo rm -f /var/tmp/export-*.tmp</code>.</li>
+</ol>
+<p>Snapshots <code>07-journaux-maintenance</code> de sup-lnx-01 et srv-lnx-01.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/><code>/var/log/hexalog/srv-lnx-01/</code> contient <code>auth.log</code> et <code>syslog.log</code> ; les messages envoyés pendant une coupure du serveur sont arrivés ensuite.</label></li>
+<li><label><input type="checkbox"/>Rotation configurée et justifiée ; chronologie d’une connexion reconstituée depuis sup-lnx-01.</label></li>
+<li><label><input type="checkbox"/>(Recommandé) <code>timedatectl</code> : synchronisé sur <code>10.20.N.1</code>, fuseau <code>Europe/Paris</code>.</label></li>
+<li><label><input type="checkbox"/>Problème Zabbix sur les connexions SSH refusées de srv-lnx-01, et sur les 4625 de srv-win-01.</label></li>
+<li><label><input type="checkbox"/>Mises à jour automatiques limitées à la sécurité (<code>Allowed origins</code>) ; trois éléments de mises à jour dans Zabbix.</label></li>
+<li><label><input type="checkbox"/>Demande de changement remplie, validée, réalisée et clôturée ; aucune notification pendant la maintenance ; ligne au journal des modifications ; snapshot supprimé.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Pourquoi les messages reçus sont-ils traités dans un <code>ruleset</code> séparé ? Que se passerait-il sans le <code>stop</code> ?</li>
+<li>Un attaquant qui prend le contrôle de srv-lnx-01 efface <code>/var/log/auth.log</code>. Que reste-t-il ? Quelles mesures rendraient la copie centrale encore plus sûre ?</li>
+<li>Pourquoi l’agent Zabbix a-t-il besoin du groupe <code>adm</code> ? Quel risque y a-t-il à lui donner ce groupe ?</li>
+<li>La CNIL recommande de six mois à un an de conservation. Quelle durée choisissez-vous pour Hexalog, pour quels journaux, et pourquoi ?</li>
+<li>Avec la politique de la partie E.2, une faille grave est corrigée dans une version intermédiaire de Debian et pas par un correctif de sécurité. Est-elle installée automatiquement ? Comment le sauriez-vous ?</li>
+<li>Pendant la partie F, pourquoi a-t-on déclaré la maintenance dans Zabbix <strong>et</strong> dans Nagios ? Qu’est-ce qui se serait passé sinon ?</li>
+<li>Le changement de la partie F est-il standard, normal ou urgent ? Et l’installation automatique des correctifs de sécurité ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rsyslogd -N1</code> : erreur de syntaxe</td>
+<td>guillemets ou accolades oubliés en recopiant ; relancer <code>-N1</code> après chaque correction</td>
+</tr>
+<tr class="even">
+<td>Rien n’arrive dans <code>/var/log/hexalog</code></td>
+<td>sur sup-lnx-01 : <code>ss -tlnp | grep 514</code> ; adresse de <code>$AllowedSender</code> (N remplacé ?) ; sur srv-lnx-01 : adresse <code>target</code>, <code>sudo journalctl -u rsyslog</code></td>
+</tr>
+<tr class="odd">
+<td><code>journalctl -u rsyslog</code> (sup-lnx-01) : <em>disallowed sender</em></td>
+<td>l’adresse de l’émetteur n’est pas dans <code>$AllowedSender</code></td>
+</tr>
+<tr class="even">
+<td>Les messages de la coupure n’arrivent pas</td>
+<td>attendre une à deux minutes (le client réessaie à intervalles croissants) ; <code>action.resumeRetryCount="-1"</code> présent ?</td>
+</tr>
+<tr class="odd">
+<td><code>timedatectl timesync-status</code> : <em>Packet count: 0</em></td>
+<td>le serveur NTP ne répond pas : N, passerelle ; prévenir M. CHADEYRON</td>
+</tr>
+<tr class="even">
+<td>Élément <code>log[]</code> <em>Non supporté</em> : <em>Cannot open file</em></td>
+<td>le compte <code>zabbix</code> n’est pas dans <code>adm</code>, ou l’agent n’a pas été redémarré</td>
+</tr>
+<tr class="odd">
+<td>Élément <code>log[]</code> ou <code>eventlog[]</code> sans valeur, pas d’erreur</td>
+<td>contrôle actif : <code>ServerActive=</code> et <code>Hostname=</code> de l’agent (TP 4) ; le nom doit être <strong>identique</strong> à celui de l’hôte dans Zabbix ; les lignes antérieures à la création sont ignorées (<code>skip</code>)</td>
+</tr>
+<tr class="even">
+<td>Pas d’événement 4625</td>
+<td>stratégie d’audit non appliquée : <code>gpupdate /force</code>, vérifier qu’il s’agit bien de la <em>Default Domain Controllers Policy</em></td>
+</tr>
+<tr class="odd">
+<td><code>smbclient</code> : <em>Connection refused</em></td>
+<td>srv-win-01 éteint, ou mauvaise adresse</td>
+</tr>
+<tr class="even">
+<td><code>apt-config dump</code> montre encore <code>label=Debian</code></td>
+<td>ligne <code>#clear</code> absente ou mal orthographiée</td>
+</tr>
+<tr class="odd">
+<td>Élément <code>hexalog.maj.attente</code> : <em>Timeout while executing a shell script</em></td>
+<td>délai d’expiration de l’élément trop court : <code>15s</code></td>
+</tr>
+<tr class="even">
+<td><code>needrestart</code> ouvre une fenêtre de choix</td>
+<td>vous avez oublié <code>-r l</code> : choisissez <em>Annuler</em></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<ul>
+<li>Réglez l’heure du contrôleur de domaine sur le serveur Proxmox, dans une invite de commandes en administrateur : <code>w32tm /config /manualpeerlist:10.20.N.1 /syncfromflags:manual /reliable:yes /update</code>, puis <code>w32tm /resync</code> et <code>w32tm /query /status</code>. Pourquoi est-ce le contrôleur de domaine, et lui seul, qui doit avoir une source externe ?</li>
+<li>Envoyez aussi les journaux de sup-lnx-01 dans le dossier central (<code>/var/log/hexalog/sup-lnx-01/</code>), sans les envoyer deux fois.</li>
+<li>Chiffrez le transport des journaux avec TLS (port 6514) : il faut une autorité de certification et un certificat par machine. Quel est le coût d’exploitation de ce choix ?</li>
+<li>Supervisez le serveur de journaux lui-même : un élément <code>vfs.file.time[/var/log/hexalog/srv-lnx-01/syslog.log]</code> et un déclencheur qui signale qu’aucun journal n’est arrivé depuis 30 minutes.</li>
+</ul>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="dir">‹ Page précédente</span><span class="titre">Séance 7 : Journaux centralisés et maintenance préventive</span></a><a class="next" href="../cours/s08-incidents.html" data-seance="8"><span class="dir">Page suivante ›</span><span class="titre">Séance 8 : Gestion des incidents</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 1 : Prendre en main Proxmox et construire le lab | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous vous connectez au serveur Proxmox, vous fabriquez vos premières VM à partir des modèles en quelques minutes grâce à cloud-init, vous y accédez depuis votre PC par SSH avec rebond, vous installez ">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d'Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item active" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp active" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d'un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d'astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d'activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d'activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module A : Fondamentaux et lab</span><span class="sep">›</span><a href="../cours/s01-supervision-mco.html" data-seance="1">Séance 1</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 1</span>
+  <h1>TP 1 : Prendre en main Proxmox et construire le lab</h1>
+  <p class="lead">Vous vous connectez au serveur Proxmox, vous fabriquez vos premières VM à partir des modèles en quelques minutes grâce à cloud-init, vous y accédez depuis votre PC par SSH avec rebond, vous installez l'intranet d'Hexalog, puis vous recréez le contrôleur de domaine hexalog.local. À la fin, le lab est prêt à être supervisé.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>sup-lnx-01, srv-lnx-01, srv-win-01 (créées dans ce TP)</td></tr><tr><th>Cours associé</th><td><a href="../cours/s01-supervision-mco.html" data-seance="1">Séance 1 : Superviser et maintenir : les enjeux</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#architecture-visée">Architecture visée</a></li><li><a href="#partie-a.-prendre-en-main-proxmox-15-min">Partie A. Prendre en main Proxmox (15 min)</a></li><li><a href="#partie-b.-créer-sup-lnx-01-30-min">Partie B. Créer sup-lnx-01 (30 min)</a></li><li><a href="#partie-c.-créer-srv-lnx-01-15-min">Partie C. Créer srv-lnx-01 (15 min)</a></li><li><a href="#partie-d.-accéder-aux-vm-depuis-votre-pc-20-min">Partie D. Accéder aux VM depuis votre PC (20 min)</a></li><li><a href="#partie-e.-installer-lintranet-sur-srv-lnx-01-15-min">Partie E. Installer l’intranet sur srv-lnx-01 (15 min)</a></li><li><a href="#partie-f.-le-contrôleur-de-domaine-srv-win-01-60-min">Partie F. Le contrôleur de domaine srv-win-01 (60 min)</a></li><li><a href="#partie-g.-superviser-à-la-main-facultatif-15-min">Partie G. Superviser « à la main » (facultatif, 15 min)</a></li><li><a href="#partie-h.-snapshots-5-min">Partie H. Snapshots (5 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Hexalog a migré son infrastructure sur un serveur Proxmox VE. Vous recréez le cœur du système d’information dans votre espace : un serveur Linux qui porte l’<strong>intranet</strong> de suivi des expéditions (nginx, PHP, MariaDB), le <strong>contrôleur de domaine</strong> <code>hexalog.local</code>, et le futur <strong>serveur de supervision</strong>, qui sera aussi votre point d’entrée pour l’administration.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p><strong>Socle</strong> (indispensable pour la séance 2) : parties A à E, et la partie F jusqu’à la création du domaine (F.4). Les parties F.5 à F.7 peuvent être terminées au début de la séance 2. La partie G est facultative.</p>
+<p>Notez dès maintenant vos valeurs dans votre journal de bord : votre numéro <strong>N</strong>, l’adresse <strong>PROXMOX</strong>, l’adresse <strong>DNS-SECOURS</strong>, le <strong>mot de passe de lab</strong>.</p>
+</div></div>
+<h2 id="architecture-visée">Architecture visée</h2>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-644634" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1045.78125px;" viewBox="0 0 1045.78125 287.25" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-644634{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-644634 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-644634 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-644634 .error-icon{fill:#f5f6f8;}#mmd0-644634 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-644634 .edge-thickness-normal{stroke-width:1px;}#mmd0-644634 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-644634 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-644634 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-644634 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-644634 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-644634 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-644634 .marker.cross{stroke:#4a5563;}#mmd0-644634 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-644634 p{margin:0;}#mmd0-644634 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-644634 .cluster-label text{fill:#1f3a5f;}#mmd0-644634 .cluster-label span{color:#1f3a5f;}#mmd0-644634 .cluster-label span p{background-color:transparent;}#mmd0-644634 .label text,#mmd0-644634 span{fill:#1d2530;color:#1d2530;}#mmd0-644634 .node rect,#mmd0-644634 .node circle,#mmd0-644634 .node ellipse,#mmd0-644634 .node polygon,#mmd0-644634 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-644634 .rough-node .label text,#mmd0-644634 .node .label text,#mmd0-644634 .image-shape .label,#mmd0-644634 .icon-shape .label{text-anchor:middle;}#mmd0-644634 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-644634 .rough-node .label,#mmd0-644634 .node .label,#mmd0-644634 .image-shape .label,#mmd0-644634 .icon-shape .label{text-align:center;}#mmd0-644634 .node.clickable{cursor:pointer;}#mmd0-644634 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-644634 .arrowheadPath{fill:#000000;}#mmd0-644634 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-644634 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-644634 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-644634 .edgeLabel p{background-color:#ffffff;}#mmd0-644634 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-644634 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-644634 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-644634 .cluster text{fill:#1f3a5f;}#mmd0-644634 .cluster span{color:#1f3a5f;}#mmd0-644634 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-644634 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-644634 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-644634 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-644634 rect.text{fill:none;stroke-width:0;}#mmd0-644634 .icon-shape,#mmd0-644634 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-644634 .icon-shape p,#mmd0-644634 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-644634 .icon-shape .label rect,#mmd0-644634 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-644634 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-644634 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-644634 .node .neo-node{stroke:#1f3a5f;}#mmd0-644634 [data-look="neo"].node rect,#mmd0-644634 [data-look="neo"].cluster rect,#mmd0-644634 [data-look="neo"].node polygon{stroke:url(#mmd0-644634-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-644634 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-644634 [data-look="neo"].node path{stroke:url(#mmd0-644634-gradient);stroke-width:1px;}#mmd0-644634 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-644634 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-644634 [data-look="neo"].node circle{stroke:url(#mmd0-644634-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-644634 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-644634 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-644634-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-644634 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-644634-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-644634 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-644634_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-644634_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-644634_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-644634_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-644634_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-644634_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-644634_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-644634_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-644634_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-644634_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-644634_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-644634_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-644634-NET" data-look="classic"><rect style="" x="253.3125" y="8" width="784.46875" height="271.25"></rect><g class="cluster-label " transform="translate(561.4921875, 8)"><foreignObject width="168.109375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>VNet hexaN · 10.20.N.0/24</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M120.031,120.852L186.672,118L253.313,118L274.313,118" id="mmd0-644634-L_PC_SUP_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_SUP_0" data-points="W3sieCI6MTIwLjAzMTI1LCJ5IjoxMjAuODUyMzg4NTM1MDMxODV9LHsieCI6MTg2LjY3MTg3NSwieSI6MTE4fSx7IngiOjI1My4zMTI1LCJ5IjoxMTh9LHsieCI6Mjc4LjMxMjUsInkiOjExOH1d" data-look="classic" marker-end="url(#mmd0-644634_flowchart-v2-pointEnd)"></path><path d="M451.406,118L530.102,118L604.928,137.637" id="mmd0-644634-L_SUP_L1_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_SUP_L1_0" data-points="W3sieCI6NDUxLjQwNjI1LCJ5IjoxMTh9LHsieCI6NTMwLjEwMTU2MjUsInkiOjExOH0seyJ4Ijo2MDguNzk2ODc1LCJ5IjoxMzguNjUxOTA3NTk5ODM3fV0=" data-look="classic" marker-end="url(#mmd0-644634_flowchart-v2-pointEnd)"></path><path d="M103.95,147.75L186.672,198.5L253.313,198.5L364.859,198.5L530.102,198.5L604.928,178.863" id="mmd0-644634-L_PC_L1_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_L1_0" data-points="W3sieCI6MTAzLjk1MDIxODAyMzI1NTgxLCJ5IjoxNDcuNzV9LHsieCI6MTg2LjY3MTg3NSwieSI6MTk4LjV9LHsieCI6MjUzLjMxMjUsInkiOjE5OC41fSx7IngiOjM2NC44NTkzNzUsInkiOjE5OC41fSx7IngiOjUzMC4xMDE1NjI1LCJ5IjoxOTguNX0seyJ4Ijo2MDguNzk2ODc1LCJ5IjoxNzcuODQ4MDkyNDAwMTYzfV0=" data-look="classic" marker-end="url(#mmd0-644634_flowchart-v2-pointEnd)"></path><path d="M103.95,98.75L186.672,48L253.313,48L364.859,48L530.102,48L683.477,48L797.938,48L881.81,120.631" id="mmd0-644634-L_PC_DC_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_DC_0" data-points="W3sieCI6MTAzLjk1MDIxODAyMzI1NTgxLCJ5Ijo5OC43NX0seyJ4IjoxODYuNjcxODc1LCJ5Ijo0OH0seyJ4IjoyNTMuMzEyNSwieSI6NDh9LHsieCI6MzY0Ljg1OTM3NSwieSI6NDh9LHsieCI6NTMwLjEwMTU2MjUsInkiOjQ4fSx7IngiOjY4My40NzY1NjI1LCJ5Ijo0OH0seyJ4Ijo3OTcuOTM3NSwieSI6NDh9LHsieCI6ODg0LjgzMzMzMzMzMzMzMzQsInkiOjEyMy4yNX1d" data-look="classic" marker-end="url(#mmd0-644634_flowchart-v2-pointEnd)"></path><path d="M758.156,158.25L797.938,158.25L833.719,158.25" id="mmd0-644634-L_L1_DC_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_L1_DC_0" data-points="W3sieCI6NzU4LjE1NjI1LCJ5IjoxNTguMjV9LHsieCI6Nzk3LjkzNzUsInkiOjE1OC4yNX0seyJ4Ijo4MzcuNzE4NzUsInkiOjE1OC4yNX1d" data-look="classic" marker-end="url(#mmd0-644634_flowchart-v2-pointEnd)"></path><path d="M409.092,153L530.102,248.75L683.477,248.75L797.938,248.75L872.753,195.568" id="mmd0-644634-L_SUP_DC_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_SUP_DC_0" data-points="W3sieCI6NDA5LjA5MjQ2NTM0NDE2ODI2LCJ5IjoxNTN9LHsieCI6NTMwLjEwMTU2MjUsInkiOjI0OC43NX0seyJ4Ijo2ODMuNDc2NTYyNSwieSI6MjQ4Ljc1fSx7IngiOjc5Ny45Mzc1LCJ5IjoyNDguNzV9LHsieCI6ODc2LjAxMzEyMTU0Njk2MTMsInkiOjE5My4yNX1d" data-look="classic" marker-end="url(#mmd0-644634_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(186.671875, 118)"><g class="label" data-id="L_PC_SUP_0" transform="translate(-41.640625, -10.5)"><foreignObject width="83.28125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>ssh -p 1N022</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(530.1015625, 118)"><g class="label" data-id="L_SUP_L1_0" transform="translate(-38.140625, -10.5)"><foreignObject width="76.28125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>rebond SSH</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(364.859375, 198.5)"><g class="label" data-id="L_PC_L1_0" transform="translate(-36.1953125, -10.5)"><foreignObject width="72.390625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>http :1N020</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(530.1015625, 48)"><g class="label" data-id="L_PC_DC_0" transform="translate(-53.6953125, -10.5)"><foreignObject width="107.390625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>console Proxmox</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(797.9375, 158.25)"><g class="label" data-id="L_L1_DC_0" transform="translate(-14.78125, -10.5)"><foreignObject width="29.5625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>DNS</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(683.4765625, 248.75)"><g class="label" data-id="L_SUP_DC_0" transform="translate(-14.78125, -10.5)"><foreignObject width="29.5625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>DNS</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-644634-flowchart-PC-0" data-look="classic" transform="translate(64.015625, 123.25)"><rect class="basic label-container" style="" x="-56.015625" y="-24.5" width="112.03125" height="49"></rect><g class="label" style="" transform="translate(-28.015625, -10.5)"><rect></rect><foreignObject width="56.03125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Votre PC</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-644634-flowchart-SUP-1" data-look="classic" transform="translate(364.859375, 118)"><rect class="basic label-container" style="" x="-86.546875" y="-35" width="173.09375" height="70"></rect><g class="label" style="" transform="translate(-58.546875, -21)"><rect></rect><foreignObject width="117.09375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>sup-lnx-01 · .40<br>point d'entrée SSH</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-644634-flowchart-L1-2" data-look="classic" transform="translate(683.4765625, 158.25)"><rect class="basic label-container" style="" x="-74.6796875" y="-35" width="149.359375" height="70"></rect><g class="label" style="" transform="translate(-46.6796875, -21)"><rect></rect><foreignObject width="93.359375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>srv-lnx-01 · .20<br>intranet</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-644634-flowchart-DC-3" data-look="classic" transform="translate(925.25, 158.25)"><rect class="basic label-container" style="" x="-87.53125" y="-35" width="175.0625" height="70"></rect><g class="label" style="" transform="translate(-59.53125, -21)"><rect></rect><foreignObject width="119.0625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>srv-win-01 · .10<br>hexalog.local, DNS</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-644634-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-644634-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-644634-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<h2 id="partie-a.-prendre-en-main-proxmox-15-min">Partie A. Prendre en main Proxmox (15 min)</h2>
+<h3 id="a.1-se-connecter">A.1, Se connecter</h3>
+<ol type="1">
+<li>Ouvrez <code>https://PROXMOX:8006</code> dans votre navigateur et acceptez le certificat (il est autosigné, comme celui de l’intranet du BLOC 1).</li>
+<li>Nom d’utilisateur <code>etuN</code>, mot de passe donné par M. CHADEYRON, <strong>domaine</strong> : <em>Proxmox VE authentication server</em>, langue : <em>Français</em>.</li>
+<li>Changez votre mot de passe : en haut à droite, menu de votre compte → <strong>Mot de passe</strong>.</li>
+</ol>
+<h3 id="a.2-se-repérer">A.2, Se repérer</h3>
+<ol type="1">
+<li>En haut de l’arborescence de gauche, choisissez la <strong>Vue Pool</strong> : votre pool <code>etuN</code> est vide pour l’instant.</li>
+<li>Revenez à la <strong>Vue serveur</strong> et dépliez le nœud : vous voyez les deux <strong>modèles</strong> (icône différente des VM), <code>9000 (TPL-DEB13)</code> et <code>9001 (TPL-WS2025)</code>, les <strong>stockages</strong> auxquels vous avez accès, et votre zone réseau <code>hexa</code> avec votre VNet <code>hexaN</code>.</li>
+<li>Cliquez sur le modèle <code>9000</code> → <strong>Matériel</strong> : notez le disque, la mémoire, et l’absence de carte réseau. Onglet <strong>Cloud-Init</strong> : les champs sont vides, ils seront remplis sur chaque clone.</li>
+</ol>
+<h2 id="partie-b.-créer-sup-lnx-01-30-min">Partie B. Créer sup-lnx-01 (30 min)</h2>
+<h3 id="b.1-préparer-votre-clé-ssh">B.1, Préparer votre clé SSH</h3>
+<p>Les VM Debian refusent les connexions SSH par mot de passe : vous vous connecterez avec la clé de votre PC, créée au TP 10 du BLOC 1 (<code>perso-pc</code>). Affichez la clé <strong>publique</strong> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC (Windows, PowerShell)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">Get-Content</span> <span class="va">$env</span><span class="op">:</span>USERPROFILE\<span class="op">.</span><span class="fu">ssh</span>\id_ed25519<span class="op">.</span><span class="fu">pub</span></span></code></pre></div></div>
+<p>Sous Linux : <code>cat ~/.ssh/id_ed25519.pub</code>. Si le fichier n’existe pas, créez la paire : <code>ssh-keygen -t ed25519 -C perso-pc</code> (avec une phrase de passe). La ligne commence par <code>ssh-ed25519 AAAA</code> : c’est elle que vous collerez dans Proxmox. La clé <strong>privée</strong> (<code>id_ed25519</code>, sans extension) ne quitte jamais votre PC.</p>
+<h3 id="b.2-cloner-le-modèle">B.2, Cloner le modèle</h3>
+<p>Clic droit sur <code>9000 (TPL-DEB13)</code> → <strong>Cloner</strong> :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID de VM</td>
+<td><code>N40</code> (par exemple <code>340</code> pour l’étudiant 3)</td>
+</tr>
+<tr class="even">
+<td>Nom</td>
+<td><code>sup-lnx-01</code></td>
+</tr>
+<tr class="odd">
+<td>Mode</td>
+<td><strong>Clone lié</strong></td>
+</tr>
+<tr class="even">
+<td>Pool de ressources</td>
+<td><code>etuN</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Cliquez sur <strong>Cloner</strong> : quelques secondes suffisent, car un clone lié ne copie rien (voir le cours).</p>
+<h3 id="b.3-ajuster-le-matériel">B.3, Ajuster le matériel</h3>
+<p>Sélectionnez <code>sup-lnx-01</code> → <strong>Matériel</strong> :</p>
+<ol type="1">
+<li><strong>Mémoire</strong> → Modifier → <code>3072</code> Mio.</li>
+<li><strong>Processeurs</strong> → Modifier → 2 cœurs.</li>
+<li><strong>Disque dur</strong> (<code>scsi0</code>) → <strong>Action du disque</strong> → <strong>Redimensionner</strong> → incrément de <code>10</code> Gio (le disque passe à 20 Gio ; le système l’agrandira tout seul au démarrage).</li>
+<li><strong>Ajouter</strong> → <strong>Périphérique réseau</strong> : pont <code>hexaN</code>, modèle <em>VirtIO (paravirtualisé)</em>, case <strong>Pare-feu décochée</strong> → Ajouter.</li>
+</ol>
+<h3 id="b.4-remplir-longlet-cloud-init">B.4, Remplir l’onglet Cloud-Init</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Utilisateur</td>
+<td><code>sysadmin</code></td>
+</tr>
+<tr class="even">
+<td>Mot de passe</td>
+<td>le mot de passe de lab</td>
+</tr>
+<tr class="odd">
+<td>Domaine DNS</td>
+<td><code>hexalog.local</code></td>
+</tr>
+<tr class="even">
+<td>Serveurs DNS</td>
+<td><code>10.20.N.10 DNS-SECOURS</code> (les deux adresses séparées par une espace)</td>
+</tr>
+<tr class="odd">
+<td>Clé publique SSH</td>
+<td>la ligne <code>ssh-ed25519 AAAA… perso-pc</code> de B.1</td>
+</tr>
+<tr class="even">
+<td>Mettre à niveau les paquets</td>
+<td>Oui</td>
+</tr>
+<tr class="odd">
+<td>Config. IP (net0)</td>
+<td>IPv4 <strong>Statique</strong> : <code>10.20.N.40/24</code>, passerelle <code>10.20.N.1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Cliquez sur <strong>Régénérer l’image</strong>.</p>
+<h3 id="b.5-premier-démarrage">B.5, Premier démarrage</h3>
+<ol type="1">
+<li><strong>Démarrer</strong>, puis <strong>Console</strong> : la VM démarre sur une console texte (<em>xterm.js</em>). Appuyez sur Entrée si l’écran reste vide.</li>
+<li>Connectez-vous avec <code>sysadmin</code> et le mot de passe de lab, puis attendez la fin de cloud-init (il installe les mises à jour : deux à cinq minutes) :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (console Proxmox) (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="ex">cloud-init</span> status <span class="at">--wait</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="ex">hostnamectl</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="ex">ip</span> <span class="at">-br</span> a</span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="ex">ip</span> route</span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="ex">resolvectl</span> status eth0</span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 2 deb.debian.org</span></code></pre></div></div>
+<p>Résultat attendu : <code>status: done</code>, nom d’hôte <code>sup-lnx-01</code>, adresse <code>10.20.N.40/24</code> sur <code>eth0</code>, route par défaut <code>via 10.20.N.1</code>, serveurs DNS <code>10.20.N.10</code> et <code>DNS-SECOURS</code>, et le ping répond. Le contrôleur de domaine n’existe pas encore : c’est le DNS de secours qui répond pour l’instant.</p>
+<h2 id="partie-c.-créer-srv-lnx-01-15-min">Partie C. Créer srv-lnx-01 (15 min)</h2>
+<p>Même méthode, avec ces valeurs :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Réglage</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID de VM, nom</td>
+<td><code>N20</code>, <code>srv-lnx-01</code></td>
+</tr>
+<tr class="even">
+<td>Mémoire, processeurs</td>
+<td><code>1024</code> Mio, 1 cœur</td>
+</tr>
+<tr class="odd">
+<td>Disque</td>
+<td>on le laisse à 10 Gio</td>
+</tr>
+<tr class="even">
+<td>Carte réseau</td>
+<td>pont <code>hexaN</code>, VirtIO, sans pare-feu</td>
+</tr>
+<tr class="odd">
+<td>Cloud-Init</td>
+<td>mêmes champs, adresse <code>10.20.N.20/24</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Démarrez-la et vérifiez comme en B.5 (<code>cloud-init status --wait</code>, <code>ip -br a</code>).</p>
+<h2 id="partie-d.-accéder-aux-vm-depuis-votre-pc-20-min">Partie D. Accéder aux VM depuis votre PC (20 min)</h2>
+<h3 id="d.1-première-connexion-par-la-redirection-de-port">D.1, Première connexion par la redirection de port</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a>ssh <span class="op">-</span>p 1N022 sysadmin@PROXMOX</span></code></pre></div></div>
+<p>Votre PC ne connaît pas encore ce serveur : il affiche l’<strong>empreinte</strong> de sa clé d’hôte. Avant de répondre <code>yes</code>, comparez-la avec celle que donne la VM elle-même (console Proxmox de sup-lnx-01) :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (console Proxmox) (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-lf</span> /etc/ssh/ssh_host_ed25519_key.pub</span></code></pre></div></div>
+<p>Une fois connecté, <code>hostname</code> doit répondre <code>sup-lnx-01</code>. La connexion s’est faite <strong>par clé</strong> : la phrase de passe demandée est celle de votre clé, pas le mot de passe de lab.</p>
+<h3 id="d.2-le-fichier-de-configuration-ssh">D.2, Le fichier de configuration SSH</h3>
+<p>Créez ou complétez le fichier de configuration SSH de votre PC avec le bloc de la page <a href="../lab.html#le-fichier-de-configuration-ssh-de-votre-pc">du lab</a> (sous Windows : <code>C:\Users\&lt;vous&gt;\.ssh\config</code>, <strong>sans extension</strong> ; le Bloc-notes ajoute volontiers <code>.txt</code>). Puis :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a>ssh sup<span class="op">-</span>lnx<span class="op">-</span>01 hostname</span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a>ssh srv<span class="op">-</span>lnx<span class="op">-</span>01 hostname</span></code></pre></div></div>
+<p>La seconde commande <strong>rebondit</strong> par sup-lnx-01 (<code>ProxyJump</code>, vu au TP 12 du BLOC 1) : srv-lnx-01 n’est pas joignable directement depuis votre PC.</p>
+<h3 id="d.3-les-droits-de-sysadmin">D.3, Les droits de sysadmin</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">id</span></span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">-l</span></span></code></pre></div></div>
+<p>Le compte créé par cloud-init est membre de <code>sudo</code> et peut l’utiliser <strong>sans mot de passe</strong> (<code>NOPASSWD: ALL</code>) : c’est le réglage des images cloud, pratique pour le lab. En production, on exigerait une authentification (ou une clé matérielle) pour élever ses privilèges.</p>
+<h2 id="partie-e.-installer-lintranet-sur-srv-lnx-01-15-min">Partie E. Installer l’intranet sur srv-lnx-01 (15 min)</h2>
+<p>L’intranet est une petite application PHP de suivi des expéditions, avec sa base MariaDB. Le script d’installation est sur le site du cours : lisez-le avant de l’exécuter (c’est une bonne habitude avant tout <code>sudo bash</code>).</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSLO</span> https://jfchadeyron.github.io/bachelor/bloc2/fichiers/installer-intranet.sh</span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="fu">less</span> installer-intranet.sh</span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="fu">sudo</span> bash installer-intranet.sh</span></code></pre></div></div>
+<p>Si <code>curl</code> répond par une erreur, le site du cours n’est pas joignable depuis la VM : téléchargez le fichier depuis votre PC (ou prenez-le sur la clé de M. CHADEYRON), puis envoyez-le avec <code>scp installer-intranet.sh srv-lnx-01:</code> et lancez les deux dernières commandes.</p>
+<p>Le script installe nginx, PHP-FPM et MariaDB, crée la base <code>intranet</code> et son compte, l’application dans <code>/var/www/intranet</code>, et une <strong>page de santé</strong> <code>/sante.php</code> qui répond <code>BASE-OK</code> si l’application arrive à lire la base, <code>BASE-KO</code> (avec le code HTTP 500) sinon. Il prépare aussi deux pages d’état lisibles seulement depuis la machine elle-même, qui serviront à Zabbix (<code>/basic_status</code> pour nginx, <code>/status</code> pour PHP-FPM).</p>
+<p>Vérifiez :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> http://10.20.N.20/sante.php</span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">"code %{http_code} en %{time_total} s\n"</span> http://10.20.N.20/</span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">"basic_status depuis sup-lnx-01 : code %{http_code}\n"</span> http://10.20.N.20/basic_status</span></code></pre></div></div>
+<p>Résultat attendu : <code>BASE-OK expeditions=8</code>, <code>code 200</code>, puis <code>code 403</code> pour la page d’état (réservée à la machine elle-même). Ouvrez enfin l’intranet depuis votre PC, comme un utilisateur : <code>http://PROXMOX:1N020/</code>.</p>
+<h2 id="partie-f.-le-contrôleur-de-domaine-srv-win-01-60-min">Partie F. Le contrôleur de domaine srv-win-01 (60 min)</h2>
+<h3 id="f.1-cloner-le-modèle-windows">F.1, Cloner le modèle Windows</h3>
+<p>Clic droit sur <code>9001 (TPL-WS2025)</code> → <strong>Cloner</strong> : ID <code>N10</code>, nom <code>srv-win-01</code>, <strong>clone lié</strong>, pool <code>etuN</code>. Puis <strong>Matériel</strong> : mémoire <code>3072</code> Mio, 2 cœurs, et une carte réseau (pont <code>hexaN</code>, VirtIO, sans pare-feu). <strong>Démarrer</strong>, <strong>Console</strong>.</p>
+<h3 id="f.2-la-première-configuration-de-windows">F.2, La première configuration de Windows</h3>
+<p>Le modèle a été généralisé par <code>sysprep</code> : Windows démarre comme un ordinateur neuf. Choisissez la région <strong>France</strong>, la langue <strong>Français</strong>, le clavier <strong>Français</strong>, acceptez la licence, puis saisissez deux fois le <strong>mot de passe de lab</strong> pour le compte <code>Administrateur</code>.</p>
+<p>Pour l’écran de connexion, utilisez le bouton <strong>Ctrl-Alt-Suppr</strong> du panneau de gauche de la console (la combinaison du clavier serait interceptée par votre PC).</p>
+<h3 id="f.3-adresse-fixe-et-nom">F.3, Adresse fixe et nom</h3>
+<p>Comme au TP 5 du BLOC 1, en interface graphique :</p>
+<ol type="1">
+<li><code>ncpa.cpl</code> → carte <strong>Ethernet</strong> → Propriétés → <strong>Protocole Internet version 4</strong> : adresse <code>10.20.N.10</code>, masque <code>255.255.255.0</code>, passerelle <code>10.20.N.1</code>, DNS préféré <code>127.0.0.1</code>, DNS auxiliaire <code>DNS-SECOURS</code>.</li>
+<li><code>sysdm.cpl</code> → <strong>Modifier</strong> → nom de l’ordinateur <code>SRV-WIN-01</code> → redémarrer.</li>
+</ol>
+<p>Tant que le rôle DNS n’existe pas, Windows résout les noms avec le DNS auxiliaire.</p>
+<h3 id="f.4-créer-le-domaine-hexalog.local">F.4, Créer le domaine hexalog.local</h3>
+<p><strong>Gestionnaire de serveur</strong> → <strong>Gérer</strong> → <strong>Ajouter des rôles et fonctionnalités</strong> → rôle <strong>Services AD DS</strong> → Installer. Puis le drapeau en haut → <strong>Promouvoir ce serveur en contrôleur de domaine</strong> :</p>
+<ul>
+<li><strong>Ajouter une nouvelle forêt</strong>, domaine racine <code>hexalog.local</code> ;</li>
+<li>mot de passe du mode de restauration des services d’annuaire (DSRM) : le mot de passe de lab ;</li>
+<li>nom NetBIOS proposé : <code>HEXALOG</code> ;</li>
+<li>Installer. Le serveur redémarre (dix minutes environ). Ouvrez ensuite une session <code>HEXALOG\Administrateur</code>.</li>
+</ul>
+<h3 id="f.5-le-dns-du-domaine">F.5, Le DNS du domaine</h3>
+<p><strong>Outils</strong> → <strong>DNS</strong> (<code>dnsmgmt.msc</code>) :</p>
+<ol type="1">
+<li>Clic droit sur <code>SRV-WIN-01</code> → <strong>Propriétés</strong> → onglet <strong>Redirecteurs</strong> → <strong>Modifier</strong> → <code>DNS-SECOURS</code>. Le contrôleur de domaine pourra ainsi résoudre les noms d’Internet pour les autres VM.</li>
+<li>Zone <code>hexalog.local</code> → clic droit → <strong>Nouvel hôte (A ou AAAA)</strong> : <code>srv-lnx-01</code> → <code>10.20.N.20</code> ; <code>srv-lnx-02</code> → <code>10.20.N.21</code> ; <code>sup-lnx-01</code> → <code>10.20.N.40</code> ; <code>sup-win-01</code> → <code>10.20.N.41</code>.</li>
+<li>Clic droit → <strong>Nouvel alias (CNAME)</strong> : <code>intranet</code> → <code>srv-lnx-01.hexalog.local</code> ; <code>glpi</code> → <code>srv-lnx-02.hexalog.local</code>.</li>
+</ol>
+<h3 id="f.6-autoriser-le-ping">F.6, Autoriser le ping</h3>
+<p>Par défaut, le pare-feu de Windows Server ne répond pas au ping : pour la supervision, un serveur qui ne répond pas au ping semblerait éteint. <code>wf.msc</code> → <strong>Règles de trafic entrant</strong> → activez <strong>Partage de fichiers et d’imprimantes (Demande d’écho - Trafic entrant ICMPv4)</strong> pour le profil <strong>Domaine</strong> (clic droit → Activer la règle).</p>
+<h3 id="f.7-vérifier-depuis-les-vm-linux">F.7, Vérifier depuis les VM Linux</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 2 10.20.N.10</span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="ex">resolvectl</span> query srv-lnx-01.hexalog.local</span>
+<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a><span class="ex">resolvectl</span> query intranet.hexalog.local</span>
+<span id="cb10-4"><a aria-hidden="true" href="#cb10-4" tabindex="-1"></a><span class="ex">resolvectl</span> query deb.debian.org</span></code></pre></div></div>
+<p>Résultat attendu : le ping répond ; les trois noms sont résolus (le deuxième et le troisième par <code>10.20.N.10</code>) ; <code>intranet</code> est un alias de <code>srv-lnx-01</code>.</p>
+<h2 id="partie-g.-superviser-à-la-main-facultatif-15-min">Partie G. Superviser « à la main » (facultatif, 15 min)</h2>
+<p>Avant d’installer des outils, essayez de savoir si l’intranet va bien avec ce que vous connaissez déjà.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="fu">ping</span> <span class="at">-c</span> 3 10.20.N.20</span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">"code %{http_code} en %{time_total} s\n"</span> http://10.20.N.20/</span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> http://10.20.N.20/sante.php</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class="fu">uptime</span></span>
+<span id="cb12-2"><a aria-hidden="true" href="#cb12-2" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> /</span>
+<span id="cb12-3"><a aria-hidden="true" href="#cb12-3" tabindex="-1"></a><span class="fu">free</span> <span class="at">-h</span></span>
+<span id="cb12-4"><a aria-hidden="true" href="#cb12-4" tabindex="-1"></a><span class="ex">systemctl</span> is-active nginx php8.4-fpm mariadb</span></code></pre></div></div>
+<p>Écrivez un petit script <code>~/verif-intranet.sh</code> qui enchaîne les trois commandes de sup-lnx-01 et affiche « INTRANET OK » ou « INTRANET EN PANNE ». Puis complétez dans votre journal de bord le tableau : <em>que manque-t-il à ce script pour être un outil de supervision ?</em> (pensez à l’historique, aux seuils, aux alertes, au nombre de machines, aux tableaux de bord, à la fiabilité du script lui-même). Les séances 3 à 6 répondent à chacun de ces manques.</p>
+<h2 id="partie-h.-snapshots-5-min">Partie H. Snapshots (5 min)</h2>
+<p>Pour chacune des trois VM : <strong>Snapshots</strong> → <strong>Prendre un snapshot</strong> → nom <code>01-lab-initial</code>, une description courte. Pour srv-win-01, ne cochez pas <em>Inclure la RAM</em> (le snapshot serait beaucoup plus gros).</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">Les trois VM sont dans votre pool <code>etuN</code>, avec les numéros et noms de la convention.</label></li>
+<li><label><input type="checkbox"><code>ssh sup-lnx-01</code> et <code>ssh srv-lnx-01</code> fonctionnent depuis votre PC, par clé.</label></li>
+<li><label><input type="checkbox"><code>http://PROXMOX:1N020/</code> affiche la liste des expéditions ; <code>sante.php</code> répond <code>BASE-OK</code>.</label></li>
+<li><label><input type="checkbox"><code>srv-win-01</code> est contrôleur de <code>hexalog.local</code>, répond au ping, et résout <code>intranet.hexalog.local</code> et les noms d’Internet.</label></li>
+<li><label><input type="checkbox">Snapshots <code>01-lab-initial</code> pris ; tableau « Mes adresses » rempli dans le journal de bord.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Pourquoi la création d’une VM Debian prend-elle deux minutes ici, contre près d’une demi-heure au BLOC 1 ?</li>
+<li>Votre clone <code>srv-lnx-01</code> est un clone lié. Que se passerait-il pour lui si le modèle 9000 était abîmé ? Quel avantage et quel inconvénient a ce choix ?</li>
+<li>Dans quel ordre les machines doivent-elles redémarrer après une coupure générale, et pourquoi ?</li>
+<li>La page d’état <code>/basic_status</code> répond <code>403</code> depuis sup-lnx-01. Est-ce une panne ? Pourquoi l’avoir réglée ainsi ?</li>
+<li>Depuis votre PC, pourquoi ne pouvez-vous pas joindre directement <code>10.20.N.20:22</code> ? Quel chemin prennent vos paquets avec <code>ssh srv-lnx-01</code> ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Le clonage est refusé</td>
+<td>pool cible <code>etuN</code> oublié, ou numéro de VM déjà pris</td>
+</tr>
+<tr class="even">
+<td>La VM démarre sans adresse ni compte <code>sysadmin</code></td>
+<td>onglet Cloud-Init rempli après le démarrage : <strong>Régénérer l’image</strong>, redémarrer</td>
+</tr>
+<tr class="odd">
+<td><code>cloud-init status</code> reste sur <code>running</code> longtemps</td>
+<td>il installe les mises à jour ; si rien ne bouge après 10 minutes : <code>sudo tail -f /var/log/cloud-init-output.log</code> (souvent un problème d’accès à Internet)</td>
+</tr>
+<tr class="even">
+<td><code>ssh -p 1N022</code> : <em>Connection refused</em> ou <em>timed out</em></td>
+<td>sup-lnx-01 éteinte, mauvaise adresse dans Cloud-Init, ou mauvais port (vérifiez N)</td>
+</tr>
+<tr class="odd">
+<td><code>Permission denied (publickey)</code></td>
+<td>clé publique absente de Cloud-Init, ou ce n’est pas celle du PC utilisé ; la corriger, régénérer l’image, redémarrer</td>
+</tr>
+<tr class="even">
+<td><code>ssh srv-lnx-01</code> : <em>Could not resolve hostname</em></td>
+<td>le bloc <code>Host srv-lnx-01</code> manque dans le fichier <code>config</code>, ou le fichier s’appelle <code>config.txt</code></td>
+</tr>
+<tr class="odd">
+<td>L’installation de l’intranet échoue sur <code>apt</code></td>
+<td>pas d’Internet : <code>ip route</code>, <code>resolvectl status eth0</code>, <code>ping -c 2 DNS-SECOURS</code></td>
+</tr>
+<tr class="even">
+<td>La promotion du contrôleur de domaine échoue sur le DNS</td>
+<td>vérifier l’adresse fixe et le DNS préféré <code>127.0.0.1</code> de la carte</td>
+</tr>
+<tr class="odd">
+<td><code>resolvectl query intranet.hexalog.local</code> échoue</td>
+<td>enregistrements non créés (F.5), ou srv-win-01 éteint : le DNS de secours ne connaît pas <code>hexalog.local</code></td>
+</tr>
+<tr class="even">
+<td>Le ping de srv-win-01 échoue alors qu’il est allumé</td>
+<td>règle ICMPv4 du profil <strong>Domaine</strong> non activée (F.6)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<ul>
+<li>Lisez le journal de cloud-init (<code>sudo less /var/log/cloud-init-output.log</code>) : retrouvez le moment où le compte, la clé et les mises à jour ont été traités.</li>
+<li>Faites tourner votre script de la partie G toutes les cinq minutes avec un <strong>minuteur systemd</strong> (les images cloud de Debian n’ont pas de <code>cron</code>) : un service <code>verif-intranet.service</code> de type <code>oneshot</code> et un minuteur <code>verif-intranet.timer</code> avec <code>OnCalendar=*:0/5</code>. Où lisez-vous ses résultats ? Qui est prévenu en cas de panne ?</li>
+</ul>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="dir">‹ Page précédente</span><span class="titre">Séance 1 : Superviser et maintenir : les enjeux</span></a><a class="next" href="../cours/s02-collecte.html" data-seance="2"><span class="dir">Page suivante ›</span><span class="titre">Séance 2 : Collecter les mesures : ICMP, SNMP, agents</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 10 : Sauvegarder Hexalog et prouver la restauration | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous sauvegardez les VM d&#x27;Hexalog dans Proxmox Backup Server, vous mettez en place une sauvegarde applicative horaire de la base de l&#x27;intranet et une copie tirée, en lecture seule, sur une autre machi">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item active" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp active" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module D : Sauvegarde et reprise d&#x27;activité</span><span class="sep">›</span><a href="../cours/s10-sauvegarde.html" data-seance="10">Séance 10</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 10</span>
+  <h1>TP 10 : Sauvegarder Hexalog et prouver la restauration</h1>
+  <p class="lead">Vous sauvegardez les VM d'Hexalog dans Proxmox Backup Server, vous mettez en place une sauvegarde applicative horaire de la base de l'intranet et une copie tirée, en lecture seule, sur une autre machine, vous supervisez le tout dans Zabbix. Puis vous restaurez trois fois : un fichier, une table, une VM entière, en chronométrant. Le rapport de test de restauration servira de base au PRA.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>srv-lnx-01, sup-lnx-01, srv-lnx-02, srv-win-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s10-sauvegarde.html" data-seance="10">Séance 10 : Sauvegarder et restaurer</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-avant-de-commencer-10-min">Partie A. Avant de commencer (10 min)</a></li><li><a href="#partie-b.-sauvegarder-srv-lnx-01-dans-proxmox-backup-server-25-min">Partie B. Sauvegarder srv-lnx-01 dans Proxmox Backup Server (25 min)</a></li><li><a href="#partie-c.-lactivité-de-lintranet-et-sa-sauvegarde-applicative-35-min">Partie C. L’activité de l’intranet et sa sauvegarde applicative (35 min)</a></li><li><a href="#partie-d.-une-copie-tirée-par-sup-lnx-01-en-lecture-seule-30-min-recommandé">Partie D. Une copie tirée par sup-lnx-01, en lecture seule (30 min, recommandé)</a></li><li><a href="#partie-e.-superviser-les-sauvegardes-15-min">Partie E. Superviser les sauvegardes (15 min)</a></li><li><a href="#partie-f.-restaurer-50-min">Partie F. Restaurer (50 min)</a></li><li><a href="#partie-g.-sauvegarder-les-autres-vm-en-arrière-plan">Partie G. Sauvegarder les autres VM (en arrière-plan)</a></li><li><a href="#partie-h.-windows-server-létat-du-système-facultatif-25-min">Partie H. Windows Server : l’état du système (facultatif, 25 min)</a></li><li><a href="#partie-i.-le-rapport-de-test-de-restauration-10-min">Partie I. Le rapport de test de restauration (10 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Hexalog n’a jamais restauré quoi que ce soit : « les sauvegardes, c’est Nicolas qui s’en occupe, ça marche ». L’assureur de l’entreprise demande désormais la <strong>preuve</strong> que les données peuvent être restaurées, et en combien de temps.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p><strong>Socle</strong> : parties A, B, C, E et F (F.1 à F.3), I. <strong>Recommandé</strong> : partie D (copie tirée), utile pour l’exercice de la séance 11. <strong>Facultatif</strong> : partie H (Windows Server).</p>
+<p>La partie G se lance en arrière-plan dès la partie B : les sauvegardes des autres VM tournent pendant que vous continuez.</p>
+</div></div>
+<h2 id="partie-a.-avant-de-commencer-10-min">Partie A. Avant de commencer (10 min)</h2>
+<ol type="1">
+<li>Dans Proxmox, sélectionnez chaque VM → <strong>Snapshots</strong> : supprimez les snapshots devenus inutiles des séances précédentes (gardez le plus récent de chaque VM). Combien d’espace occupaient-ils, et où ?</li>
+<li>Vérifiez que le stockage <code>pbs-etuN</code> apparaît sous le nœud (icône de sauvegarde) et ouvrez-le : onglet <strong>Sauvegardes</strong>, vide pour l’instant.</li>
+<li>Notez dans votre journal la réponse à la question : si le disque du serveur Proxmox lâchait cette nuit, que resterait-il de vos snapshots ?</li>
+</ol>
+<h2 id="partie-b.-sauvegarder-srv-lnx-01-dans-proxmox-backup-server-25-min">Partie B. Sauvegarder srv-lnx-01 dans Proxmox Backup Server (25 min)</h2>
+<h3 id="b.1-la-première-sauvegarde">B.1, La première sauvegarde</h3>
+<p>srv-lnx-01 → <strong>Sauvegarde</strong> → <strong>Sauvegarder maintenant</strong> (<em>Backup now</em>) :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Stockage</td>
+<td><code>pbs-etuN</code></td>
+</tr>
+<tr class="even">
+<td>Mode</td>
+<td><strong>Snapshot</strong> (la VM continue de tourner)</td>
+</tr>
+<tr class="odd">
+<td>Notes</td>
+<td><code>{{guestname}}, TP 10, première sauvegarde</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Cliquez sur <strong>Sauvegarder</strong> et gardez ouverte la fenêtre de la tâche. Relevez dans le journal de la tâche :</p>
+<ul>
+<li>les lignes <code>fs-freeze</code> et <code>fs-thaw</code> : l’agent invité fige les systèmes de fichiers (cours, partie 5) ;</li>
+<li>la ligne <code>dirty-bitmap status</code> : <em>created new</em> pour une première sauvegarde ;</li>
+<li>la quantité <strong>transférée</strong> et la durée totale (<em>Finished Backup of VM … (hh:mm:ss)</em>) ;</li>
+<li>la part <strong>réutilisée</strong> (<em>reused</em>) : les blocs que le serveur avait déjà, par exemple ceux du modèle, sauvegardés par un camarade.</li>
+</ul>
+<h3 id="b.2-la-deuxième-tout-de-suite-après">B.2, La deuxième, tout de suite après</h3>
+<p>Modifiez quelque chose sur srv-lnx-01 (<code>sudo apt install -y tree</code>), puis relancez une sauvegarde identique (notes : <code>deuxième sauvegarde</code>). Comparez avec la première : ligne <code>dirty-bitmap</code>, quantité lue et transférée, durée. Expliquez la différence dans votre journal.</p>
+<h3 id="b.3-ce-que-contient-le-stockage">B.3, Ce que contient le stockage</h3>
+<p><code>pbs-etuN</code> → <strong>Sauvegardes</strong> : deux sauvegardes de la VM N20. Pour chacune : date, taille affichée, état de <strong>vérification</strong>, notes. La taille affichée est celle de la VM ; ce qui est réellement occupé sur le serveur est bien plus faible (déduplication). Lequel des deux chiffres sert à prévoir la durée d’une restauration ?</p>
+<h2 id="partie-c.-lactivité-de-lintranet-et-sa-sauvegarde-applicative-35-min">Partie C. L’activité de l’intranet et sa sauvegarde applicative (35 min)</h2>
+<h3 id="c.1-une-activité-simulée">C.1, Une activité simulée</h3>
+<p>Pour mesurer ce qu’une restauration fait perdre, l’intranet doit vivre : un petit programme saisit une expédition toutes les 5 minutes, avec son heure de création.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSLO</span> https://jfchadeyron.github.io/bachelor/bloc2/fichiers/activite-intranet.sh</span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="fu">less</span> activite-intranet.sh</span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="fu">sudo</span> bash activite-intranet.sh</span></code></pre></div></div>
+<p>Résultat attendu : les trois expéditions les plus récentes, dont une <code>EXP-AAMMJJ-hhmm</code> qui vient d’être créée. <code>sudo bash activite-intranet.sh etat</code> affiche à tout moment les dernières saisies.</p>
+<h3 id="c.2-le-script-de-sauvegarde-de-la-base">C.2, Le script de sauvegarde de la base</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> tee /usr/local/sbin/sauvegarde-intranet <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="st">#!/bin/bash</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="st"># Sauvegarde cohérente de la base de l'intranet d'Hexalog (TP 10)</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="st">set -euo pipefail</span></span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a><span class="st">DEST=/var/backups/intranet                  # dossier des sauvegardes</span></span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a><span class="st">JOURS=2                                     # durée de conservation ici, en jours</span></span>
+<span id="cb2-7"><a aria-hidden="true" href="#cb2-7" tabindex="-1"></a><span class="st">ETAT=/var/lib/hexalog/sauvegarde-intranet.ok</span></span>
+<span id="cb2-8"><a aria-hidden="true" href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a aria-hidden="true" href="#cb2-9" tabindex="-1"></a><span class="st">mkdir -p "$DEST" "$(dirname "$ETAT")"</span></span>
+<span id="cb2-10"><a aria-hidden="true" href="#cb2-10" tabindex="-1"></a><span class="st">chmod 750 "$DEST"</span></span>
+<span id="cb2-11"><a aria-hidden="true" href="#cb2-11" tabindex="-1"></a><span class="st">if getent group copie &gt; /dev/null ; then chgrp copie "$DEST" ; fi   # lecture par la copie (partie D)</span></span>
+<span id="cb2-12"><a aria-hidden="true" href="#cb2-12" tabindex="-1"></a><span class="st">FICHIER="$DEST/intranet-$(date +%Y%m%d-%H%M).sql.gz"</span></span>
+<span id="cb2-13"><a aria-hidden="true" href="#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a aria-hidden="true" href="#cb2-14" tabindex="-1"></a><span class="st"># --single-transaction : une image cohérente de la base, sans bloquer l'intranet</span></span>
+<span id="cb2-15"><a aria-hidden="true" href="#cb2-15" tabindex="-1"></a><span class="st">mariadb-dump --single-transaction --routines --triggers intranet | gzip &gt; "$FICHIER.partiel"</span></span>
+<span id="cb2-16"><a aria-hidden="true" href="#cb2-16" tabindex="-1"></a><span class="st">gzip -t "$FICHIER.partiel"                  # l'archive est-elle lisible ?</span></span>
+<span id="cb2-17"><a aria-hidden="true" href="#cb2-17" tabindex="-1"></a><span class="st">mv "$FICHIER.partiel" "$FICHIER"</span></span>
+<span id="cb2-18"><a aria-hidden="true" href="#cb2-18" tabindex="-1"></a></span>
+<span id="cb2-19"><a aria-hidden="true" href="#cb2-19" tabindex="-1"></a><span class="st"># rotation : les sauvegardes de plus de JOURS jours sont supprimées</span></span>
+<span id="cb2-20"><a aria-hidden="true" href="#cb2-20" tabindex="-1"></a><span class="st">find "$DEST" -maxdepth 1 -name 'intranet-*.sql.gz' -mtime +"$JOURS" -delete</span></span>
+<span id="cb2-21"><a aria-hidden="true" href="#cb2-21" tabindex="-1"></a></span>
+<span id="cb2-22"><a aria-hidden="true" href="#cb2-22" tabindex="-1"></a><span class="st">touch "$ETAT"                               # date de la dernière réussite (supervisée par Zabbix)</span></span>
+<span id="cb2-23"><a aria-hidden="true" href="#cb2-23" tabindex="-1"></a><span class="st">echo "Sauvegarde réussie : $FICHIER ($(du -h "$FICHIER" | cut -f1))"</span></span>
+<span id="cb2-24"><a aria-hidden="true" href="#cb2-24" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb2-25"><a aria-hidden="true" href="#cb2-25" tabindex="-1"></a><span class="fu">sudo</span> chmod 750 /usr/local/sbin/sauvegarde-intranet</span>
+<span id="cb2-26"><a aria-hidden="true" href="#cb2-26" tabindex="-1"></a><span class="fu">sudo</span> /usr/local/sbin/sauvegarde-intranet</span>
+<span id="cb2-27"><a aria-hidden="true" href="#cb2-27" tabindex="-1"></a><span class="fu">sudo</span> ls <span class="at">-l</span> /var/backups/intranet/</span>
+<span id="cb2-28"><a aria-hidden="true" href="#cb2-28" tabindex="-1"></a><span class="fu">sudo</span> sh <span class="at">-c</span> <span class="st">'zcat /var/backups/intranet/intranet-*.sql.gz | grep -c "^INSERT INTO"'</span></span></code></pre></div></div>
+<p>Lisez le script ligne par ligne et répondez dans votre journal : pourquoi écrire d’abord un fichier <code>.partiel</code> ? Que se passe-t-il si <code>mariadb-dump</code> échoue (pensez à <code>set -euo pipefail</code>) ? Le fichier témoin est-il mis à jour dans ce cas ?</p>
+<p>Le dossier n’est lisible que par root : d’où le <code>sudo sh -c '…'</code>, pour que le <code>*</code> soit développé avec les droits de root. L’export ne contient pas de <code>CREATE DATABASE</code> : on choisira la base de destination au moment de la restauration (partie F.2), ce qui évite d’écraser la production par erreur.</p>
+<h3 id="c.3-toutes-les-heures">C.3, Toutes les heures</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/systemd/system/sauvegarde-intranet.service <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="st">[Unit]</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="st">Description=Hexalog : sauvegarde de la base de l'intranet</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="st">After=mariadb.service</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="st">[Service]</span></span>
+<span id="cb3-7"><a aria-hidden="true" href="#cb3-7" tabindex="-1"></a><span class="st">Type=oneshot</span></span>
+<span id="cb3-8"><a aria-hidden="true" href="#cb3-8" tabindex="-1"></a><span class="st">ExecStart=/usr/local/sbin/sauvegarde-intranet</span></span>
+<span id="cb3-9"><a aria-hidden="true" href="#cb3-9" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb3-10"><a aria-hidden="true" href="#cb3-10" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/systemd/system/sauvegarde-intranet.timer <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb3-11"><a aria-hidden="true" href="#cb3-11" tabindex="-1"></a><span class="st">[Unit]</span></span>
+<span id="cb3-12"><a aria-hidden="true" href="#cb3-12" tabindex="-1"></a><span class="st">Description=Hexalog : sauvegarde horaire de la base de l'intranet</span></span>
+<span id="cb3-13"><a aria-hidden="true" href="#cb3-13" tabindex="-1"></a></span>
+<span id="cb3-14"><a aria-hidden="true" href="#cb3-14" tabindex="-1"></a><span class="st">[Timer]</span></span>
+<span id="cb3-15"><a aria-hidden="true" href="#cb3-15" tabindex="-1"></a><span class="st">OnCalendar=hourly</span></span>
+<span id="cb3-16"><a aria-hidden="true" href="#cb3-16" tabindex="-1"></a><span class="st">Persistent=true</span></span>
+<span id="cb3-17"><a aria-hidden="true" href="#cb3-17" tabindex="-1"></a></span>
+<span id="cb3-18"><a aria-hidden="true" href="#cb3-18" tabindex="-1"></a><span class="st">[Install]</span></span>
+<span id="cb3-19"><a aria-hidden="true" href="#cb3-19" tabindex="-1"></a><span class="st">WantedBy=timers.target</span></span>
+<span id="cb3-20"><a aria-hidden="true" href="#cb3-20" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb3-21"><a aria-hidden="true" href="#cb3-21" tabindex="-1"></a><span class="fu">sudo</span> systemctl daemon-reload</span>
+<span id="cb3-22"><a aria-hidden="true" href="#cb3-22" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable <span class="at">--now</span> sauvegarde-intranet.timer</span>
+<span id="cb3-23"><a aria-hidden="true" href="#cb3-23" tabindex="-1"></a><span class="ex">systemctl</span> list-timers <span class="st">'sauvegarde-*'</span> <span class="at">--no-pager</span></span></code></pre></div></div>
+<p><code>Persistent=true</code> : si la VM était éteinte à l’heure prévue, la sauvegarde est faite au démarrage. Le résultat de chaque exécution est dans <code>journalctl -u sauvegarde-intranet</code>.</p>
+<h2 id="partie-d.-une-copie-tirée-par-sup-lnx-01-en-lecture-seule-30-min-recommandé">Partie D. Une copie tirée par sup-lnx-01, en lecture seule (30 min, recommandé)</h2>
+<p>Les exports de la base sont sur srv-lnx-01 : si la VM est perdue ou chiffrée, ils le sont aussi. sup-lnx-01 vient donc en chercher une copie chaque heure, avec un compte qui ne peut <strong>que lire</strong> ce dossier (cours, partie 9).</p>
+<h3 id="d.1-sur-srv-lnx-01-un-compte-limité-à-la-lecture-du-dossier">D.1, Sur srv-lnx-01 : un compte limité à la lecture du dossier</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> rsync</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">sudo</span> useradd <span class="at">-m</span> <span class="at">-s</span> /bin/bash copie</span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="fu">sudo</span> /usr/local/sbin/sauvegarde-intranet</span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="fu">sudo</span> ls <span class="at">-ld</span> /var/backups/intranet</span></code></pre></div></div>
+<p>Le dossier appartient désormais au groupe <code>copie</code>, en lecture seule (<code>drwxr-x---</code>).</p>
+<h3 id="d.2-sur-sup-lnx-01-la-clé-de-la-copie">D.2, Sur sup-lnx-01 : la clé de la copie</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> rsync</span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> ssh-keygen <span class="at">-t</span> ed25519 <span class="at">-N</span> <span class="st">''</span> <span class="at">-C</span> copie@sup-lnx-01 <span class="at">-f</span> /root/.ssh/copie-srv-lnx-01</span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="fu">sudo</span> cat /root/.ssh/copie-srv-lnx-01.pub</span></code></pre></div></div>
+<p>La clé n’a pas de phrase de passe, puisqu’aucun humain ne sera là pour la taper : c’est pour cela qu’on la limite strictement côté srv-lnx-01.</p>
+<h3 id="d.3-sur-srv-lnx-01-nautoriser-que-la-lecture-par-rsync">D.3, Sur srv-lnx-01 : n’autoriser que la lecture par rsync</h3>
+<p>Copiez la ligne <code>ssh-ed25519 AAAA… copie@sup-lnx-01</code> affichée en D.2 à la place de <code>CLE-PUBLIQUE</code> :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /home/copie/.ssh</span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'command="/usr/bin/rrsync -ro /var/backups/intranet",restrict CLE-PUBLIQUE'</span> <span class="kw">|</span> <span class="fu">sudo</span> tee /home/copie/.ssh/authorized_keys</span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="fu">sudo</span> chown <span class="at">-R</span> copie:copie /home/copie/.ssh</span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="fu">sudo</span> chmod 700 /home/copie/.ssh</span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="fu">sudo</span> chmod 600 /home/copie/.ssh/authorized_keys</span></code></pre></div></div>
+<ul>
+<li><code>command="/usr/bin/rrsync -ro /var/backups/intranet"</code> : quoi que demande la connexion, elle ne peut lancer que <code>rsync</code>, en <strong>lecture seule</strong>, dans ce dossier ;</li>
+<li><code>restrict</code> : pas de terminal, pas de redirection de ports, pas d’agent.</li>
+</ul>
+<h3 id="d.4-sur-sup-lnx-01-la-copie-chaque-heure">D.4, Sur sup-lnx-01 : la copie, chaque heure</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> tee /usr/local/sbin/copie-sauvegardes <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="st">#!/bin/bash</span></span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="st"># Tire une copie des sauvegardes de la base de l'intranet (TP 10)</span></span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a><span class="st">set -euo pipefail</span></span>
+<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a><span class="st">SOURCE=copie@10.20.N.20:                    # le dossier imposé par rrsync côté srv-lnx-01</span></span>
+<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a><span class="st">DEST=/srv/copies/srv-lnx-01</span></span>
+<span id="cb7-7"><a aria-hidden="true" href="#cb7-7" tabindex="-1"></a><span class="st">mkdir -p "$DEST" /var/lib/hexalog</span></span>
+<span id="cb7-8"><a aria-hidden="true" href="#cb7-8" tabindex="-1"></a><span class="st">chmod 750 "$DEST" &amp;&amp; chgrp sudo "$DEST"   # lisible par les administrateurs, pour restaurer</span></span>
+<span id="cb7-9"><a aria-hidden="true" href="#cb7-9" tabindex="-1"></a><span class="st"># pas de --delete : un fichier supprimé ou chiffré sur srv-lnx-01 reste intact ici</span></span>
+<span id="cb7-10"><a aria-hidden="true" href="#cb7-10" tabindex="-1"></a><span class="st">rsync -rt -e "ssh -i /root/.ssh/copie-srv-lnx-01 -o BatchMode=yes -o StrictHostKeyChecking=accept-new" "$SOURCE" "$DEST/"</span></span>
+<span id="cb7-11"><a aria-hidden="true" href="#cb7-11" tabindex="-1"></a><span class="st">find "$DEST" -maxdepth 1 -name 'intranet-*.sql.gz' -mtime +30 -delete     # 30 jours ici</span></span>
+<span id="cb7-12"><a aria-hidden="true" href="#cb7-12" tabindex="-1"></a><span class="st">touch /var/lib/hexalog/copie-srv-lnx-01.ok</span></span>
+<span id="cb7-13"><a aria-hidden="true" href="#cb7-13" tabindex="-1"></a><span class="st">echo "Copie à jour : $(ls "$DEST" | wc -l) sauvegardes dans $DEST"</span></span>
+<span id="cb7-14"><a aria-hidden="true" href="#cb7-14" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb7-15"><a aria-hidden="true" href="#cb7-15" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./'</span> /usr/local/sbin/copie-sauvegardes     <span class="co"># votre numéro</span></span>
+<span id="cb7-16"><a aria-hidden="true" href="#cb7-16" tabindex="-1"></a><span class="fu">sudo</span> chmod 750 /usr/local/sbin/copie-sauvegardes</span>
+<span id="cb7-17"><a aria-hidden="true" href="#cb7-17" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/systemd/system/copie-sauvegardes.service <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb7-18"><a aria-hidden="true" href="#cb7-18" tabindex="-1"></a><span class="st">[Unit]</span></span>
+<span id="cb7-19"><a aria-hidden="true" href="#cb7-19" tabindex="-1"></a><span class="st">Description=Hexalog : copie des sauvegardes de srv-lnx-01</span></span>
+<span id="cb7-20"><a aria-hidden="true" href="#cb7-20" tabindex="-1"></a><span class="st">After=network-online.target</span></span>
+<span id="cb7-21"><a aria-hidden="true" href="#cb7-21" tabindex="-1"></a></span>
+<span id="cb7-22"><a aria-hidden="true" href="#cb7-22" tabindex="-1"></a><span class="st">[Service]</span></span>
+<span id="cb7-23"><a aria-hidden="true" href="#cb7-23" tabindex="-1"></a><span class="st">Type=oneshot</span></span>
+<span id="cb7-24"><a aria-hidden="true" href="#cb7-24" tabindex="-1"></a><span class="st">ExecStart=/usr/local/sbin/copie-sauvegardes</span></span>
+<span id="cb7-25"><a aria-hidden="true" href="#cb7-25" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb7-26"><a aria-hidden="true" href="#cb7-26" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/systemd/system/copie-sauvegardes.timer <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb7-27"><a aria-hidden="true" href="#cb7-27" tabindex="-1"></a><span class="st">[Unit]</span></span>
+<span id="cb7-28"><a aria-hidden="true" href="#cb7-28" tabindex="-1"></a><span class="st">Description=Hexalog : copie horaire des sauvegardes de srv-lnx-01, 10 minutes après la sauvegarde</span></span>
+<span id="cb7-29"><a aria-hidden="true" href="#cb7-29" tabindex="-1"></a></span>
+<span id="cb7-30"><a aria-hidden="true" href="#cb7-30" tabindex="-1"></a><span class="st">[Timer]</span></span>
+<span id="cb7-31"><a aria-hidden="true" href="#cb7-31" tabindex="-1"></a><span class="st">OnCalendar=*:10</span></span>
+<span id="cb7-32"><a aria-hidden="true" href="#cb7-32" tabindex="-1"></a><span class="st">Persistent=true</span></span>
+<span id="cb7-33"><a aria-hidden="true" href="#cb7-33" tabindex="-1"></a></span>
+<span id="cb7-34"><a aria-hidden="true" href="#cb7-34" tabindex="-1"></a><span class="st">[Install]</span></span>
+<span id="cb7-35"><a aria-hidden="true" href="#cb7-35" tabindex="-1"></a><span class="st">WantedBy=timers.target</span></span>
+<span id="cb7-36"><a aria-hidden="true" href="#cb7-36" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb7-37"><a aria-hidden="true" href="#cb7-37" tabindex="-1"></a><span class="fu">sudo</span> systemctl daemon-reload</span>
+<span id="cb7-38"><a aria-hidden="true" href="#cb7-38" tabindex="-1"></a><span class="fu">sudo</span> systemctl start copie-sauvegardes.service</span>
+<span id="cb7-39"><a aria-hidden="true" href="#cb7-39" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable <span class="at">--now</span> copie-sauvegardes.timer</span>
+<span id="cb7-40"><a aria-hidden="true" href="#cb7-40" tabindex="-1"></a><span class="fu">sudo</span> ls <span class="at">-l</span> /srv/copies/srv-lnx-01/</span></code></pre></div></div>
+<h3 id="d.5-prouver-que-la-copie-est-en-lecture-seule">D.5, Prouver que la copie est en lecture seule</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="fu">sudo</span> ssh <span class="at">-i</span> /root/.ssh/copie-srv-lnx-01 copie@10.20.N.20 id</span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="fu">sudo</span> rsync <span class="at">-e</span> <span class="st">"ssh -i /root/.ssh/copie-srv-lnx-01"</span> /etc/hostname copie@10.20.N.20:</span></code></pre></div></div>
+<p>Les deux sont refusées : pas de commande, pas d’écriture. Notez les messages. Si srv-lnx-01 était compromise, que pourrait faire l’attaquant contre les copies de sup-lnx-01 ? Et si c’était sup-lnx-01 ?</p>
+<h2 id="partie-e.-superviser-les-sauvegardes-15-min">Partie E. Superviser les sauvegardes (15 min)</h2>
+<ol type="1">
+<li>Sur l’hôte <code>srv-lnx-01</code> de Zabbix, créez l’élément <code>Sauvegarde de la base : dernière réussite</code> : type <strong>Agent Zabbix</strong>, clé <code>vfs.file.time[/var/lib/hexalog/sauvegarde-intranet.ok]</code>, type d’information <em>Numérique (non signé)</em>, unités <code>unixtime</code>, intervalle <code>1m</code>.</li>
+<li>Et le déclencheur <code>Sauvegarde de la base de l'intranet en retard sur {HOST.NAME}</code>, sévérité <strong>Moyen</strong> :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : expression du déclencheur</span><button class="copy" type="button">Copier</button></div><pre class="text"><code>now()-last(/srv-lnx-01/vfs.file.time[/var/lib/hexalog/sauvegarde-intranet.ok])&gt;7200</code></pre></div>
+<ol start="3" type="1">
+<li>(Si la partie D est faite) même chose sur l’hôte <code>Zabbix server</code> (sup-lnx-01) pour <code>/var/lib/hexalog/copie-srv-lnx-01.ok</code> : <code>Copie des sauvegardes de srv-lnx-01 en retard</code>.</li>
+<li>Testez sans attendre deux heures, en vieillissant le fichier témoin :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="fu">sudo</span> touch <span class="at">-d</span> <span class="st">'-3 hours'</span> /var/lib/hexalog/sauvegarde-intranet.ok</span></code></pre></div></div>
+<p>Le problème apparaît en une à deux minutes. Puis relancez une vraie sauvegarde (<code>sudo systemctl start sauvegarde-intranet.service</code>) : il se résout. Pourquoi le seuil est-il de deux heures pour une sauvegarde horaire ?</p>
+<h2 id="partie-f.-restaurer-50-min">Partie F. Restaurer (50 min)</h2>
+<p>Pour chaque restauration, <strong>chronométrez</strong> : heure du constat, heure de la décision, heure de fin de la restauration, heure de la vérification. Ces durées vont dans le rapport (partie I).</p>
+<h3 id="f.1-un-fichier-supprimé-par-erreur">F.1, Un fichier supprimé par erreur</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="fu">sudo</span> rm /var/www/intranet/index.php</span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">"accueil : %{http_code}\n"</span> http://localhost/</span></code></pre></div></div>
+<p>L’accueil de l’intranet ne répond plus (<code>403</code>). Restaurez <strong>seulement ce fichier</strong> depuis la sauvegarde de la partie B :</p>
+<ol type="1">
+<li><code>pbs-etuN</code> → <strong>Sauvegardes</strong> → la sauvegarde la plus récente de la VM N20 → <strong>Restauration de fichiers</strong> (<em>File Restore</em>). Proxmox lit la sauvegarde (cela prend une minute la première fois) : dépliez le disque, la partition, puis <code>var/www/intranet/</code> ; sélectionnez <code>index.php</code> → <strong>Télécharger</strong>.</li>
+<li>Le fichier arrive sur votre PC. Renvoyez-le sur srv-lnx-01, en rebondissant par sup-lnx-01, puis remettez-le en place avec les bons droits :</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a>scp index<span class="op">.</span><span class="fu">php</span> srv<span class="op">-</span>lnx<span class="op">-</span>01<span class="op">:/</span>tmp<span class="op">/</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a aria-hidden="true" href="#cb13-1" tabindex="-1"></a><span class="fu">sudo</span> install <span class="at">-o</span> root <span class="at">-g</span> www-data <span class="at">-m</span> 640 /tmp/index.php /var/www/intranet/index.php</span>
+<span id="cb13-2"><a aria-hidden="true" href="#cb13-2" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">"accueil : %{http_code}\n"</span> http://localhost/</span></code></pre></div></div>
+<h3 id="f.2-une-table-vidée-par-une-mauvaise-requête">F.2, Une table vidée par une mauvaise requête</h3>
+<p>Un collègue voulait « archiver les expéditions livrées » ; il les a supprimées :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a aria-hidden="true" href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> mariadb intranet <span class="at">-e</span> <span class="st">"DELETE FROM expeditions WHERE statut = 'livrée'"</span></span>
+<span id="cb14-2"><a aria-hidden="true" href="#cb14-2" tabindex="-1"></a><span class="fu">sudo</span> mariadb intranet <span class="at">-e</span> <span class="st">"SELECT statut, COUNT(*) FROM expeditions GROUP BY statut"</span></span></code></pre></div></div>
+<p>Restaurer <strong>toute</strong> la base depuis le dernier export ferait perdre les expéditions saisies depuis (l’activité simulée continue). On restaure donc l’export dans une base <strong>à part</strong>, puis on ne réinjecte que les lignes perdues :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a aria-hidden="true" href="#cb15-1" tabindex="-1"></a><span class="va">DERNIER</span><span class="op">=</span><span class="va">$(</span><span class="fu">sudo</span> sh <span class="at">-c</span> <span class="st">'ls -1t /var/backups/intranet/intranet-*.sql.gz | head -n 1'</span><span class="va">)</span> <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"</span><span class="va">$DERNIER</span><span class="st">"</span></span>
+<span id="cb15-2"><a aria-hidden="true" href="#cb15-2" tabindex="-1"></a><span class="fu">sudo</span> mariadb <span class="at">-e</span> <span class="st">"CREATE DATABASE intranet_restau"</span></span>
+<span id="cb15-3"><a aria-hidden="true" href="#cb15-3" tabindex="-1"></a><span class="fu">sudo</span> zcat <span class="st">"</span><span class="va">$DERNIER</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">sudo</span> mariadb intranet_restau</span>
+<span id="cb15-4"><a aria-hidden="true" href="#cb15-4" tabindex="-1"></a><span class="fu">sudo</span> mariadb <span class="at">-e</span> <span class="st">"SELECT COUNT(*) AS livrees_dans_l_export FROM intranet_restau.expeditions WHERE statut = 'livrée'"</span></span>
+<span id="cb15-5"><a aria-hidden="true" href="#cb15-5" tabindex="-1"></a><span class="fu">sudo</span> mariadb <span class="at">-e</span> <span class="st">"INSERT INTO intranet.expeditions</span></span>
+<span id="cb15-6"><a aria-hidden="true" href="#cb15-6" tabindex="-1"></a><span class="st">                 SELECT * FROM intranet_restau.expeditions r</span></span>
+<span id="cb15-7"><a aria-hidden="true" href="#cb15-7" tabindex="-1"></a><span class="st">                 WHERE r.statut = 'livrée' AND r.id NOT IN (SELECT id FROM intranet.expeditions)"</span></span>
+<span id="cb15-8"><a aria-hidden="true" href="#cb15-8" tabindex="-1"></a><span class="fu">sudo</span> mariadb intranet <span class="at">-e</span> <span class="st">"SELECT statut, COUNT(*) FROM expeditions GROUP BY statut"</span></span>
+<span id="cb15-9"><a aria-hidden="true" href="#cb15-9" tabindex="-1"></a><span class="fu">sudo</span> mariadb <span class="at">-e</span> <span class="st">"DROP DATABASE intranet_restau"</span></span></code></pre></div></div>
+<p>Vérifiez dans l’intranet que les expéditions livrées sont revenues <strong>et</strong> que les saisies récentes sont toujours là (<code>sudo bash activite-intranet.sh etat</code>). Qu’aurait-on perdu si la dernière expédition livrée avait été saisie après le dernier export ?</p>
+<h3 id="f.3-une-vm-entière-en-test">F.3, Une VM entière, en test</h3>
+<p>Vous restaurez srv-lnx-01 <strong>à côté</strong> de la production, sur le numéro de VM de test <code>N99</code>, sans la brancher au réseau (elle a la même adresse que l’original).</p>
+<ol type="1">
+<li><code>pbs-etuN</code> → <strong>Sauvegardes</strong> → la sauvegarde la plus récente de N20 → <strong>Restaurer</strong> : ID de VM <code>N99</code>, stockage celui de vos disques, <strong>Unique</strong> coché, <em>Démarrer après la restauration</em> <strong>décoché</strong> → Restaurer. Notez l’heure de début et de fin dans le journal de la tâche.</li>
+<li><strong>Avant de la démarrer</strong> : VM N99 → <strong>Matériel</strong> → <strong>Périphérique réseau</strong> → Modifier → cochez <strong>Déconnecter</strong> → OK.</li>
+<li>Démarrez-la, ouvrez sa <strong>console</strong>, connectez-vous (<code>sysadmin</code>, mot de passe de lab) et vérifiez : <code>hostname</code>, <code>ls /var/www/intranet</code>, <code>sudo mariadb intranet -e "SELECT COUNT(*), MAX(cree_le) FROM expeditions"</code>, <code>ip -br a</code> (la carte est sans lien). Les données correspondent-elles à l’heure de la sauvegarde ?</li>
+<li>Arrêtez-la, puis supprimez-la : <strong>Plus</strong> → <strong>Supprimer</strong>, en vérifiant <strong>deux fois</strong> qu’il s’agit bien de la VM <strong>N99</strong> (elle porte le même nom que srv-lnx-01).</li>
+</ol>
+<p>Combien de temps a pris la restauration elle-même ? Et l’ensemble, du constat à la vérification ? C’est la base du RTO réel de srv-lnx-01 (séance 11).</p>
+<h2 id="partie-g.-sauvegarder-les-autres-vm-en-arrière-plan">Partie G. Sauvegarder les autres VM (en arrière-plan)</h2>
+<p>Lancez une sauvegarde <strong>Snapshot</strong> vers <code>pbs-etuN</code> de sup-lnx-01, srv-lnx-02 et srv-win-01, l’une après l’autre (une seule à la fois par VM). Relevez pour chacune la durée et la quantité transférée : laquelle est la plus longue, et pourquoi ? Pour srv-win-01, le journal de la tâche indique-t-il <code>fs-freeze</code> ? (L’agent invité de Windows utilise le service de clichés instantanés, VSS.)</p>
+<p>Une <strong>tâche planifiée</strong> sauvegarde aussi votre pool chaque soir vers <code>pbs-etuN</code> ; elle est réglée au niveau du centre de données (<strong>Centre de données → Sauvegarde</strong>), que votre compte ne voit pas : M. CHADEYRON la montre au vidéoprojecteur (heure, mode, sélection par pool, conservation). Qu’apporte-t-elle par rapport à vos sauvegardes manuelles ? Retrouvez ses sauvegardes dans <code>pbs-etuN</code> (notes et heure).</p>
+<h2 id="partie-h.-windows-server-létat-du-système-facultatif-25-min">Partie H. Windows Server : l’état du système (facultatif, 25 min)</h2>
+<ol type="1">
+<li>Proxmox : srv-win-01 → <strong>Matériel</strong> → <strong>Ajouter</strong> → <strong>Disque dur</strong> : SCSI, <code>30</code> Gio, sur votre stockage.</li>
+<li>Dans Windows : <code>diskmgmt.msc</code> → initialiser le nouveau disque (GPT) → <strong>Nouveau volume simple</strong> → lettre <code>E:</code>, NTFS, nom <code>Sauvegardes</code>.</li>
+<li><strong>Gestionnaire de serveur → Gérer → Ajouter des rôles et fonctionnalités</strong> → <em>Fonctionnalités</em> → <strong>Sauvegarde Windows Server</strong> → Installer.</li>
+<li><strong>Outils → Sauvegarde Windows Server</strong> → <em>Sauvegarde locale</em> → <strong>Sauvegarde unique</strong> → <em>Options différentes</em> → <em>Personnalisé</em> → <strong>Ajouter des éléments</strong> → <strong>État du système</strong> → destination <em>Lecteurs locaux</em> → <code>E:</code> → Sauvegarde.</li>
+<li>Relevez la durée et la taille. Qu’est-ce qui est inclus dans l’état du système d’un contrôleur de domaine ? Que faudrait-il pour restaurer l’annuaire (mode de restauration des services d’annuaire, mot de passe DSRM du TP 1) ? Pourquoi une entreprise a-t-elle au moins <strong>deux</strong> contrôleurs de domaine ?</li>
+</ol>
+<h2 id="partie-i.-le-rapport-de-test-de-restauration-10-min">Partie I. Le rapport de test de restauration (10 min)</h2>
+<p>Remplissez le modèle « Rapport de test de restauration » de la page <a href="../modeles.html">Modèles de livrables</a> pour les trois restaurations de la partie F : ce qui a été restauré, depuis quelle sauvegarde (date), durée de chaque étape, données perdues, difficultés, améliorations. Ce rapport est une <strong>preuve</strong> pour l’assureur, et il alimentera le PRA.</p>
+<p>Snapshots <code>10-sauvegarde</code> de srv-lnx-01 et sup-lnx-01.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Deux sauvegardes de srv-lnx-01 dans <code>pbs-etuN</code>, différence de durée expliquée (dirty bitmap) ; les autres VM sauvegardées.</label></li>
+<li><label><input type="checkbox"/>Activité simulée en place ; export horaire de la base (minuteur actif, fichiers dans <code>/var/backups/intranet</code>).</label></li>
+<li><label><input type="checkbox"/>(Recommandé) Copie tirée sur sup-lnx-01 ; le compte <code>copie</code> ne peut ni lancer de commande, ni écrire.</label></li>
+<li><label><input type="checkbox"/>Zabbix signale une sauvegarde en retard, puis se rétablit après une vraie sauvegarde.</label></li>
+<li><label><input type="checkbox"/><code>index.php</code> restauré depuis PBS ; expéditions livrées réinjectées sans perdre les saisies récentes ; VM N99 restaurée, vérifiée, puis supprimée.</label></li>
+<li><label><input type="checkbox"/>Rapport de test de restauration complet, avec les durées.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Combien d’exemplaires des données de l’intranet existe-t-il maintenant, sur combien de supports ? Qu’est-ce qui manque pour respecter 3-2-1-1-0 ?</li>
+<li>Avec la sauvegarde PBS d’hier soir et les exports horaires, combien de données perdriez-vous au maximum si srv-lnx-01 était détruite maintenant ? Et si sup-lnx-01 n’avait pas de copie ?</li>
+<li>Pourquoi la restauration de la table s’est-elle faite dans une base à part ?</li>
+<li>Pourquoi a-t-on débranché la carte réseau de la VM N99 avant de la démarrer ? Qu’aurait-il pu se passer sinon ?</li>
+<li>La clé de copie de sup-lnx-01 n’a pas de phrase de passe. Pourquoi est-ce acceptable ici ?</li>
+<li>Que contient une sauvegarde de srv-lnx-02 qui permettrait de reconstruire GLPI à l’identique ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>pbs-etuN</code> absent de la liste des stockages</td>
+<td>droits sur le stockage ; prévenir M. CHADEYRON</td>
+</tr>
+<tr class="even">
+<td>Sauvegarde : <code>guest-agent</code> ne répond pas, pas de <code>fs-freeze</code></td>
+<td>agent invité non démarré dans la VM (<code>systemctl status qemu-guest-agent</code>) ou option <em>Agent QEMU</em> désactivée dans les options de la VM</td>
+</tr>
+<tr class="odd">
+<td>La deuxième sauvegarde n’est pas plus rapide</td>
+<td>la VM a été arrêtée ou redémarrée entre les deux : la carte des blocs modifiés est perdue</td>
+</tr>
+<tr class="even">
+<td><code>activite-intranet.sh</code> : <code>curl: (22)</code> ou délai dépassé</td>
+<td>site du cours non joignable depuis la VM : téléchargez le fichier sur votre PC (ou prenez-le sur la clé de M. CHADEYRON) et envoyez-le avec <code>scp activite-intranet.sh srv-lnx-01:</code></td>
+</tr>
+<tr class="odd">
+<td><code>mariadb-dump</code> : <em>Access denied</em></td>
+<td>le script doit être lancé avec <code>sudo</code> (connexion de root par le socket)</td>
+</tr>
+<tr class="even">
+<td><code>rsync</code> : <em>Permission denied (publickey)</em></td>
+<td>ligne <code>authorized_keys</code> mal collée (une seule ligne, sans retour à la ligne), ou droits de <code>/home/copie/.ssh</code></td>
+</tr>
+<tr class="odd">
+<td><code>rsync</code> : <em>rrsync error</em> ou <em>Permission denied</em> sur les fichiers</td>
+<td>le dossier n’appartient pas au groupe <code>copie</code> : relancer le script de sauvegarde après avoir créé le compte (D.1)</td>
+</tr>
+<tr class="even">
+<td>Élément <code>vfs.file.time</code> <em>Non supporté</em></td>
+<td>fichier témoin absent (aucune sauvegarde encore réussie) ou chemin mal recopié</td>
+</tr>
+<tr class="odd">
+<td>La restauration de fichiers reste sur « chargement »</td>
+<td>première ouverture : attendre une à deux minutes ; sinon prévenir M. CHADEYRON</td>
+</tr>
+<tr class="even">
+<td>Restauration de la VM N99 refusée (<em>permission check failed</em>)</td>
+<td>numéro de VM différent de <code>N99</code> (seul celui-ci est prévu pour vos tests)</td>
+</tr>
+<tr class="odd">
+<td><code>INSERT … SELECT</code> : <em>Column count doesn’t match</em></td>
+<td>l’export date d’avant l’installation de l’activité simulée (colonne <code>cree_le</code> absente) : prendre un export plus récent</td>
+</tr>
+</tbody>
+</table></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="dir">‹ Page précédente</span><span class="titre">Séance 10 : Sauvegarder et restaurer</span></a><a class="next" href="../cours/s11-pra.html" data-seance="11"><span class="dir">Page suivante ›</span><span class="titre">Séance 11 : Plan de reprise d&#x27;activité</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 12 : Le dossier de MCO d&#x27;Hexalog | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous remettez votre lab en conformité avec la liste ci-dessous, vous assemblez le dossier de MCO d&#x27;Hexalog à partir de vos productions du bloc, vous le faites relire par un camarade avec le test du re">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item active" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp active" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module E : Consolidation et évaluation</span><span class="sep">›</span><a href="../cours/s12-dossier-mco.html" data-seance="12">Séance 12</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 12</span>
+  <h1>TP 12 : Le dossier de MCO d&#x27;Hexalog</h1>
+  <p class="lead">Vous remettez votre lab en conformité avec la liste ci-dessous, vous assemblez le dossier de MCO d'Hexalog à partir de vos productions du bloc, vous le faites relire par un camarade avec le test du remplaçant, puis vous prenez les snapshots qui serviront de point de départ à l'évaluation finale.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>1 h 45</td></tr><tr><th>Machines virtuelles</th><td>toutes</td></tr><tr><th>Cours associé</th><td><a href="../cours/s12-dossier-mco.html" data-seance="12">Séance 12 : Documenter le MCO et réviser</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-la-conformité-du-lab-40-min">Partie A. La conformité du lab (40 min)</a></li><li><a href="#partie-b.-assembler-le-dossier-de-mco-40-min-puis-à-la-maison">Partie B. Assembler le dossier de MCO (40 min, puis à la maison)</a></li><li><a href="#partie-c.-le-test-du-remplaçant-20-min">Partie C. Le test du remplaçant (20 min)</a></li><li><a href="#partie-d.-prêt-pour-lévaluation-5-min">Partie D. Prêt pour l’évaluation (5 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Nicolas Fournier, l’administrateur d’Hexalog, part trois semaines en formation. Son remplaçant arrive lundi et ne connaît rien au système. Tout ce qu’il saura, il le lira dans le dossier de MCO.</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p><strong>Socle</strong> : parties A, C et D. La partie B se commence ici et se termine à la maison : le <strong>dossier de MCO complet</strong> est à rendre à la date fixée par M. CHADEYRON.</p>
+</div></div>
+<h2 id="partie-a.-la-conformité-du-lab-40-min">Partie A. La conformité du lab (40 min)</h2>
+<p>Cochez chaque ligne <strong>après l’avoir vérifiée</strong>, pas de mémoire. Ce qui ne fonctionne pas se corrige maintenant (les TP indiqués donnent la marche à suivre).</p>
+<h3 id="a.1-les-machines">A.1, Les machines</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Les VM <code>srv-win-01</code>, <code>srv-lnx-01</code>, <code>srv-lnx-02</code>, <code>sup-lnx-01</code> démarrent, avec les adresses et numéros de la convention ; <code>sup-win-01</code> est éteinte (TP 6).</label></li>
+<li><label><input type="checkbox"/><code>ssh sup-lnx-01</code>, <code>ssh srv-lnx-01</code>, <code>ssh srv-lnx-02</code> fonctionnent depuis le PC, par clé ; aucune clé inconnue dans les <code>authorized_keys</code> de sysadmin (TP 11).</label></li>
+<li><label><input type="checkbox"/>srv-win-01 résout <code>intranet.hexalog.local</code> et <code>glpi.hexalog.local</code>, et les noms d’Internet (TP 1).</label></li>
+<li><label><input type="checkbox"/>Toutes les VM Linux sont à l’heure (<code>timedatectl</code>), et les mises à jour de sécurité automatiques sont réglées (TP 7).</label></li>
+</ul>
+<h3 id="a.2-les-services">A.2, Les services</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"/>L’intranet répond depuis le PC (<code>http://PROXMOX:1N020/</code>), <code>sante.php</code> répond <code>BASE-OK</code>, l’activité simulée tourne (TP 1, 10).</label></li>
+<li><label><input type="checkbox"/>GLPI répond (<code>http://PROXMOX:1N081/</code>), comptes par défaut désactivés, <code>install.php</code> absent (TP 8).</label></li>
+<li><label><input type="checkbox"/>Nagios (<code>/nagios4</code>) et Zabbix (<code>/zabbix</code>) répondent, avec un mot de passe changé (TP 3, 4).</label></li>
+</ul>
+<h3 id="a.3-la-supervision">A.3, La supervision</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Zabbix : pastille ZBX verte pour les quatre machines ; <strong>aucun problème</strong> ouvert (ou seulement des informations connues et notées) ; scénarios web <em>Intranet</em> et <em>GLPI</em> en succès (TP 4, 5, 8).</label></li>
+<li><label><input type="checkbox"/>Zabbix : l’action par courriel et l’action vers GLPI fonctionnent (testez avec un arrêt de nginx, puis rétablissez) (TP 5, 8).</label></li>
+<li><label><input type="checkbox"/>Zabbix : les éléments de journaux (connexions SSH refusées, 4625), de mises à jour et de sauvegardes ont des valeurs récentes (TP 7, 10).</label></li>
+<li><label><input type="checkbox"/>Nagios : tous les hôtes UP, aucun service non géré (sauf <em>Mises a jour</em> si des mises à jour attendent) (TP 3).</label></li>
+</ul>
+<h3 id="a.4-les-journaux-et-les-sauvegardes">A.4, Les journaux et les sauvegardes</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"/><code>/var/log/hexalog/</code> sur sup-lnx-01 reçoit les journaux de srv-lnx-01 et srv-lnx-02 (TP 7, 8).</label></li>
+<li><label><input type="checkbox"/>Une sauvegarde PBS de moins de 24 heures pour chaque VM ; aucune sauvegarde protégée inutile (la preuve du TP 11 peut être déprotégée et supprimée) (TP 10, 11).</label></li>
+<li><label><input type="checkbox"/>L’export horaire de la base tourne ; sup-lnx-01 en a des copies de la dernière heure (TP 10).</label></li>
+<li><label><input type="checkbox"/>Les snapshots inutiles sont supprimés (gardez le dernier de chaque VM).</label></li>
+</ul>
+<h2 id="partie-b.-assembler-le-dossier-de-mco-40-min-puis-à-la-maison">Partie B. Assembler le dossier de MCO (40 min, puis à la maison)</h2>
+<p>Créez un dossier <code>dossier-mco/</code> (sur votre PC, ou dans un dépôt Git) organisé selon le plan du cours (modèle « Plan du dossier de MCO » de la page <a href="../modeles.html">Modèles de livrables</a>). Pour chaque partie, rassemblez vos productions des TP, <strong>mettez-les à jour</strong> avec l’état réel du lab, et complétez ce qui manque. Priorités pour la séance :</p>
+<ol type="1">
+<li>le <strong>schéma</strong> de l’architecture avec les flux de supervision, de journaux et de sauvegarde ;</li>
+<li>la <strong>matrice de supervision</strong> (TP 2), mise à jour avec ce que vous avez réellement configuré dans Zabbix et Nagios, et ce que l’astreinte a révélé (TP 9) ;</li>
+<li>trois <strong>procédures d’exploitation</strong> courtes et exactes :
+<ul>
+<li>« ajouter un serveur Linux à la supervision et à la centralisation des journaux » ;</li>
+<li>« déclarer et réaliser une maintenance planifiée » ;</li>
+<li>« restaurer un fichier de l’intranet depuis Proxmox Backup Server » ;</li>
+</ul></li>
+<li>la <strong>politique de sauvegarde</strong> : quoi, quand, où, combien de temps, comment c’est supervisé, quand c’est testé.</li>
+</ol>
+<h2 id="partie-c.-le-test-du-remplaçant-20-min">Partie C. Le test du remplaçant (20 min)</h2>
+<p>Échangez une de vos trois procédures avec votre voisin. Il la suit <strong>sur son propre lab</strong>, à la lettre, sans vous poser de question pendant cinq minutes. Puis :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Réponse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A-t-il pu aller au bout ?</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Où a-t-il hésité ?</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Quelle information manquait (machine, compte, menu, résultat attendu) ?</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Quelle étape était fausse ou dépassée ?</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Corrigez votre procédure. Échangez les rôles.</p>
+<h2 id="partie-d.-prêt-pour-lévaluation-5-min">Partie D. Prêt pour l’évaluation (5 min)</h2>
+<ol type="1">
+<li>Arrêtez proprement sup-win-01 si elle tourne.</li>
+<li>Prenez un snapshot <strong><code>12-lab-final</code></strong> de srv-win-01, srv-lnx-01, srv-lnx-02 et sup-lnx-01 (sans la mémoire vive).</li>
+<li>Notez dans votre journal de bord ce qui ne fonctionne pas encore, s’il reste quelque chose : mieux vaut le savoir avant l’évaluation que le découvrir pendant.</li>
+</ol>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Liste de conformité entièrement cochée (ou écarts notés et expliqués).</label></li>
+<li><label><input type="checkbox"/>Dossier de MCO commencé : schéma, matrice de supervision à jour, trois procédures, politique de sauvegarde.</label></li>
+<li><label><input type="checkbox"/>Une procédure testée par un camarade et corrigée.</label></li>
+<li><label><input type="checkbox"/>Snapshots <code>12-lab-final</code> sur les quatre VM.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Quelle partie de votre dossier serait la plus utile au remplaçant la première nuit d’astreinte ? Laquelle est la plus faible ?</li>
+<li>Pourquoi ne doit-il contenir aucun mot de passe ? Où les ranger, et comment le remplaçant y accède-t-il ?</li>
+<li>Comment s’assurer que le dossier reste à jour dans six mois ?</li>
+</ol>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="dir">‹ Page précédente</span><span class="titre">Séance 12 : Documenter le MCO et réviser</span></a><a class="next" href="../cours/s13-evaluation.html" data-seance="13"><span class="dir">Page suivante ›</span><span class="titre">Séance 13 : Évaluation finale</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

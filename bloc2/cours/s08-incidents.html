@@ -1,0 +1,589 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 8 : Gestion des incidents | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="La supervision détecte ; il faut ensuite que quelqu'un prenne en charge, dans le bon ordre, avec les bonnes informations, et que rien ne se perde entre deux personnes. Cette séance présente la démarch">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d'Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="../tp/tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="../tp/tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="../tp/tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="../tp/tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="../tp/tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d'un outil</span></a><a class="nav-tp" href="../tp/tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="../tp/tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item active" data-seance="8"><a class="nav-link" href="s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="../tp/tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d'astreinte</span></a><a class="nav-tp" href="../tp/tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d'activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="../tp/tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d'activité</span></a><a class="nav-tp" href="../tp/tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="../tp/tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module C : Maintenance et incidents</span><span class="sep">›</span><span>Séance 8</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 8</span>
+  <h1>Gestion des incidents</h1>
+  <p class="lead">La supervision détecte ; il faut ensuite que quelqu'un prenne en charge, dans le bon ordre, avec les bonnes informations, et que rien ne se perde entre deux personnes. Cette séance présente la démarche de gestion des incidents issue d'ITIL : vocabulaire, cycle de vie d'un ticket, priorité, niveaux de support et d'escalade, engagements de délai, incident majeur et communication, gestion des problèmes et analyse après incident. Le TP met en place l'outil de ticketing GLPI et le relie à Zabbix.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 1 à 7 (supervision, alertes, maintenance)</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp08-incidents.html" data-seance="8">TP 8 : Mettre en place GLPI et traiter des incidents</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#itil">1. ITIL et le vocabulaire</a></li><li><a href="#cycle">2. Le cycle de vie d’un incident</a></li><li><a href="#priorite">3. La priorité</a></li><li><a href="#sla">4. Les engagements de délai</a></li><li><a href="#niveaux">5. Les niveaux de support</a></li><li><a href="#majeur">6. L’incident majeur et la communication</a></li><li><a href="#problemes">7. Problèmes et analyse après incident</a></li><li><a href="#indicateurs">8. Les indicateurs</a></li><li><a href="#outils">9. Les outils</a></li><li><a href="#à-retenir">10. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<div class="callout info avis-exemples"><div class="callout-body"><p class="callout-titre"><strong>Les commandes de ce cours sont des exemples</strong></p><p>Les blocs marqués <span class="code-exemple">Exemple</span> montrent des commandes et des fichiers pour expliquer comment les choses fonctionnent. Lisez-les, mais ne les tapez pas pendant le cours. Vous ferez les manipulations pendant le <a data-seance="8" href="../tp/tp08-incidents.html">TP 8</a>, dans l'ordre et sur les machines indiquées : certaines n'ont de sens qu'après les étapes précédentes.</p></div></div><h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Distinguer événement, alerte, incident, problème, demande de service et changement.</li>
+<li>Décrire le cycle de vie d’un incident, de la détection à la clôture.</li>
+<li>Calculer une priorité à partir de l’impact et de l’urgence, et l’associer à des délais (SLA, OLA, TTO, TTR).</li>
+<li>Organiser le support en niveaux, escalader, traiter un incident majeur et communiquer.</li>
+<li>Conduire une analyse de cause et rédiger un compte rendu après incident sans recherche de coupable.</li>
+<li>Utiliser un outil de gestion des services informatiques : GLPI.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>45 min</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>3 h</td>
+<td><a data-seance="8" href="../tp/tp08-incidents.html">TP 8 : Mettre en place GLPI et traiter des incidents</a></td>
+</tr>
+<tr class="odd">
+<td>15 min</td>
+<td>Quiz</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="itil">1. ITIL et le vocabulaire</h2>
+<p><strong>ITIL</strong> (<em>Information Technology Infrastructure Library</em>) est un ensemble de bonnes pratiques de gestion des services informatiques, né au Royaume-Uni à la fin des années 1980. La version actuelle, <strong>ITIL 4</strong> (2019), décrit 34 « pratiques » ; celles qui nous concernent sont la gestion des incidents, des problèmes, des demandes de service, l’habilitation des changements (séance 7), la gestion des niveaux de service et le centre de services. La norme <strong>ISO/IEC 20000</strong> reprend les mêmes idées sous une forme certifiable.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Terme</th>
+<th>Définition</th>
+<th>Exemple chez Hexalog</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Événement</strong></td>
+<td>un changement d’état notable, détecté par un outil</td>
+<td>Zabbix : <em>Nginx: Process is not running</em></td>
+</tr>
+<tr class="even">
+<td><strong>Alerte</strong></td>
+<td>un événement qui demande l’attention de quelqu’un</td>
+<td>le courriel envoyé à l’astreinte</td>
+</tr>
+<tr class="odd">
+<td><strong>Incident</strong></td>
+<td>une <strong>interruption non planifiée</strong> d’un service, ou une <strong>baisse de sa qualité</strong></td>
+<td>l’intranet affiche « Base de données indisponible »</td>
+</tr>
+<tr class="even">
+<td><strong>Demande de service</strong></td>
+<td>une demande normale d’un utilisateur, qui n’est pas une panne</td>
+<td>« créez un compte pour la nouvelle chargée de recrutement »</td>
+</tr>
+<tr class="odd">
+<td><strong>Problème</strong></td>
+<td>la <strong>cause</strong>, connue ou non, d’un ou plusieurs incidents</td>
+<td>le disque de srv-lnx-01 se remplit chaque semaine</td>
+</tr>
+<tr class="even">
+<td><strong>Erreur connue</strong></td>
+<td>un problème dont la cause est identifiée, avec ou sans correction définitive</td>
+<td>« l’exportation nocturne ne purge pas ses fichiers temporaires »</td>
+</tr>
+<tr class="odd">
+<td><strong>Solution de contournement</strong></td>
+<td>ce qui rétablit le service sans corriger la cause</td>
+<td>supprimer les fichiers temporaires à la main</td>
+</tr>
+<tr class="even">
+<td><strong>Changement</strong></td>
+<td>l’ajout, la modification ou la suppression d’un élément qui peut avoir un effet sur les services</td>
+<td>la mise à jour mensuelle (séance 7)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>Incident et problème : deux objectifs différents</strong></p>
+<p>La gestion des <strong>incidents</strong> vise à <strong>rétablir le service le plus vite possible</strong>, même provisoirement. La gestion des <strong>problèmes</strong> vise à <strong>trouver et supprimer la cause</strong>, pour que l’incident ne se reproduise pas. Redémarrer MariaDB clôt l’incident ; comprendre pourquoi elle s’est arrêtée relève du problème.</p>
+</div></div>
+<h2 id="cycle">2. Le cycle de vie d’un incident</h2>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-660478" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1443.453125px;" viewBox="0 0 1443.453125 163" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-660478{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-660478 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-660478 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-660478 .error-icon{fill:#f5f6f8;}#mmd0-660478 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-660478 .edge-thickness-normal{stroke-width:1px;}#mmd0-660478 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-660478 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-660478 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-660478 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-660478 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-660478 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-660478 .marker.cross{stroke:#4a5563;}#mmd0-660478 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-660478 p{margin:0;}#mmd0-660478 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-660478 .cluster-label text{fill:#1f3a5f;}#mmd0-660478 .cluster-label span{color:#1f3a5f;}#mmd0-660478 .cluster-label span p{background-color:transparent;}#mmd0-660478 .label text,#mmd0-660478 span{fill:#1d2530;color:#1d2530;}#mmd0-660478 .node rect,#mmd0-660478 .node circle,#mmd0-660478 .node ellipse,#mmd0-660478 .node polygon,#mmd0-660478 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-660478 .rough-node .label text,#mmd0-660478 .node .label text,#mmd0-660478 .image-shape .label,#mmd0-660478 .icon-shape .label{text-anchor:middle;}#mmd0-660478 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-660478 .rough-node .label,#mmd0-660478 .node .label,#mmd0-660478 .image-shape .label,#mmd0-660478 .icon-shape .label{text-align:center;}#mmd0-660478 .node.clickable{cursor:pointer;}#mmd0-660478 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-660478 .arrowheadPath{fill:#000000;}#mmd0-660478 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-660478 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-660478 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-660478 .edgeLabel p{background-color:#ffffff;}#mmd0-660478 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-660478 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-660478 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-660478 .cluster text{fill:#1f3a5f;}#mmd0-660478 .cluster span{color:#1f3a5f;}#mmd0-660478 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-660478 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-660478 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-660478 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-660478 rect.text{fill:none;stroke-width:0;}#mmd0-660478 .icon-shape,#mmd0-660478 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-660478 .icon-shape p,#mmd0-660478 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-660478 .icon-shape .label rect,#mmd0-660478 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-660478 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-660478 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-660478 .node .neo-node{stroke:#1f3a5f;}#mmd0-660478 [data-look="neo"].node rect,#mmd0-660478 [data-look="neo"].cluster rect,#mmd0-660478 [data-look="neo"].node polygon{stroke:url(#mmd0-660478-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-660478 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-660478 [data-look="neo"].node path{stroke:url(#mmd0-660478-gradient);stroke-width:1px;}#mmd0-660478 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-660478 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-660478 [data-look="neo"].node circle{stroke:url(#mmd0-660478-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-660478 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-660478 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-660478-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-660478 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-660478-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-660478 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-660478_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-660478_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-660478_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-660478_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-660478_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-660478_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-660478_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-660478_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-660478_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-660478_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-660478_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-660478_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M155.828,64L180.828,64L201.828,64" id="mmd0-660478-L_D_E_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_E_0" data-points="W3sieCI6MTU1LjgyODEyNSwieSI6NjR9LHsieCI6MTgwLjgyODEyNSwieSI6NjR9LHsieCI6MjA1LjgyODEyNSwieSI6NjR9XQ==" data-look="classic" marker-end="url(#mmd0-660478_flowchart-v2-pointEnd)"></path><path d="M356.766,64L381.766,64L402.766,64" id="mmd0-660478-L_E_C_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_E_C_0" data-points="W3sieCI6MzU2Ljc2NTYyNSwieSI6NjR9LHsieCI6MzgxLjc2NTYyNSwieSI6NjR9LHsieCI6NDA2Ljc2NTYyNSwieSI6NjR9XQ==" data-look="classic" marker-end="url(#mmd0-660478_flowchart-v2-pointEnd)"></path><path d="M553.047,64L578.047,64L599.047,64" id="mmd0-660478-L_C_N1_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C_N1_0" data-points="W3sieCI6NTUzLjA0Njg3NSwieSI6NjR9LHsieCI6NTc4LjA0Njg3NSwieSI6NjR9LHsieCI6NjAzLjA0Njg3NSwieSI6NjR9XQ==" data-look="classic" marker-end="url(#mmd0-660478_flowchart-v2-pointEnd)"></path><path d="M760.219,36.831L813.242,18.5L933.57,18.5L1025.875,18.5L1047.259,28.615" id="mmd0-660478-L_N1_R_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_N1_R_0" data-points="W3sieCI6NzYwLjIxODc1LCJ5IjozNi44MzEyNjU1ODIzMzQwOH0seyJ4Ijo4MTMuMjQyMTg3NSwieSI6MTguNX0seyJ4Ijo5MzMuNTcwMzEyNSwieSI6MTguNX0seyJ4IjoxMDI1Ljg3NSwieSI6MTguNX0seyJ4IjoxMDUwLjg3NSwieSI6MzAuMzI1ODYwOTQ4NjY3OTY2fV0=" data-look="classic" marker-end="url(#mmd0-660478_flowchart-v2-pointEnd)"></path><path d="M760.219,91.169L813.242,109.5L862.266,109.5" id="mmd0-660478-L_N1_N2_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_N1_N2_0" data-points="W3sieCI6NzYwLjIxODc1LCJ5Ijo5MS4xNjg3MzQ0MTc2NjU5Mn0seyJ4Ijo4MTMuMjQyMTg3NSwieSI6MTA5LjV9LHsieCI6ODY2LjI2NTYyNSwieSI6MTA5LjV9XQ==" data-look="classic" marker-end="url(#mmd0-660478_flowchart-v2-pointEnd)"></path><path d="M1000.875,109.5L1025.875,109.5L1047.259,99.385" id="mmd0-660478-L_N2_R_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_N2_R_0" data-points="W3sieCI6MTAwMC44NzUsInkiOjEwOS41fSx7IngiOjEwMjUuODc1LCJ5IjoxMDkuNX0seyJ4IjoxMDUwLjg3NSwieSI6OTcuNjc0MTM5MDUxMzMyMDN9XQ==" data-look="classic" marker-end="url(#mmd0-660478_flowchart-v2-pointEnd)"></path><path d="M1193.25,64L1218.25,64L1239.25,64" id="mmd0-660478-L_R_V_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_R_V_0" data-points="W3sieCI6MTE5My4yNSwieSI6NjR9LHsieCI6MTIxOC4yNSwieSI6NjR9LHsieCI6MTI0My4yNSwieSI6NjR9XQ==" data-look="classic" marker-end="url(#mmd0-660478_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_D_E_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_E_C_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_C_N1_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(933.5703125, 18.5)"><g class="label" data-id="L_N1_R_0" transform="translate(-19.0703125, -10.5)"><foreignObject width="38.140625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>résolu</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(813.2421875, 109.5)"><g class="label" data-id="L_N1_N2_0" transform="translate(-28.0234375, -10.5)"><foreignObject width="56.046875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>escalade</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_N2_R_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_R_V_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-660478-flowchart-D-0" data-look="classic" transform="translate(81.9140625, 64)"><rect class="basic label-container" style="" x="-73.9140625" y="-45.5" width="147.828125" height="91"></rect><g class="label" style="" transform="translate(-45.9140625, -31.5)"><rect></rect><foreignObject width="91.828125" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Détection<br>alerte, appel,<br>courriel, portail</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-660478-flowchart-E-1" data-look="classic" transform="translate(281.296875, 64)"><rect class="basic label-container" style="" x="-75.46875" y="-35" width="150.9375" height="70"></rect><g class="label" style="" transform="translate(-47.46875, -21)"><rect></rect><foreignObject width="94.9375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Enregistrement<br>un ticket</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-660478-flowchart-C-3" data-look="classic" transform="translate(479.90625, 64)"><rect class="basic label-container" style="" x="-73.140625" y="-35" width="146.28125" height="70"></rect><g class="label" style="" transform="translate(-45.140625, -21)"><rect></rect><foreignObject width="90.28125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Catégorisation<br>et priorité</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-660478-flowchart-N1-5" data-look="classic" transform="translate(681.6328125, 64)"><rect class="basic label-container" style="" x="-78.5859375" y="-35" width="157.171875" height="70"></rect><g class="label" style="" transform="translate(-50.5859375, -21)"><rect></rect><foreignObject width="101.171875" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Diagnostic initial<br>niveau 1</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-660478-flowchart-R-7" data-look="classic" transform="translate(1122.0625, 64)"><rect class="basic label-container" style="" x="-71.1875" y="-35" width="142.375" height="70"></rect><g class="label" style="" transform="translate(-43.1875, -21)"><rect></rect><foreignObject width="86.375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Résolution<br>service rétabli</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-660478-flowchart-N2-9" data-look="classic" transform="translate(933.5703125, 109.5)"><rect class="basic label-container" style="" x="-67.3046875" y="-45.5" width="134.609375" height="91"></rect><g class="label" style="" transform="translate(-39.3046875, -31.5)"><rect></rect><foreignObject width="78.609375" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Investigation<br>niveau 2, 3,<br>fournisseur</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-660478-flowchart-V-13" data-look="classic" transform="translate(1339.3515625, 64)"><rect class="basic label-container" style="" x="-96.1015625" y="-35" width="192.203125" height="70"></rect><g class="label" style="" transform="translate(-68.1015625, -21)"><rect></rect><foreignObject width="136.203125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Clôture<br>accord du demandeur</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-660478-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-660478-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-660478-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Étape</th>
+<th>Ce qu’on fait</th>
+<th>Ce qu’on écrit dans le ticket</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Détection</td>
+<td>une alerte, un appel, un courriel, un formulaire du portail</td>
+<td>l’origine (téléphone, courriel, supervision)</td>
+</tr>
+<tr class="even">
+<td>Enregistrement</td>
+<td><strong>toujours un ticket</strong>, même pour une question de deux minutes</td>
+<td>le demandeur, le symptôme décrit <strong>avec ses mots</strong>, l’heure</td>
+</tr>
+<tr class="odd">
+<td>Catégorisation</td>
+<td>le service ou le domaine touché</td>
+<td>catégorie (Intranet, Réseau, Comptes et accès…)</td>
+</tr>
+<tr class="even">
+<td>Priorité</td>
+<td>impact × urgence (partie 3)</td>
+<td>impact, urgence, priorité calculée</td>
+</tr>
+<tr class="odd">
+<td>Diagnostic initial</td>
+<td>questions, vérifications simples, base de connaissances</td>
+<td>ce qui a été vérifié et le résultat</td>
+</tr>
+<tr class="even">
+<td>Escalade</td>
+<td>vers un niveau plus compétent, ou un fournisseur</td>
+<td>à qui, pourquoi</td>
+</tr>
+<tr class="odd">
+<td>Résolution</td>
+<td>rétablir le service</td>
+<td>la <strong>solution</strong> appliquée</td>
+</tr>
+<tr class="even">
+<td>Clôture</td>
+<td>le demandeur confirme ; sinon le ticket se rouvre</td>
+<td>la date de clôture</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le ticket est la <strong>mémoire</strong> de l’équipe : celui qui reprend le dossier, le collègue du lendemain, l’auditeur, doivent comprendre ce qui s’est passé sans avoir à demander. Un suivi utile dit <strong>ce qui a été fait, observé, conclu</strong>, pas seulement « en cours ».</p>
+<h2 id="priorite">3. La priorité</h2>
+<p>La priorité ne se décide pas au ressenti ni à la voix du demandeur : elle se <strong>calcule</strong> à partir de deux critères.</p>
+<ul>
+<li><strong>Impact</strong> : l’étendue des conséquences. Combien d’utilisateurs, quels services, quelles conséquences pour l’activité (financières, clients, réglementaires) ?</li>
+<li><strong>Urgence</strong> : la vitesse à laquelle les conséquences s’aggravent. Combien de temps l’activité peut-elle attendre ?</li>
+</ul>
+<p>La matrice par défaut de GLPI (urgence en lignes, impact en colonnes) :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Urgence \ Impact</th>
+<th>Très bas</th>
+<th>Bas</th>
+<th>Moyen</th>
+<th>Haut</th>
+<th>Très haut</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Très haute</strong></td>
+<td>Basse</td>
+<td>Moyenne</td>
+<td>Haute</td>
+<td>Très haute</td>
+<td>Très haute</td>
+</tr>
+<tr class="even">
+<td><strong>Haute</strong></td>
+<td>Basse</td>
+<td>Moyenne</td>
+<td>Haute</td>
+<td>Haute</td>
+<td>Très haute</td>
+</tr>
+<tr class="odd">
+<td><strong>Moyenne</strong></td>
+<td>Basse</td>
+<td>Basse</td>
+<td>Moyenne</td>
+<td>Haute</td>
+<td>Haute</td>
+</tr>
+<tr class="even">
+<td><strong>Basse</strong></td>
+<td>Très basse</td>
+<td>Basse</td>
+<td>Basse</td>
+<td>Moyenne</td>
+<td>Moyenne</td>
+</tr>
+<tr class="odd">
+<td><strong>Très basse</strong></td>
+<td>Très basse</td>
+<td>Très basse</td>
+<td>Basse</td>
+<td>Basse</td>
+<td>Basse</td>
+</tr>
+</tbody>
+</table></div>
+<p>Exemples chez Hexalog :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>Impact</th>
+<th>Urgence</th>
+<th>Priorité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intranet inaccessible à 8 h 30 : les préparateurs ne voient plus les expéditions du jour</td>
+<td>Très haut</td>
+<td>Très haute</td>
+<td>Très haute</td>
+</tr>
+<tr class="even">
+<td>La directrice ne reçoit plus les rapports mensuels du tableau de bord</td>
+<td>Bas</td>
+<td>Moyenne</td>
+<td>Basse</td>
+</tr>
+<tr class="odd">
+<td>L’imprimante de l’entrepôt est bloquée, il en reste une autre</td>
+<td>Bas</td>
+<td>Haute</td>
+<td>Moyenne</td>
+</tr>
+<tr class="even">
+<td>Un disque sera plein dans 10 jours (alerte de prévision)</td>
+<td>Haut</td>
+<td>Basse</td>
+<td>Moyenne</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="sla">4. Les engagements de délai</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Accord</th>
+<th>Entre</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>SLA</strong> (accord de niveau de service)</td>
+<td>le service informatique et ses <strong>clients</strong> (internes ou externes)</td>
+<td>« l’intranet est disponible à 99,5 % sur les heures ouvrées ; un incident de priorité très haute est rétabli en moins de 4 h »</td>
+</tr>
+<tr class="even">
+<td><strong>OLA</strong> (accord de niveau opérationnel)</td>
+<td>deux <strong>équipes internes</strong></td>
+<td>« l’équipe réseau prend en charge un ticket escaladé en moins de 30 min »</td>
+</tr>
+<tr class="odd">
+<td><strong>Contrat de sous-traitance</strong></td>
+<td>le service informatique et un <strong>fournisseur</strong></td>
+<td>« le constructeur remplace un disque en J+1 ouvré »</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les délais mesurés sur chaque ticket :</p>
+<ul>
+<li><strong>TTO</strong> (<em>Time To Own</em>) : délai de <strong>prise en charge</strong> (un technicien s’est attribué le ticket) ;</li>
+<li><strong>TTR</strong> (<em>Time To Resolve</em>) : délai de <strong>résolution</strong>.</li>
+</ul>
+<p>Ils se comptent sur un <strong>calendrier</strong> (heures ouvrées ou 24 h sur 24) et déclenchent des <strong>escalades</strong> automatiques : à 75 % du délai, prévenir le responsable du groupe. Un SLA n’a de sens que s’il est <strong>mesuré</strong> et <strong>revu</strong> régulièrement avec le client.</p>
+<h2 id="niveaux">5. Les niveaux de support</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Niveau</th>
+<th>Qui</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0</strong></td>
+<td>l’utilisateur lui-même</td>
+<td>portail, base de connaissances, réinitialisation de mot de passe en libre-service</td>
+</tr>
+<tr class="even">
+<td><strong>1</strong></td>
+<td>le <strong>centre de services</strong> (<em>service desk</em>), point de contact unique</td>
+<td>enregistrer, qualifier, résoudre ce qui est simple et documenté (« premier contact »), escalader le reste</td>
+</tr>
+<tr class="odd">
+<td><strong>2</strong></td>
+<td>les administrateurs (systèmes, réseau, applications)</td>
+<td>diagnostiquer en profondeur, corriger</td>
+</tr>
+<tr class="even">
+<td><strong>3</strong></td>
+<td>les experts, l’éditeur, le constructeur</td>
+<td>défaut du logiciel, panne matérielle sous garantie</td>
+</tr>
+</tbody>
+</table></div>
+<p>L’<strong>escalade fonctionnelle</strong> transmet le ticket à plus compétent ; l’<strong>escalade hiérarchique</strong> prévient un responsable (délai dépassé, client important, incident majeur). Dans une PME comme Hexalog, une même personne tient souvent les niveaux 1 et 2 : la démarche reste la même, l’outil garde la trace.</p>
+<h2 id="majeur">6. L’incident majeur et la communication</h2>
+<p>Un <strong>incident majeur</strong> a un impact très fort sur l’activité : site principal à l’arrêt, rançongiciel, service client inaccessible. Il suit une procédure à part :</p>
+<ol type="1">
+<li><strong>déclaration</strong> par une personne habilitée, qui en devient le <strong>responsable</strong> (<em>incident manager</em>) : il coordonne, il ne dépanne pas lui-même ;</li>
+<li>une <strong>cellule</strong> réunit les personnes nécessaires (techniciens, responsable métier, direction) ;</li>
+<li>une <strong>communication</strong> régulière, même quand il n’y a rien de nouveau ;</li>
+<li>après le rétablissement, une <strong>analyse</strong> systématique (partie 7).</li>
+</ol>
+<p>Un message aux utilisateurs dit : <strong>ce qui se passe</strong> (en termes de service, pas de technique), <strong>qui est touché</strong>, <strong>ce qu’il faut faire</strong> en attendant, <strong>quand</strong> aura lieu le prochain point.</p>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : message aux utilisateurs</span><span class="code-note">à lire, pas à taper</span></div><pre class="text"><code>Objet : [Incident en cours] Intranet indisponible
+
+Depuis 8 h 40, l'intranet de suivi des expéditions est inaccessible pour tous les sites.
+L'équipe informatique est mobilisée et la cause est identifiée.
+En attendant, les préparateurs utilisent la liste papier du jour, imprimée par l'accueil.
+Prochain point d'information : 9 h 30, ou dès le rétablissement.
+
+Service informatique d'Hexalog, poste 200</code></pre></div>
+<h2 id="problemes">7. Problèmes et analyse après incident</h2>
+<h3 id="trouver-la-cause">Trouver la cause</h3>
+<ul>
+<li><strong>Les cinq pourquoi</strong> : on demande « pourquoi ? » jusqu’à atteindre une cause sur laquelle on peut agir.</li>
+</ul>
+<div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : exemple</span><span class="code-note">à lire, pas à taper</span></div><pre class="text"><code>L'intranet était en panne.                     Pourquoi ? MariaDB était arrêtée.
+MariaDB était arrêtée.                         Pourquoi ? Le disque / était plein.
+Le disque était plein.                         Pourquoi ? 6 Go de fichiers d'exportation dans /var/tmp.
+Les fichiers s'accumulaient.                   Pourquoi ? Le script d'exportation ne les supprime pas.
+Personne ne l'avait vu.                        Pourquoi ? Aucune alerte de prévision sur l'espace disque.
+→ Actions : corriger le script (problème) ; ajouter un déclencheur timeleft() (supervision).</code></pre></div>
+<ul>
+<li><strong>Le diagramme d’Ishikawa</strong> (en arêtes de poisson) classe les causes possibles par familles (les « 5 M » : Matériel, Méthode, Main-d’œuvre, Milieu, Matière, transposés en informatique : matériel, logiciel, procédure, personnes, environnement, données).</li>
+</ul>
+<h3 id="le-compte-rendu-après-incident">Le compte rendu après incident</h3>
+<p>Le <strong>post-mortem</strong> (ou <strong>retour d’expérience</strong>, RETEX) se rédige après chaque incident majeur, et après tout incident instructif. Il est <strong>sans recherche de coupable</strong> (<em>blameless</em>) : si une personne a pu se tromper, c’est que le système le permettait ; on corrige le système (procédure, contrôle, supervision), pas la personne. Sinon, plus personne ne dit la vérité, et les mêmes erreurs reviennent.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Rubrique</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Résumé</td>
+<td>quoi, quand, durée, impact, en cinq lignes</td>
+</tr>
+<tr class="even">
+<td>Chronologie</td>
+<td>les faits horodatés : début, détection, prise en charge, actions, rétablissement</td>
+</tr>
+<tr class="odd">
+<td>Détection</td>
+<td>comment, et en combien de temps ? Qu’est-ce qui aurait permis de le voir plus tôt ?</td>
+</tr>
+<tr class="even">
+<td>Causes</td>
+<td>la cause immédiate et les causes profondes (cinq pourquoi)</td>
+</tr>
+<tr class="odd">
+<td>Ce qui a bien fonctionné, ce qui a manqué</td>
+<td>procédure, outils, communication</td>
+</tr>
+<tr class="even">
+<td>Actions</td>
+<td>chaque action avec un <strong>responsable</strong> et une <strong>date</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="indicateurs">8. Les indicateurs</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Indicateur</th>
+<th>Ce qu’il montre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nombre de tickets par catégorie, par semaine</td>
+<td>où se concentrent les difficultés</td>
+</tr>
+<tr class="even">
+<td><strong>MTTA</strong>, <strong>MTTR</strong> (séance 1)</td>
+<td>réactivité de l’équipe, efficacité du diagnostic</td>
+</tr>
+<tr class="odd">
+<td>Respect du TTO et du TTR</td>
+<td>tenue des engagements</td>
+</tr>
+<tr class="even">
+<td>Taux de résolution au premier contact</td>
+<td>efficacité du niveau 1 et de la base de connaissances</td>
+</tr>
+<tr class="odd">
+<td>Tickets rouverts</td>
+<td>qualité des résolutions</td>
+</tr>
+<tr class="even">
+<td>Stock de tickets ouverts (<em>backlog</em>)</td>
+<td>charge de l’équipe</td>
+</tr>
+<tr class="odd">
+<td>Satisfaction des demandeurs</td>
+<td>la perception, qui compte autant que les délais</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="outils">9. Les outils</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Outil</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>GLPI</strong></td>
+<td>logiciel libre français (Teclib’), très répandu dans les collectivités, les établissements scolaires et les PME : tickets, problèmes, changements, SLA, base de connaissances, inventaire du parc et CMDB, API</td>
+</tr>
+<tr class="even">
+<td>iTop</td>
+<td>libre, français (Combodo), centré sur la CMDB</td>
+</tr>
+<tr class="odd">
+<td>Zammad, Znuny (ex-OTRS)</td>
+<td>libres, centrés sur les tickets</td>
+</tr>
+<tr class="even">
+<td>Jira Service Management, ServiceNow, Freshservice</td>
+<td>commerciaux, souvent en SaaS</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="les-notions-de-glpi">Les notions de GLPI</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Notion</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Entité</strong></td>
+<td>un périmètre (une société, un site, un client de l’infogérant) ; les droits et les règles s’appliquent par entité</td>
+</tr>
+<tr class="even">
+<td><strong>Profil</strong></td>
+<td>un ensemble de droits : <em>Self-Service</em> (l’utilisateur crée et suit ses tickets), <em>Technician</em>, <em>Supervisor</em>, <em>Admin</em>, <em>Super-Admin</em></td>
+</tr>
+<tr class="odd">
+<td><strong>Groupe</strong></td>
+<td>une équipe (Support N1, Exploitation N2), à qui l’on attribue des tickets</td>
+</tr>
+<tr class="even">
+<td><strong>Catégorie ITIL</strong></td>
+<td>le domaine du ticket ; elle peut désigner un <strong>groupe responsable</strong>, pour l’attribution automatique</td>
+</tr>
+<tr class="odd">
+<td><strong>Ticket</strong></td>
+<td>de type <em>Incident</em> ou <em>Demande</em> ; acteurs (demandeur, observateur, attribué à), suivis, tâches, solution, validation</td>
+</tr>
+<tr class="even">
+<td><strong>Problème</strong>, <strong>Changement</strong></td>
+<td>objets à part, liés aux tickets</td>
+</tr>
+<tr class="odd">
+<td><strong>Niveaux de services</strong></td>
+<td>SLA et OLA, avec TTO et TTR, un calendrier, des escalades</td>
+</tr>
+<tr class="even">
+<td><strong>Règles métier</strong></td>
+<td>des automatismes : attribuer, classer, appliquer un SLA selon des critères</td>
+</tr>
+<tr class="odd">
+<td><strong>Base de connaissances</strong></td>
+<td>les articles réutilisables, publics ou internes</td>
+</tr>
+<tr class="even">
+<td><strong>API</strong></td>
+<td>création de tickets par d’autres outils, comme Zabbix</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="relier-la-supervision-au-ticketing">Relier la supervision au ticketing</h3>
+<p>Zabbix fournit un type de média <strong>GLPi</strong> (un <em>webhook</em>) : quand une action le déclenche, il crée un <strong>ticket</strong> dans GLPI avec le nom du problème et une urgence déduite de la sévérité, y ajoute un suivi à chaque mise à jour (acquittement, commentaire), et passe le ticket à l’état <em>Résolu</em> au rétablissement. Il utilise l’<strong>API</strong> de GLPI avec un compte dédié aux droits limités. On réserve ce mécanisme aux sévérités <strong>Haut</strong> et <strong>Désastre</strong> : un ticket pour chaque avertissement noierait le centre de services.</p>
+<h2 id="à-retenir">10. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Événement, alerte, incident (interruption ou dégradation), demande de service, problème (cause), erreur connue, contournement, changement.</li>
+<li>Incident : rétablir vite ; problème : supprimer la cause.</li>
+<li>Toujours un ticket ; un suivi dit ce qui a été fait, observé, conclu.</li>
+<li>Priorité = impact × urgence, par une matrice ; SLA (clients), OLA (équipes internes), TTO (prise en charge), TTR (résolution), calendrier, escalades.</li>
+<li>Niveaux 0 à 3 ; escalade fonctionnelle ou hiérarchique.</li>
+<li>Incident majeur : un responsable qui coordonne, une cellule, une communication régulière (quoi, qui, que faire, prochain point).</li>
+<li>Cinq pourquoi, Ishikawa ; post-mortem sans recherche de coupable, actions avec responsable et date.</li>
+<li>GLPI : entités, profils, groupes, catégories, tickets, SLA, règles, base de connaissances, API ; Zabbix crée les tickets des problèmes graves.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Classez : « créer un compte pour une nouvelle salariée » ; « l’intranet est très lent depuis ce matin » ; « le disque se remplit chaque semaine à cause d’un script » ; « le courriel d’alerte de Zabbix ».</li>
+<li>Quelle est la différence d’objectif entre la gestion des incidents et la gestion des problèmes ?</li>
+<li>Un utilisateur très insistant exige une priorité maximale pour un problème d’affichage sur son seul poste, sans conséquence sur son travail. Que faites-vous ?</li>
+<li>Avec la matrice de GLPI, quelle est la priorité d’un incident d’impact Haut et d’urgence Moyenne ?</li>
+<li>Que mesurent le TTO et le TTR ? Pourquoi un calendrier est-il associé au SLA ?</li>
+<li>Quelle différence entre un SLA et une OLA ?</li>
+<li>Qu’est-ce qu’une escalade fonctionnelle ? Une escalade hiérarchique ?</li>
+<li>Dans un incident majeur, pourquoi le responsable de l’incident ne doit-il pas dépanner lui-même ?</li>
+<li>Que doit contenir un message aux utilisateurs pendant un incident ?</li>
+<li>Pourquoi un compte rendu après incident doit-il être « sans recherche de coupable » ?</li>
+<li>Pourquoi ne crée-t-on pas un ticket GLPI pour chaque problème Zabbix ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Demande de service ; incident (dégradation de la qualité) ; problème (une cause identifiée : erreur connue) ; une alerte (issue d’un événement).</li>
+<li>Incidents : rétablir le service au plus vite, même provisoirement. Problèmes : trouver et supprimer la cause pour éviter que l’incident revienne.</li>
+<li>On calcule la priorité avec la matrice : impact très bas (un poste, pas de conséquence), urgence basse → priorité très basse ou basse. On l’explique poliment au demandeur et on lui donne le délai prévu.</li>
+<li><strong>Haute</strong>.</li>
+<li>TTO : délai de prise en charge ; TTR : délai de résolution. Le calendrier dit quelles heures comptent (heures ouvrées ou 24 h sur 24) : un ticket ouvert vendredi soir n’est pas « en retard » le samedi si le SLA ne couvre que les jours ouvrés.</li>
+<li>Le SLA est un engagement envers les clients du service ; l’OLA, un accord entre deux équipes internes, qui permet de tenir le SLA.</li>
+<li>Fonctionnelle : transmettre à une équipe plus compétente (niveau 2, éditeur). Hiérarchique : prévenir un responsable (délai dépassé, impact important).</li>
+<li>Pour garder une vue d’ensemble : coordonner, décider, communiquer ; un responsable plongé dans une console ne voit plus le reste.</li>
+<li>Ce qui se passe (en termes de service), qui est touché, ce qu’il faut faire en attendant, l’heure du prochain point.</li>
+<li>Pour que chacun dise ce qui s’est réellement passé ; on corrige le système (procédure, contrôle, supervision) qui a permis l’erreur, sinon elle se reproduira.</li>
+<li>Le centre de services serait submergé de tickets sans action à mener (fatigue d’alerte) ; on réserve l’ouverture automatique aux problèmes graves (Haut, Désastre).</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp07-journaux-maintenance.html" data-seance="7"><span class="dir">‹ Page précédente</span><span class="titre">TP 7 : Centraliser les journaux et planifier la maintenance</span></a><a class="next" href="../tp/tp08-incidents.html" data-seance="8"><span class="dir">Page suivante ›</span><span class="titre">TP 8 : Mettre en place GLPI et traiter des incidents</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>

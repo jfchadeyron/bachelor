@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 5 : Alertes, scénario web et tableau de bord | BLOC 2 Supervision et maintenance</title>
+<meta name="description" content="Vous faites de Zabbix un vrai outil d&#x27;astreinte : alertes par courriel, scénario web qui teste l&#x27;intranet comme un utilisateur, seuils adaptés, hystérésis et dépendances pour réduire le bruit, période">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 2 : Supervision et maintenance</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item active" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp active" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module B : Outils de supervision</span><span class="sep">›</span><a href="../cours/s05-zabbix-alertes.html" data-seance="5">Séance 5</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 5</span>
+  <h1>TP 5 : Alertes, scénario web et tableau de bord</h1>
+  <p class="lead">Vous faites de Zabbix un vrai outil d'astreinte : alertes par courriel, scénario web qui teste l'intranet comme un utilisateur, seuils adaptés, hystérésis et dépendances pour réduire le bruit, période de maintenance, supervision SNMP, et un tableau de bord pour l'astreinte d'Hexalog. Chaque réglage est vérifié par une panne provoquée.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>sup-lnx-01, srv-lnx-01, srv-win-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s05-zabbix-alertes.html" data-seance="5">Séance 5 : Zabbix : déclencheurs, alertes, tableaux de bord</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-être-prévenu-par-courriel-30-min">Partie A. Être prévenu par courriel (30 min)</a></li><li><a href="#partie-b.-tester-lintranet-comme-un-utilisateur-30-min">Partie B. Tester l’intranet comme un utilisateur (30 min)</a></li><li><a href="#partie-c.-adapter-les-seuils-30-min">Partie C. Adapter les seuils (30 min)</a></li><li><a href="#partie-d.-une-alerte-par-cause-30-min">Partie D. Une alerte par cause (30 min)</a></li><li><a href="#partie-e.-une-maintenance-sans-fausse-alerte-20-min">Partie E. Une maintenance sans fausse alerte (20 min)</a></li><li><a href="#partie-f.-srv-lnx-01-vu-en-snmp-facultatif-20-min">Partie F. srv-lnx-01 vu en SNMP (facultatif, 20 min)</a></li><li><a href="#partie-g.-le-tableau-de-bord-de-lastreinte-30-min">Partie G. Le tableau de bord de l’astreinte (30 min)</a></li><li><a href="#partie-h.-services-et-sla-facultatif-25-min">Partie H. Services et SLA (facultatif, 25 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>La supervision Zabbix d’Hexalog collecte, mais elle ne prévient personne, et la liste des problèmes contient déjà des alertes sans intérêt. Avant de la confier à l’astreinte, vous la rendez <strong>fiable</strong> (on est prévenu des vraies pannes) et <strong>sobre</strong> (on n’est prévenu que des vraies pannes).</p>
+<div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
+<p><strong>Socle</strong> : parties A à E et G. <strong>Facultatif</strong> : partie F (SNMP) et H (services et SLA).</p>
+<p>La messagerie locale de sup-lnx-01 a été installée au TP 3 (partie F.1). Sinon, faites-le d’abord.</p>
+</div></div>
+<h2 id="partie-a.-être-prévenu-par-courriel-30-min">Partie A. Être prévenu par courriel (30 min)</h2>
+<h3 id="a.1-le-type-de-média">A.1, Le type de média</h3>
+<p><strong>Alertes → Types de média</strong> (<em>Alerts → Media types</em>) → <strong>Courriel</strong> (<em>Email</em>) :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Serveur SMTP</td>
+<td><code>127.0.0.1</code></td>
+</tr>
+<tr class="even">
+<td>Port du serveur SMTP</td>
+<td><code>25</code></td>
+</tr>
+<tr class="odd">
+<td>SMTP helo</td>
+<td><code>sup-lnx-01.hexalog.local</code></td>
+</tr>
+<tr class="even">
+<td>Courriel</td>
+<td><code>zabbix@sup-lnx-01.hexalog.local</code></td>
+</tr>
+<tr class="odd">
+<td>Sécurité de la connexion, Authentification</td>
+<td>Aucune</td>
+</tr>
+<tr class="even">
+<td>Activé</td>
+<td>coché</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Actualiser</strong>, puis le bouton <strong>Test</strong> sur la ligne <em>Courriel</em> : envoyez un message à <code>sysadmin@localhost</code> et lisez-le avec <code>mail</code> sur sup-lnx-01.</p>
+<h3 id="a.2-le-média-de-lutilisateur-admin">A.2, Le média de l’utilisateur Admin</h3>
+<p><strong>Utilisateurs → Utilisateurs</strong> → <code>Admin</code> → onglet <strong>Média</strong> → <strong>Ajouter</strong> : type <em>Courriel</em>, envoyer à <code>sysadmin@localhost</code>, lorsque actif <code>1-7,00:00-24:00</code>, utiliser si sévérité : <strong>Avertissement, Moyen, Haut, Désastre</strong> → Ajouter → <strong>Actualiser</strong>.</p>
+<h3 id="a.3-laction">A.3, L’action</h3>
+<p><strong>Alertes → Actions → Actions de déclencheur</strong> (<em>Trigger actions</em>) : ouvrez <em>Report problems to Zabbix administrators</em>. Lisez ses onglets <strong>Opérations</strong> (à qui, par quel média) et <strong>Opérations de récupération</strong>, puis activez-la (case <em>Activé</em>, ou clic sur <em>Désactivé</em> dans la liste).</p>
+<h3 id="a.4-vérifier-toute-la-chaîne">A.4, Vérifier toute la chaîne</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">date</span> <span class="kw">;</span> <span class="fu">sudo</span> systemctl stop nginx</span></code></pre></div></div>
+<p>Suivez <strong>Surveillance → Problèmes</strong> : <em>Nginx: Process is not running</em> (Haut), puis d’autres. Lisez le courriel sur sup-lnx-01, puis redémarrez nginx et attendez le message de résolution. Ouvrez <strong>Rapports → Journal des actions</strong> (<em>Reports → Action log</em>) : chaque message envoyé y figure, avec son état.</p>
+<p>Combien de problèmes une seule cause a-t-elle ouverts ? Gardez la liste : la partie D en réduit le nombre.</p>
+<h2 id="partie-b.-tester-lintranet-comme-un-utilisateur-30-min">Partie B. Tester l’intranet comme un utilisateur (30 min)</h2>
+<h3 id="b.1-le-scénario-web">B.1, Le scénario web</h3>
+<p><strong>Collecte de données → Hôtes</strong> → ligne <code>srv-lnx-01</code> → <strong>Web</strong> → <strong>Créer un scénario web</strong> :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Onglet</th>
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Scénario</td>
+<td>Nom</td>
+<td><code>Intranet</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Intervalle d’actualisation</td>
+<td><code>1m</code></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Tentatives</td>
+<td><code>2</code></td>
+</tr>
+<tr class="even">
+<td>Étapes</td>
+<td>Ajouter</td>
+<td>nom <code>Accueil</code>, URL <code>http://10.20.N.20/</code>, chaîne requise <code>Hexalog</code>, code d’état requis <code>200</code>, expiration <code>10s</code></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Ajouter</td>
+<td>nom <code>Sante</code>, URL <code>http://10.20.N.20/sante.php</code>, chaîne requise <code>BASE-OK</code>, code d’état requis <code>200</code>, expiration <code>10s</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Ajouter</strong>. Après deux minutes, <strong>Surveillance → Dernières données</strong>, filtre sur le nom <code>Intranet</code> : temps de réponse et code de chaque étape, et l’élément <em>Failed step of scenario “Intranet”</em> à 0.</p>
+<h3 id="b.2-les-déclencheurs-du-scénario">B.2, Les déclencheurs du scénario</h3>
+<p>Sur srv-lnx-01 → <strong>Déclencheurs</strong> → <strong>Créer un déclencheur</strong>, deux fois :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Nom</th>
+<th>Sévérité</th>
+<th>Expression</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Intranet : le parcours utilisateur échoue (étape {ITEM.LASTVALUE1})</code></td>
+<td>Haut</td>
+<td><code>last(/srv-lnx-01/web.test.fail[Intranet])&lt;&gt;0</code></td>
+</tr>
+<tr class="even">
+<td><code>Intranet : temps de réponse supérieur à 1 s</code></td>
+<td>Avertissement</td>
+<td><code>avg(/srv-lnx-01/web.test.time[Intranet,Accueil,resp],5m)&gt;1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Le premier n’a pas besoin d’expression de récupération : un parcours réussi suffit à rétablir. Dans l’onglet <strong>Tags</strong> des deux déclencheurs, ajoutez <code>service</code> = <code>intranet</code>.</p>
+<h3 id="b.3-vérifier">B.3, Vérifier</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop mariadb</span></code></pre></div></div>
+<p>Le scénario échoue à l’étape 2 (la page s’affiche, mais <code>BASE-OK</code> est absent). Lisez l’élément <em>Last error message of scenario “Intranet”</em>. Puis <code>sudo systemctl start mariadb</code>.</p>
+<h2 id="partie-c.-adapter-les-seuils-30-min">Partie C. Adapter les seuils (30 min)</h2>
+<h3 id="c.1-un-seuil-propre-à-lhôte-par-macro">C.1, Un seuil propre à l’hôte, par macro</h3>
+<p>srv-lnx-01 a un petit disque (10 Go) : on veut être prévenu plus tôt. Hôte <code>srv-lnx-01</code> → onglet <strong>Macros</strong> → <strong>Macros héritées et de l’hôte</strong> : repérez <code>{$VFS.FS.PUSED.MAX.WARN}</code> (80, venue du modèle). Redéfinissez sur l’hôte <code>{$VFS.FS.PUSED.MAX.WARN}</code> = <code>70</code> et <code>{$VFS.FS.PUSED.MAX.CRIT}</code> = <code>85</code> → <strong>Actualiser</strong>.</p>
+<p>Provoquez le remplissage du disque, en calculant la taille pour atteindre environ 75 % :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> /</span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="va">TAILLE</span><span class="op">=</span><span class="va">$(</span><span class="fu">df</span> <span class="at">--output</span><span class="op">=</span>size,used <span class="at">-B1</span> / <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'NR==2 {printf "%d", $1*0.75 - $2}'</span><span class="va">)</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Fichier de </span><span class="va">$((TAILLE</span> <span class="op">/</span> <span class="dv">1024</span> <span class="op">/</span> <span class="dv">1024</span><span class="va">))</span><span class="st"> Mo"</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="fu">sudo</span> fallocate <span class="at">-l</span> <span class="st">"</span><span class="va">$TAILLE</span><span class="st">"</span> /var/tmp/test-remplissage</span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> /</span></code></pre></div></div>
+<p>En une à deux minutes, <em>Linux: FS [/]: Space is low</em> apparaît (Avertissement). Supprimez le fichier (<code>sudo rm /var/tmp/test-remplissage</code>) et vérifiez la résolution.</p>
+<h3 id="c.2-un-déclencheur-avec-hystérésis">C.2, Un déclencheur avec hystérésis</h3>
+<p>Sur srv-lnx-01, créez le déclencheur :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nom</td>
+<td><code>Charge élevée et durable sur {HOST.NAME}</code></td>
+</tr>
+<tr class="even">
+<td>Sévérité</td>
+<td>Moyen</td>
+</tr>
+<tr class="odd">
+<td>Expression</td>
+<td><code>min(/srv-lnx-01/system.cpu.load[all,avg1],3m)&gt;1.5</code></td>
+</tr>
+<tr class="even">
+<td>Génération d’événement OK</td>
+<td>Expression de récupération</td>
+</tr>
+<tr class="odd">
+<td>Expression de récupération</td>
+<td><code>max(/srv-lnx-01/system.cpu.load[all,avg1],3m)&lt;0.8</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Testez avec deux calculs inutiles qui occupent le processeur (srv-lnx-01 n’a qu’un cœur), puis arrêtez-les après l’apparition du problème :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">sudo</span> systemd-run <span class="at">--unit</span><span class="op">=</span>test-charge-1 sha256sum /dev/zero</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">sudo</span> systemd-run <span class="at">--unit</span><span class="op">=</span>test-charge-2 sha256sum /dev/zero</span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="fu">uptime</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop test-charge-1 test-charge-2</span></code></pre></div></div>
+<p>Relevez l’heure d’apparition et de résolution du problème, et la charge à ces deux moments. Pourquoi la résolution n’est-elle pas immédiate ?</p>
+<h2 id="partie-d.-une-alerte-par-cause-30-min">Partie D. Une alerte par cause (30 min)</h2>
+<h3 id="d.1-la-dépendance">D.1, La dépendance</h3>
+<p>Ouvrez le déclencheur <code>Intranet : le parcours utilisateur échoue…</code> → onglet <strong>Dépendances</strong> → <strong>Ajouter</strong> → hôte <code>srv-lnx-01</code> → <em>MySQL: Service is down</em>, puis ajoutez aussi <em>Nginx: Process is not running</em> et <em>PHP-FPM: Service is down</em> → <strong>Actualiser</strong>.</p>
+<p>Arrêtez MariaDB : seul <em>MySQL: Service is down</em> doit notifier ; le problème de l’intranet n’apparaît pas tant que MariaDB est arrêtée. Redémarrez-la.</p>
+<h3 id="d.2-le-tri-des-alertes-du-modèle">D.2, Le tri des alertes du modèle</h3>
+<p>Ouvrez <strong>Surveillance → Problèmes</strong>, cochez <em>Afficher : Historique</em> sur les dernières 24 heures. Pour chaque problème qui ne correspondait à aucune vraie panne (par exemple <em>Number of installed packages has been changed</em>), décidez : seuil à changer, sévérité, désactivation sur l’hôte, ou rien. Notez vos décisions et leur justification dans le journal de bord.</p>
+<p>Pour désactiver un déclencheur venu d’un modèle sur un seul hôte : hôte → <strong>Déclencheurs</strong> → cliquez sur <em>Activé</em> dans sa ligne (il devient <em>Désactivé</em>). Le modèle n’est pas modifié.</p>
+<h2 id="partie-e.-une-maintenance-sans-fausse-alerte-20-min">Partie E. Une maintenance sans fausse alerte (20 min)</h2>
+<p>Vous devez redémarrer srv-lnx-01 pour appliquer des mises à jour. <strong>Collecte de données → Maintenance</strong> → <strong>Créer une période de maintenance</strong> :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nom</td>
+<td><code>Mises à jour srv-lnx-01</code></td>
+</tr>
+<tr class="even">
+<td>Type de maintenance</td>
+<td>Avec collecte de données</td>
+</tr>
+<tr class="odd">
+<td>Actif depuis, actif jusqu’à</td>
+<td>maintenant, dans 2 heures</td>
+</tr>
+<tr class="even">
+<td>Périodes</td>
+<td>Ajouter : <em>Une fois uniquement</em>, date et heure de début : dans 2 minutes, durée : 30 minutes</td>
+</tr>
+<tr class="odd">
+<td>Hôtes</td>
+<td><code>srv-lnx-01</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Une fois la période commencée (icône de clé dans <strong>Surveillance → Hôtes</strong>), redémarrez la VM : <code>sudo reboot</code>. Les problèmes apparaissent marqués comme supprimés, et aucun courriel ne part. Vérifiez-le dans <strong>Rapports → Journal des actions</strong>.</p>
+<h2 id="partie-f.-srv-lnx-01-vu-en-snmp-facultatif-20-min">Partie F. srv-lnx-01 vu en SNMP (facultatif, 20 min)</h2>
+<p>On crée un <strong>second hôte</strong> pour la même machine, interrogé en SNMPv3 (avec l’utilisateur du TP 2) : il ne peut pas recevoir le modèle SNMP sur le même hôte que le modèle d’agent, leurs éléments portant les mêmes clés.</p>
+<p><strong>Créer un hôte</strong> : nom <code>srv-lnx-01-snmp</code>, nom visible <code>SRV-LNX-01 (SNMP)</code>, modèle <code>Linux by SNMP</code>, groupe <code>Hexalog/SNMP</code>, interface <strong>SNMP</strong> :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Champ</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Adresse IP, port</td>
+<td><code>10.20.N.20</code>, <code>161</code></td>
+</tr>
+<tr class="even">
+<td>Version SNMP</td>
+<td>SNMPv3</td>
+</tr>
+<tr class="odd">
+<td>Nom de sécurité</td>
+<td><code>supervision</code></td>
+</tr>
+<tr class="even">
+<td>Niveau de sécurité</td>
+<td>authPriv</td>
+</tr>
+<tr class="odd">
+<td>Protocole d’authentification, phrase secrète</td>
+<td>SHA256, <code>Snmp-Auth-Hexalog</code></td>
+</tr>
+<tr class="even">
+<td>Protocole de confidentialité, phrase secrète</td>
+<td>AES128, <code>Snmp-Chiff-Hexalog</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Après quelques minutes, comparez dans <strong>Dernières données</strong> la charge et l’espace de <code>/</code> vus par l’agent et par SNMP. Pastille <strong>SNMP</strong> verte dans <strong>Surveillance → Hôtes</strong>.</p>
+<h2 id="partie-g.-le-tableau-de-bord-de-lastreinte-30-min">Partie G. Le tableau de bord de l’astreinte (30 min)</h2>
+<p><strong>Tableaux de bord</strong> → <strong>Créer un tableau de bord</strong> : nom <code>Hexalog - astreinte</code>. Ajoutez les widgets suivants (<strong>Ajouter un widget</strong>), puis <strong>Sauvegarder les modifications</strong> :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Widget</th>
+<th>Réglages</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Problèmes par sévérité</td>
+<td>groupes d’hôtes <code>Hexalog</code></td>
+</tr>
+<tr class="even">
+<td>Problèmes</td>
+<td>groupes <code>Hexalog</code>, sévérités Avertissement à Désastre, afficher les problèmes supprimés : non</td>
+</tr>
+<tr class="odd">
+<td>Disponibilité de l’hôte</td>
+<td>groupes <code>Hexalog</code>, interface Agent</td>
+</tr>
+<tr class="even">
+<td>Graph (classique)</td>
+<td>source : élément simple ; srv-lnx-01, <em>Response time for step “Accueil” of scenario “Intranet”</em></td>
+</tr>
+<tr class="odd">
+<td>Valeur de l’élément</td>
+<td>srv-lnx-01, <em>Failed step of scenario “Intranet”</em> (0 = tout va bien)</td>
+</tr>
+<tr class="even">
+<td>Top des hôtes</td>
+<td>groupes <code>Hexalog</code>, colonne utilisation du processeur</td>
+</tr>
+</tbody>
+</table></div>
+<p>Testez le tableau en arrêtant PHP-FPM sur srv-lnx-01 (<code>sudo systemctl stop php8.4-fpm</code>) : en combien de temps le voyez-vous ? Redémarrez-le.</p>
+<p>Snapshots <code>05-zabbix-alertes</code> de sup-lnx-01 et srv-lnx-01.</p>
+<h2 id="partie-h.-services-et-sla-facultatif-25-min">Partie H. Services et SLA (facultatif, 25 min)</h2>
+<ol type="1">
+<li><strong>Services → Services</strong> → <strong>Créer un service</strong> : nom <code>Intranet</code>, <em>Règle de statut</em> par défaut, <strong>Tags de problème</strong> : <code>service</code> égal <code>intranet</code>. Les deux déclencheurs du scénario web (tag <code>service:intranet</code>) déterminent maintenant l’état du service.</li>
+<li><strong>Services → SLA</strong> → créer <code>Intranet heures ouvrées</code> : SLO <code>99.5</code>, période mensuelle, plage du lundi au vendredi de 7 h à 19 h, services avec le tag <code>service:intranet</code> (ajoutez ce tag au service).</li>
+<li>Provoquez une panne de quelques minutes, puis consultez <strong>Services → Rapport SLA</strong> : disponibilité calculée et budget d’erreur restant.</li>
+</ol>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Un courriel PROBLÈME puis RÉSOLU reçu par <code>sysadmin</code> pour une panne de nginx ; visible dans le journal des actions.</label></li>
+<li><label><input type="checkbox"/>Scénario web <em>Intranet</em> à deux étapes, avec ses deux déclencheurs ; l’arrêt de MariaDB fait échouer l’étape 2.</label></li>
+<li><label><input type="checkbox"/>Macros de seuil redéfinies sur srv-lnx-01 ; remplissage du disque détecté puis résolu.</label></li>
+<li><label><input type="checkbox"/>Déclencheur de charge avec expression de récupération, testé.</label></li>
+<li><label><input type="checkbox"/>Dépendances : l’arrêt de MariaDB ne produit qu’une notification.</label></li>
+<li><label><input type="checkbox"/>Période de maintenance : redémarrage sans notification.</label></li>
+<li><label><input type="checkbox"/>Tableau de bord <em>Hexalog - astreinte</em>.</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Pourquoi a-t-on mis le seuil de l’espace disque dans une macro de l’hôte plutôt que de modifier le modèle <em>Linux by Zabbix agent</em> ?</li>
+<li>Quand MariaDB est arrêtée, que voit-on dans les dernières données du scénario web ? Pourquoi nginx répond-il quand même <code>200</code> à l’étape 1 ?</li>
+<li>Pendant la partie C.2, combien de temps s’est écoulé entre le début de la charge et le problème ? Entre l’arrêt de la charge et la résolution ? Expliquez avec les expressions.</li>
+<li>Une panne de MariaDB la nuit : qui est prévenu, par quel moyen ? Que faudrait-il ajouter pour qu’un responsable soit prévenu si personne ne réagit en 30 minutes ?</li>
+<li>Comparez avec Nagios la même panne (nginx arrêté) : délai de détection, nombre d’alertes, contenu du message.</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Le test du type de média échoue (<em>Connection refused</em>)</td>
+<td>Postfix absent ou arrêté sur sup-lnx-01 : <code>systemctl status postfix</code></td>
+</tr>
+<tr class="even">
+<td>Pas de courriel lors d’un problème</td>
+<td>action désactivée ; média de l’utilisateur absent, ou sévérité non cochée ; <strong>Rapports → Journal des actions</strong> donne la raison</td>
+</tr>
+<tr class="odd">
+<td>Le scénario web échoue à l’étape 1 avec <code>Couldn't connect</code></td>
+<td>URL avec <code>N</code> non remplacé, ou nginx arrêté</td>
+</tr>
+<tr class="even">
+<td><em>Required pattern not found</em> alors que la page s’affiche</td>
+<td>chaîne requise différente de la page (majuscules, accents)</td>
+</tr>
+<tr class="odd">
+<td>Expression de déclencheur refusée (<em>incorrect item key</em>)</td>
+<td>clé recopiée avec une faute ; la choisir avec le bouton <strong>Ajouter</strong> du constructeur d’expression</td>
+</tr>
+<tr class="even">
+<td>Pas d’élément <code>vfs.fs.dependent.size[/,pused]</code></td>
+<td>la découverte des systèmes de fichiers n’a pas encore tourné : <strong>Exécuter maintenant</strong> sur la règle de découverte</td>
+</tr>
+<tr class="odd">
+<td>Le problème de l’intranet apparaît malgré la dépendance</td>
+<td>le déclencheur dont il dépend n’était pas encore en problème (MariaDB arrêtée depuis moins d’une minute) : les dépendances jouent sur l’état au moment de l’évaluation</td>
+</tr>
+<tr class="even">
+<td>Hôte SNMP : <em>Timeout while connecting</em></td>
+<td>snmpd arrêté, ou paramètres v3 différents de ceux du TP 2 (SHA-256 côté snmpd = SHA256 dans Zabbix ; AES = AES128)</td>
+</tr>
+<tr class="odd">
+<td>Des problèmes restent affichés pendant la maintenance</td>
+<td>normal : ils sont <strong>supprimés</strong> (icône), sans notification ; filtre <em>Afficher les problèmes supprimés</em></td>
+</tr>
+</tbody>
+</table></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="dir">‹ Page précédente</span><span class="titre">Séance 5 : Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="next" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="dir">Page suivante ›</span><span class="titre">Séance 6 : PRTG et le choix d&#x27;un outil</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>
