@@ -2,7 +2,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Séance 2 : Collecter les mesures : ICMP, SNMP, agents | BLOC 2 Supervision et maintenance</title>
-<meta name="description" content="Avant de parler d'outils, il faut comprendre comment un serveur de supervision obtient ses informations : en testant de l'extérieur, en interrogeant un agent, en recevant des messages. Cette séance pr">
+<meta name="description" content="Comment un serveur de supervision obtient-il ses informations ? En testant de l'extérieur, en interrogeant un agent, en recevant des messages. Les modes de collecte, le contrat des plugins, SNMP, les ">
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body class="kind-cours">
@@ -27,18 +27,17 @@
 <header class="hero">
   <span class="surtitre">Cours de la séance 2</span>
   <h1>Collecter les mesures : ICMP, SNMP, agents</h1>
-  <p class="lead">Avant de parler d'outils, il faut comprendre comment un serveur de supervision obtient ses informations : en testant de l'extérieur, en interrogeant un agent, en recevant des messages. Cette séance présente les méthodes de collecte, le contrat des plugins de supervision, le protocole SNMP et les agents, ainsi que les flux réseau et les précautions de sécurité qui vont avec.</p>
-  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séance 1 (lab construit)</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp02-collecte.html" data-seance="2">TP 2 : Plugins de supervision et SNMP</a></td></tr></tbody></table>
+  <p class="lead">Comment un serveur de supervision obtient-il ses informations ? En testant de l'extérieur, en interrogeant un agent, en recevant des messages. Les modes de collecte, le contrat des plugins, SNMP, les agents, et les flux réseau à autoriser et à protéger.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séance 1 (lab installé)</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp02-collecte.html" data-seance="2">TP 2 : Plugins de supervision et SNMP</a></td></tr></tbody></table>
 </header>
-<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#modes">1. Comment le serveur de supervision obtient-il l’information ?</a></li><li><a href="#tests">2. Tester de l’extérieur</a></li><li><a href="#plugins">3. Les plugins de supervision</a></li><li><a href="#snmp">4. SNMP</a></li><li><a href="#agents">5. Les agents</a></li><li><a href="#windows">6. Windows : WMI et compteurs de performance</a></li><li><a href="#flux">7. Les flux de supervision</a></li><li><a href="#securite">8. Sécuriser la collecte</a></li><li><a href="#à-retenir">9. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#modes">1. Comment le serveur obtient-il l’information ?</a></li><li><a href="#tests">2. Tester de l’extérieur</a></li><li><a href="#plugins">3. Les plugins de supervision</a></li><li><a href="#snmp">4. SNMP</a></li><li><a href="#agents">5. Les agents</a></li><li><a href="#windows">6. Windows : WMI et compteurs</a></li><li><a href="#flux">7. Les flux de supervision</a></li><li><a href="#securite">8. Sécuriser la collecte</a></li><li><a href="#à-retenir">9. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
 <article class="content">
 <div class="callout info avis-exemples"><div class="callout-body"><p class="callout-titre"><strong>Les commandes de ce cours sont des exemples</strong></p><p>Les blocs marqués <span class="code-exemple">Exemple</span> montrent des commandes et des fichiers pour expliquer comment les choses fonctionnent. Lisez-les, mais ne les tapez pas pendant le cours. Vous ferez les manipulations pendant le <a data-seance="2" href="../tp/tp02-collecte.html">TP 2</a>, dans l'ordre et sur les machines indiquées : certaines n'ont de sens qu'après les étapes précédentes.</p></div></div><h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
 <ul>
-<li>Distinguer les modes de collecte : actif ou passif, interrogation ou envoi, avec ou sans agent.</li>
+<li>Distinguer interrogation et envoi, avec ou sans agent.</li>
 <li>Lire et écrire un résultat de plugin : code retour, message, données de performance, seuils.</li>
-<li>Expliquer SNMP : agent, manager, MIB, OID, opérations, différences entre v2c et v3.</li>
-<li>Choisir entre agent, SNMP et WMI selon le système supervisé.</li>
-<li>Établir la matrice des flux de supervision et sécuriser la collecte.</li>
+<li>Expliquer SNMP : agent, OID, MIB, v2c et v3.</li>
+<li>Choisir entre agent, SNMP et WMI ; établir la matrice des flux.</li>
 </ul>
 <div class="table-wrap"><table>
 
@@ -50,107 +49,80 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td>45 min</td>
+<td>30 min</td>
 <td>Cours</td>
 </tr>
 <tr class="even">
-<td>3 h</td>
+<td>3 h 30</td>
 <td><a data-seance="2" href="../tp/tp02-collecte.html">TP 2 : Plugins de supervision et SNMP</a></td>
 </tr>
 <tr class="odd">
-<td>15 min</td>
-<td>Quiz</td>
+<td>Chez vous</td>
+<td>Quiz (10 min)</td>
 </tr>
 </tbody>
 </table></div>
-<h2 id="modes">1. Comment le serveur de supervision obtient-il l’information ?</h2>
-<p>Trois questions permettent de décrire n’importe quelle méthode de collecte :</p>
-<ul>
-<li><strong>Qui prend l’initiative ?</strong> Le serveur de supervision va chercher l’information (<strong>interrogation</strong>, <em>pull</em>), ou la machine supervisée l’envoie d’elle-même (<strong>envoi</strong>, <em>push</em>).</li>
-<li><strong>Faut-il installer quelque chose ?</strong> Un <strong>agent</strong> (programme dédié installé sur la machine supervisée) ou <strong>rien de plus</strong> que les services déjà présents (supervision <strong>sans agent</strong>).</li>
-<li><strong>Que voit-on ?</strong> L’extérieur, comme un utilisateur (<strong>boîte noire</strong>), ou l’intérieur de la machine (<strong>boîte blanche</strong>).</li>
-</ul>
+<h2 id="modes">1. Comment le serveur obtient-il l’information ?</h2>
+<p>Trois questions décrivent n’importe quelle méthode : <strong>qui ouvre la connexion</strong> (le serveur interroge, <em>pull</em>, ou la machine envoie, <em>push</em>) ? Faut-il un <strong>agent</strong> ? Voit-on l’extérieur (<strong>boîte noire</strong>) ou l’intérieur (<strong>boîte blanche</strong>) ?</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-370911" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 817.234375px;" viewBox="0 0 817.234375 724" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-370911{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-370911 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-370911 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-370911 .error-icon{fill:#f5f6f8;}#mmd0-370911 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-370911 .edge-thickness-normal{stroke-width:1px;}#mmd0-370911 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-370911 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-370911 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-370911 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-370911 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-370911 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-370911 .marker.cross{stroke:#4a5563;}#mmd0-370911 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-370911 p{margin:0;}#mmd0-370911 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-370911 .cluster-label text{fill:#1f3a5f;}#mmd0-370911 .cluster-label span{color:#1f3a5f;}#mmd0-370911 .cluster-label span p{background-color:transparent;}#mmd0-370911 .label text,#mmd0-370911 span{fill:#1d2530;color:#1d2530;}#mmd0-370911 .node rect,#mmd0-370911 .node circle,#mmd0-370911 .node ellipse,#mmd0-370911 .node polygon,#mmd0-370911 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-370911 .rough-node .label text,#mmd0-370911 .node .label text,#mmd0-370911 .image-shape .label,#mmd0-370911 .icon-shape .label{text-anchor:middle;}#mmd0-370911 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-370911 .rough-node .label,#mmd0-370911 .node .label,#mmd0-370911 .image-shape .label,#mmd0-370911 .icon-shape .label{text-align:center;}#mmd0-370911 .node.clickable{cursor:pointer;}#mmd0-370911 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-370911 .arrowheadPath{fill:#000000;}#mmd0-370911 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-370911 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-370911 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-370911 .edgeLabel p{background-color:#ffffff;}#mmd0-370911 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-370911 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-370911 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-370911 .cluster text{fill:#1f3a5f;}#mmd0-370911 .cluster span{color:#1f3a5f;}#mmd0-370911 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-370911 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-370911 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-370911 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-370911 rect.text{fill:none;stroke-width:0;}#mmd0-370911 .icon-shape,#mmd0-370911 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-370911 .icon-shape p,#mmd0-370911 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-370911 .icon-shape .label rect,#mmd0-370911 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-370911 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-370911 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-370911 .node .neo-node{stroke:#1f3a5f;}#mmd0-370911 [data-look="neo"].node rect,#mmd0-370911 [data-look="neo"].cluster rect,#mmd0-370911 [data-look="neo"].node polygon{stroke:url(#mmd0-370911-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-370911 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-370911 [data-look="neo"].node path{stroke:url(#mmd0-370911-gradient);stroke-width:1px;}#mmd0-370911 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-370911 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-370911 [data-look="neo"].node circle{stroke:url(#mmd0-370911-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-370911 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-370911 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-370911-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-370911 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-370911-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-370911 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-370911_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-370911_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-370911_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-370911_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-370911_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-370911_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-370911_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-370911_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-370911_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-370911_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-370911_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-370911_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-370911-CIBLE" data-look="classic"><rect style="" x="324.734375" y="8" width="186.953125" height="458"></rect><g class="cluster-label " transform="translate(387.4765625, 8)"><foreignObject width="61.46875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>srv-lnx-01</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-370911-SUP" data-look="classic"><rect style="" x="8" y="486" width="801.234375" height="230"></rect><g class="cluster-label " transform="translate(333.9140625, 486)"><foreignObject width="149.40625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>sup-lnx-01 (supervision)</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M132.594,544.502L228.664,531L324.734,531L412.479,95.921" id="mmd0-370911-L_N_W_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_N_W_0" data-points="W3sieCI6MTMyLjU5Mzc1LCJ5Ijo1NDQuNTAxNjA2NzY5ODU3fSx7IngiOjIyOC42NjQwNjI1LCJ5Ijo1MzF9LHsieCI6MzI0LjczNDM3NSwieSI6NTMxfSx7IngiOjQxMy4yNjk4ODk0MjgyNjMyNCwieSI6OTJ9XQ==" data-look="classic" marker-end="url(#mmd0-370911_flowchart-v2-pointEnd)"></path><path d="M132.594,561.4L228.664,580.5L324.734,580.5L409.2,215.897" id="mmd0-370911-L_N_S_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_N_S_0" data-points="W3sieCI6MTMyLjU5Mzc1LCJ5Ijo1NjEuNDAwMTY2MDMyODg1Mn0seyJ4IjoyMjguNjY0MDYyNSwieSI6NTgwLjV9LHsieCI6MzI0LjczNDM3NSwieSI6NTgwLjV9LHsieCI6NDEwLjEwMjY4NTQ4NjM2OTMsInkiOjIxMn1d" data-look="classic" marker-end="url(#mmd0-370911_flowchart-v2-pointEnd)"></path><path d="M131.813,640.755L228.664,621.5L324.734,621.5L407.021,335.844" id="mmd0-370911-L_Z_A_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_Z_A_0" data-points="W3sieCI6MTMxLjgxMjUsInkiOjY0MC43NTUxNTUwNTMyOTEyfSx7IngiOjIyOC42NjQwNjI1LCJ5Ijo2MjEuNX0seyJ4IjozMjQuNzM0Mzc1LCJ5Ijo2MjEuNX0seyJ4Ijo0MDguMTI4NzE5NjY0ODY5MDQsInkiOjMzMn1d" data-look="classic" marker-end="url(#mmd0-370911_flowchart-v2-pointEnd)"></path><path d="M409.463,332L324.734,671L228.664,671L135.774,657.945" id="mmd0-370911-L_A_Z_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A_Z_0" data-points="W3sieCI6NDA5LjQ2MzEzMDg0ODkzMDQ2LCJ5IjozMzJ9LHsieCI6MzI0LjczNDM3NSwieSI6NjcxfSx7IngiOjIyOC42NjQwNjI1LCJ5Ijo2NzF9LHsieCI6MTMxLjgxMjUsInkiOjY1Ny4zODg1OTcyODk5MTQ5fV0=" data-look="classic" marker-end="url(#mmd0-370911_flowchart-v2-pointEnd)"></path><path d="M473.063,406.5L511.688,406.5L597.781,601L679.875,601" id="mmd0-370911-L_J_R_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_J_R_0" data-points="W3sieCI6NDczLjA2MjUsInkiOjQwNi41fSx7IngiOjUxMS42ODc1LCJ5Ijo0MDYuNX0seyJ4Ijo1OTcuNzgxMjUsInkiOjYwMX0seyJ4Ijo2ODMuODc1LCJ5Ijo2MDF9XQ==" data-look="classic" marker-end="url(#mmd0-370911_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(228.6640625, 531)"><g class="label" data-id="L_N_W_0" transform="translate(-71.0703125, -10.5)"><foreignObject width="142.140625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>test HTTP (boîte noire)</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(228.6640625, 580.5)"><g class="label" data-id="L_N_S_0" transform="translate(-45.9140625, -10.5)"><foreignObject width="91.828125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>requête SNMP</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(228.6640625, 621.5)"><g class="label" data-id="L_Z_A_0" transform="translate(-45.140625, -10.5)"><foreignObject width="90.28125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>contrôle passif</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(228.6640625, 671)"><g class="label" data-id="L_A_Z_0" transform="translate(-70.046875, -10.5)"><foreignObject width="140.09375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>contrôle actif → 10051</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(597.78125, 601)"><g class="label" data-id="L_J_R_0" transform="translate(-61.09375, -10.5)"><foreignObject width="122.1875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>envoi syslog → 514</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-370911-flowchart-N-0" data-look="classic" transform="translate(82.796875, 551.5)"><rect class="basic label-container" style="" x="-49.796875" y="-24.5" width="99.59375" height="49"></rect><g class="label" style="" transform="translate(-21.796875, -10.5)"><rect></rect><foreignObject width="43.59375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Nagios</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-370911-flowchart-Z-1" data-look="classic" transform="translate(82.796875, 650.5)"><rect class="basic label-container" style="" x="-49.015625" y="-24.5" width="98.03125" height="49"></rect><g class="label" style="" transform="translate(-21.015625, -10.5)"><rect></rect><foreignObject width="42.03125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Zabbix</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-370911-flowchart-R-2" data-look="classic" transform="translate(734.0546875, 601)"><rect class="basic label-container" style="" x="-50.1796875" y="-24.5" width="100.359375" height="49"></rect><g class="label" style="" transform="translate(-22.1796875, -10.5)"><rect></rect><foreignObject width="44.359375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>rsyslog</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-370911-flowchart-W-3" data-look="classic" transform="translate(418.2109375, 67.5)"><rect class="basic label-container" style="" x="-56.4140625" y="-24.5" width="112.828125" height="49"></rect><g class="label" style="" transform="translate(-28.4140625, -10.5)"><rect></rect><foreignObject width="56.828125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>nginx :80</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-370911-flowchart-S-4" data-look="classic" transform="translate(418.2109375, 177)"><rect class="basic label-container" style="" x="-56.28125" y="-35" width="112.5625" height="70"></rect><g class="label" style="" transform="translate(-28.28125, -21)"><rect></rect><foreignObject width="56.5625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>snmpd<br>UDP 161</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-370911-flowchart-A-5" data-look="classic" transform="translate(418.2109375, 297)"><rect class="basic label-container" style="" x="-68.4765625" y="-35" width="136.953125" height="70"></rect><g class="label" style="" transform="translate(-40.4765625, -21)"><rect></rect><foreignObject width="80.953125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>agent Zabbix<br>10050</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-370911-flowchart-J-6" data-look="classic" transform="translate(418.2109375, 406.5)"><rect class="basic label-container" style="" x="-54.8515625" y="-24.5" width="109.703125" height="49"></rect><g class="label" style="" transform="translate(-26.8515625, -10.5)"><rect></rect><foreignObject width="53.703125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>journaux</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-370911-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-370911-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-370911-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
 <div class="table-wrap"><table>
 
 <thead>
 <tr class="header">
 <th>Méthode</th>
-<th>Initiative</th>
+<th>Qui ouvre</th>
 <th>Agent</th>
-<th>Vue</th>
 <th>Exemple dans le bloc</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Ping, test d’un port TCP</td>
+<td>Ping, port TCP, test HTTP/DNS</td>
 <td>serveur</td>
 <td>non</td>
-<td>boîte noire</td>
-<td>srv-win-01 répond-il ? le port 389 est-il ouvert ?</td>
-</tr>
-<tr class="even">
-<td>Test applicatif (HTTP, DNS, LDAP)</td>
-<td>serveur</td>
-<td>non</td>
-<td>boîte noire</td>
 <td>la page <code>sante.php</code> contient-elle <code>BASE-OK</code> ?</td>
 </tr>
-<tr class="odd">
-<td>SNMP : requêtes</td>
+<tr class="even">
+<td>SNMP (requêtes)</td>
 <td>serveur</td>
-<td>le service SNMP de la machine</td>
-<td>boîte blanche</td>
+<td>service SNMP</td>
 <td>charge et disques de srv-lnx-01</td>
 </tr>
-<tr class="even">
-<td>SNMP : <em>traps</em></td>
+<tr class="odd">
+<td>SNMP (<em>traps</em>)</td>
 <td>machine</td>
-<td>le service SNMP</td>
-<td>événement</td>
+<td>service SNMP</td>
 <td>un commutateur signale un port tombé</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>NRPE, NCPA</td>
 <td>serveur</td>
 <td>oui</td>
-<td>boîte blanche</td>
-<td>Nagios demande à srv-lnx-01 l’espace disque</td>
-</tr>
-<tr class="even">
-<td>Agent Zabbix, contrôles <strong>passifs</strong></td>
-<td>serveur</td>
-<td>oui</td>
-<td>boîte blanche</td>
-<td>le serveur Zabbix interroge l’agent sur le port 10050</td>
+<td>Nagios demande l’espace disque</td>
 </tr>
 <tr class="odd">
-<td>Agent Zabbix, contrôles <strong>actifs</strong></td>
-<td>agent</td>
+<td>Agent Zabbix passif / actif</td>
+<td>serveur / agent</td>
 <td>oui</td>
-<td>boîte blanche</td>
-<td>l’agent envoie ses mesures au port 10051 du serveur</td>
+<td>port 10050 / port 10051</td>
 </tr>
 <tr class="even">
-<td>WMI (Windows)</td>
+<td>WMI</td>
 <td>serveur</td>
-<td>non (service intégré à Windows)</td>
-<td>boîte blanche</td>
-<td>PRTG lit le processeur et les services de srv-win-01</td>
+<td>non (intégré à Windows)</td>
+<td>PRTG lit les services de srv-win-01</td>
 </tr>
 <tr class="odd">
 <td>Syslog</td>
 <td>machine</td>
-<td>le service de journalisation</td>
-<td>journaux</td>
-<td>srv-lnx-01 envoie ses journaux à sup-lnx-01</td>
+<td>service de journalisation</td>
+<td>srv-lnx-01 envoie ses journaux</td>
 </tr>
 </tbody>
 </table></div>
 <div class="callout warn"><div class="callout-body"><p class="callout-titre"><strong>Actif et passif : attention au vocabulaire</strong></p>
-<p>Les mots changent de sens selon l’outil. Dans <strong>Nagios</strong>, un contrôle <em>actif</em> est lancé par Nagios ; un contrôle <em>passif</em> est un résultat qu’on lui envoie. Dans <strong>Zabbix</strong>, un agent <em>passif</em> attend qu’on l’interroge ; un agent <em>actif</em> envoie lui-même ses mesures au serveur. Dans les deux cas, demandez-vous simplement : <strong>qui ouvre la connexion ?</strong> C’est aussi ce qui détermine les règles de pare-feu.</p>
+<p>Dans <strong>Nagios</strong>, un contrôle <em>actif</em> est lancé par Nagios ; dans <strong>Zabbix</strong>, un agent <em>actif</em> envoie lui-même ses mesures. Posez-vous toujours la même question : <strong>qui ouvre la connexion ?</strong> C’est elle qui fixe les règles de pare-feu.</p>
 </div></div>
-<h3 id="avec-ou-sans-agent">Avec ou sans agent ?</h3>
 <div class="table-wrap"><table>
 
 <thead>
@@ -162,29 +134,28 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td>Ce qu’on peut mesurer</td>
-<td>tout ce que la machine voit : processus, fichiers, journaux, services</td>
-<td>ce que le réseau et les protocoles standard exposent</td>
+<td>Ce qu’on voit</td>
+<td>tout : processus, fichiers, journaux</td>
+<td>ce que les protocoles standard exposent</td>
 </tr>
 <tr class="even">
 <td>Installation</td>
-<td>un logiciel à déployer, configurer, mettre à jour sur chaque machine</td>
-<td>rien (ou un service intégré à activer : SNMP, WMI)</td>
+<td>un logiciel à déployer et maintenir partout</td>
+<td>rien, ou un service à activer (SNMP, WMI)</td>
 </tr>
 <tr class="odd">
 <td>Sécurité</td>
-<td>un service de plus qui écoute, parfois avec des droits élevés</td>
-<td>identifiants à confier au serveur de supervision (communauté SNMP, compte WMI)</td>
+<td>un service de plus qui écoute</td>
+<td>des identifiants confiés au serveur</td>
 </tr>
 <tr class="even">
-<td>Équipements fermés (commutateurs, onduleurs, imprimantes)</td>
+<td>Équipement fermé (commutateur, onduleur)</td>
 <td>impossible</td>
-<td>SNMP est souvent le seul moyen</td>
+<td>SNMP, souvent le seul moyen</td>
 </tr>
 </tbody>
 </table></div>
 <h2 id="tests">2. Tester de l’extérieur</h2>
-<p>Chaque test prouve quelque chose de précis, et rien de plus :</p>
 <div class="table-wrap"><table>
 
 <thead>
@@ -196,30 +167,29 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Ping</strong> (ICMP)</td>
-<td>la machine est allumée et sa pile réseau répond</td>
-<td>les services fonctionnent ; un ping refusé ne prouve pas non plus que la machine est éteinte (pare-feu)</td>
+<td><strong>Ping</strong></td>
+<td>la pile réseau répond</td>
+<td>les services marchent ; un ping refusé ne prouve pas que la machine est éteinte (pare-feu)</td>
 </tr>
 <tr class="even">
 <td><strong>Port TCP</strong></td>
-<td>un programme écoute sur ce port et accepte la connexion</td>
-<td>ce programme répond correctement</td>
+<td>un programme écoute et accepte</td>
+<td>il répond correctement</td>
 </tr>
 <tr class="odd">
 <td><strong>Test applicatif</strong></td>
-<td>le service répond <strong>comme attendu</strong> : code HTTP, contenu, temps de réponse, réponse DNS correcte</td>
-<td>toutes les fonctions de l’application sont disponibles</td>
+<td>le service répond <strong>comme attendu</strong> (code, contenu, délai)</td>
+<td>toute l’application fonctionne</td>
 </tr>
 </tbody>
 </table></div>
-<p>On les <strong>enchaîne</strong> pour localiser une panne : ping OK, port 80 OK, mais page en erreur 500 → le réseau et nginx vont bien, le problème est dans l’application ou sa base.</p>
+<p>On les <strong>enchaîne</strong> pour localiser : ping OK, port 80 OK, page en erreur 500 → le problème est dans l’application ou sa base.</p>
 <h2 id="plugins">3. Les plugins de supervision</h2>
-<p>Nagios a imposé une convention très simple, reprise par Icinga, Centreon, Checkmk, Naemon et utilisable par Zabbix : un <strong>plugin</strong> est un programme qui fait un test, puis <strong>affiche une ligne de texte</strong> et <strong>se termine avec un code retour</strong>.</p>
+<p>Convention de Nagios, reprise par Icinga, Centreon, Checkmk et utilisable par Zabbix : un <strong>plugin</strong> fait un test, <strong>affiche une ligne</strong> et <strong>sort avec un code retour</strong>.</p>
 <div class="table-wrap"><table>
-
 <thead>
 <tr class="header">
-<th>Code retour</th>
+<th>Code</th>
 <th>État</th>
 <th>Sens</th>
 </tr>
@@ -232,29 +202,29 @@
 </tr>
 <tr class="even">
 <td>1</td>
-<td>WARNING (avertissement)</td>
+<td>WARNING</td>
 <td>seuil d’avertissement franchi</td>
 </tr>
 <tr class="odd">
 <td>2</td>
-<td>CRITICAL (critique)</td>
-<td>seuil critique franchi ou service en panne</td>
+<td>CRITICAL</td>
+<td>seuil critique franchi, ou service en panne</td>
 </tr>
 <tr class="even">
 <td>3</td>
-<td>UNKNOWN (inconnu)</td>
-<td>le test n’a pas pu être réalisé (mauvais argument, délai dépassé, plugin absent)</td>
+<td>UNKNOWN</td>
+<td>test impossible (argument, délai, plugin absent)</td>
 </tr>
 </tbody>
 </table></div>
-<p>Le projet <strong>Monitoring Plugins</strong> fournit une cinquantaine de plugins standard (<code>check_ping</code>, <code>check_tcp</code>, <code>check_http</code>, <code>check_disk</code>, <code>check_load</code>, <code>check_snmp</code>…) ; sous Debian, ils sont dans <code>/usr/lib/nagios/plugins</code>.</p>
+<p>Les <strong>Monitoring Plugins</strong> (<code>check_ping</code>, <code>check_tcp</code>, <code>check_http</code>, <code>check_disk</code>, <code>check_snmp</code>…) sont dans <code>/usr/lib/nagios/plugins</code> sous Debian.</p>
 <div class="code-block exemple"><div class="code-header"><span class="code-exemple">Exemple</span><span class="code-machine">Machine : exemple de résultat</span><span class="code-note">à lire, pas à taper</span></div><pre class="text"><code>$ /usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /
 DISK OK - free space: / 6532 MiB (68% inode=89%);| /=3061MiB;7880;8865;0;9850
 $ echo $?
 0</code></pre></div>
-<p>Après la barre verticale viennent les <strong>données de performance</strong> (<em>perfdata</em>), que l’outil enregistre pour faire des graphiques : <code>étiquette=valeur[unité];avertissement;critique;minimum;maximum</code>.</p>
+<p>Après la barre <code>|</code> : les <strong>données de performance</strong>, que l’outil enregistre pour les graphiques (<code>étiquette=valeur;avertissement;critique;min;max</code>).</p>
 <h3 id="la-notation-des-seuils">La notation des seuils</h3>
-<p>Les options <code>-w</code> (avertissement) et <code>-c</code> (critique) acceptent des <strong>plages</strong>. L’alerte se déclenche quand la valeur sort de la plage :</p>
+<p>L’alerte se déclenche quand la valeur <strong>sort</strong> de la plage :</p>
 <div class="table-wrap"><table>
 <thead>
 <tr class="header">
@@ -266,64 +236,42 @@ $ echo $?
 <tbody>
 <tr class="odd">
 <td><code>10</code></td>
-<td>supérieure à 10 (ou négative)</td>
+<td>supérieure à 10</td>
 <td>charge : <code>-w 4 -c 8</code></td>
 </tr>
 <tr class="even">
 <td><code>10:</code></td>
 <td>inférieure à 10</td>
-<td>processus nginx : <code>-c 1:</code> (au moins un)</td>
+<td>au moins un processus nginx : <code>-c 1:</code></td>
 </tr>
 <tr class="odd">
-<td><code>~:10</code></td>
-<td>supérieure à 10</td>
-<td>identique à <code>10</code>, sans borne basse</td>
-</tr>
-<tr class="even">
 <td><code>10:20</code></td>
-<td>hors de l’intervalle 10–20</td>
+<td>hors de 10–20</td>
 <td>température</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>@10:20</code></td>
-<td><strong>dans</strong> l’intervalle 10–20</td>
+<td><strong>dans</strong> 10–20</td>
 <td>plage interdite</td>
 </tr>
 </tbody>
 </table></div>
-<p>Pour les disques, <code>check_disk</code> accepte aussi des pourcentages d’espace <strong>libre</strong> : <code>-w 20% -c 10%</code> signifie « avertissement sous 20 % libres, critique sous 10 % ».</p>
-<p>Écrire son propre plugin est facile : un script qui teste quelque chose, affiche une ligne et sort avec le bon code. C’est ce qui rend ces outils extensibles à presque tout.</p>
+<p>Pour <code>check_disk</code>, <code>-w 20% -c 10%</code> signifie « moins de 20 % / 10 % <strong>libres</strong> ». Écrire son propre plugin est simple : un script qui teste, affiche une ligne et sort avec le bon code (TP, partie B).</p>
 <h2 id="snmp">4. SNMP</h2>
-<h3 id="les-acteurs">Les acteurs</h3>
-<p><strong>SNMP</strong> (<em>Simple Network Management Protocol</em>) est le protocole standard de supervision des équipements réseau, depuis 1988. Il met en relation :</p>
-<ul>
-<li>un <strong>gestionnaire</strong> (<em>manager</em>) : le serveur de supervision, qui interroge ;</li>
-<li>un <strong>agent</strong> : le service SNMP de l’équipement supervisé (<code>snmpd</code> sous Linux), qui répond sur le port <strong>UDP 161</strong> ;</li>
-<li>des <strong>traps</strong> : messages envoyés spontanément par l’agent au gestionnaire, sur le port <strong>UDP 162</strong>.</li>
-</ul>
+<p><strong>SNMP</strong> est le protocole standard de supervision des équipements réseau. Le <strong>gestionnaire</strong> (le serveur de supervision) interroge l’<strong>agent</strong> (<code>snmpd</code>) sur <strong>UDP 161</strong> ; l’agent peut aussi envoyer des <strong>traps</strong> sur <strong>UDP 162</strong>.</p>
 <h3 id="mib-et-oid">MIB et OID</h3>
-<p>Chaque information est désignée par un <strong>OID</strong> (<em>Object Identifier</em>), une suite de nombres qui forme un chemin dans un arbre mondial. Une <strong>MIB</strong> (<em>Management Information Base</em>) est un fichier texte qui décrit une branche de cet arbre : noms, types, unités, signification.</p>
-<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-415599" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1540.703125px;" viewBox="0 0 1540.703125 326" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-415599{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-415599 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-415599 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-415599 .error-icon{fill:#f5f6f8;}#mmd0-415599 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-415599 .edge-thickness-normal{stroke-width:1px;}#mmd0-415599 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-415599 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-415599 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-415599 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-415599 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-415599 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-415599 .marker.cross{stroke:#4a5563;}#mmd0-415599 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-415599 p{margin:0;}#mmd0-415599 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-415599 .cluster-label text{fill:#1f3a5f;}#mmd0-415599 .cluster-label span{color:#1f3a5f;}#mmd0-415599 .cluster-label span p{background-color:transparent;}#mmd0-415599 .label text,#mmd0-415599 span{fill:#1d2530;color:#1d2530;}#mmd0-415599 .node rect,#mmd0-415599 .node circle,#mmd0-415599 .node ellipse,#mmd0-415599 .node polygon,#mmd0-415599 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-415599 .rough-node .label text,#mmd0-415599 .node .label text,#mmd0-415599 .image-shape .label,#mmd0-415599 .icon-shape .label{text-anchor:middle;}#mmd0-415599 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-415599 .rough-node .label,#mmd0-415599 .node .label,#mmd0-415599 .image-shape .label,#mmd0-415599 .icon-shape .label{text-align:center;}#mmd0-415599 .node.clickable{cursor:pointer;}#mmd0-415599 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-415599 .arrowheadPath{fill:#000000;}#mmd0-415599 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-415599 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-415599 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-415599 .edgeLabel p{background-color:#ffffff;}#mmd0-415599 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-415599 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-415599 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-415599 .cluster text{fill:#1f3a5f;}#mmd0-415599 .cluster span{color:#1f3a5f;}#mmd0-415599 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-415599 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-415599 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-415599 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-415599 rect.text{fill:none;stroke-width:0;}#mmd0-415599 .icon-shape,#mmd0-415599 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-415599 .icon-shape p,#mmd0-415599 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-415599 .icon-shape .label rect,#mmd0-415599 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-415599 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-415599 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-415599 .node .neo-node{stroke:#1f3a5f;}#mmd0-415599 [data-look="neo"].node rect,#mmd0-415599 [data-look="neo"].cluster rect,#mmd0-415599 [data-look="neo"].node polygon{stroke:url(#mmd0-415599-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-415599 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-415599 [data-look="neo"].node path{stroke:url(#mmd0-415599-gradient);stroke-width:1px;}#mmd0-415599 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-415599 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-415599 [data-look="neo"].node circle{stroke:url(#mmd0-415599-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-415599 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-415599 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-415599-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-415599 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-415599-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-415599 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-415599_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-415599_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-415599_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-415599_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-415599_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-415599_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-415599_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-415599_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-415599_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-415599_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-415599_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-415599_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M742.422,60.926L442,103L442,124" id="mmd0-415599-L_R_MG_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_R_MG_0" data-points="W3sieCI6NzQyLjQyMTg3NSwieSI6NjAuOTI2MjU1NTE2MjQ3ODU2fSx7IngiOjQ0MiwieSI6MTAzfSx7IngiOjQ0MiwieSI6MTI4fV0=" data-look="classic" marker-end="url(#mmd0-415599_flowchart-v2-pointEnd)"></path><path d="M998.422,60.926L1298.844,103L1298.844,124" id="mmd0-415599-L_R_PR_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_R_PR_0" data-points="W3sieCI6OTk4LjQyMTg3NSwieSI6NjAuOTI2MjU1NTE2MjQ3ODU2fSx7IngiOjEyOTguODQzNzUsInkiOjEwM30seyJ4IjoxMjk4Ljg0Mzc1LCJ5IjoxMjh9XQ==" data-look="classic" marker-end="url(#mmd0-415599_flowchart-v2-pointEnd)"></path><path d="M352.156,167.034L136,202L136,223" id="mmd0-415599-L_MG_SY_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_MG_SY_0" data-points="W3sieCI6MzUyLjE1NjI1LCJ5IjoxNjcuMDMzNTQ3Nzk0MTE3NjV9LHsieCI6MTM2LCJ5IjoyMDJ9LHsieCI6MTM2LCJ5IjoyMjd9XQ==" data-look="classic" marker-end="url(#mmd0-415599_flowchart-v2-pointEnd)"></path><path d="M442,177L442,202L442,223" id="mmd0-415599-L_MG_IF_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_MG_IF_0" data-points="W3sieCI6NDQyLCJ5IjoxNzd9LHsieCI6NDQyLCJ5IjoyMDJ9LHsieCI6NDQyLCJ5IjoyMjd9XQ==" data-look="classic" marker-end="url(#mmd0-415599_flowchart-v2-pointEnd)"></path><path d="M531.844,167.145L745.664,202L745.664,233.5" id="mmd0-415599-L_MG_HR_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_MG_HR_0" data-points="W3sieCI6NTMxLjg0Mzc1LCJ5IjoxNjcuMTQ1MzQ3MTkxODQ5NTR9LHsieCI6NzQ1LjY2NDA2MjUsInkiOjIwMn0seyJ4Ijo3NDUuNjY0MDYyNSwieSI6MjM3LjV9XQ==" data-look="classic" marker-end="url(#mmd0-415599_flowchart-v2-pointEnd)"></path><path d="M1188.367,174.335L1048.391,202L1048.391,233.5" id="mmd0-415599-L_PR_UC_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PR_UC_0" data-points="W3sieCI6MTE4OC4zNjcxODc1LCJ5IjoxNzQuMzM0NzgzODI5MzA5Mzd9LHsieCI6MTA0OC4zOTA2MjUsInkiOjIwMn0seyJ4IjoxMDQ4LjM5MDYyNSwieSI6MjM3LjV9XQ==" data-look="classic" marker-end="url(#mmd0-415599_flowchart-v2-pointEnd)"></path><path d="M1298.844,177L1298.844,202L1298.844,244" id="mmd0-415599-L_PR_MS_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PR_MS_0" data-points="W3sieCI6MTI5OC44NDM3NSwieSI6MTc3fSx7IngiOjEyOTguODQzNzUsInkiOjIwMn0seyJ4IjoxMjk4Ljg0Mzc1LCJ5IjoyNDh9XQ==" data-look="classic" marker-end="url(#mmd0-415599_flowchart-v2-pointEnd)"></path><path d="M1387.254,177L1477.469,202L1477.469,244" id="mmd0-415599-L_PR_CI_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PR_CI_0" data-points="W3sieCI6MTM4Ny4yNTQxMDM1MzUzNTM2LCJ5IjoxNzd9LHsieCI6MTQ3Ny40Njg3NSwieSI6MjAyfSx7IngiOjE0NzcuNDY4NzUsInkiOjI0OH1d" data-look="classic" marker-end="url(#mmd0-415599_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_R_MG_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_R_PR_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_MG_SY_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_MG_IF_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_MG_HR_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_PR_UC_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_PR_MS_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_PR_CI_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-415599-flowchart-R-0" data-look="classic" transform="translate(870.421875, 43)"><rect class="basic label-container" style="" x="-128" y="-35" width="256" height="70"></rect><g class="label" style="" transform="translate(-100, -21)"><rect></rect><foreignObject width="200" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>iso (1) . org (3) . dod (6) . internet (1)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-415599-flowchart-MG-1" data-look="classic" transform="translate(442, 152.5)"><rect class="basic label-container" style="" x="-89.84375" y="-24.5" width="179.6875" height="49"></rect><g class="label" style="" transform="translate(-61.84375, -10.5)"><rect></rect><foreignObject width="123.6875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>mgmt (2) . mib-2 (1)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-415599-flowchart-PR-3" data-look="classic" transform="translate(1298.84375, 152.5)"><rect class="basic label-container" style="" x="-110.4765625" y="-24.5" width="220.953125" height="49"></rect><g class="label" style="" transform="translate(-82.4765625, -10.5)"><rect></rect><foreignObject width="164.953125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>private (4) . enterprises (1)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-415599-flowchart-SY-5" data-look="classic" transform="translate(136, 272.5)"><rect class="basic label-container" style="" x="-128" y="-45.5" width="256" height="91"></rect><g class="label" style="" transform="translate(-100, -31.5)"><rect></rect><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>system (1)<br>sysDescr .1, sysUpTime .3, sysName .5</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-415599-flowchart-IF-7" data-look="classic" transform="translate(442, 272.5)"><rect class="basic label-container" style="" x="-128" y="-45.5" width="256" height="91"></rect><g class="label" style="" transform="translate(-100, -31.5)"><rect></rect><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>interfaces (2)<br>ifDescr, ifOperStatus, compteurs</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-415599-flowchart-HR-9" data-look="classic" transform="translate(745.6640625, 272.5)"><rect class="basic label-container" style="" x="-125.6640625" y="-35" width="251.328125" height="70"></rect><g class="label" style="" transform="translate(-97.6640625, -21)"><rect></rect><foreignObject width="195.328125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>host (25)<br>hrStorage : disques et mémoire</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-415599-flowchart-UC-11" data-look="classic" transform="translate(1048.390625, 272.5)"><rect class="basic label-container" style="" x="-127.0625" y="-35" width="254.125" height="70"></rect><g class="label" style="" transform="translate(-99.0625, -21)"><rect></rect><foreignObject width="198.125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>2021 : UCD-SNMP (Net-SNMP)<br>laLoad : charge</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-415599-flowchart-MS-13" data-look="classic" transform="translate(1298.84375, 272.5)"><rect class="basic label-container" style="" x="-73.390625" y="-24.5" width="146.78125" height="49"></rect><g class="label" style="" transform="translate(-45.390625, -10.5)"><rect></rect><foreignObject width="90.78125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>311 : Microsoft</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-415599-flowchart-CI-15" data-look="classic" transform="translate(1477.46875, 272.5)"><rect class="basic label-container" style="" x="-55.234375" y="-24.5" width="110.46875" height="49"></rect><g class="label" style="" transform="translate(-27.234375, -10.5)"><rect></rect><foreignObject width="54.46875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>9 : Cisco</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-415599-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-415599-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-415599-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<p>Chaque information a un <strong>OID</strong>, un chemin de nombres dans un arbre mondial. Une <strong>MIB</strong> est un fichier qui décrit une branche : noms, types, unités.</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd1-815480" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1400.109375px;" viewBox="0 0 1400.109375 326" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd1-815480{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd1-815480 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd1-815480 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd1-815480 .error-icon{fill:#f5f6f8;}#mmd1-815480 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd1-815480 .edge-thickness-normal{stroke-width:1px;}#mmd1-815480 .edge-thickness-thick{stroke-width:3.5px;}#mmd1-815480 .edge-pattern-solid{stroke-dasharray:0;}#mmd1-815480 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd1-815480 .edge-pattern-dashed{stroke-dasharray:3;}#mmd1-815480 .edge-pattern-dotted{stroke-dasharray:2;}#mmd1-815480 .marker{fill:#4a5563;stroke:#4a5563;}#mmd1-815480 .marker.cross{stroke:#4a5563;}#mmd1-815480 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd1-815480 p{margin:0;}#mmd1-815480 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd1-815480 .cluster-label text{fill:#1f3a5f;}#mmd1-815480 .cluster-label span{color:#1f3a5f;}#mmd1-815480 .cluster-label span p{background-color:transparent;}#mmd1-815480 .label text,#mmd1-815480 span{fill:#1d2530;color:#1d2530;}#mmd1-815480 .node rect,#mmd1-815480 .node circle,#mmd1-815480 .node ellipse,#mmd1-815480 .node polygon,#mmd1-815480 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd1-815480 .rough-node .label text,#mmd1-815480 .node .label text,#mmd1-815480 .image-shape .label,#mmd1-815480 .icon-shape .label{text-anchor:middle;}#mmd1-815480 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd1-815480 .rough-node .label,#mmd1-815480 .node .label,#mmd1-815480 .image-shape .label,#mmd1-815480 .icon-shape .label{text-align:center;}#mmd1-815480 .node.clickable{cursor:pointer;}#mmd1-815480 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd1-815480 .arrowheadPath{fill:#000000;}#mmd1-815480 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd1-815480 .flowchart-link{stroke:#4a5563;fill:none;}#mmd1-815480 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd1-815480 .edgeLabel p{background-color:#ffffff;}#mmd1-815480 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd1-815480 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd1-815480 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd1-815480 .cluster text{fill:#1f3a5f;}#mmd1-815480 .cluster span{color:#1f3a5f;}#mmd1-815480 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd1-815480 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd1-815480 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd1-815480 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd1-815480 rect.text{fill:none;stroke-width:0;}#mmd1-815480 .icon-shape,#mmd1-815480 .image-shape{background-color:#ffffff;text-align:center;}#mmd1-815480 .icon-shape p,#mmd1-815480 .image-shape p{background-color:#ffffff;padding:2px;}#mmd1-815480 .icon-shape .label rect,#mmd1-815480 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd1-815480 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd1-815480 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd1-815480 .node .neo-node{stroke:#1f3a5f;}#mmd1-815480 [data-look="neo"].node rect,#mmd1-815480 [data-look="neo"].cluster rect,#mmd1-815480 [data-look="neo"].node polygon{stroke:url(#mmd1-815480-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-815480 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd1-815480 [data-look="neo"].node path{stroke:url(#mmd1-815480-gradient);stroke-width:1px;}#mmd1-815480 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-815480 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd1-815480 [data-look="neo"].node circle{stroke:url(#mmd1-815480-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-815480 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd1-815480 [data-look="neo"].icon-shape .icon{fill:url(#mmd1-815480-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-815480 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd1-815480-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd1-815480 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd1-815480_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-815480_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-815480_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-815480_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd1-815480_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-815480_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-815480_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-815480_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd1-815480_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-815480_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd1-815480_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd1-815480_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M659.863,63.735L417.477,103L417.477,124" id="mmd1-815480-L_R_MG_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_R_MG_0" data-points="W3sieCI6NjU5Ljg2MzI4MTI1LCJ5Ijo2My43MzUwODQ3NDA0MDAxMjZ9LHsieCI6NDE3LjQ3NjU2MjUsInkiOjEwM30seyJ4Ijo0MTcuNDc2NTYyNSwieSI6MTI4fV0=" data-look="classic" marker-end="url(#mmd1-815480_flowchart-v2-pointEnd)"></path><path d="M915.863,63.735L1158.25,103L1158.25,124" id="mmd1-815480-L_R_PR_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_R_PR_0" data-points="W3sieCI6OTE1Ljg2MzI4MTI1LCJ5Ijo2My43MzUwODQ3NDA0MDAxMjZ9LHsieCI6MTE1OC4yNSwieSI6MTAzfSx7IngiOjExNTguMjUsInkiOjEyOH1d" data-look="classic" marker-end="url(#mmd1-815480_flowchart-v2-pointEnd)"></path><path d="M327.633,168.3L136,202L136,223" id="mmd1-815480-L_MG_SY_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_MG_SY_0" data-points="W3sieCI6MzI3LjYzMjgxMjUsInkiOjE2OC4yOTk3NzI0MDU1NjIxOH0seyJ4IjoxMzYsInkiOjIwMn0seyJ4IjoxMzYsInkiOjIyN31d" data-look="classic" marker-end="url(#mmd1-815480_flowchart-v2-pointEnd)"></path><path d="M417.477,177L417.477,202L417.477,233.5" id="mmd1-815480-L_MG_IF_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_MG_IF_0" data-points="W3sieCI6NDE3LjQ3NjU2MjUsInkiOjE3N30seyJ4Ijo0MTcuNDc2NTYyNSwieSI6MjAyfSx7IngiOjQxNy40NzY1NjI1LCJ5IjoyMzcuNX1d" data-look="classic" marker-end="url(#mmd1-815480_flowchart-v2-pointEnd)"></path><path d="M507.32,168.773L690.773,202L690.773,233.5" id="mmd1-815480-L_MG_HR_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_MG_HR_0" data-points="W3sieCI6NTA3LjMyMDMxMjUsInkiOjE2OC43NzI2NTQ1MDgwMzI3fSx7IngiOjY5MC43NzM0Mzc1LCJ5IjoyMDJ9LHsieCI6NjkwLjc3MzQzNzUsInkiOjIzNy41fV0=" data-look="classic" marker-end="url(#mmd1-815480_flowchart-v2-pointEnd)"></path><path d="M1054.052,177L947.727,202L947.727,233.5" id="mmd1-815480-L_PR_UC_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PR_UC_0" data-points="W3sieCI6MTA1NC4wNTE1MzA5MzQzNDM0LCJ5IjoxNzd9LHsieCI6OTQ3LjcyNjU2MjUsInkiOjIwMn0seyJ4Ijo5NDcuNzI2NTYyNSwieSI6MjM3LjV9XQ==" data-look="classic" marker-end="url(#mmd1-815480_flowchart-v2-pointEnd)"></path><path d="M1158.25,177L1158.25,202L1158.25,244" id="mmd1-815480-L_PR_MS_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PR_MS_0" data-points="W3sieCI6MTE1OC4yNSwieSI6MTc3fSx7IngiOjExNTguMjUsInkiOjIwMn0seyJ4IjoxMTU4LjI1LCJ5IjoyNDh9XQ==" data-look="classic" marker-end="url(#mmd1-815480_flowchart-v2-pointEnd)"></path><path d="M1246.66,177L1336.875,202L1336.875,244" id="mmd1-815480-L_PR_CI_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PR_CI_0" data-points="W3sieCI6MTI0Ni42NjAzNTM1MzUzNTM2LCJ5IjoxNzd9LHsieCI6MTMzNi44NzUsInkiOjIwMn0seyJ4IjoxMzM2Ljg3NSwieSI6MjQ4fV0=" data-look="classic" marker-end="url(#mmd1-815480_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_R_MG_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_R_PR_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_MG_SY_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_MG_IF_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_MG_HR_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_PR_UC_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_PR_MS_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_PR_CI_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd1-815480-flowchart-R-0" data-look="classic" transform="translate(787.86328125, 43)"><rect class="basic label-container" style="" x="-128" y="-35" width="256" height="70"></rect><g class="label" style="" transform="translate(-100, -21)"><rect></rect><foreignObject width="200" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>iso (1) . org (3) . dod (6) . internet (1)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-815480-flowchart-MG-1" data-look="classic" transform="translate(417.4765625, 152.5)"><rect class="basic label-container" style="" x="-89.84375" y="-24.5" width="179.6875" height="49"></rect><g class="label" style="" transform="translate(-61.84375, -10.5)"><rect></rect><foreignObject width="123.6875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>mgmt (2) . mib-2 (1)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-815480-flowchart-PR-3" data-look="classic" transform="translate(1158.25, 152.5)"><rect class="basic label-container" style="" x="-110.4765625" y="-24.5" width="220.953125" height="49"></rect><g class="label" style="" transform="translate(-82.4765625, -10.5)"><rect></rect><foreignObject width="164.953125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>private (4) . enterprises (1)</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-815480-flowchart-SY-5" data-look="classic" transform="translate(136, 272.5)"><rect class="basic label-container" style="" x="-128" y="-45.5" width="256" height="91"></rect><g class="label" style="" transform="translate(-100, -31.5)"><rect></rect><foreignObject width="200" height="63"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>system (1)<br>sysDescr .1, sysUpTime .3, sysName .5</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-815480-flowchart-IF-7" data-look="classic" transform="translate(417.4765625, 272.5)"><rect class="basic label-container" style="" x="-103.4765625" y="-35" width="206.953125" height="70"></rect><g class="label" style="" transform="translate(-75.4765625, -21)"><rect></rect><foreignObject width="150.953125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>interfaces (2)<br>ifOperStatus, compteurs</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-815480-flowchart-HR-9" data-look="classic" transform="translate(690.7734375, 272.5)"><rect class="basic label-container" style="" x="-119.8203125" y="-35" width="239.640625" height="70"></rect><g class="label" style="" transform="translate(-91.8203125, -21)"><rect></rect><foreignObject width="183.640625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>host (25)<br>hrStorage : disques, mémoire</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-815480-flowchart-UC-11" data-look="classic" transform="translate(947.7265625, 272.5)"><rect class="basic label-container" style="" x="-87.1328125" y="-35" width="174.265625" height="70"></rect><g class="label" style="" transform="translate(-59.1328125, -21)"><rect></rect><foreignObject width="118.265625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>2021 : UCD-SNMP<br>laLoad : charge</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-815480-flowchart-MS-13" data-look="classic" transform="translate(1158.25, 272.5)"><rect class="basic label-container" style="" x="-73.390625" y="-24.5" width="146.78125" height="49"></rect><g class="label" style="" transform="translate(-45.390625, -10.5)"><rect></rect><foreignObject width="90.78125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>311 : Microsoft</p></span></div></foreignObject></g></g><g class="node default  " id="mmd1-815480-flowchart-CI-15" data-look="classic" transform="translate(1336.875, 272.5)"><rect class="basic label-container" style="" x="-55.234375" y="-24.5" width="110.46875" height="49"></rect><g class="label" style="" transform="translate(-27.234375, -10.5)"><rect></rect><foreignObject width="54.46875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>9 : Cisco</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd1-815480-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd1-815480-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd1-815480-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
 <div class="table-wrap"><table>
 
 <thead>
 <tr class="header">
 <th>Objet</th>
 <th>OID</th>
-<th>Nom dans la MIB</th>
+<th>Nom</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>description du système</td>
-<td><code>.1.3.6.1.2.1.1.1.0</code></td>
-<td><code>SNMPv2-MIB::sysDescr.0</code></td>
-</tr>
-<tr class="even">
-<td>temps depuis le démarrage</td>
-<td><code>.1.3.6.1.2.1.1.3.0</code></td>
-<td><code>DISMAN-EVENT-MIB::sysUpTimeInstance</code></td>
-</tr>
 <tr class="odd">
 <td>nom de la machine</td>
 <td><code>.1.3.6.1.2.1.1.5.0</code></td>
@@ -335,56 +283,24 @@ $ echo $?
 <td><code>IF-MIB::ifOperStatus</code></td>
 </tr>
 <tr class="odd">
-<td>octets reçus (compteur 64 bits)</td>
+<td>octets reçus (64 bits)</td>
 <td><code>.1.3.6.1.2.1.31.1.1.1.6</code></td>
 <td><code>IF-MIB::ifHCInOctets</code></td>
 </tr>
 <tr class="even">
-<td>espaces de stockage : nom, taille, utilisé</td>
+<td>stockages : nom, taille, utilisé</td>
 <td><code>.1.3.6.1.2.1.25.2.3.1.3</code>, <code>.5</code>, <code>.6</code></td>
-<td><code>HOST-RESOURCES-MIB::hrStorageDescr</code>, <code>hrStorageSize</code>, <code>hrStorageUsed</code></td>
+<td><code>HOST-RESOURCES-MIB::hrStorage…</code></td>
 </tr>
 <tr class="odd">
-<td>charge sur 1, 5, 15 minutes</td>
+<td>charge 1, 5, 15 min</td>
 <td><code>.1.3.6.1.4.1.2021.10.1.3</code></td>
 <td><code>UCD-SNMP-MIB::laLoad</code></td>
 </tr>
 </tbody>
 </table></div>
-<p>Le <code>.0</code> final désigne une valeur unique (scalaire) ; dans une <strong>table</strong>, le dernier nombre est l’index de la ligne (<code>hrStorageDescr.31</code> = le 31ᵉ espace de stockage). Debian n’installe pas les MIB standard (pour des raisons de licence) : sans elles, les outils affichent les OID en chiffres. Le paquet <code>snmp-mibs-downloader</code> (dépôt <em>non-free</em>) les télécharge.</p>
-<h3 id="les-opérations">Les opérations</h3>
-<div class="table-wrap"><table>
-
-<thead>
-<tr class="header">
-<th>Opération</th>
-<th>Sens</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>GET</code></td>
-<td>lire un OID précis</td>
-</tr>
-<tr class="even">
-<td><code>GETNEXT</code>, <code>GETBULK</code></td>
-<td>lire l’OID suivant, ou un lot d’OID suivants (v2c et v3)</td>
-</tr>
-<tr class="odd">
-<td><em>walk</em></td>
-<td>parcourir une branche entière par une suite de <code>GETNEXT</code> ou <code>GETBULK</code> (commande <code>snmpwalk</code>)</td>
-</tr>
-<tr class="even">
-<td><code>SET</code></td>
-<td>modifier une valeur (rarement autorisé)</td>
-</tr>
-<tr class="odd">
-<td><code>TRAP</code>, <code>INFORM</code></td>
-<td>message spontané de l’agent ; l’<code>INFORM</code> attend un accusé de réception</td>
-</tr>
-</tbody>
-</table></div>
-<p>Beaucoup de valeurs sont des <strong>compteurs</strong> qui ne font qu’augmenter (octets reçus par une interface) : l’outil calcule le débit en faisant la différence entre deux lectures, divisée par le temps écoulé. Les compteurs 32 bits débordent vite sur un lien rapide ; on lit les compteurs 64 bits (<code>ifHCInOctets</code>).</p>
+<p>Le <code>.0</code> final désigne une valeur unique ; dans une <strong>table</strong>, le dernier nombre est l’index de la ligne. Debian n’installe pas les MIB standard (licence) : sans elles, on voit des OID en chiffres.</p>
+<p><strong>Opérations</strong> : <code>GET</code> (un OID), <em>walk</em> (une branche, commande <code>snmpwalk</code>), <code>SET</code> (rarement autorisé), <code>TRAP</code>. Beaucoup de valeurs sont des <strong>compteurs</strong> : le débit se calcule par différence entre deux lectures.</p>
 <h3 id="les-versions">Les versions</h3>
 <div class="table-wrap"><table>
 
@@ -393,33 +309,24 @@ $ echo $?
 <th>Version</th>
 <th>Authentification</th>
 <th>Chiffrement</th>
-<th>Remarques</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>v1 (1988)</td>
+<td>v1, <strong>v2c</strong></td>
 <td>« communauté », en clair</td>
 <td>aucun</td>
-<td>obsolète</td>
 </tr>
 <tr class="even">
-<td><strong>v2c</strong></td>
-<td>« communauté », en clair</td>
-<td>aucun</td>
-<td><code>GETBULK</code>, compteurs 64 bits ; toujours très répandue</td>
-</tr>
-<tr class="odd">
 <td><strong>v3</strong></td>
-<td>utilisateur et mot de passe, condensé HMAC (SHA-2)</td>
-<td>AES</td>
-<td>trois niveaux : <code>noAuthNoPriv</code>, <code>authNoPriv</code>, <strong><code>authPriv</code></strong> (authentifié et chiffré)</td>
+<td>utilisateur, mot de passe (SHA-2)</td>
+<td>AES, au niveau <strong><code>authPriv</code></strong></td>
 </tr>
 </tbody>
 </table></div>
-<p>La <strong>communauté</strong> de v1 et v2c n’est qu’un mot de passe qui circule en clair : quiconque écoute le réseau la lit. La valeur par défaut <code>public</code> est connue de tous. Avec v2c, on se limite donc à la <strong>lecture seule</strong>, depuis la <strong>seule adresse</strong> du serveur de supervision, avec une communauté non triviale. Dès que possible, on utilise <strong>v3 en <code>authPriv</code></strong>.</p>
+<p>La communauté n’est qu’un mot de passe qui circule en clair, et <code>public</code> est connue de tous. En v2c : <strong>lecture seule</strong>, depuis la <strong>seule adresse</strong> du serveur, communauté non triviale. Dès que possible : <strong>v3 <code>authPriv</code></strong>.</p>
 <div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Et Windows ?</strong></p>
-<p>Microsoft a déclaré le service SNMP de Windows <strong>obsolète</strong> depuis Windows Server 2012 : il existe encore comme fonctionnalité facultative, mais n’évolue plus. Pour Windows, on utilise un <strong>agent</strong> (Zabbix, NCPA) ou <strong>WMI</strong>. SNMP reste incontournable pour le matériel réseau, les onduleurs, les imprimantes, les NAS et les hyperviseurs.</p>
+<p>Le service SNMP de Windows est <strong>obsolète</strong> depuis Windows Server 2012. Pour Windows : un <strong>agent</strong> ou <strong>WMI</strong>. SNMP reste incontournable pour le matériel réseau, les onduleurs, les imprimantes, les NAS.</p>
 </div></div>
 <h2 id="agents">5. Les agents</h2>
 <div class="table-wrap"><table>
@@ -429,53 +336,40 @@ $ echo $?
 <th>Agent</th>
 <th>Outil</th>
 <th>Port, sens</th>
-<th>Principe</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><strong>NRPE</strong></td>
 <td>Nagios</td>
-<td>serveur → agent, 5666/tcp (TLS)</td>
-<td>le serveur demande l’exécution d’une commande <strong>prédéfinie</strong> sur l’agent, qui renvoie le résultat du plugin</td>
+<td>serveur → agent, 5666/tcp ; exécute des commandes <strong>prédéfinies</strong></td>
 </tr>
 <tr class="even">
 <td><strong>NCPA</strong></td>
-<td>Nagios (multiplateforme)</td>
-<td>serveur → agent, 5693/tcp (HTTPS)</td>
-<td>une API qui expose processeur, mémoire, disques, services, processus ; protégée par un jeton</td>
+<td>Nagios</td>
+<td>serveur → agent, 5693/tcp (HTTPS, jeton)</td>
 </tr>
 <tr class="odd">
 <td><strong>Zabbix agent 2</strong></td>
 <td>Zabbix</td>
-<td>passif : serveur → agent 10050/tcp ; actif : agent → serveur 10051/tcp</td>
-<td>collecte de centaines d’indicateurs prédéfinis (clés), extensions (MySQL, Docker…)</td>
+<td>passif 10050/tcp ; actif → serveur 10051/tcp</td>
 </tr>
 <tr class="even">
-<td><strong>Sonde distante</strong></td>
+<td>Sonde distante</td>
 <td>PRTG</td>
-<td>sonde → serveur central 23560/tcp</td>
-<td>une sonde installée dans un site distant interroge les machines locales et remonte les résultats</td>
+<td>sonde → serveur 23560/tcp</td>
 </tr>
 <tr class="odd">
 <td><em>Exporter</em></td>
 <td>Prometheus</td>
-<td>serveur → exporter, HTTP (9100 pour <code>node_exporter</code>)</td>
-<td>une page web de métriques lue régulièrement par le serveur</td>
+<td>serveur → exporter, HTTP (9100)</td>
 </tr>
 </tbody>
 </table></div>
-<h2 id="windows">6. Windows : WMI et compteurs de performance</h2>
-<p><strong>WMI</strong> (<em>Windows Management Instrumentation</em>, implémentation de la norme CIM) donne accès à presque tout l’état d’une machine Windows sous forme de <strong>classes</strong> : <code>Win32_OperatingSystem</code> (mémoire, démarrage), <code>Win32_LogicalDisk</code> (disques), <code>Win32_Service</code> (services), <code>Win32_PerfFormattedData_*</code> (compteurs de performance). On l’interroge à distance par <strong>DCOM/RPC</strong> (port 135, puis un port dynamique) ou par <strong>WinRM</strong> (5985 en HTTP, 5986 en HTTPS).</p>
-<p>Les <strong>compteurs de performance</strong> (Analyseur de performances, <code>perfmon</code>) mesurent processeur, mémoire, disques, réseau et chaque rôle (DNS, AD). Le <strong>journal des événements</strong> complète le tableau : un service qui s’arrête, une ouverture de session refusée (4625), un verrouillage de compte (4740), vus au BLOC 1.</p>
-<p>L’accès WMI à distance demande un compte <strong>administrateur</strong> de la machine (ou des droits finement délégués, difficiles à régler) : c’est l’un des points faibles de la supervision sans agent sous Windows.</p>
+<h2 id="windows">6. Windows : WMI et compteurs</h2>
+<p><strong>WMI</strong> expose l’état de Windows sous forme de <strong>classes</strong> (<code>Win32_LogicalDisk</code>, <code>Win32_Service</code>, compteurs de performance), interrogées à distance par DCOM/RPC (135 puis un port dynamique) ou WinRM (5985/5986). Il faut un compte <strong>administrateur</strong> de la machine : c’est le point faible du sans-agent sous Windows. Le <strong>journal des événements</strong> complète (4625 : ouverture de session refusée ; 4740 : compte verrouillé).</p>
 <h2 id="flux">7. Les flux de supervision</h2>
-<p>La supervision crée des flux réseau qu’il faut autoriser, et <strong>seulement</strong> ceux-là. On les décrit dans une <strong>matrice des flux</strong> (source, destination, port, protocole, sens, justification), comme celle de la page <a href="../lab.html#les-flux-de-supervision">du lab</a>.</p>
-<p>Deux principes :</p>
-<ul>
-<li>le serveur de supervision est une machine <strong>sensible</strong> : il joint toutes les autres, détient des identifiants (communautés, comptes WMI, jetons) et donne une carte complète du système d’information. Il doit être aussi protégé qu’un contrôleur de domaine ;</li>
-<li>dans les infrastructures importantes, les flux d’administration et de supervision passent par un <strong>réseau d’administration</strong> séparé du réseau des utilisateurs.</li>
-</ul>
+<p>La supervision crée des flux qu’il faut autoriser, et <strong>seulement</strong> ceux-là : on les écrit dans une <strong>matrice des flux</strong> (source, destination, port, sens, justification), comme celle de la page <a href="../lab.html#les-flux-de-supervision">du lab</a>. Le serveur de supervision joint toutes les machines et détient des identifiants : il est aussi <strong>sensible</strong> qu’un contrôleur de domaine.</p>
 <h2 id="securite">8. Sécuriser la collecte</h2>
 <div class="table-wrap"><table>
 
@@ -487,40 +381,36 @@ $ echo $?
 </thead>
 <tbody>
 <tr class="odd">
-<td>quelqu’un interroge l’agent à la place du serveur</td>
-<td>restreindre par adresse : <code>allowed_hosts</code> (NRPE), <code>Server=</code> (Zabbix), <code>rocommunity … 10.20.N.40</code> (SNMP)</td>
+<td>quelqu’un interroge l’agent</td>
+<td>restreindre par adresse : <code>allowed_hosts</code> (NRPE), <code>Server=</code> (Zabbix), <code>rocommunity … 10.20.N.40</code></td>
 </tr>
 <tr class="even">
 <td>quelqu’un écoute le réseau</td>
-<td>chiffrer : SNMPv3 <code>authPriv</code>, TLS de NRPE, chiffrement PSK ou certificats de Zabbix, HTTPS de NCPA</td>
+<td>chiffrer : SNMPv3 <code>authPriv</code>, TLS, PSK</td>
 </tr>
 <tr class="odd">
 <td>l’agent exécute n’importe quoi</td>
-<td>commandes prédéfinies seulement (<code>dont_blame_nrpe=0</code>), pas de commandes distantes dans Zabbix</td>
+<td>commandes prédéfinies seulement (<code>dont_blame_nrpe=0</code>)</td>
 </tr>
 <tr class="even">
-<td>identifiants trop puissants</td>
-<td>lecture seule, comptes dédiés, droits minimaux</td>
+<td>identifiants trop puissants ou visibles</td>
+<td>lecture seule, comptes dédiés, fichiers lisibles par le seul service</td>
 </tr>
 <tr class="odd">
-<td>identifiants visibles</td>
-<td>dans des fichiers lisibles par le seul service (<code>resource.cfg</code> de Nagios), jamais en clair dans un tableau de bord</td>
-</tr>
-<tr class="even">
-<td>logiciel de supervision vulnérable</td>
-<td>mises à jour régulières ; en 2020, la compromission de la chaîne de mise à jour d’un outil de supervision très répandu (SolarWinds Orion) a ouvert l’accès à des milliers d’organisations</td>
+<td>outil de supervision vulnérable</td>
+<td>mises à jour (affaire SolarWinds Orion, 2020)</td>
 </tr>
 </tbody>
 </table></div>
 <h2 id="à-retenir">9. À retenir</h2>
 <div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
 <ul>
-<li>Qui ouvre la connexion ? Interrogation (<em>pull</em>) ou envoi (<em>push</em>), avec ou sans agent, boîte noire ou blanche.</li>
-<li>Ping, port, test applicatif : chacun prouve une chose précise ; on les enchaîne pour localiser une panne.</li>
-<li>Plugin : une ligne de texte, un code retour (0 OK, 1 WARNING, 2 CRITICAL, 3 UNKNOWN), des données de performance après <code>|</code>. Seuils : <code>10</code>, <code>10:</code>, <code>10:20</code>, <code>@10:20</code>.</li>
-<li>SNMP : agent sur UDP 161, traps sur 162 ; OID et MIB ; GET, walk, trap ; v2c = communauté en clair, v3 <code>authPriv</code> = authentifié et chiffré.</li>
-<li>Agents : NRPE (5666), NCPA (5693), Zabbix (10050 passif, 10051 actif). Windows : agent ou WMI ; SNMP Windows obsolète.</li>
-<li>Matrice des flux ; serveur de supervision = machine sensible ; restreindre, chiffrer, moindre privilège.</li>
+<li>Qui ouvre la connexion ? Interrogation ou envoi, avec ou sans agent, boîte noire ou blanche.</li>
+<li>Ping, port, test applicatif : chacun prouve une chose précise.</li>
+<li>Plugin : une ligne, un code (0 OK, 1 WARNING, 2 CRITICAL, 3 UNKNOWN), des données de performance après <code>|</code>. Seuils : <code>10</code>, <code>10:</code>, <code>10:20</code>, <code>@10:20</code>.</li>
+<li>SNMP : UDP 161 (traps 162) ; OID, MIB ; v2c en clair, v3 <code>authPriv</code> authentifié et chiffré.</li>
+<li>Agents : NRPE 5666, NCPA 5693, Zabbix 10050/10051. Windows : agent ou WMI.</li>
+<li>Matrice des flux ; restreindre, chiffrer, moindre privilège.</li>
 </ul>
 </div></div>
 <h2 id="quiz">Quiz</h2>

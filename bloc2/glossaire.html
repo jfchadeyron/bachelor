@@ -113,11 +113,11 @@ Ajout, modification ou suppression d’un élément pouvant avoir un effet sur l
 </dd>
 <dt>Clone lié, clone intégral</dt>
 <dd>
-Copie d’un modèle Proxmox : le clone lié ne stocke que ses différences avec le modèle (rapide, économe, dépendant) ; le clone intégral est une copie complète et indépendante. (S1)
+Copie d’un modèle (VM figée) : le clone lié ne stocke que ses différences avec le modèle (rapide, économe, dépendant) ; le clone intégral est une copie complète et indépendante. Utilisé en entreprise pour déployer vite ; dans ce bloc, les VM sont installées depuis l’ISO. (S1)
 </dd>
 <dt>cloud-init</dt>
 <dd>
-Outil des images « cloud » qui configure la VM à son premier démarrage (nom, compte, clé SSH, adresse, DNS) à partir des réglages fournis par l’hyperviseur. (S1)
+Outil des images « cloud » qui configure une VM à son premier démarrage (nom, compte, clé SSH, adresse, DNS) à partir des réglages fournis par l’hyperviseur ; il évite d’installer chaque serveur à la main. (S1)
 </dd>
 <dt>Code retour</dt>
 <dd>
@@ -269,6 +269,10 @@ Dans Zabbix, toutes les valeurs, gardées peu de temps ; puis seulement un minim
 </dl>
 <h2 id="i">I</h2>
 <dl>
+<dt>Image ISO</dt>
+<dd>
+Fichier qui contient le « CD » d’installation d’un système (Debian netinst, Windows Server). Déposée sur le stockage <code>local</code> de Proxmox, on la branche sur le lecteur CD/DVD virtuel d’une VM, puis on la retire après l’installation. (S1)
+</dd>
 <dt>Incident</dt>
 <dd>
 Interruption non planifiée d’un service, ou baisse de sa qualité. (S8)
@@ -534,6 +538,13 @@ Outil de Debian qui installe automatiquement les mises à jour des origines auto
 <dt>UserParameter</dt>
 <dd>
 Ligne de configuration de l’agent Zabbix qui associe une clé maison à une commande. (S7)
+</dd>
+</dl>
+<h2 id="v">V</h2>
+<dl>
+<dt>VirtIO</dt>
+<dd>
+Famille de périphériques « paravirtualisés » (disque, carte réseau, mémoire) conçus pour les machines virtuelles : plus rapides que l’imitation d’un vrai matériel. Linux les gère d’origine ; Windows a besoin des pilotes du CD <code>virtio-win</code>. (S1)
 </dd>
 </dl>
 <h2 id="w">W</h2>

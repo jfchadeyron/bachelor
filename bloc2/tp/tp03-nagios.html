@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+<!DOCTYPE html><html lang="fr"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TP 3 : Superviser Hexalog avec Nagios | BLOC 2 Supervision et maintenance</title>
-<meta name="description" content="Vous installez Nagios Core sur sup-lnx-01 et sécurisez son interface, vous déclarez les hôtes et services d&#x27;Hexalog avec vos propres modèles, vous installez l&#x27;agent NRPE sur srv-lnx-01, vous observez ">
+<meta name="description" content="Vous installez Nagios Core sur sup-lnx-01 et sécurisez son interface, vous déclarez les hôtes et services d'Hexalog avec vos propres modèles, vous installez l'agent NRPE sur srv-lnx-01, vous observez ">
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body class="kind-tp">
@@ -21,7 +19,7 @@
 </header>
 <aside class="sidebar">
   <nav>
-    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d&#x27;Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item active" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp active" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d&#x27;un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d&#x27;astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d&#x27;activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d&#x27;activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Proxmox d'Hexalog</span></a></div><div class="nav-section-title">A. Fondamentaux et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-supervision-mco.html" data-seance="1"><span class="num">1.</span><span>Superviser et maintenir : les enjeux</span></a><a class="nav-tp" href="tp01-supervision-mco.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-collecte.html" data-seance="2"><span class="num">2.</span><span>Collecter les mesures : ICMP, SNMP, agents</span></a><a class="nav-tp" href="tp02-collecte.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-section-title">B. Outils de supervision</div><div class="nav-item active" data-seance="3"><a class="nav-link" href="../cours/s03-nagios.html" data-seance="3"><span class="num">3.</span><span>Nagios Core : hôtes, services, états</span></a><a class="nav-tp active" href="tp03-nagios.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-zabbix-installation.html" data-seance="4"><span class="num">4.</span><span>Zabbix : architecture et agents</span></a><a class="nav-tp" href="tp04-zabbix-installation.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-zabbix-alertes.html" data-seance="5"><span class="num">5.</span><span>Zabbix : déclencheurs, alertes, tableaux de bord</span></a><a class="nav-tp" href="tp05-zabbix-alertes.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-prtg-choix.html" data-seance="6"><span class="num">6.</span><span>PRTG et le choix d'un outil</span></a><a class="nav-tp" href="tp06-prtg-choix.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-section-title">C. Maintenance et incidents</div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-journaux-maintenance.html" data-seance="7"><span class="num">7.</span><span>Journaux centralisés et maintenance préventive</span></a><a class="nav-tp" href="tp07-journaux-maintenance.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-incidents.html" data-seance="8"><span class="num">8.</span><span>Gestion des incidents</span></a><a class="nav-tp" href="tp08-incidents.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-astreinte.html" data-seance="9"><span class="num">9.</span><span>Exercice d'astreinte</span></a><a class="nav-tp" href="tp09-astreinte.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-section-title">D. Sauvegarde et reprise d'activité</div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-sauvegarde.html" data-seance="10"><span class="num">10.</span><span>Sauvegarder et restaurer</span></a><a class="nav-tp" href="tp10-sauvegarde.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-pra.html" data-seance="11"><span class="num">11.</span><span>Plan de reprise d'activité</span></a><a class="nav-tp" href="tp11-pra.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-section-title">E. Consolidation et évaluation</div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-dossier-mco.html" data-seance="12"><span class="num">12.</span><span>Documenter le MCO et réviser</span></a><a class="nav-tp" href="tp12-dossier-mco.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-evaluation.html" data-seance="13"><span class="num">13.</span><span>Évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
   </nav>
 </aside>
 <main class="main">
@@ -30,292 +28,294 @@
   <span class="surtitre">Travaux pratiques de la séance 3</span>
   <h1>TP 3 : Superviser Hexalog avec Nagios</h1>
   <p class="lead">Vous installez Nagios Core sur sup-lnx-01 et sécurisez son interface, vous déclarez les hôtes et services d'Hexalog avec vos propres modèles, vous installez l'agent NRPE sur srv-lnx-01, vous observez le passage des états SOFT aux états HARD lors d'une vraie panne, et vous recevez les alertes par courriel.</p>
-  <table class="fiche-seance"><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>sup-lnx-01, srv-lnx-01, srv-win-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s03-nagios.html" data-seance="3">Séance 3 : Nagios Core : hôtes, services, états</a></td></tr></table>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>3 h 30</td></tr><tr><th>Machines virtuelles</th><td>sup-lnx-01, srv-lnx-01, srv-win-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s03-nagios.html" data-seance="3">Séance 3 : Nagios Core : hôtes, services, états</a></td></tr></tbody></table>
 </header>
-<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-installer-nagios-15-min">Partie A. Installer Nagios (15 min)</a></li><li><a href="#partie-b.-protéger-linterface-web-20-min">Partie B. Protéger l’interface web (20 min)</a></li><li><a href="#partie-c.-les-hôtes-et-services-dhexalog-45-min">Partie C. Les hôtes et services d’Hexalog (45 min)</a></li><li><a href="#partie-d.-lagent-nrpe-sur-srv-lnx-01-30-min">Partie D. L’agent NRPE sur srv-lnx-01 (30 min)</a></li><li><a href="#partie-e.-observer-soft-et-hard-sur-une-vraie-panne-25-min">Partie E. Observer SOFT et HARD sur une vraie panne (25 min)</a></li><li><a href="#partie-f.-les-alertes-par-courriel-25-min">Partie F. Les alertes par courriel (25 min)</a></li><li><a href="#partie-g.-windows-avec-ncpa-facultatif-30-min">Partie G. Windows avec NCPA (facultatif, 30 min)</a></li><li><a href="#partie-h.-snmp-dans-nagios-facultatif-15-min">Partie H. SNMP dans Nagios (facultatif, 15 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#ce-que-vous-construisez">Ce que vous construisez</a></li><li><a href="#partie-a.-installer-nagios-15-min">Partie A. Installer Nagios (15 min)</a></li><li><a href="#partie-b.-protéger-linterface-web-20-min">Partie B. Protéger l’interface web (20 min)</a></li><li><a href="#partie-c.-les-hôtes-et-services-dhexalog-45-min">Partie C. Les hôtes et services d’Hexalog (45 min)</a></li><li><a href="#partie-d.-lagent-nrpe-sur-srv-lnx-01-30-min">Partie D. L’agent NRPE sur srv-lnx-01 (30 min)</a></li><li><a href="#partie-e.-observer-soft-et-hard-sur-une-vraie-panne-25-min">Partie E. Observer SOFT et HARD sur une vraie panne (25 min)</a></li><li><a href="#partie-f.-les-alertes-par-courriel-25-min">Partie F. Les alertes par courriel (25 min)</a></li><li><a href="#partie-g.-windows-avec-ncpa-30-min">Partie G. Windows avec NCPA (30 min)</a></li><li><a href="#partie-h.-snmp-dans-nagios-facultatif-15-min">Partie H. SNMP dans Nagios (facultatif, 15 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
 <article class="content">
 <h2 id="contexte">Contexte</h2>
 <p>Le responsable informatique veut une première supervision <strong>rapidement</strong>, avec un outil libre et éprouvé. Vous mettez en place Nagios à partir de la matrice de supervision du TP 2.</p>
 <div class="callout info"><div class="callout-body"><p class="callout-titre"><strong>Organisation</strong></p>
-<p><strong>Socle</strong> : parties A à F. <strong>Facultatif</strong> : partie G (Windows avec NCPA), partie H (SNMP), « Pour aller plus loin ».</p>
+<p><strong>Socle</strong> : parties A à G. <strong>Facultatif</strong> : partie H (SNMP), « Pour aller plus loin ».</p>
 <p>Dans les fichiers de configuration, les adresses sont écrites <code>10.20.N.…</code> : une commande <code>sed</code> remplace N par votre numéro à la fin de la partie C.</p>
 </div></div>
+<h2 id="ce-que-vous-construisez">Ce que vous construisez</h2>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-973077" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1010.875px;" viewBox="0 0 1010.875 618.5" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-973077{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-973077 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-973077 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-973077 .error-icon{fill:#f5f6f8;}#mmd0-973077 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-973077 .edge-thickness-normal{stroke-width:1px;}#mmd0-973077 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-973077 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-973077 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-973077 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-973077 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-973077 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-973077 .marker.cross{stroke:#4a5563;}#mmd0-973077 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-973077 p{margin:0;}#mmd0-973077 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-973077 .cluster-label text{fill:#1f3a5f;}#mmd0-973077 .cluster-label span{color:#1f3a5f;}#mmd0-973077 .cluster-label span p{background-color:transparent;}#mmd0-973077 .label text,#mmd0-973077 span{fill:#1d2530;color:#1d2530;}#mmd0-973077 .node rect,#mmd0-973077 .node circle,#mmd0-973077 .node ellipse,#mmd0-973077 .node polygon,#mmd0-973077 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-973077 .rough-node .label text,#mmd0-973077 .node .label text,#mmd0-973077 .image-shape .label,#mmd0-973077 .icon-shape .label{text-anchor:middle;}#mmd0-973077 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-973077 .rough-node .label,#mmd0-973077 .node .label,#mmd0-973077 .image-shape .label,#mmd0-973077 .icon-shape .label{text-align:center;}#mmd0-973077 .node.clickable{cursor:pointer;}#mmd0-973077 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-973077 .arrowheadPath{fill:#000000;}#mmd0-973077 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-973077 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-973077 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-973077 .edgeLabel p{background-color:#ffffff;}#mmd0-973077 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-973077 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-973077 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-973077 .cluster text{fill:#1f3a5f;}#mmd0-973077 .cluster span{color:#1f3a5f;}#mmd0-973077 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-973077 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-973077 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-973077 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-973077 rect.text{fill:none;stroke-width:0;}#mmd0-973077 .icon-shape,#mmd0-973077 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-973077 .icon-shape p,#mmd0-973077 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-973077 .icon-shape .label rect,#mmd0-973077 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-973077 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-973077 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-973077 .node .neo-node{stroke:#1f3a5f;}#mmd0-973077 [data-look="neo"].node rect,#mmd0-973077 [data-look="neo"].cluster rect,#mmd0-973077 [data-look="neo"].node polygon{stroke:url(#mmd0-973077-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-973077 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-973077 [data-look="neo"].node path{stroke:url(#mmd0-973077-gradient);stroke-width:1px;}#mmd0-973077 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-973077 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-973077 [data-look="neo"].node circle{stroke:url(#mmd0-973077-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-973077 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-973077 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-973077-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-973077 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-973077-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-973077 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-973077_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-973077_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-973077_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-973077_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-973077_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-973077_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-973077_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-973077_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-973077_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-973077_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-973077_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-973077_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-973077-L1" data-look="classic"><rect style="" x="748.234375" y="371.5" width="254.640625" height="239"></rect><g class="cluster-label " transform="translate(844.8203125, 371.5)"><foreignObject width="61.46875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>srv-lnx-01</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-973077-SUP" data-look="classic"><rect style="" x="349.03125" y="8" width="653.84375" height="223.5"></rect><g class="cluster-label " transform="translate(643.265625, 8)"><foreignObject width="65.375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>sup-lnx-01</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M129.391,139.5L239.211,139.5L349.031,139.5L370.031,139.5" id="mmd0-973077-L_PC_N_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PC_N_0" data-points="W3sieCI6MTI5LjM5MDYyNSwieSI6MTM5LjV9LHsieCI6MjM5LjIxMDkzNzUsInkiOjEzOS41fSx7IngiOjM0OS4wMzEyNSwieSI6MTM5LjV9LHsieCI6Mzc0LjAzMTI1LCJ5IjoxMzkuNX1d" data-look="classic" marker-end="url(#mmd0-973077_flowchart-v2-pointEnd)"></path><path d="M543.672,148.793L645.953,160L748.234,160L862.343,402.88" id="mmd0-973077-L_N_WEB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_N_WEB_0" data-points="W3sieCI6NTQzLjY3MTg3NSwieSI6MTQ4Ljc5MzQzNjA1MTYwOTY2fSx7IngiOjY0NS45NTMxMjUsInkiOjE2MH0seyJ4Ijo3NDguMjM0Mzc1LCJ5IjoxNjB9LHsieCI6ODY0LjA0NDE3OTU0MzM1NzksInkiOjQwNi41fV0=" data-look="classic" marker-end="url(#mmd0-973077_flowchart-v2-pointEnd)"></path><path d="M543.672,167.38L645.953,201L748.234,201L861.024,501.755" id="mmd0-973077-L_N_NRPE_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_N_NRPE_0" data-points="W3sieCI6NTQzLjY3MTg3NSwieSI6MTY3LjM4MDMwODE1NDgyOX0seyJ4Ijo2NDUuOTUzMTI1LCJ5IjoyMDF9LHsieCI6NzQ4LjIzNDM3NSwieSI6MjAxfSx7IngiOjg2Mi40Mjg4ODIwODc2Mjg4LCJ5Ijo1MDUuNX1d" data-look="classic" marker-end="url(#mmd0-973077_flowchart-v2-pointEnd)"></path><path d="M543.672,130.207L645.953,119L748.234,119L848.848,263.219" id="mmd0-973077-L_N_DC_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_N_DC_0" data-points="W3sieCI6NTQzLjY3MTg3NSwieSI6MTMwLjIwNjU2Mzk0ODM5MDM0fSx7IngiOjY0NS45NTMxMjUsInkiOjExOX0seyJ4Ijo3NDguMjM0Mzc1LCJ5IjoxMTl9LHsieCI6ODUxLjEzNzA5MzMyMTkxNzksInkiOjI2Ni41fV0=" data-look="classic" marker-end="url(#mmd0-973077_flowchart-v2-pointEnd)"></path><path d="M543.672,111.62L645.953,78L748.234,78L786.742,78" id="mmd0-973077-L_N_MAIL_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_N_MAIL_0" data-points="W3sieCI6NTQzLjY3MTg3NSwieSI6MTExLjYxOTY5MTg0NTE3MDk5fSx7IngiOjY0NS45NTMxMjUsInkiOjc4fSx7IngiOjc0OC4yMzQzNzUsInkiOjc4fSx7IngiOjc5MC43NDIxODc1LCJ5Ijo3OH1d" data-look="classic" marker-end="url(#mmd0-973077_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(239.2109375, 139.5)"><g class="label" data-id="L_PC_N_0" transform="translate(-84.8203125, -21)"><foreignObject width="169.640625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>PROXMOX:1N080/nagios4<br>compte nagiosadmin</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(645.953125, 160)"><g class="label" data-id="L_N_WEB_0" transform="translate(-35.40625, -10.5)"><foreignObject width="70.8125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>ping, HTTP</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(645.953125, 201)"><g class="label" data-id="L_N_NRPE_0" transform="translate(-36.1953125, -10.5)"><foreignObject width="72.390625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>check_nrpe</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(645.953125, 119)"><g class="label" data-id="L_N_DC_0" transform="translate(-54.0859375, -10.5)"><foreignObject width="108.171875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>ping, DNS, LDAP</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(645.953125, 78)"><g class="label" data-id="L_N_MAIL_0" transform="translate(-77.28125, -10.5)"><foreignObject width="154.5625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>PROBLEM, RECOVERY</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-973077-flowchart-PC-0" data-look="classic" transform="translate(68.6953125, 139.5)"><rect class="basic label-container" style="" x="-60.6953125" y="-35" width="121.390625" height="70"></rect><g class="label" style="" transform="translate(-32.6953125, -21)"><rect></rect><foreignObject width="65.390625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Votre PC<br>navigateur</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-973077-flowchart-N-1" data-look="classic" transform="translate(458.8515625, 139.5)"><rect class="basic label-container" style="" x="-84.8203125" y="-35" width="169.640625" height="70"></rect><g class="label" style="" transform="translate(-56.8203125, -21)"><rect></rect><foreignObject width="113.640625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Nagios Core<br>conf.d/hexalog.cfg</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-973077-flowchart-MAIL-3" data-look="classic" transform="translate(875.5546875, 78)"><rect class="basic label-container" style="" x="-84.8125" y="-35" width="169.625" height="70"></rect><g class="label" style="" transform="translate(-56.8125, -21)"><rect></rect><foreignObject width="113.625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Postfix local<br>boîte de sysadmin</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-973077-flowchart-WEB-4" data-look="classic" transform="translate(875.5546875, 431)"><rect class="basic label-container" style="" x="-63.03125" y="-24.5" width="126.0625" height="49"></rect><g class="label" style="" transform="translate(-35.03125, -10.5)"><rect></rect><foreignObject width="70.0625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>intranet :80</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-973077-flowchart-NRPE-5" data-look="classic" transform="translate(875.5546875, 540.5)"><rect class="basic label-container" style="" x="-102.3203125" y="-35" width="204.640625" height="70"></rect><g class="label" style="" transform="translate(-74.3203125, -21)"><rect></rect><foreignObject width="148.640625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>NRPE :5666<br>commandes prédéfinies</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-973077-flowchart-DC-6" data-look="classic" transform="translate(875.5546875, 301.5)"><rect class="basic label-container" style="" x="-97.515625" y="-35" width="195.03125" height="70"></rect><g class="label" style="" transform="translate(-69.515625, -21)"><rect></rect><foreignObject width="139.03125" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>srv-win-01<br>NCPA :5693 (partie G)</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-973077-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-973077-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-973077-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
 <h2 id="partie-a.-installer-nagios-15-min">Partie A. Installer Nagios (15 min)</h2>
 <p>Snapshot <code>03-avant-nagios</code> de sup-lnx-01, puis :</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> nagios4 monitoring-plugins nagios-nrpe-plugin</span>
-<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="ex">systemctl</span> status nagios4 apache2 <span class="at">--no-pager</span></span>
-<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="fu">ls</span> /etc/nagios4 /etc/nagios4/objects /etc/nagios4/conf.d</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> nagios4 monitoring-plugins nagios-nrpe-plugin</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="ex">systemctl</span> status nagios4 apache2 <span class="at">--no-pager</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="fu">ls</span> /etc/nagios4 /etc/nagios4/objects /etc/nagios4/conf.d</span></code></pre></div></div>
 <p>Le paquet installe aussi Apache, qui sert l’interface web. Repérez dans <code>/etc/nagios4</code> les fichiers décrits dans le cours.</p>
 <h2 id="partie-b.-protéger-linterface-web-20-min">Partie B. Protéger l’interface web (20 min)</h2>
 <p>Sous Debian, l’interface est livrée sans authentification. On crée un compte <code>nagiosadmin</code> et on l’exige pour toutes les pages.</p>
 <ol type="1">
 <li>Créez le compte (mot de passe de lab) :</li>
 </ol>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> htdigest <span class="at">-c</span> /etc/nagios4/htdigest.users Nagios4 nagiosadmin</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> htdigest <span class="at">-c</span> /etc/nagios4/htdigest.users Nagios4 nagiosadmin</span></code></pre></div></div>
 <ol start="2" type="1">
 <li>Remplacez la configuration Apache de Nagios :</li>
 </ol>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> cp /etc/apache2/conf-available/nagios4-cgi.conf /etc/apache2/conf-available/nagios4-cgi.conf.origine</span>
-<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/apache2/conf-available/nagios4-cgi.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="st"># Nagios 4 : interface web protégée par identifiant et mot de passe (Hexalog)</span></span>
-<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="st">ScriptAlias /cgi-bin/nagios4 /usr/lib/cgi-bin/nagios4</span></span>
-<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="st">ScriptAlias /nagios4/cgi-bin /usr/lib/cgi-bin/nagios4</span></span>
-<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="st">Alias /nagios4/stylesheets /etc/nagios4/stylesheets</span></span>
-<span id="cb3-7"><a aria-hidden="true" href="#cb3-7" tabindex="-1"></a><span class="st">Alias /nagios4 /usr/share/nagios4/htdocs</span></span>
-<span id="cb3-8"><a aria-hidden="true" href="#cb3-8" tabindex="-1"></a></span>
-<span id="cb3-9"><a aria-hidden="true" href="#cb3-9" tabindex="-1"></a><span class="st">&lt;DirectoryMatch (/usr/share/nagios4/htdocs|/usr/lib/cgi-bin/nagios4|/etc/nagios4/stylesheets)&gt;</span></span>
-<span id="cb3-10"><a aria-hidden="true" href="#cb3-10" tabindex="-1"></a><span class="st">    Options FollowSymLinks</span></span>
-<span id="cb3-11"><a aria-hidden="true" href="#cb3-11" tabindex="-1"></a><span class="st">    DirectoryIndex index.php index.html</span></span>
-<span id="cb3-12"><a aria-hidden="true" href="#cb3-12" tabindex="-1"></a><span class="st">    AllowOverride AuthConfig</span></span>
-<span id="cb3-13"><a aria-hidden="true" href="#cb3-13" tabindex="-1"></a><span class="st">    AuthDigestDomain "Nagios4"</span></span>
-<span id="cb3-14"><a aria-hidden="true" href="#cb3-14" tabindex="-1"></a><span class="st">    AuthDigestProvider file</span></span>
-<span id="cb3-15"><a aria-hidden="true" href="#cb3-15" tabindex="-1"></a><span class="st">    AuthUserFile "/etc/nagios4/htdigest.users"</span></span>
-<span id="cb3-16"><a aria-hidden="true" href="#cb3-16" tabindex="-1"></a><span class="st">    AuthGroupFile "/etc/group"</span></span>
-<span id="cb3-17"><a aria-hidden="true" href="#cb3-17" tabindex="-1"></a><span class="st">    AuthName "Nagios4"</span></span>
-<span id="cb3-18"><a aria-hidden="true" href="#cb3-18" tabindex="-1"></a><span class="st">    AuthType Digest</span></span>
-<span id="cb3-19"><a aria-hidden="true" href="#cb3-19" tabindex="-1"></a><span class="st">    Require valid-user</span></span>
-<span id="cb3-20"><a aria-hidden="true" href="#cb3-20" tabindex="-1"></a><span class="st">&lt;/DirectoryMatch&gt;</span></span>
-<span id="cb3-21"><a aria-hidden="true" href="#cb3-21" tabindex="-1"></a></span>
-<span id="cb3-22"><a aria-hidden="true" href="#cb3-22" tabindex="-1"></a><span class="st">&lt;Directory /usr/share/nagios4/htdocs&gt;</span></span>
-<span id="cb3-23"><a aria-hidden="true" href="#cb3-23" tabindex="-1"></a><span class="st">    Options +ExecCGI</span></span>
-<span id="cb3-24"><a aria-hidden="true" href="#cb3-24" tabindex="-1"></a><span class="st">&lt;/Directory&gt;</span></span>
-<span id="cb3-25"><a aria-hidden="true" href="#cb3-25" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">sudo</span> cp /etc/apache2/conf-available/nagios4-cgi.conf /etc/apache2/conf-available/nagios4-cgi.conf.origine</span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/apache2/conf-available/nagios4-cgi.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="st"># Nagios 4 : interface web protégée par identifiant et mot de passe (Hexalog)</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="st">ScriptAlias /cgi-bin/nagios4 /usr/lib/cgi-bin/nagios4</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="st">ScriptAlias /nagios4/cgi-bin /usr/lib/cgi-bin/nagios4</span></span>
+<span id="cb4-6"><a aria-hidden="true" href="#cb4-6" tabindex="-1"></a><span class="st">Alias /nagios4/stylesheets /etc/nagios4/stylesheets</span></span>
+<span id="cb4-7"><a aria-hidden="true" href="#cb4-7" tabindex="-1"></a><span class="st">Alias /nagios4 /usr/share/nagios4/htdocs</span></span>
+<span id="cb4-8"><a aria-hidden="true" href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a aria-hidden="true" href="#cb4-9" tabindex="-1"></a><span class="st">&lt;DirectoryMatch (/usr/share/nagios4/htdocs|/usr/lib/cgi-bin/nagios4|/etc/nagios4/stylesheets)&gt;</span></span>
+<span id="cb4-10"><a aria-hidden="true" href="#cb4-10" tabindex="-1"></a><span class="st">    Options FollowSymLinks</span></span>
+<span id="cb4-11"><a aria-hidden="true" href="#cb4-11" tabindex="-1"></a><span class="st">    DirectoryIndex index.php index.html</span></span>
+<span id="cb4-12"><a aria-hidden="true" href="#cb4-12" tabindex="-1"></a><span class="st">    AllowOverride AuthConfig</span></span>
+<span id="cb4-13"><a aria-hidden="true" href="#cb4-13" tabindex="-1"></a><span class="st">    AuthDigestDomain "Nagios4"</span></span>
+<span id="cb4-14"><a aria-hidden="true" href="#cb4-14" tabindex="-1"></a><span class="st">    AuthDigestProvider file</span></span>
+<span id="cb4-15"><a aria-hidden="true" href="#cb4-15" tabindex="-1"></a><span class="st">    AuthUserFile "/etc/nagios4/htdigest.users"</span></span>
+<span id="cb4-16"><a aria-hidden="true" href="#cb4-16" tabindex="-1"></a><span class="st">    AuthGroupFile "/etc/group"</span></span>
+<span id="cb4-17"><a aria-hidden="true" href="#cb4-17" tabindex="-1"></a><span class="st">    AuthName "Nagios4"</span></span>
+<span id="cb4-18"><a aria-hidden="true" href="#cb4-18" tabindex="-1"></a><span class="st">    AuthType Digest</span></span>
+<span id="cb4-19"><a aria-hidden="true" href="#cb4-19" tabindex="-1"></a><span class="st">    Require valid-user</span></span>
+<span id="cb4-20"><a aria-hidden="true" href="#cb4-20" tabindex="-1"></a><span class="st">&lt;/DirectoryMatch&gt;</span></span>
+<span id="cb4-21"><a aria-hidden="true" href="#cb4-21" tabindex="-1"></a></span>
+<span id="cb4-22"><a aria-hidden="true" href="#cb4-22" tabindex="-1"></a><span class="st">&lt;Directory /usr/share/nagios4/htdocs&gt;</span></span>
+<span id="cb4-23"><a aria-hidden="true" href="#cb4-23" tabindex="-1"></a><span class="st">    Options +ExecCGI</span></span>
+<span id="cb4-24"><a aria-hidden="true" href="#cb4-24" tabindex="-1"></a><span class="st">&lt;/Directory&gt;</span></span>
+<span id="cb4-25"><a aria-hidden="true" href="#cb4-25" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
 <ol start="3" type="1">
 <li>Activez l’authentification dans Nagios lui-même (pour que les droits de <code>nagiosadmin</code> s’appliquent), activez les modules Apache nécessaires, redémarrez :</li>
 </ol>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/^use_authentication=0/use_authentication=1/'</span> /etc/nagios4/cgi.cfg</span>
-<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">sudo</span> a2enmod cgi auth_digest</span>
-<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="fu">sudo</span> apache2ctl configtest</span>
-<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart apache2 nagios4</span>
-<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">"sans compte : %{http_code}\n"</span> http://localhost/nagios4/</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/^use_authentication=0/use_authentication=1/'</span> /etc/nagios4/cgi.cfg</span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> a2enmod cgi auth_digest</span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="fu">sudo</span> apache2ctl configtest</span>
+<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart apache2 nagios4</span>
+<span id="cb5-5"><a aria-hidden="true" href="#cb5-5" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">"sans compte : %{http_code}\n"</span> http://localhost/nagios4/</span></code></pre></div></div>
 <p>Résultat attendu : <code>Syntax OK</code>, puis <code>401</code> (identification exigée). Depuis votre PC, ouvrez <code>http://PROXMOX:1N080/nagios4</code> et connectez-vous avec <code>nagiosadmin</code>.</p>
 <ol start="4" type="1">
-<li>Parcourez <em>Tactical Overview</em>, <em>Hosts</em> et <em>Services</em> : Nagios supervise déjà <code>localhost</code> (sup-lnx-01 elle-même). Un service est <strong>CRITIQUE</strong> : <em>Swap Usage</em>. L’image cloud de Debian n’a pas d’espace d’échange (<em>swap</em>) : c’est une <strong>fausse alerte</strong>, à supprimer plutôt qu’à tolérer (cours 1, fatigue d’alerte). La commande suivante met en commentaire (un <code>#</code> en début de ligne) le bloc qui définit ce contrôle dans <code>/etc/nagios4/objects/localhost.cfg</code> ; vérifiez le résultat avec <code>grep</code>, puis rechargez :</li>
+<li>Parcourez <em>Tactical Overview</em>, <em>Hosts</em> et <em>Services</em> : Nagios supervise déjà <code>localhost</code> (sup-lnx-01 elle-même) avec quelques contrôles de base (ping, charge, disque, processus, <em>swap</em>, SSH, HTTP). Ils doivent être OK. <strong>Si</strong> <em>Swap Usage</em> est <strong>CRITIQUE</strong>, c’est que votre installation n’a pas créé d’espace d’échange (<em>swap</em>) : c’est alors une <strong>fausse alerte</strong>, à supprimer plutôt qu’à tolérer (cours 1, fatigue d’alerte). Dans ce cas seulement, la commande suivante met en commentaire (un <code>#</code> en début de ligne) le bloc qui définit ce contrôle dans <code>/etc/nagios4/objects/localhost.cfg</code> ; vérifiez le résultat avec <code>grep</code>, puis rechargez :</li>
 </ol>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'/check the swap usage/,/^}/ s/^/#/'</span> /etc/nagios4/objects/localhost.cfg</span>
-<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-n</span> <span class="at">-B4</span> <span class="at">-A2</span> <span class="st">"Swap Usage"</span> /etc/nagios4/objects/localhost.cfg</span>
-<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-3</span></span>
-<span id="cb5-4"><a aria-hidden="true" href="#cb5-4" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'/check the swap usage/,/^}/ s/^/#/'</span> /etc/nagios4/objects/localhost.cfg</span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-n</span> <span class="at">-B4</span> <span class="at">-A2</span> <span class="st">"Swap Usage"</span> /etc/nagios4/objects/localhost.cfg</span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-3</span></span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
 <h2 id="partie-c.-les-hôtes-et-services-dhexalog-45-min">Partie C. Les hôtes et services d’Hexalog (45 min)</h2>
 <p>On range la configuration d’Hexalog dans quatre fichiers du dossier <code>conf.d</code>. Copiez chaque bloc tel quel (les <code>$</code> sont des macros de Nagios, à ne pas modifier).</p>
 <h3 id="c.1-contacts-et-modèles">C.1, Contacts et modèles</h3>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-modeles.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="st"># Contacts et modèles d'Hexalog</span></span>
-<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="st">define contact {</span></span>
-<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="st">    contact_name            astreinte</span></span>
-<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="st">    use                     generic-contact</span></span>
-<span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a><span class="st">    alias                   Astreinte informatique Hexalog</span></span>
-<span id="cb6-7"><a aria-hidden="true" href="#cb6-7" tabindex="-1"></a><span class="st">    email                   sysadmin@localhost</span></span>
-<span id="cb6-8"><a aria-hidden="true" href="#cb6-8" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb6-9"><a aria-hidden="true" href="#cb6-9" tabindex="-1"></a></span>
-<span id="cb6-10"><a aria-hidden="true" href="#cb6-10" tabindex="-1"></a><span class="st">define contactgroup {</span></span>
-<span id="cb6-11"><a aria-hidden="true" href="#cb6-11" tabindex="-1"></a><span class="st">    contactgroup_name       hexalog-admins</span></span>
-<span id="cb6-12"><a aria-hidden="true" href="#cb6-12" tabindex="-1"></a><span class="st">    alias                   Administrateurs Hexalog</span></span>
-<span id="cb6-13"><a aria-hidden="true" href="#cb6-13" tabindex="-1"></a><span class="st">    members                 astreinte</span></span>
-<span id="cb6-14"><a aria-hidden="true" href="#cb6-14" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb6-15"><a aria-hidden="true" href="#cb6-15" tabindex="-1"></a></span>
-<span id="cb6-16"><a aria-hidden="true" href="#cb6-16" tabindex="-1"></a><span class="st"># Un service d'Hexalog est contrôlé toutes les 2 minutes ; en cas de problème,</span></span>
-<span id="cb6-17"><a aria-hidden="true" href="#cb6-17" tabindex="-1"></a><span class="st"># il est recontrôlé toutes les minutes et devient HARD au 3e échec.</span></span>
-<span id="cb6-18"><a aria-hidden="true" href="#cb6-18" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb6-19"><a aria-hidden="true" href="#cb6-19" tabindex="-1"></a><span class="st">    name                    hexalog-service</span></span>
-<span id="cb6-20"><a aria-hidden="true" href="#cb6-20" tabindex="-1"></a><span class="st">    use                     generic-service</span></span>
-<span id="cb6-21"><a aria-hidden="true" href="#cb6-21" tabindex="-1"></a><span class="st">    check_interval          2</span></span>
-<span id="cb6-22"><a aria-hidden="true" href="#cb6-22" tabindex="-1"></a><span class="st">    retry_interval          1</span></span>
-<span id="cb6-23"><a aria-hidden="true" href="#cb6-23" tabindex="-1"></a><span class="st">    max_check_attempts      3</span></span>
-<span id="cb6-24"><a aria-hidden="true" href="#cb6-24" tabindex="-1"></a><span class="st">    notification_interval   30</span></span>
-<span id="cb6-25"><a aria-hidden="true" href="#cb6-25" tabindex="-1"></a><span class="st">    contact_groups          hexalog-admins</span></span>
-<span id="cb6-26"><a aria-hidden="true" href="#cb6-26" tabindex="-1"></a><span class="st">    register                0</span></span>
-<span id="cb6-27"><a aria-hidden="true" href="#cb6-27" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb6-28"><a aria-hidden="true" href="#cb6-28" tabindex="-1"></a></span>
-<span id="cb6-29"><a aria-hidden="true" href="#cb6-29" tabindex="-1"></a><span class="st">define host {</span></span>
-<span id="cb6-30"><a aria-hidden="true" href="#cb6-30" tabindex="-1"></a><span class="st">    name                    hexalog-hote</span></span>
-<span id="cb6-31"><a aria-hidden="true" href="#cb6-31" tabindex="-1"></a><span class="st">    use                     generic-host</span></span>
-<span id="cb6-32"><a aria-hidden="true" href="#cb6-32" tabindex="-1"></a><span class="st">    check_command           check-host-alive</span></span>
-<span id="cb6-33"><a aria-hidden="true" href="#cb6-33" tabindex="-1"></a><span class="st">    check_interval          2</span></span>
-<span id="cb6-34"><a aria-hidden="true" href="#cb6-34" tabindex="-1"></a><span class="st">    retry_interval          1</span></span>
-<span id="cb6-35"><a aria-hidden="true" href="#cb6-35" tabindex="-1"></a><span class="st">    max_check_attempts      3</span></span>
-<span id="cb6-36"><a aria-hidden="true" href="#cb6-36" tabindex="-1"></a><span class="st">    contact_groups          hexalog-admins</span></span>
-<span id="cb6-37"><a aria-hidden="true" href="#cb6-37" tabindex="-1"></a><span class="st">    register                0</span></span>
-<span id="cb6-38"><a aria-hidden="true" href="#cb6-38" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb6-39"><a aria-hidden="true" href="#cb6-39" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-modeles.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="st"># Contacts et modèles d'Hexalog</span></span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="st">define contact {</span></span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a><span class="st">    contact_name            astreinte</span></span>
+<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a><span class="st">    use                     generic-contact</span></span>
+<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a><span class="st">    alias                   Astreinte informatique Hexalog</span></span>
+<span id="cb7-7"><a aria-hidden="true" href="#cb7-7" tabindex="-1"></a><span class="st">    email                   sysadmin@localhost</span></span>
+<span id="cb7-8"><a aria-hidden="true" href="#cb7-8" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-9"><a aria-hidden="true" href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a aria-hidden="true" href="#cb7-10" tabindex="-1"></a><span class="st">define contactgroup {</span></span>
+<span id="cb7-11"><a aria-hidden="true" href="#cb7-11" tabindex="-1"></a><span class="st">    contactgroup_name       hexalog-admins</span></span>
+<span id="cb7-12"><a aria-hidden="true" href="#cb7-12" tabindex="-1"></a><span class="st">    alias                   Administrateurs Hexalog</span></span>
+<span id="cb7-13"><a aria-hidden="true" href="#cb7-13" tabindex="-1"></a><span class="st">    members                 astreinte</span></span>
+<span id="cb7-14"><a aria-hidden="true" href="#cb7-14" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-15"><a aria-hidden="true" href="#cb7-15" tabindex="-1"></a></span>
+<span id="cb7-16"><a aria-hidden="true" href="#cb7-16" tabindex="-1"></a><span class="st"># Un service d'Hexalog est contrôlé toutes les 2 minutes ; en cas de problème,</span></span>
+<span id="cb7-17"><a aria-hidden="true" href="#cb7-17" tabindex="-1"></a><span class="st"># il est recontrôlé toutes les minutes et devient HARD au 3e échec.</span></span>
+<span id="cb7-18"><a aria-hidden="true" href="#cb7-18" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb7-19"><a aria-hidden="true" href="#cb7-19" tabindex="-1"></a><span class="st">    name                    hexalog-service</span></span>
+<span id="cb7-20"><a aria-hidden="true" href="#cb7-20" tabindex="-1"></a><span class="st">    use                     generic-service</span></span>
+<span id="cb7-21"><a aria-hidden="true" href="#cb7-21" tabindex="-1"></a><span class="st">    check_interval          2</span></span>
+<span id="cb7-22"><a aria-hidden="true" href="#cb7-22" tabindex="-1"></a><span class="st">    retry_interval          1</span></span>
+<span id="cb7-23"><a aria-hidden="true" href="#cb7-23" tabindex="-1"></a><span class="st">    max_check_attempts      3</span></span>
+<span id="cb7-24"><a aria-hidden="true" href="#cb7-24" tabindex="-1"></a><span class="st">    notification_interval   30</span></span>
+<span id="cb7-25"><a aria-hidden="true" href="#cb7-25" tabindex="-1"></a><span class="st">    contact_groups          hexalog-admins</span></span>
+<span id="cb7-26"><a aria-hidden="true" href="#cb7-26" tabindex="-1"></a><span class="st">    register                0</span></span>
+<span id="cb7-27"><a aria-hidden="true" href="#cb7-27" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-28"><a aria-hidden="true" href="#cb7-28" tabindex="-1"></a></span>
+<span id="cb7-29"><a aria-hidden="true" href="#cb7-29" tabindex="-1"></a><span class="st">define host {</span></span>
+<span id="cb7-30"><a aria-hidden="true" href="#cb7-30" tabindex="-1"></a><span class="st">    name                    hexalog-hote</span></span>
+<span id="cb7-31"><a aria-hidden="true" href="#cb7-31" tabindex="-1"></a><span class="st">    use                     generic-host</span></span>
+<span id="cb7-32"><a aria-hidden="true" href="#cb7-32" tabindex="-1"></a><span class="st">    check_command           check-host-alive</span></span>
+<span id="cb7-33"><a aria-hidden="true" href="#cb7-33" tabindex="-1"></a><span class="st">    check_interval          2</span></span>
+<span id="cb7-34"><a aria-hidden="true" href="#cb7-34" tabindex="-1"></a><span class="st">    retry_interval          1</span></span>
+<span id="cb7-35"><a aria-hidden="true" href="#cb7-35" tabindex="-1"></a><span class="st">    max_check_attempts      3</span></span>
+<span id="cb7-36"><a aria-hidden="true" href="#cb7-36" tabindex="-1"></a><span class="st">    contact_groups          hexalog-admins</span></span>
+<span id="cb7-37"><a aria-hidden="true" href="#cb7-37" tabindex="-1"></a><span class="st">    register                0</span></span>
+<span id="cb7-38"><a aria-hidden="true" href="#cb7-38" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-39"><a aria-hidden="true" href="#cb7-39" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
 <h3 id="c.2-commandes">C.2, Commandes</h3>
 <p>Votre plugin du TP 2 (<code>check_intranet</code>) devient une commande Nagios.</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-commandes.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="st"># Commandes d'Hexalog (préfixe hx- : pas de conflit avec les commandes de Debian)</span></span>
-<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a><span class="st">define command {</span></span>
-<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a><span class="st">    command_name    hx-http-page</span></span>
-<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_http -I $HOSTADDRESS$ -u $ARG1$ -s $ARG2$</span></span>
-<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb7-7"><a aria-hidden="true" href="#cb7-7" tabindex="-1"></a><span class="st">define command {</span></span>
-<span id="cb7-8"><a aria-hidden="true" href="#cb7-8" tabindex="-1"></a><span class="st">    command_name    hx-tcp</span></span>
-<span id="cb7-9"><a aria-hidden="true" href="#cb7-9" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$</span></span>
-<span id="cb7-10"><a aria-hidden="true" href="#cb7-10" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb7-11"><a aria-hidden="true" href="#cb7-11" tabindex="-1"></a><span class="st">define command {</span></span>
-<span id="cb7-12"><a aria-hidden="true" href="#cb7-12" tabindex="-1"></a><span class="st">    command_name    hx-dns</span></span>
-<span id="cb7-13"><a aria-hidden="true" href="#cb7-13" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_dns -H $ARG1$ -s $HOSTADDRESS$ -a $ARG2$</span></span>
-<span id="cb7-14"><a aria-hidden="true" href="#cb7-14" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb7-15"><a aria-hidden="true" href="#cb7-15" tabindex="-1"></a><span class="st">define command {</span></span>
-<span id="cb7-16"><a aria-hidden="true" href="#cb7-16" tabindex="-1"></a><span class="st">    command_name    hx-intranet</span></span>
-<span id="cb7-17"><a aria-hidden="true" href="#cb7-17" tabindex="-1"></a><span class="st">    command_line    /usr/local/lib/nagios/check_intranet $HOSTADDRESS$</span></span>
-<span id="cb7-18"><a aria-hidden="true" href="#cb7-18" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb7-19"><a aria-hidden="true" href="#cb7-19" tabindex="-1"></a><span class="st">define command {</span></span>
-<span id="cb7-20"><a aria-hidden="true" href="#cb7-20" tabindex="-1"></a><span class="st">    command_name    hx-nrpe</span></span>
-<span id="cb7-21"><a aria-hidden="true" href="#cb7-21" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$</span></span>
-<span id="cb7-22"><a aria-hidden="true" href="#cb7-22" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb7-23"><a aria-hidden="true" href="#cb7-23" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
-<h3 id="c.3-hôtes">C.3, Hôtes</h3>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-hotes.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="st"># Hôtes d'Hexalog, déclarés par adresse IP : la supervision ne doit pas dépendre du DNS</span></span>
-<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="st">define hostgroup {</span></span>
-<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a><span class="st">    hostgroup_name  hexalog-linux</span></span>
-<span id="cb8-5"><a aria-hidden="true" href="#cb8-5" tabindex="-1"></a><span class="st">    alias           Serveurs Linux Hexalog</span></span>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-commandes.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="st"># Commandes d'Hexalog (préfixe hx- : pas de conflit avec les commandes de Debian)</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="st">define command {</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a><span class="st">    command_name    hx-http-page</span></span>
+<span id="cb8-5"><a aria-hidden="true" href="#cb8-5" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_http -I $HOSTADDRESS$ -u $ARG1$ -s $ARG2$</span></span>
 <span id="cb8-6"><a aria-hidden="true" href="#cb8-6" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb8-7"><a aria-hidden="true" href="#cb8-7" tabindex="-1"></a><span class="st">define hostgroup {</span></span>
-<span id="cb8-8"><a aria-hidden="true" href="#cb8-8" tabindex="-1"></a><span class="st">    hostgroup_name  hexalog-windows</span></span>
-<span id="cb8-9"><a aria-hidden="true" href="#cb8-9" tabindex="-1"></a><span class="st">    alias           Serveurs Windows Hexalog</span></span>
+<span id="cb8-7"><a aria-hidden="true" href="#cb8-7" tabindex="-1"></a><span class="st">define command {</span></span>
+<span id="cb8-8"><a aria-hidden="true" href="#cb8-8" tabindex="-1"></a><span class="st">    command_name    hx-tcp</span></span>
+<span id="cb8-9"><a aria-hidden="true" href="#cb8-9" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$</span></span>
 <span id="cb8-10"><a aria-hidden="true" href="#cb8-10" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb8-11"><a aria-hidden="true" href="#cb8-11" tabindex="-1"></a><span class="st">define host {</span></span>
-<span id="cb8-12"><a aria-hidden="true" href="#cb8-12" tabindex="-1"></a><span class="st">    use             hexalog-hote</span></span>
-<span id="cb8-13"><a aria-hidden="true" href="#cb8-13" tabindex="-1"></a><span class="st">    host_name       srv-win-01</span></span>
-<span id="cb8-14"><a aria-hidden="true" href="#cb8-14" tabindex="-1"></a><span class="st">    alias           Controleur de domaine hexalog.local</span></span>
-<span id="cb8-15"><a aria-hidden="true" href="#cb8-15" tabindex="-1"></a><span class="st">    address         10.20.N.10</span></span>
-<span id="cb8-16"><a aria-hidden="true" href="#cb8-16" tabindex="-1"></a><span class="st">    hostgroups      hexalog-windows</span></span>
-<span id="cb8-17"><a aria-hidden="true" href="#cb8-17" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb8-18"><a aria-hidden="true" href="#cb8-18" tabindex="-1"></a><span class="st">define host {</span></span>
-<span id="cb8-19"><a aria-hidden="true" href="#cb8-19" tabindex="-1"></a><span class="st">    use             hexalog-hote</span></span>
-<span id="cb8-20"><a aria-hidden="true" href="#cb8-20" tabindex="-1"></a><span class="st">    host_name       srv-lnx-01</span></span>
-<span id="cb8-21"><a aria-hidden="true" href="#cb8-21" tabindex="-1"></a><span class="st">    alias           Intranet (nginx, PHP, MariaDB)</span></span>
-<span id="cb8-22"><a aria-hidden="true" href="#cb8-22" tabindex="-1"></a><span class="st">    address         10.20.N.20</span></span>
-<span id="cb8-23"><a aria-hidden="true" href="#cb8-23" tabindex="-1"></a><span class="st">    hostgroups      hexalog-linux</span></span>
-<span id="cb8-24"><a aria-hidden="true" href="#cb8-24" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb8-25"><a aria-hidden="true" href="#cb8-25" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
+<span id="cb8-11"><a aria-hidden="true" href="#cb8-11" tabindex="-1"></a><span class="st">define command {</span></span>
+<span id="cb8-12"><a aria-hidden="true" href="#cb8-12" tabindex="-1"></a><span class="st">    command_name    hx-dns</span></span>
+<span id="cb8-13"><a aria-hidden="true" href="#cb8-13" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_dns -H $ARG1$ -s $HOSTADDRESS$ -a $ARG2$</span></span>
+<span id="cb8-14"><a aria-hidden="true" href="#cb8-14" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb8-15"><a aria-hidden="true" href="#cb8-15" tabindex="-1"></a><span class="st">define command {</span></span>
+<span id="cb8-16"><a aria-hidden="true" href="#cb8-16" tabindex="-1"></a><span class="st">    command_name    hx-intranet</span></span>
+<span id="cb8-17"><a aria-hidden="true" href="#cb8-17" tabindex="-1"></a><span class="st">    command_line    /usr/local/lib/nagios/check_intranet $HOSTADDRESS$</span></span>
+<span id="cb8-18"><a aria-hidden="true" href="#cb8-18" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb8-19"><a aria-hidden="true" href="#cb8-19" tabindex="-1"></a><span class="st">define command {</span></span>
+<span id="cb8-20"><a aria-hidden="true" href="#cb8-20" tabindex="-1"></a><span class="st">    command_name    hx-nrpe</span></span>
+<span id="cb8-21"><a aria-hidden="true" href="#cb8-21" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$</span></span>
+<span id="cb8-22"><a aria-hidden="true" href="#cb8-22" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb8-23"><a aria-hidden="true" href="#cb8-23" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
+<h3 id="c.3-hôtes">C.3, Hôtes</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-hotes.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="st"># Hôtes d'Hexalog, déclarés par adresse IP : la supervision ne doit pas dépendre du DNS</span></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="st">define hostgroup {</span></span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="st">    hostgroup_name  hexalog-linux</span></span>
+<span id="cb9-5"><a aria-hidden="true" href="#cb9-5" tabindex="-1"></a><span class="st">    alias           Serveurs Linux Hexalog</span></span>
+<span id="cb9-6"><a aria-hidden="true" href="#cb9-6" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb9-7"><a aria-hidden="true" href="#cb9-7" tabindex="-1"></a><span class="st">define hostgroup {</span></span>
+<span id="cb9-8"><a aria-hidden="true" href="#cb9-8" tabindex="-1"></a><span class="st">    hostgroup_name  hexalog-windows</span></span>
+<span id="cb9-9"><a aria-hidden="true" href="#cb9-9" tabindex="-1"></a><span class="st">    alias           Serveurs Windows Hexalog</span></span>
+<span id="cb9-10"><a aria-hidden="true" href="#cb9-10" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb9-11"><a aria-hidden="true" href="#cb9-11" tabindex="-1"></a><span class="st">define host {</span></span>
+<span id="cb9-12"><a aria-hidden="true" href="#cb9-12" tabindex="-1"></a><span class="st">    use             hexalog-hote</span></span>
+<span id="cb9-13"><a aria-hidden="true" href="#cb9-13" tabindex="-1"></a><span class="st">    host_name       srv-win-01</span></span>
+<span id="cb9-14"><a aria-hidden="true" href="#cb9-14" tabindex="-1"></a><span class="st">    alias           Controleur de domaine hexalog.local</span></span>
+<span id="cb9-15"><a aria-hidden="true" href="#cb9-15" tabindex="-1"></a><span class="st">    address         10.20.N.10</span></span>
+<span id="cb9-16"><a aria-hidden="true" href="#cb9-16" tabindex="-1"></a><span class="st">    hostgroups      hexalog-windows</span></span>
+<span id="cb9-17"><a aria-hidden="true" href="#cb9-17" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb9-18"><a aria-hidden="true" href="#cb9-18" tabindex="-1"></a><span class="st">define host {</span></span>
+<span id="cb9-19"><a aria-hidden="true" href="#cb9-19" tabindex="-1"></a><span class="st">    use             hexalog-hote</span></span>
+<span id="cb9-20"><a aria-hidden="true" href="#cb9-20" tabindex="-1"></a><span class="st">    host_name       srv-lnx-01</span></span>
+<span id="cb9-21"><a aria-hidden="true" href="#cb9-21" tabindex="-1"></a><span class="st">    alias           Intranet (nginx, PHP, MariaDB)</span></span>
+<span id="cb9-22"><a aria-hidden="true" href="#cb9-22" tabindex="-1"></a><span class="st">    address         10.20.N.20</span></span>
+<span id="cb9-23"><a aria-hidden="true" href="#cb9-23" tabindex="-1"></a><span class="st">    hostgroups      hexalog-linux</span></span>
+<span id="cb9-24"><a aria-hidden="true" href="#cb9-24" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb9-25"><a aria-hidden="true" href="#cb9-25" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
 <h3 id="c.4-services-vus-de-lextérieur">C.4, Services vus de l’extérieur</h3>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-services.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="st"># Services d'Hexalog vus de l'extérieur</span></span>
-<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb9-5"><a aria-hidden="true" href="#cb9-5" tabindex="-1"></a><span class="st">    hostgroup_name          hexalog-linux,hexalog-windows</span></span>
-<span id="cb9-6"><a aria-hidden="true" href="#cb9-6" tabindex="-1"></a><span class="st">    service_description     PING</span></span>
-<span id="cb9-7"><a aria-hidden="true" href="#cb9-7" tabindex="-1"></a><span class="st">    check_command           check_ping!200.0,20%!500.0,60%</span></span>
-<span id="cb9-8"><a aria-hidden="true" href="#cb9-8" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb9-9"><a aria-hidden="true" href="#cb9-9" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb9-10"><a aria-hidden="true" href="#cb9-10" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb9-11"><a aria-hidden="true" href="#cb9-11" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb9-12"><a aria-hidden="true" href="#cb9-12" tabindex="-1"></a><span class="st">    service_description     SSH</span></span>
-<span id="cb9-13"><a aria-hidden="true" href="#cb9-13" tabindex="-1"></a><span class="st">    check_command           check_ssh</span></span>
-<span id="cb9-14"><a aria-hidden="true" href="#cb9-14" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb9-15"><a aria-hidden="true" href="#cb9-15" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb9-16"><a aria-hidden="true" href="#cb9-16" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb9-17"><a aria-hidden="true" href="#cb9-17" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb9-18"><a aria-hidden="true" href="#cb9-18" tabindex="-1"></a><span class="st">    service_description     Intranet - accueil</span></span>
-<span id="cb9-19"><a aria-hidden="true" href="#cb9-19" tabindex="-1"></a><span class="st">    check_command           hx-http-page!/!Hexalog</span></span>
-<span id="cb9-20"><a aria-hidden="true" href="#cb9-20" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb9-21"><a aria-hidden="true" href="#cb9-21" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb9-22"><a aria-hidden="true" href="#cb9-22" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb9-23"><a aria-hidden="true" href="#cb9-23" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb9-24"><a aria-hidden="true" href="#cb9-24" tabindex="-1"></a><span class="st">    service_description     Intranet - sante</span></span>
-<span id="cb9-25"><a aria-hidden="true" href="#cb9-25" tabindex="-1"></a><span class="st">    check_command           hx-intranet</span></span>
-<span id="cb9-26"><a aria-hidden="true" href="#cb9-26" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb9-27"><a aria-hidden="true" href="#cb9-27" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb9-28"><a aria-hidden="true" href="#cb9-28" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb9-29"><a aria-hidden="true" href="#cb9-29" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
-<span id="cb9-30"><a aria-hidden="true" href="#cb9-30" tabindex="-1"></a><span class="st">    service_description     DNS - resolution intranet</span></span>
-<span id="cb9-31"><a aria-hidden="true" href="#cb9-31" tabindex="-1"></a><span class="st">    check_command           hx-dns!intranet.hexalog.local!10.20.N.20</span></span>
-<span id="cb9-32"><a aria-hidden="true" href="#cb9-32" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb9-33"><a aria-hidden="true" href="#cb9-33" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb9-34"><a aria-hidden="true" href="#cb9-34" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb9-35"><a aria-hidden="true" href="#cb9-35" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
-<span id="cb9-36"><a aria-hidden="true" href="#cb9-36" tabindex="-1"></a><span class="st">    service_description     LDAP</span></span>
-<span id="cb9-37"><a aria-hidden="true" href="#cb9-37" tabindex="-1"></a><span class="st">    check_command           hx-tcp!389</span></span>
-<span id="cb9-38"><a aria-hidden="true" href="#cb9-38" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb9-39"><a aria-hidden="true" href="#cb9-39" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb9-40"><a aria-hidden="true" href="#cb9-40" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb9-41"><a aria-hidden="true" href="#cb9-41" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
-<span id="cb9-42"><a aria-hidden="true" href="#cb9-42" tabindex="-1"></a><span class="st">    service_description     Kerberos</span></span>
-<span id="cb9-43"><a aria-hidden="true" href="#cb9-43" tabindex="-1"></a><span class="st">    check_command           hx-tcp!88</span></span>
-<span id="cb9-44"><a aria-hidden="true" href="#cb9-44" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb9-45"><a aria-hidden="true" href="#cb9-45" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-services.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="st"># Services d'Hexalog vus de l'extérieur</span></span>
+<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb10-4"><a aria-hidden="true" href="#cb10-4" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb10-5"><a aria-hidden="true" href="#cb10-5" tabindex="-1"></a><span class="st">    hostgroup_name          hexalog-linux,hexalog-windows</span></span>
+<span id="cb10-6"><a aria-hidden="true" href="#cb10-6" tabindex="-1"></a><span class="st">    service_description     PING</span></span>
+<span id="cb10-7"><a aria-hidden="true" href="#cb10-7" tabindex="-1"></a><span class="st">    check_command           check_ping!200.0,20%!500.0,60%</span></span>
+<span id="cb10-8"><a aria-hidden="true" href="#cb10-8" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb10-9"><a aria-hidden="true" href="#cb10-9" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb10-10"><a aria-hidden="true" href="#cb10-10" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb10-11"><a aria-hidden="true" href="#cb10-11" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb10-12"><a aria-hidden="true" href="#cb10-12" tabindex="-1"></a><span class="st">    service_description     SSH</span></span>
+<span id="cb10-13"><a aria-hidden="true" href="#cb10-13" tabindex="-1"></a><span class="st">    check_command           check_ssh</span></span>
+<span id="cb10-14"><a aria-hidden="true" href="#cb10-14" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb10-15"><a aria-hidden="true" href="#cb10-15" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb10-16"><a aria-hidden="true" href="#cb10-16" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb10-17"><a aria-hidden="true" href="#cb10-17" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb10-18"><a aria-hidden="true" href="#cb10-18" tabindex="-1"></a><span class="st">    service_description     Intranet - accueil</span></span>
+<span id="cb10-19"><a aria-hidden="true" href="#cb10-19" tabindex="-1"></a><span class="st">    check_command           hx-http-page!/!Hexalog</span></span>
+<span id="cb10-20"><a aria-hidden="true" href="#cb10-20" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb10-21"><a aria-hidden="true" href="#cb10-21" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb10-22"><a aria-hidden="true" href="#cb10-22" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb10-23"><a aria-hidden="true" href="#cb10-23" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb10-24"><a aria-hidden="true" href="#cb10-24" tabindex="-1"></a><span class="st">    service_description     Intranet - sante</span></span>
+<span id="cb10-25"><a aria-hidden="true" href="#cb10-25" tabindex="-1"></a><span class="st">    check_command           hx-intranet</span></span>
+<span id="cb10-26"><a aria-hidden="true" href="#cb10-26" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb10-27"><a aria-hidden="true" href="#cb10-27" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb10-28"><a aria-hidden="true" href="#cb10-28" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb10-29"><a aria-hidden="true" href="#cb10-29" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
+<span id="cb10-30"><a aria-hidden="true" href="#cb10-30" tabindex="-1"></a><span class="st">    service_description     DNS - resolution intranet</span></span>
+<span id="cb10-31"><a aria-hidden="true" href="#cb10-31" tabindex="-1"></a><span class="st">    check_command           hx-dns!intranet.hexalog.local!10.20.N.20</span></span>
+<span id="cb10-32"><a aria-hidden="true" href="#cb10-32" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb10-33"><a aria-hidden="true" href="#cb10-33" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb10-34"><a aria-hidden="true" href="#cb10-34" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb10-35"><a aria-hidden="true" href="#cb10-35" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
+<span id="cb10-36"><a aria-hidden="true" href="#cb10-36" tabindex="-1"></a><span class="st">    service_description     LDAP</span></span>
+<span id="cb10-37"><a aria-hidden="true" href="#cb10-37" tabindex="-1"></a><span class="st">    check_command           hx-tcp!389</span></span>
+<span id="cb10-38"><a aria-hidden="true" href="#cb10-38" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb10-39"><a aria-hidden="true" href="#cb10-39" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb10-40"><a aria-hidden="true" href="#cb10-40" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb10-41"><a aria-hidden="true" href="#cb10-41" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
+<span id="cb10-42"><a aria-hidden="true" href="#cb10-42" tabindex="-1"></a><span class="st">    service_description     Kerberos</span></span>
+<span id="cb10-43"><a aria-hidden="true" href="#cb10-43" tabindex="-1"></a><span class="st">    check_command           hx-tcp!88</span></span>
+<span id="cb10-44"><a aria-hidden="true" href="#cb10-44" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb10-45"><a aria-hidden="true" href="#cb10-45" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div></div>
 <h3 id="c.5-votre-numéro-vérification-chargement">C.5, Votre numéro, vérification, chargement</h3>
 <p>Remplacez <code>3</code> par votre numéro dans la première commande :</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./g'</span> /etc/nagios4/conf.d/hexalog-<span class="pp">*</span>.cfg</span>
-<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-n</span> <span class="st">"10.20"</span> /etc/nagios4/conf.d/hexalog-<span class="pp">*</span>.cfg</span>
-<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">"Checked (hosts|services)|Total"</span></span>
-<span id="cb10-4"><a aria-hidden="true" href="#cb10-4" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./g'</span> /etc/nagios4/conf.d/hexalog-<span class="pp">*</span>.cfg</span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-n</span> <span class="st">"10.20"</span> /etc/nagios4/conf.d/hexalog-<span class="pp">*</span>.cfg</span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">"Checked (hosts|services)|Total"</span></span>
+<span id="cb11-4"><a aria-hidden="true" href="#cb11-4" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
 <p>Résultat attendu : 3 hôtes (avec <code>localhost</code>), <code>Total Warnings: 0</code>, <code>Total Errors: 0</code>. Si votre plugin du TP 2 n’est pas dans <code>/usr/local/lib/nagios/check_intranet</code>, le service <em>Intranet - sante</em> restera en UNKNOWN : reprenez la partie B.4 du TP 2.</p>
 <p>Dans l’interface, les nouveaux services sont d’abord <em>PENDING</em>, puis passent à OK en deux minutes au plus. Pour ne pas attendre : page de l’hôte → <em>Schedule a check of all services on this host</em>.</p>
 <h2 id="partie-d.-lagent-nrpe-sur-srv-lnx-01-30-min">Partie D. L’agent NRPE sur srv-lnx-01 (30 min)</h2>
 <h3 id="d.1-installer-et-configurer-lagent">D.1, Installer et configurer l’agent</h3>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> nagios-nrpe-server monitoring-plugins</span>
-<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios/nrpe.d/hexalog.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a><span class="st"># Hexalog : serveur de supervision autorisé et commandes proposées</span></span>
-<span id="cb11-4"><a aria-hidden="true" href="#cb11-4" tabindex="-1"></a><span class="st">allowed_hosts=127.0.0.1,::1,10.20.N.40</span></span>
-<span id="cb11-5"><a aria-hidden="true" href="#cb11-5" tabindex="-1"></a><span class="st">command[hx_disque_racine]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /</span></span>
-<span id="cb11-6"><a aria-hidden="true" href="#cb11-6" tabindex="-1"></a><span class="st">command[hx_charge]=/usr/lib/nagios/plugins/check_load -r -w 0.8,0.7,0.6 -c 1.5,1.2,1.0</span></span>
-<span id="cb11-7"><a aria-hidden="true" href="#cb11-7" tabindex="-1"></a><span class="st">command[hx_nginx]=/usr/lib/nagios/plugins/check_procs -C nginx -c 1:</span></span>
-<span id="cb11-8"><a aria-hidden="true" href="#cb11-8" tabindex="-1"></a><span class="st">command[hx_phpfpm]=/usr/lib/nagios/plugins/check_procs -C php-fpm8.4 -c 1:</span></span>
-<span id="cb11-9"><a aria-hidden="true" href="#cb11-9" tabindex="-1"></a><span class="st">command[hx_mariadb]=/usr/lib/nagios/plugins/check_procs -C mariadbd -c 1:</span></span>
-<span id="cb11-10"><a aria-hidden="true" href="#cb11-10" tabindex="-1"></a><span class="st">command[hx_maj]=/usr/lib/nagios/plugins/check_apt</span></span>
-<span id="cb11-11"><a aria-hidden="true" href="#cb11-11" tabindex="-1"></a><span class="op">EOF</span></span>
-<span id="cb11-12"><a aria-hidden="true" href="#cb11-12" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./'</span> /etc/nagios/nrpe.d/hexalog.cfg     <span class="co"># votre numéro</span></span>
-<span id="cb11-13"><a aria-hidden="true" href="#cb11-13" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart nagios-nrpe-server</span>
-<span id="cb11-14"><a aria-hidden="true" href="#cb11-14" tabindex="-1"></a><span class="fu">sudo</span> ss <span class="at">-tlnp</span> <span class="kw">|</span> <span class="fu">grep</span> 5666</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> nagios-nrpe-server monitoring-plugins</span>
+<span id="cb12-2"><a aria-hidden="true" href="#cb12-2" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios/nrpe.d/hexalog.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb12-3"><a aria-hidden="true" href="#cb12-3" tabindex="-1"></a><span class="st"># Hexalog : serveur de supervision autorisé et commandes proposées</span></span>
+<span id="cb12-4"><a aria-hidden="true" href="#cb12-4" tabindex="-1"></a><span class="st">allowed_hosts=127.0.0.1,::1,10.20.N.40</span></span>
+<span id="cb12-5"><a aria-hidden="true" href="#cb12-5" tabindex="-1"></a><span class="st">command[hx_disque_racine]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /</span></span>
+<span id="cb12-6"><a aria-hidden="true" href="#cb12-6" tabindex="-1"></a><span class="st">command[hx_charge]=/usr/lib/nagios/plugins/check_load -r -w 0.8,0.7,0.6 -c 1.5,1.2,1.0</span></span>
+<span id="cb12-7"><a aria-hidden="true" href="#cb12-7" tabindex="-1"></a><span class="st">command[hx_nginx]=/usr/lib/nagios/plugins/check_procs -C nginx -c 1:</span></span>
+<span id="cb12-8"><a aria-hidden="true" href="#cb12-8" tabindex="-1"></a><span class="st">command[hx_phpfpm]=/usr/lib/nagios/plugins/check_procs -C php-fpm8.4 -c 1:</span></span>
+<span id="cb12-9"><a aria-hidden="true" href="#cb12-9" tabindex="-1"></a><span class="st">command[hx_mariadb]=/usr/lib/nagios/plugins/check_procs -C mariadbd -c 1:</span></span>
+<span id="cb12-10"><a aria-hidden="true" href="#cb12-10" tabindex="-1"></a><span class="st">command[hx_maj]=/usr/lib/nagios/plugins/check_apt</span></span>
+<span id="cb12-11"><a aria-hidden="true" href="#cb12-11" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb12-12"><a aria-hidden="true" href="#cb12-12" tabindex="-1"></a><span class="fu">sudo</span> sed <span class="at">-i</span> <span class="st">'s/10\.20\.N\./10.20.3./'</span> /etc/nagios/nrpe.d/hexalog.cfg     <span class="co"># votre numéro</span></span>
+<span id="cb12-13"><a aria-hidden="true" href="#cb12-13" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart nagios-nrpe-server</span>
+<span id="cb12-14"><a aria-hidden="true" href="#cb12-14" tabindex="-1"></a><span class="fu">sudo</span> ss <span class="at">-tlnp</span> <span class="kw">|</span> <span class="fu">grep</span> 5666</span></code></pre></div></div>
 <p>Le fichier ajouté est lu <strong>après</strong> le fichier principal : sa ligne <code>allowed_hosts</code> remplace celle de <code>nrpe.cfg</code>. On ne modifie pas le fichier fourni par le paquet.</p>
 <h3 id="d.2-tester-depuis-sup-lnx-01">D.2, Tester depuis sup-lnx-01</h3>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class="ex">/usr/lib/nagios/plugins/check_nrpe</span> <span class="at">-H</span> 10.20.N.20</span>
-<span id="cb12-2"><a aria-hidden="true" href="#cb12-2" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> hx_disque_racine hx_charge hx_nginx hx_phpfpm hx_mariadb hx_maj <span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb12-3"><a aria-hidden="true" href="#cb12-3" tabindex="-1"></a>  <span class="ex">/usr/lib/nagios/plugins/check_nrpe</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-c</span> <span class="va">$c</span> <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"  -&gt; code </span><span class="va">$?</span><span class="st">"</span></span>
-<span id="cb12-4"><a aria-hidden="true" href="#cb12-4" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb12-5"><a aria-hidden="true" href="#cb12-5" tabindex="-1"></a><span class="ex">/usr/lib/nagios/plugins/check_nrpe</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-c</span> commande_inconnue</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a aria-hidden="true" href="#cb13-1" tabindex="-1"></a><span class="ex">/usr/lib/nagios/plugins/check_nrpe</span> <span class="at">-H</span> 10.20.N.20</span>
+<span id="cb13-2"><a aria-hidden="true" href="#cb13-2" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> hx_disque_racine hx_charge hx_nginx hx_phpfpm hx_mariadb hx_maj <span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb13-3"><a aria-hidden="true" href="#cb13-3" tabindex="-1"></a>  <span class="ex">/usr/lib/nagios/plugins/check_nrpe</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-c</span> <span class="va">$c</span> <span class="kw">;</span> <span class="bu">echo</span> <span class="st">"  -&gt; code </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb13-4"><a aria-hidden="true" href="#cb13-4" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb13-5"><a aria-hidden="true" href="#cb13-5" tabindex="-1"></a><span class="ex">/usr/lib/nagios/plugins/check_nrpe</span> <span class="at">-H</span> 10.20.N.20 <span class="at">-c</span> commande_inconnue</span></code></pre></div></div>
 <p>Résultat attendu : la version de NRPE, puis un résultat par commande. <code>hx_maj</code> est probablement en WARNING ou CRITICAL : des mises à jour attendent (séance 7). Une commande inconnue est refusée.</p>
 <h3 id="d.3-les-services-nrpe-dans-nagios">D.3, Les services NRPE dans Nagios</h3>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a aria-hidden="true" href="#cb13-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-nrpe.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb13-2"><a aria-hidden="true" href="#cb13-2" tabindex="-1"></a><span class="st"># srv-lnx-01 vu de l'intérieur, par NRPE</span></span>
-<span id="cb13-3"><a aria-hidden="true" href="#cb13-3" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb13-4"><a aria-hidden="true" href="#cb13-4" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb13-5"><a aria-hidden="true" href="#cb13-5" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb13-6"><a aria-hidden="true" href="#cb13-6" tabindex="-1"></a><span class="st">    service_description     Disque /</span></span>
-<span id="cb13-7"><a aria-hidden="true" href="#cb13-7" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_disque_racine</span></span>
-<span id="cb13-8"><a aria-hidden="true" href="#cb13-8" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb13-9"><a aria-hidden="true" href="#cb13-9" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb13-10"><a aria-hidden="true" href="#cb13-10" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb13-11"><a aria-hidden="true" href="#cb13-11" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb13-12"><a aria-hidden="true" href="#cb13-12" tabindex="-1"></a><span class="st">    service_description     Charge</span></span>
-<span id="cb13-13"><a aria-hidden="true" href="#cb13-13" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_charge</span></span>
-<span id="cb13-14"><a aria-hidden="true" href="#cb13-14" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb13-15"><a aria-hidden="true" href="#cb13-15" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb13-16"><a aria-hidden="true" href="#cb13-16" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb13-17"><a aria-hidden="true" href="#cb13-17" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb13-18"><a aria-hidden="true" href="#cb13-18" tabindex="-1"></a><span class="st">    service_description     Processus nginx</span></span>
-<span id="cb13-19"><a aria-hidden="true" href="#cb13-19" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_nginx</span></span>
-<span id="cb13-20"><a aria-hidden="true" href="#cb13-20" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb13-21"><a aria-hidden="true" href="#cb13-21" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb13-22"><a aria-hidden="true" href="#cb13-22" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb13-23"><a aria-hidden="true" href="#cb13-23" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb13-24"><a aria-hidden="true" href="#cb13-24" tabindex="-1"></a><span class="st">    service_description     Processus PHP-FPM</span></span>
-<span id="cb13-25"><a aria-hidden="true" href="#cb13-25" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_phpfpm</span></span>
-<span id="cb13-26"><a aria-hidden="true" href="#cb13-26" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb13-27"><a aria-hidden="true" href="#cb13-27" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb13-28"><a aria-hidden="true" href="#cb13-28" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb13-29"><a aria-hidden="true" href="#cb13-29" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb13-30"><a aria-hidden="true" href="#cb13-30" tabindex="-1"></a><span class="st">    service_description     Processus MariaDB</span></span>
-<span id="cb13-31"><a aria-hidden="true" href="#cb13-31" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_mariadb</span></span>
-<span id="cb13-32"><a aria-hidden="true" href="#cb13-32" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb13-33"><a aria-hidden="true" href="#cb13-33" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb13-34"><a aria-hidden="true" href="#cb13-34" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb13-35"><a aria-hidden="true" href="#cb13-35" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb13-36"><a aria-hidden="true" href="#cb13-36" tabindex="-1"></a><span class="st">    service_description     Mises a jour</span></span>
-<span id="cb13-37"><a aria-hidden="true" href="#cb13-37" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_maj</span></span>
-<span id="cb13-38"><a aria-hidden="true" href="#cb13-38" tabindex="-1"></a><span class="st">    check_interval          60</span></span>
-<span id="cb13-39"><a aria-hidden="true" href="#cb13-39" tabindex="-1"></a><span class="st">    notification_interval   0</span></span>
-<span id="cb13-40"><a aria-hidden="true" href="#cb13-40" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb13-41"><a aria-hidden="true" href="#cb13-41" tabindex="-1"></a><span class="op">EOF</span></span>
-<span id="cb13-42"><a aria-hidden="true" href="#cb13-42" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">"Checked services|Total"</span></span>
-<span id="cb13-43"><a aria-hidden="true" href="#cb13-43" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a aria-hidden="true" href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-nrpe.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb14-2"><a aria-hidden="true" href="#cb14-2" tabindex="-1"></a><span class="st"># srv-lnx-01 vu de l'intérieur, par NRPE</span></span>
+<span id="cb14-3"><a aria-hidden="true" href="#cb14-3" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb14-4"><a aria-hidden="true" href="#cb14-4" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb14-5"><a aria-hidden="true" href="#cb14-5" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb14-6"><a aria-hidden="true" href="#cb14-6" tabindex="-1"></a><span class="st">    service_description     Disque /</span></span>
+<span id="cb14-7"><a aria-hidden="true" href="#cb14-7" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_disque_racine</span></span>
+<span id="cb14-8"><a aria-hidden="true" href="#cb14-8" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb14-9"><a aria-hidden="true" href="#cb14-9" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb14-10"><a aria-hidden="true" href="#cb14-10" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb14-11"><a aria-hidden="true" href="#cb14-11" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb14-12"><a aria-hidden="true" href="#cb14-12" tabindex="-1"></a><span class="st">    service_description     Charge</span></span>
+<span id="cb14-13"><a aria-hidden="true" href="#cb14-13" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_charge</span></span>
+<span id="cb14-14"><a aria-hidden="true" href="#cb14-14" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb14-15"><a aria-hidden="true" href="#cb14-15" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb14-16"><a aria-hidden="true" href="#cb14-16" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb14-17"><a aria-hidden="true" href="#cb14-17" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb14-18"><a aria-hidden="true" href="#cb14-18" tabindex="-1"></a><span class="st">    service_description     Processus nginx</span></span>
+<span id="cb14-19"><a aria-hidden="true" href="#cb14-19" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_nginx</span></span>
+<span id="cb14-20"><a aria-hidden="true" href="#cb14-20" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb14-21"><a aria-hidden="true" href="#cb14-21" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb14-22"><a aria-hidden="true" href="#cb14-22" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb14-23"><a aria-hidden="true" href="#cb14-23" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb14-24"><a aria-hidden="true" href="#cb14-24" tabindex="-1"></a><span class="st">    service_description     Processus PHP-FPM</span></span>
+<span id="cb14-25"><a aria-hidden="true" href="#cb14-25" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_phpfpm</span></span>
+<span id="cb14-26"><a aria-hidden="true" href="#cb14-26" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb14-27"><a aria-hidden="true" href="#cb14-27" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb14-28"><a aria-hidden="true" href="#cb14-28" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb14-29"><a aria-hidden="true" href="#cb14-29" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb14-30"><a aria-hidden="true" href="#cb14-30" tabindex="-1"></a><span class="st">    service_description     Processus MariaDB</span></span>
+<span id="cb14-31"><a aria-hidden="true" href="#cb14-31" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_mariadb</span></span>
+<span id="cb14-32"><a aria-hidden="true" href="#cb14-32" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb14-33"><a aria-hidden="true" href="#cb14-33" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb14-34"><a aria-hidden="true" href="#cb14-34" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb14-35"><a aria-hidden="true" href="#cb14-35" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb14-36"><a aria-hidden="true" href="#cb14-36" tabindex="-1"></a><span class="st">    service_description     Mises a jour</span></span>
+<span id="cb14-37"><a aria-hidden="true" href="#cb14-37" tabindex="-1"></a><span class="st">    check_command           hx-nrpe!hx_maj</span></span>
+<span id="cb14-38"><a aria-hidden="true" href="#cb14-38" tabindex="-1"></a><span class="st">    check_interval          60</span></span>
+<span id="cb14-39"><a aria-hidden="true" href="#cb14-39" tabindex="-1"></a><span class="st">    notification_interval   0</span></span>
+<span id="cb14-40"><a aria-hidden="true" href="#cb14-40" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb14-41"><a aria-hidden="true" href="#cb14-41" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb14-42"><a aria-hidden="true" href="#cb14-42" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">"Checked services|Total"</span></span>
+<span id="cb14-43"><a aria-hidden="true" href="#cb14-43" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
 <h2 id="partie-e.-observer-soft-et-hard-sur-une-vraie-panne-25-min">Partie E. Observer SOFT et HARD sur une vraie panne (25 min)</h2>
 <p>Gardez ouverte la page <em>Services</em> de srv-lnx-01 (elle s’actualise toute seule toutes les 90 secondes ; F5 pour forcer). Notez l’heure, puis :</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a aria-hidden="true" href="#cb14-1" tabindex="-1"></a><span class="fu">date</span> <span class="kw">;</span> <span class="fu">sudo</span> systemctl stop nginx</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a aria-hidden="true" href="#cb15-1" tabindex="-1"></a><span class="fu">date</span> <span class="kw">;</span> <span class="fu">sudo</span> systemctl stop nginx</span></code></pre></div></div>
 <p>Pendant cinq minutes, relevez dans un tableau l’heure, l’état et le type d’état (<em>State Type</em> : SOFT ou HARD, et le numéro d’essai, <em>Current Attempt</em>) des services <em>Intranet - accueil</em>, <em>Intranet - sante</em> et <em>Processus nginx</em>. Puis :</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a aria-hidden="true" href="#cb15-1" tabindex="-1"></a><span class="fu">date</span> <span class="kw">;</span> <span class="fu">sudo</span> systemctl start nginx</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : srv-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a aria-hidden="true" href="#cb16-1" tabindex="-1"></a><span class="fu">date</span> <span class="kw">;</span> <span class="fu">sudo</span> systemctl start nginx</span></code></pre></div></div>
 <ol type="1">
 <li>Combien de temps s’est écoulé entre l’arrêt de nginx et le passage en HARD ? Comparez avec la formule du cours.</li>
 <li>Le service <em>SSH</em> a-t-il changé d’état ? Et <em>Processus PHP-FPM</em> ? Que montre cette panne sur l’intérêt de superviser à la fois de l’extérieur et de l’intérieur ?</li>
@@ -324,11 +324,11 @@
 <h2 id="partie-f.-les-alertes-par-courriel-25-min">Partie F. Les alertes par courriel (25 min)</h2>
 <h3 id="f.1-une-messagerie-locale">F.1, Une messagerie locale</h3>
 <p>Postfix, configuré en « local uniquement », remet les courriels dans les boîtes des comptes de sup-lnx-01, sans rien envoyer à l’extérieur.</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a aria-hidden="true" href="#cb16-1" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"postfix postfix/main_mailer_type select Local only"</span> <span class="kw">|</span> <span class="fu">sudo</span> debconf-set-selections</span>
-<span id="cb16-2"><a aria-hidden="true" href="#cb16-2" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"postfix postfix/mailname string sup-lnx-01.hexalog.local"</span> <span class="kw">|</span> <span class="fu">sudo</span> debconf-set-selections</span>
-<span id="cb16-3"><a aria-hidden="true" href="#cb16-3" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> postfix mailutils</span>
-<span id="cb16-4"><a aria-hidden="true" href="#cb16-4" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Message de test"</span> <span class="kw">|</span> <span class="ex">mail</span> <span class="at">-s</span> <span class="st">"Test de messagerie"</span> sysadmin@localhost</span>
-<span id="cb16-5"><a aria-hidden="true" href="#cb16-5" tabindex="-1"></a><span class="ex">mail</span></span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a aria-hidden="true" href="#cb17-1" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"postfix postfix/main_mailer_type select Local only"</span> <span class="kw">|</span> <span class="fu">sudo</span> debconf-set-selections</span>
+<span id="cb17-2"><a aria-hidden="true" href="#cb17-2" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"postfix postfix/mailname string sup-lnx-01.hexalog.local"</span> <span class="kw">|</span> <span class="fu">sudo</span> debconf-set-selections</span>
+<span id="cb17-3"><a aria-hidden="true" href="#cb17-3" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> postfix mailutils</span>
+<span id="cb17-4"><a aria-hidden="true" href="#cb17-4" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Message de test"</span> <span class="kw">|</span> <span class="ex">mail</span> <span class="at">-s</span> <span class="st">"Test de messagerie"</span> sysadmin@localhost</span>
+<span id="cb17-5"><a aria-hidden="true" href="#cb17-5" tabindex="-1"></a><span class="ex">mail</span></span></code></pre></div></div>
 <p>Dans <code>mail</code>, tapez le numéro du message pour le lire, <code>d</code> pour le supprimer, <code>q</code> pour quitter.</p>
 <h3 id="f.2-recevoir-une-alerte">F.2, Recevoir une alerte</h3>
 <p>Arrêtez de nouveau nginx sur srv-lnx-01. Quand le service passe en HARD, une notification part : lisez-la avec <code>mail</code> sur sup-lnx-01. Redémarrez nginx : un message <code>RECOVERY</code> arrive à son tour.</p>
@@ -338,81 +338,81 @@
 <li>Vous devez redémarrer srv-lnx-01 pour une maintenance. Page de l’hôte → <strong>Schedule downtime for this host and all services</strong>, pour 15 minutes. Redémarrez la VM (<code>sudo reboot</code>). Avez-vous reçu des notifications ? Que montre <em>Event Log</em> ?</li>
 </ol>
 <p>Snapshots <code>03-nagios</code> de sup-lnx-01 et srv-lnx-01.</p>
-<h2 id="partie-g.-windows-avec-ncpa-facultatif-30-min">Partie G. Windows avec NCPA (facultatif, 30 min)</h2>
+<h2 id="partie-g.-windows-avec-ncpa-30-min">Partie G. Windows avec NCPA (30 min)</h2>
 <ol type="1">
 <li>Sur srv-win-01, téléchargez l’agent NCPA (<code>https://assets.nagios.com/downloads/ncpa3/ncpa-latest.exe</code>) avec le navigateur, puis installez-le. Pendant l’installation, choisissez un <strong>jeton</strong> (<em>token</em>) long, par exemple <code>Jeton-NCPA-Hexalog-2027</code>, et laissez le port 5693.</li>
 <li><code>wf.msc</code> : vérifiez qu’une règle de trafic entrant autorise le port TCP 5693 ; sinon, créez-la en la limitant à l’adresse distante <code>10.20.N.40</code>.</li>
 <li>Sur sup-lnx-01 :</li>
 </ol>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a aria-hidden="true" href="#cb17-1" tabindex="-1"></a><span class="fu">sudo</span> curl <span class="at">-fsSL</span> <span class="at">-o</span> /usr/lib/nagios/plugins/check_ncpa.py https://raw.githubusercontent.com/NagiosEnterprises/ncpa/master/client/check_ncpa.py</span>
-<span id="cb17-2"><a aria-hidden="true" href="#cb17-2" tabindex="-1"></a><span class="fu">sudo</span> chmod 755 /usr/lib/nagios/plugins/check_ncpa.py</span>
-<span id="cb17-3"><a aria-hidden="true" href="#cb17-3" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'$USER9$=Jeton-NCPA-Hexalog-2027'</span> <span class="kw">|</span> <span class="fu">sudo</span> tee <span class="at">-a</span> /etc/nagios4/resource.cfg</span>
-<span id="cb17-4"><a aria-hidden="true" href="#cb17-4" tabindex="-1"></a><span class="va">P</span><span class="op">=</span>/usr/lib/nagios/plugins/check_ncpa.py <span class="kw">;</span> <span class="va">T</span><span class="op">=</span>Jeton-NCPA-Hexalog-2027</span>
-<span id="cb17-5"><a aria-hidden="true" href="#cb17-5" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> system/agent_version</span>
-<span id="cb17-6"><a aria-hidden="true" href="#cb17-6" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> cpu/percent <span class="at">-q</span> aggregate=avg <span class="at">-w</span> 80 <span class="at">-c</span> 95</span>
-<span id="cb17-7"><a aria-hidden="true" href="#cb17-7" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> memory/virtual/percent <span class="at">-w</span> 85 <span class="at">-c</span> 95</span>
-<span id="cb17-8"><a aria-hidden="true" href="#cb17-8" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> <span class="st">'disk/logical/C:|/used_percent'</span> <span class="at">-w</span> 80 <span class="at">-c</span> 90</span>
-<span id="cb17-9"><a aria-hidden="true" href="#cb17-9" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> services <span class="at">-q</span> service=NTDS,status=running</span>
-<span id="cb17-10"><a aria-hidden="true" href="#cb17-10" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> services <span class="at">-q</span> service=DNS,status=running</span></code></pre></div></div>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a aria-hidden="true" href="#cb18-1" tabindex="-1"></a><span class="fu">sudo</span> curl <span class="at">-fsSL</span> <span class="at">-o</span> /usr/lib/nagios/plugins/check_ncpa.py https://raw.githubusercontent.com/NagiosEnterprises/ncpa/master/client/check_ncpa.py</span>
+<span id="cb18-2"><a aria-hidden="true" href="#cb18-2" tabindex="-1"></a><span class="fu">sudo</span> chmod 755 /usr/lib/nagios/plugins/check_ncpa.py</span>
+<span id="cb18-3"><a aria-hidden="true" href="#cb18-3" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'$USER9$=Jeton-NCPA-Hexalog-2027'</span> <span class="kw">|</span> <span class="fu">sudo</span> tee <span class="at">-a</span> /etc/nagios4/resource.cfg</span>
+<span id="cb18-4"><a aria-hidden="true" href="#cb18-4" tabindex="-1"></a><span class="va">P</span><span class="op">=</span>/usr/lib/nagios/plugins/check_ncpa.py <span class="kw">;</span> <span class="va">T</span><span class="op">=</span>Jeton-NCPA-Hexalog-2027</span>
+<span id="cb18-5"><a aria-hidden="true" href="#cb18-5" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> system/agent_version</span>
+<span id="cb18-6"><a aria-hidden="true" href="#cb18-6" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> cpu/percent <span class="at">-q</span> aggregate=avg <span class="at">-w</span> 80 <span class="at">-c</span> 95</span>
+<span id="cb18-7"><a aria-hidden="true" href="#cb18-7" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> memory/virtual/percent <span class="at">-w</span> 85 <span class="at">-c</span> 95</span>
+<span id="cb18-8"><a aria-hidden="true" href="#cb18-8" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> <span class="st">'disk/logical/C:|/used_percent'</span> <span class="at">-w</span> 80 <span class="at">-c</span> 90</span>
+<span id="cb18-9"><a aria-hidden="true" href="#cb18-9" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> services <span class="at">-q</span> service=NTDS,status=running</span>
+<span id="cb18-10"><a aria-hidden="true" href="#cb18-10" tabindex="-1"></a><span class="ex">python3</span> <span class="va">$P</span> <span class="at">-H</span> 10.20.N.10 <span class="at">-t</span> <span class="va">$T</span> <span class="at">-M</span> services <span class="at">-q</span> service=DNS,status=running</span></code></pre></div></div>
 <ol start="4" type="1">
 <li>Déclarez la commande et les services :</li>
 </ol>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a aria-hidden="true" href="#cb18-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-ncpa.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb18-2"><a aria-hidden="true" href="#cb18-2" tabindex="-1"></a><span class="st">define command {</span></span>
-<span id="cb18-3"><a aria-hidden="true" href="#cb18-3" tabindex="-1"></a><span class="st">    command_name    hx-ncpa</span></span>
-<span id="cb18-4"><a aria-hidden="true" href="#cb18-4" tabindex="-1"></a><span class="st">    command_line    /usr/bin/python3 $USER1$/check_ncpa.py -H $HOSTADDRESS$ -t $USER9$ $ARG1$</span></span>
-<span id="cb18-5"><a aria-hidden="true" href="#cb18-5" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb18-6"><a aria-hidden="true" href="#cb18-6" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb18-7"><a aria-hidden="true" href="#cb18-7" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb18-8"><a aria-hidden="true" href="#cb18-8" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
-<span id="cb18-9"><a aria-hidden="true" href="#cb18-9" tabindex="-1"></a><span class="st">    service_description     Processeur</span></span>
-<span id="cb18-10"><a aria-hidden="true" href="#cb18-10" tabindex="-1"></a><span class="st">    check_command           hx-ncpa!-M cpu/percent -q aggregate=avg -w 80 -c 95</span></span>
-<span id="cb18-11"><a aria-hidden="true" href="#cb18-11" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb18-12"><a aria-hidden="true" href="#cb18-12" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb18-13"><a aria-hidden="true" href="#cb18-13" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb18-14"><a aria-hidden="true" href="#cb18-14" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
-<span id="cb18-15"><a aria-hidden="true" href="#cb18-15" tabindex="-1"></a><span class="st">    service_description     Service NTDS</span></span>
-<span id="cb18-16"><a aria-hidden="true" href="#cb18-16" tabindex="-1"></a><span class="st">    check_command           hx-ncpa!-M services -q service=NTDS,status=running</span></span>
-<span id="cb18-17"><a aria-hidden="true" href="#cb18-17" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb18-18"><a aria-hidden="true" href="#cb18-18" tabindex="-1"></a><span class="st">define service {</span></span>
-<span id="cb18-19"><a aria-hidden="true" href="#cb18-19" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb18-20"><a aria-hidden="true" href="#cb18-20" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
-<span id="cb18-21"><a aria-hidden="true" href="#cb18-21" tabindex="-1"></a><span class="st">    service_description     Service DNS</span></span>
-<span id="cb18-22"><a aria-hidden="true" href="#cb18-22" tabindex="-1"></a><span class="st">    check_command           hx-ncpa!-M services -q service=DNS,status=running</span></span>
-<span id="cb18-23"><a aria-hidden="true" href="#cb18-23" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb18-24"><a aria-hidden="true" href="#cb18-24" tabindex="-1"></a><span class="op">EOF</span></span>
-<span id="cb18-25"><a aria-hidden="true" href="#cb18-25" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">grep</span> Total</span>
-<span id="cb18-26"><a aria-hidden="true" href="#cb18-26" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
-<h2 id="partie-h.-snmp-dans-nagios-facultatif-15-min">Partie H. SNMP dans Nagios (facultatif, 15 min)</h2>
-<p>Rangez les identifiants SNMPv3 du TP 2 dans <code>resource.cfg</code> (lisible par Nagios seulement), puis utilisez-les dans une commande :</p>
-<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a aria-hidden="true" href="#cb19-1" tabindex="-1"></a><span class="fu">sudo</span> tee <span class="at">-a</span> /etc/nagios4/resource.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb19-2"><a aria-hidden="true" href="#cb19-2" tabindex="-1"></a><span class="st"># SNMPv3 vers srv-lnx-01</span></span>
-<span id="cb19-3"><a aria-hidden="true" href="#cb19-3" tabindex="-1"></a><span class="st">$USER3$=supervision</span></span>
-<span id="cb19-4"><a aria-hidden="true" href="#cb19-4" tabindex="-1"></a><span class="st">$USER4$=Snmp-Auth-Hexalog</span></span>
-<span id="cb19-5"><a aria-hidden="true" href="#cb19-5" tabindex="-1"></a><span class="st">$USER5$=Snmp-Chiff-Hexalog</span></span>
-<span id="cb19-6"><a aria-hidden="true" href="#cb19-6" tabindex="-1"></a><span class="op">EOF</span></span>
-<span id="cb19-7"><a aria-hidden="true" href="#cb19-7" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-snmp.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
-<span id="cb19-8"><a aria-hidden="true" href="#cb19-8" tabindex="-1"></a><span class="st">define command {</span></span>
-<span id="cb19-9"><a aria-hidden="true" href="#cb19-9" tabindex="-1"></a><span class="st">    command_name    hx-snmp-charge</span></span>
-<span id="cb19-10"><a aria-hidden="true" href="#cb19-10" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_snmp -H $HOSTADDRESS$ -P 3 -L authPriv -U $USER3$ -a SHA-256 -A $USER4$ -x AES -X $USER5$ -o .1.3.6.1.4.1.2021.10.1.5.1 -w $ARG1$ -c $ARG2$ -l "charge x100"</span></span>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a aria-hidden="true" href="#cb19-1" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-ncpa.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb19-2"><a aria-hidden="true" href="#cb19-2" tabindex="-1"></a><span class="st">define command {</span></span>
+<span id="cb19-3"><a aria-hidden="true" href="#cb19-3" tabindex="-1"></a><span class="st">    command_name    hx-ncpa</span></span>
+<span id="cb19-4"><a aria-hidden="true" href="#cb19-4" tabindex="-1"></a><span class="st">    command_line    /usr/bin/python3 $USER1$/check_ncpa.py -H $HOSTADDRESS$ -t $USER9$ $ARG1$</span></span>
+<span id="cb19-5"><a aria-hidden="true" href="#cb19-5" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb19-6"><a aria-hidden="true" href="#cb19-6" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb19-7"><a aria-hidden="true" href="#cb19-7" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb19-8"><a aria-hidden="true" href="#cb19-8" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
+<span id="cb19-9"><a aria-hidden="true" href="#cb19-9" tabindex="-1"></a><span class="st">    service_description     Processeur</span></span>
+<span id="cb19-10"><a aria-hidden="true" href="#cb19-10" tabindex="-1"></a><span class="st">    check_command           hx-ncpa!-M cpu/percent -q aggregate=avg -w 80 -c 95</span></span>
 <span id="cb19-11"><a aria-hidden="true" href="#cb19-11" tabindex="-1"></a><span class="st">}</span></span>
 <span id="cb19-12"><a aria-hidden="true" href="#cb19-12" tabindex="-1"></a><span class="st">define service {</span></span>
 <span id="cb19-13"><a aria-hidden="true" href="#cb19-13" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
-<span id="cb19-14"><a aria-hidden="true" href="#cb19-14" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
-<span id="cb19-15"><a aria-hidden="true" href="#cb19-15" tabindex="-1"></a><span class="st">    service_description     Charge SNMP</span></span>
-<span id="cb19-16"><a aria-hidden="true" href="#cb19-16" tabindex="-1"></a><span class="st">    check_command           hx-snmp-charge!150!300</span></span>
+<span id="cb19-14"><a aria-hidden="true" href="#cb19-14" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
+<span id="cb19-15"><a aria-hidden="true" href="#cb19-15" tabindex="-1"></a><span class="st">    service_description     Service NTDS</span></span>
+<span id="cb19-16"><a aria-hidden="true" href="#cb19-16" tabindex="-1"></a><span class="st">    check_command           hx-ncpa!-M services -q service=NTDS,status=running</span></span>
 <span id="cb19-17"><a aria-hidden="true" href="#cb19-17" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb19-18"><a aria-hidden="true" href="#cb19-18" tabindex="-1"></a><span class="op">EOF</span></span>
-<span id="cb19-19"><a aria-hidden="true" href="#cb19-19" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> /etc/nagios4/resource.cfg</span>
-<span id="cb19-20"><a aria-hidden="true" href="#cb19-20" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">grep</span> Total</span>
-<span id="cb19-21"><a aria-hidden="true" href="#cb19-21" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
+<span id="cb19-18"><a aria-hidden="true" href="#cb19-18" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb19-19"><a aria-hidden="true" href="#cb19-19" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb19-20"><a aria-hidden="true" href="#cb19-20" tabindex="-1"></a><span class="st">    host_name               srv-win-01</span></span>
+<span id="cb19-21"><a aria-hidden="true" href="#cb19-21" tabindex="-1"></a><span class="st">    service_description     Service DNS</span></span>
+<span id="cb19-22"><a aria-hidden="true" href="#cb19-22" tabindex="-1"></a><span class="st">    check_command           hx-ncpa!-M services -q service=DNS,status=running</span></span>
+<span id="cb19-23"><a aria-hidden="true" href="#cb19-23" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb19-24"><a aria-hidden="true" href="#cb19-24" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb19-25"><a aria-hidden="true" href="#cb19-25" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">grep</span> Total</span>
+<span id="cb19-26"><a aria-hidden="true" href="#cb19-26" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
+<h2 id="partie-h.-snmp-dans-nagios-facultatif-15-min">Partie H. SNMP dans Nagios (facultatif, 15 min)</h2>
+<p>Rangez les identifiants SNMPv3 du TP 2 dans <code>resource.cfg</code> (lisible par Nagios seulement), puis utilisez-les dans une commande :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : sup-lnx-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a aria-hidden="true" href="#cb20-1" tabindex="-1"></a><span class="fu">sudo</span> tee <span class="at">-a</span> /etc/nagios4/resource.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb20-2"><a aria-hidden="true" href="#cb20-2" tabindex="-1"></a><span class="st"># SNMPv3 vers srv-lnx-01</span></span>
+<span id="cb20-3"><a aria-hidden="true" href="#cb20-3" tabindex="-1"></a><span class="st">$USER3$=supervision</span></span>
+<span id="cb20-4"><a aria-hidden="true" href="#cb20-4" tabindex="-1"></a><span class="st">$USER4$=Snmp-Auth-Hexalog</span></span>
+<span id="cb20-5"><a aria-hidden="true" href="#cb20-5" tabindex="-1"></a><span class="st">$USER5$=Snmp-Chiff-Hexalog</span></span>
+<span id="cb20-6"><a aria-hidden="true" href="#cb20-6" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb20-7"><a aria-hidden="true" href="#cb20-7" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/nagios4/conf.d/hexalog-snmp.cfg <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb20-8"><a aria-hidden="true" href="#cb20-8" tabindex="-1"></a><span class="st">define command {</span></span>
+<span id="cb20-9"><a aria-hidden="true" href="#cb20-9" tabindex="-1"></a><span class="st">    command_name    hx-snmp-charge</span></span>
+<span id="cb20-10"><a aria-hidden="true" href="#cb20-10" tabindex="-1"></a><span class="st">    command_line    $USER1$/check_snmp -H $HOSTADDRESS$ -P 3 -L authPriv -U $USER3$ -a SHA-256 -A $USER4$ -x AES -X $USER5$ -o .1.3.6.1.4.1.2021.10.1.5.1 -w $ARG1$ -c $ARG2$ -l "charge x100"</span></span>
+<span id="cb20-11"><a aria-hidden="true" href="#cb20-11" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb20-12"><a aria-hidden="true" href="#cb20-12" tabindex="-1"></a><span class="st">define service {</span></span>
+<span id="cb20-13"><a aria-hidden="true" href="#cb20-13" tabindex="-1"></a><span class="st">    use                     hexalog-service</span></span>
+<span id="cb20-14"><a aria-hidden="true" href="#cb20-14" tabindex="-1"></a><span class="st">    host_name               srv-lnx-01</span></span>
+<span id="cb20-15"><a aria-hidden="true" href="#cb20-15" tabindex="-1"></a><span class="st">    service_description     Charge SNMP</span></span>
+<span id="cb20-16"><a aria-hidden="true" href="#cb20-16" tabindex="-1"></a><span class="st">    check_command           hx-snmp-charge!150!300</span></span>
+<span id="cb20-17"><a aria-hidden="true" href="#cb20-17" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb20-18"><a aria-hidden="true" href="#cb20-18" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb20-19"><a aria-hidden="true" href="#cb20-19" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> /etc/nagios4/resource.cfg</span>
+<span id="cb20-20"><a aria-hidden="true" href="#cb20-20" tabindex="-1"></a><span class="fu">sudo</span> nagios4 <span class="at">-v</span> /etc/nagios4/nagios.cfg <span class="kw">|</span> <span class="fu">grep</span> Total</span>
+<span id="cb20-21"><a aria-hidden="true" href="#cb20-21" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload nagios4</span></code></pre></div></div>
 <h2 id="vérifications">Vérifications</h2>
 <ul class="task-list">
-<li><label><input type="checkbox"/>L’interface <code>http://PROXMOX:1N080/nagios4</code> exige un mot de passe ; plus de service <em>Swap Usage</em>.</label></li>
-<li><label><input type="checkbox"/>srv-lnx-01 et srv-win-01 sont UP ; tous leurs services sont OK (sauf <em>Mises a jour</em>, qui signale des mises à jour en attente).</label></li>
-<li><label><input type="checkbox"/>Tableau de la partie E rempli : passage de SOFT 1/3 à HARD 3/3, durée mesurée et comparée à la formule.</label></li>
-<li><label><input type="checkbox"/>Notification PROBLEM puis RECOVERY reçues dans la boîte de <code>sysadmin</code>.</label></li>
-<li><label><input type="checkbox"/>Un problème acquitté et une maintenance planifiée, visibles dans <em>Event Log</em>.</label></li>
+<li><label><input type="checkbox">L’interface <code>http://PROXMOX:1N080/nagios4</code> exige un mot de passe ; les contrôles de <code>localhost</code> sont OK (ou la fausse alerte <em>Swap Usage</em> a été retirée).</label></li>
+<li><label><input type="checkbox">srv-lnx-01 et srv-win-01 sont UP ; tous leurs services sont OK (sauf <em>Mises a jour</em>, qui signale des mises à jour en attente).</label></li>
+<li><label><input type="checkbox">Tableau de la partie E rempli : passage de SOFT 1/3 à HARD 3/3, durée mesurée et comparée à la formule.</label></li>
+<li><label><input type="checkbox">Notification PROBLEM puis RECOVERY reçues dans la boîte de <code>sysadmin</code>.</label></li>
+<li><label><input type="checkbox">Un problème acquitté et une maintenance planifiée, visibles dans <em>Event Log</em>.</label></li>
 </ul>
 <h2 id="questions">Questions</h2>
 <ol type="1">
@@ -420,7 +420,7 @@
 <li>Quel serait le délai maximal de détection avec le modèle <code>generic-service</code> de Debian ? Proposez des valeurs pour un service critique, et dites ce que vous y perdez.</li>
 <li>Pourquoi une seule panne (nginx arrêté) a-t-elle fait passer plusieurs services en CRITICAL ? Comment éviter de recevoir plusieurs alertes pour une seule cause ?</li>
 <li>NRPE refuse <code>commande_inconnue</code>. Pourquoi est-ce important pour la sécurité ?</li>
-<li>Pourquoi supprimer le contrôle <em>Swap Usage</em> plutôt que de s’habituer à le voir rouge ?</li>
+<li>Un contrôle est rouge en permanence pour une raison connue et sans gravité (par exemple <em>Swap Usage</em> sur une machine sans espace d’échange). Pourquoi le corriger ou le supprimer plutôt que de s’habituer à le voir rouge ?</li>
 <li>Quelle différence d’usage entre acquitter un problème et planifier un arrêt ?</li>
 </ol>
 <h2 id="dépannage">Dépannage</h2>
@@ -475,7 +475,7 @@
 </tr>
 <tr class="odd">
 <td>Le ping de srv-win-01 échoue, hôte DOWN</td>
-<td>règle ICMPv4 du pare-feu Windows non activée (TP 1, F.6)</td>
+<td>règle ICMPv4 du pare-feu Windows non activée (TP 1, H.4)</td>
 </tr>
 <tr class="even">
 <td>Aucun courriel</td>
@@ -494,5 +494,6 @@
 <footer class="course-footer"><p>Bachelor Informatique, BLOC 2 : Supervision et maintenance</p></footer>
 </main>
 <script src="../assets/app.js"></script>
-</body>
-</html>
+
+
+</body></html>

@@ -46,15 +46,23 @@
 <tbody>
 <tr class="odd">
 <td>Se connecter</td>
-<td><code>https://PROXMOX:8006</code>, domaine <em>Proxmox VE authentication server</em></td>
+<td><code>https://PROXMOX:8006</code>, identifiant et mot de passe donnés par M. CHADEYRON</td>
 </tr>
 <tr class="even">
 <td>Voir ses VM</td>
 <td>arborescence → <strong>Vue Pool</strong> → <code>etuN</code></td>
 </tr>
 <tr class="odd">
-<td>Créer une VM depuis un modèle</td>
-<td>clic droit sur le modèle → <strong>Cloner</strong> (ID, nom, mode lié ou intégral, pool <code>etuN</code>)</td>
+<td>Créer une VM</td>
+<td>bouton <strong>Créer VM</strong> : Général (ID, nom, pool <code>etuN</code>), Système d’exploitation (image ISO du stockage <code>local</code>), Système (<strong>Agent QEMU</strong> coché), Disques, Processeur, Mémoire, Réseau (pont <code>hexaN</code>, VirtIO, sans pare-feu), Confirmation</td>
+</tr>
+<tr class="even">
+<td>Retirer l’ISO après l’installation</td>
+<td>VM → <strong>Matériel</strong> → Lecteur CD/DVD → Modifier → <strong>N’utiliser aucun média</strong></td>
+</tr>
+<tr class="odd">
+<td>Voir l’adresse IP d’une VM</td>
+<td>VM → <strong>Résumé</strong> → <strong>Adresses IP</strong> (agent invité requis)</td>
 </tr>
 <tr class="even">
 <td>Ajouter une carte réseau</td>
@@ -65,12 +73,12 @@
 <td>VM → <strong>Matériel</strong> → disque → <strong>Action du disque</strong> → <strong>Redimensionner</strong></td>
 </tr>
 <tr class="even">
-<td>Régler une VM Debian au démarrage</td>
-<td>VM → <strong>Cloud-Init</strong> (utilisateur, mot de passe, DNS, clé SSH, adresse) → <strong>Régénérer l’image</strong>, puis redémarrer</td>
+<td>Écran de la VM</td>
+<td>VM → <strong>Console</strong> (<em>noVNC</em>) ; bouton <strong>Ctrl-Alt-Suppr</strong> du panneau de gauche pour Windows ; pas de copier-coller : travailler en SSH pour Linux</td>
 </tr>
 <tr class="odd">
-<td>Écran de la VM</td>
-<td>VM → <strong>Console</strong> (<em>noVNC</em> ou <em>xterm.js</em>) ; bouton <strong>Ctrl-Alt-Suppr</strong> pour Windows</td>
+<td>Windows : pilotes VirtIO</td>
+<td>pendant l’installation : <strong>Charger le pilote</strong> → lecteur <code>virtio-win</code> → <code>vioscsi\2k25\amd64</code> ; après : <code>virtio-win-guest-tools</code> sur le même lecteur</td>
 </tr>
 <tr class="even">
 <td>Débrancher la VM du réseau</td>
@@ -129,8 +137,16 @@
 <td><code>scp fichier srv-lnx-01:/tmp/</code> ; <code>scp srv-lnx-01:/chemin/fichier .</code></td>
 </tr>
 <tr class="even">
+<td>Créer la clé du BLOC 2</td>
+<td><code>ssh-keygen -t ed25519 -f ~/.ssh/id_bloc2 -C bloc2</code> (Windows : <code>$env:USERPROFILE\.ssh\id_bloc2</code>)</td>
+</tr>
+<tr class="odd">
+<td>Déposer la clé publique</td>
+<td>Linux : <code>ssh-copy-id -i ~/.ssh/id_bloc2.pub sup-lnx-01</code> ; Windows : <code>Get-Content $env:USERPROFILE\.ssh\id_bloc2.pub | ssh sup-lnx-01 "mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys"</code></td>
+</tr>
+<tr class="even">
 <td>Empreinte de sa clé</td>
-<td><code>ssh-keygen -lf ~/.ssh/id_ed25519.pub</code></td>
+<td><code>ssh-keygen -lf ~/.ssh/id_bloc2.pub</code></td>
 </tr>
 <tr class="odd">
 <td>Intranet</td>
@@ -161,62 +177,66 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td>fin du premier démarrage</td>
-<td><code>cloud-init status --wait</code> ; journal : <code>sudo less /var/log/cloud-init-output.log</code></td>
+<td>nom, adresses, routes</td>
+<td><code>hostname -f</code>, <code>ip -br a</code> (carte <code>ens18</code>), <code>ip route</code></td>
 </tr>
 <tr class="even">
-<td>nom, adresses, routes</td>
-<td><code>hostnamectl</code>, <code>ip -br a</code>, <code>ip route</code></td>
+<td>configuration réseau fixe</td>
+<td><code>/etc/network/interfaces</code> (adresse, passerelle) ; <code>/etc/resolv.conf</code> (DNS)</td>
 </tr>
 <tr class="odd">
-<td>DNS utilisés, résoudre un nom</td>
-<td><code>resolvectl status</code>, <code>resolvectl query nom</code></td>
+<td>agent invité QEMU</td>
+<td><code>sudo apt install qemu-guest-agent</code> ; <code>systemctl status qemu-guest-agent</code></td>
 </tr>
 <tr class="even">
+<td>DNS utilisés, résoudre un nom</td>
+<td><code>cat /etc/resolv.conf</code> ; <code>getent hosts nom</code></td>
+</tr>
+<tr class="odd">
 <td>heure et synchronisation</td>
 <td><code>timedatectl</code>, <code>timedatectl timesync-status</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>état d’un service</td>
 <td><code>systemctl status nginx</code>, <code>systemctl is-active mariadb</code>, <code>systemctl --failed</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>démarrer, arrêter, au démarrage</td>
 <td><code>sudo systemctl start</code> / <code>stop</code> / <code>restart</code> / <code>enable --now</code> service</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>journaux d’un service</td>
 <td><code>journalctl -u nginx -n 50</code>, <code>journalctl -u ssh --since "-1h"</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>erreurs récentes</td>
 <td><code>journalctl -p err --since today</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>ports en écoute</td>
 <td><code>sudo ss -tlnp</code> (TCP), <code>sudo ss -ulnp</code> (UDP), <code>sudo ss -xlp</code> (sockets locaux)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>espace disque</td>
 <td><code>df -h</code>, <code>sudo du -xh / --max-depth=2 | sort -h | tail</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>mémoire, processus</td>
 <td><code>free -h</code>, <code>top</code>, <code>ps aux --sort=-%cpu | head</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>tâches planifiées (minuteurs)</td>
 <td><code>systemctl list-timers --no-pager</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>lancer une commande en tâche de fond</td>
 <td><code>sudo systemd-run --unit=nom commande</code> ; l’arrêter : <code>sudo systemctl stop nom</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>tester une page web</td>
 <td><code>curl -s -o /dev/null -w "%{http_code} %{time_total}\n" http://IP/</code> ; <code>curl -v http://IP/</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>configuration valide ?</td>
 <td><code>sudo nginx -t</code>, <code>sudo php-fpm8.4 -t</code>, <code>sudo apache2ctl configtest</code>, <code>sudo rsyslogd -N1</code>, <code>sudo nagios4 -v /etc/nagios4/nagios.cfg</code></td>
 </tr>
@@ -515,8 +535,8 @@
 <td><code>/etc/apt/apt.conf.d/20auto-upgrades</code>, <code>50unattended-upgrades</code>, vos réglages dans <code>52hexalog-unattended</code> ; essai : <code>sudo unattended-upgrade --dry-run --debug</code></td>
 </tr>
 <tr class="even">
-<td>services à redémarrer, redémarrage nécessaire</td>
-<td><code>sudo needrestart -r l</code> ; <code>ls /run/reboot-required</code></td>
+<td>redémarrage nécessaire</td>
+<td><code>ls /run/reboot-required</code> ; paquets concernés : <code>cat /run/reboot-required.pkgs</code></td>
 </tr>
 <tr class="odd">
 <td>historique des installations</td>
