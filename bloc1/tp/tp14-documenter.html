@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 14 : Le dossier d&#x27;exploitation Hexalog | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Répétition générale : vous vérifiez point par point que votre lab est conforme à tout ce qui a été construit depuis la première séance, vous corrigez les écarts, puis vous rédigez le dossier d&#x27;exploit">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item active" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp active" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module E : Consolidation</span><span class="sep">›</span><a href="../cours/s14-documenter.html" data-seance="14">Séance 14</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 14</span>
+  <h1>TP 14 : Le dossier d&#x27;exploitation Hexalog</h1>
+  <p class="lead">Répétition générale : vous vérifiez point par point que votre lab est conforme à tout ce qui a été construit depuis la première séance, vous corrigez les écarts, puis vous rédigez le dossier d'exploitation d'Hexalog et son cahier de recette, que vous faites exécuter en partie par un camarade.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>3 h</td></tr><tr><th>Machines virtuelles</th><td>toutes les VM du lab</td></tr><tr><th>Cours associé</th><td><a href="../cours/s14-documenter.html" data-seance="14">Séance 14 : Documenter et valider une infrastructure</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-mise-en-conformité-du-lab-1-h">Partie A. Mise en conformité du lab (1 h)</a></li><li><a href="#partie-b.-le-dossier-dexploitation-1-h-30">Partie B. Le dossier d’exploitation (1 h 30)</a></li><li><a href="#partie-c.-recette-croisée-30-min">Partie C. Recette croisée (30 min)</a></li><li><a href="#fin-de-séance">Fin de séance</a></li><li><a href="#livrables">Livrables</a></li><li><a href="#pour-aller-plus-loin">Pour aller plus loin</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>La direction d’Hexalog va confier l’exploitation de l’infrastructure à un prestataire pendant l’été. Il faut lui remettre un <strong>dossier d’exploitation</strong> complet et la preuve que l’infrastructure fonctionne comme décrit.</p>
+<h2 id="partie-a.-mise-en-conformité-du-lab-1-h">Partie A. Mise en conformité du lab (1 h)</h2>
+<p>Parcourez la liste. Pour chaque point, notez OK ou l’écart constaté, puis corrigez. C’est le moment de rattraper une séance manquée ou un TP inachevé.</p>
+<h3 id="machines-et-réseau">Machines et réseau</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"/>VM présentes et nommées : <code>TPL-DEB13</code> (éteint), <code>SRV-LNX-01</code>, <code>CLI-LNX-01</code>, <code>SRV-WIN-01</code>, <code>BST-LNX-01</code>.</label></li>
+<li><label><input type="checkbox"/>Toutes sur le réseau NAT <code>LAB-HEXALOG</code> (10.10.10.0/24), adresses fixes conformes au plan d’adressage (le DHCP de LAB-HEXALOG reste activé : il ne sert qu’à l’installation des nouvelles VM) ; <code>BST-LNX-01</code> a en plus sa carte d’administration en Accès par pont (adresse donnée par le DHCP du partage de connexion, sans passerelle ni DNS).</label></li>
+<li><label><input type="checkbox"/>DNS de toutes les VM Linux : <code>10.10.10.10</code> en premier, puis le DNS de secours, domaine <code>hexalog.local</code> ; résolution des noms internes et externes.</label></li>
+<li><label><input type="checkbox"/>Redirections : <code>web-srv</code> (8080 → .20:80) uniquement, liée à <code>127.0.0.1</code> ; aucune redirection d’administration (<code>ssh-srv</code> et <code>rdp-dc</code> supprimées).</label></li>
+<li><label><input type="checkbox"/>Snapshots récents sur chaque VM ; export OVA du modèle hors du PC.</label></li>
+</ul>
+<h3 id="windows">Windows</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"/>SRV-WIN-01 contrôleur du domaine <code>hexalog.local</code>, DNS avec redirecteur, enregistrements A des serveurs Linux.</label></li>
+<li><label><input type="checkbox"/>Arborescence d’OU (<code>Utilisateurs</code>, <code>Groupes</code>, <code>Ordinateurs</code>, <code>Admins</code>), groupes <code>GG_*</code> conformes ; <code>CLI-WIN-01</code> membre du domaine, dans l’OU <code>Ordinateurs</code>.</label></li>
+<li><label><input type="checkbox"/>Groupes <code>DL_*</code> conformes au TP 7 (AGDLP : seulement des <code>GG_*</code> dedans) ; partage <code>Partages</code> (<code>C:\Partages</code>), permissions NTFS données aux seuls <code>DL_*</code> et conformes à la matrice, aucun droit nominatif ; ABE si fait.</label></li>
+<li><label><input type="checkbox"/>Default Domain Policy et <code>PSO-Admins</code> conformes à la politique ; audit activé ; liste d’audit sur <code>RH</code>.</label></li>
+<li><label><input type="checkbox"/>RDP limité à <code>10.10.10.30</code>, accessible par tunnel avec <code>adm.nfournier</code>.</label></li>
+</ul>
+<h3 id="linux">Linux</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"/>SRV-LNX-01 : nginx actif, <code>/srv/partages</code> monté par UUID, droits et ACL conformes, délégation <code>web-ops</code>.</label></li>
+<li><label><input type="checkbox"/>SRV-LNX-01 : SSH par clé uniquement, <code>AllowGroups ssh-users</code>, UFW (80 pour tous, 22 depuis le bastion).</label></li>
+<li><label><input type="checkbox"/>BST-LNX-01 : deux cartes (<code>10.10.10.30</code> et la carte en pont), une seule route par défaut et les DNS du lab (bloc <code>interface enp0s8</code> dans <code>/etc/dhcpcd.conf</code>), ne route pas (<code>net.ipv4.ip_forward = 0</code>) ; SSH par clé, durci, UFW ; rebond vers SRV-LNX-01 fonctionnel depuis le PC, avec l’adresse en pont du jour dans <code>~/.ssh/config</code>.</label></li>
+<li><label><input type="checkbox"/>Politique de mots de passe (<code>pwquality</code>), auditd avec ses règles, mises à jour automatiques.</label></li>
+</ul>
+<h3 id="comptes">Comptes</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"/>Demandes RH de la séance 13 traitées (Léa, Emma, Julien) sur les deux systèmes.</label></li>
+<li><label><input type="checkbox"/>Anomalies de la revue d’accès corrigées ou documentées.</label></li>
+</ul>
+<h2 id="partie-b.-le-dossier-dexploitation-1-h-30">Partie B. Le dossier d’exploitation (1 h 30)</h2>
+<p>Rédigez le dossier en <strong>Markdown</strong> (un fichier ou un dossier de fichiers), à partir du modèle de la page <a href="../modeles.html">Modèles de livrables</a>. Contenu minimal :</p>
+<ol type="1">
+<li><strong>Présentation</strong> : Hexalog, périmètre du lab, services rendus.</li>
+<li><strong>Schéma d’architecture</strong> (Mermaid ou diagrams.net) : zones, machines, adresses, flux avec ports.</li>
+<li><strong>Inventaire</strong> des VM.</li>
+<li><strong>Plan d’adressage et DNS</strong> (carte en pont du bastion comprise), redirections de ports.</li>
+<li><strong>Matrice des flux</strong> (source, destination, port, usage, justification) cohérente avec les règles de pare-feu réelles.</li>
+<li><strong>Organisation de l’annuaire</strong> : OU, groupes, conventions de nommage, comptes d’administration.</li>
+<li><strong>Matrice des droits</strong> Windows et Linux.</li>
+<li><strong>Politique d’authentification</strong> et de verrouillage appliquée.</li>
+<li><strong>Procédure d’accès administrateur</strong> (séance 12).</li>
+<li><strong>Deux procédures d’exploitation</strong> au choix : arrivée d’un salarié, départ d’un salarié, ajout d’un dossier partagé, restauration d’un snapshot, redémarrage de nginx par un opérateur, déverrouillage d’un compte.</li>
+<li><strong>Cahier de recette</strong> : au moins 15 tests, dont au moins 6 tests négatifs, couvrant les quatre axes du bloc, avec résultats et preuves.</li>
+<li><strong>Journal des modifications</strong> de la séance (au moins les corrections de la partie A).</li>
+</ol>
+<h2 id="partie-c.-recette-croisée-30-min">Partie C. Recette croisée (30 min)</h2>
+<p>Échangez de poste avec votre binôme. Chacun exécute <strong>cinq tests</strong> choisis dans le cahier de recette de l’autre, <strong>sans aide</strong>, en suivant uniquement ce qui est écrit, et note :</p>
+<ul>
+<li>les tests qui passent ;</li>
+<li>les tests qui échouent ;</li>
+<li>les endroits où la procédure ou le test n’était pas assez clair pour être exécuté.</li>
+</ul>
+<p>Revenez à votre poste, corrigez le dossier ou le lab, et notez ces corrections dans le journal des modifications.</p>
+<h2 id="fin-de-séance">Fin de séance</h2>
+<p>Prenez un snapshot <code>14-lab-final</code> sur <strong>toutes</strong> les VM : c’est le point de départ de l’évaluation finale.</p>
+<h2 id="livrables">Livrables</h2>
+<ul>
+<li>Le dossier d’exploitation (fichiers Markdown et schémas).</li>
+<li>La liste de conformité de la partie A complétée.</li>
+<li>Les retours de la recette croisée et les corrections apportées.</li>
+</ul>
+<h2 id="pour-aller-plus-loin">Pour aller plus loin</h2>
+<p>Versionnez votre dossier avec Git :</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : PC hôte ou CLI-LNX-01</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">git</span> init dossier-exploitation-hexalog</span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="bu">cd</span> dossier-exploitation-hexalog</span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="co"># copiez vos fichiers Markdown et schémas ici</span></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Dossier d'exploitation Hexalog : version initiale"</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--oneline</span></span></code></pre></div></div>
+<p>Chaque modification ultérieure fera l’objet d’un nouveau commit : l’historique de Git devient votre journal des modifications de la documentation.</p>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s14-documenter.html" data-seance="14"><span class="dir">‹ Page précédente</span><span class="titre">Séance 14 : Documenter et valider une infrastructure</span></a><a class="next" href="../cours/s15-synthese.html" data-seance="15"><span class="dir">Page suivante ›</span><span class="titre">Séance 15 : Synthèse et évaluation finale</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

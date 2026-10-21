@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP 13 : Arrivées, mobilités, départs et audit | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Vous activez l&#x27;audit, vous traitez trois demandes des ressources humaines (une arrivée, une mobilité, un départ) sur Windows et sur Linux, vous menez une revue d&#x27;accès qui révèle des anomalies, et vou">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-tp">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="../cours/s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="../cours/s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="../cours/s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="../cours/s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="../cours/s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="../cours/s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../cours/s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="../cours/s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="../cours/s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="../cours/s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="../cours/s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="../cours/s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item active" data-seance="13"><a class="nav-link" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp active" href="tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="../cours/s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="../cours/s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module D : Accès et authentification</span><span class="sep">›</span><a href="../cours/s13-comptes-audit.html" data-seance="13">Séance 13</a><span class="sep">›</span><span>Travaux pratiques</span></div>
+<header class="hero">
+  <span class="surtitre">Travaux pratiques de la séance 13</span>
+  <h1>TP 13 : Arrivées, mobilités, départs et audit</h1>
+  <p class="lead">Vous activez l'audit, vous traitez trois demandes des ressources humaines (une arrivée, une mobilité, un départ) sur Windows et sur Linux, vous menez une revue d'accès qui révèle des anomalies, et vous prouvez chaque action à partir des journaux.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>2 h 45</td></tr><tr><th>Machines virtuelles</th><td>SRV-WIN-01, CLI-WIN-01, SRV-LNX-01</td></tr><tr><th>Cours associé</th><td><a href="../cours/s13-comptes-audit.html" data-seance="13">Séance 13 : Cycle de vie des comptes et audit</a></td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#contexte">Contexte</a></li><li><a href="#partie-a.-activer-laudit-30-min">Partie A. Activer l’audit (30 min)</a></li><li><a href="#partie-b.-traiter-les-demandes-des-rh-1-h">Partie B. Traiter les demandes des RH (1 h)</a></li><li><a href="#partie-c.-revue-daccès-45-min">Partie C. Revue d’accès (45 min)</a></li><li><a href="#partie-d.-prouver-par-les-journaux-30-min">Partie D. Prouver par les journaux (30 min)</a></li><li><a href="#vérifications">Vérifications</a></li><li><a href="#questions">Questions</a></li><li><a href="#dépannage">Dépannage</a></li></ul></nav>
+<article class="content">
+<h2 id="contexte">Contexte</h2>
+<p>Les RH d’Hexalog envoient trois demandes pour la semaine. En parallèle, le commissaire aux comptes demande une <strong>revue des accès</strong> et la preuve que les changements de comptes sont tracés.</p>
+<h2 id="partie-a.-activer-laudit-30-min">Partie A. Activer l’audit (30 min)</h2>
+<p>Snapshots <code>13-avant-audit</code> sur SRV-WIN-01 et SRV-LNX-01.</p>
+<h3 id="a.1-stratégie-daudit-des-contrôleurs-de-domaine">A.1, Stratégie d’audit des contrôleurs de domaine</h3>
+<p>Ouvrez <strong>Gestion des stratégies de groupe</strong> (Outils, ou <code>gpmc.msc</code>) → <code>hexalog.local</code> → <strong>Domain Controllers</strong> → sélectionnez <strong>Default Domain Controllers Policy</strong> → onglet <strong>Paramètres</strong> : notez ce qui est déjà audité (rubrique <em>Stratégies locales → Stratégie d’audit</em>, souvent vide).</p>
+<p>Clic droit sur la <strong>Default Domain Controllers Policy → Modifier</strong> : Configuration ordinateur → Stratégies → Paramètres Windows → Paramètres de sécurité → <strong>Configuration avancée de la stratégie d’audit</strong> → Stratégies d’audit. Configurez (double-clic sur chaque sous-catégorie, cochez <em>Configurer les événements d’audit suivants</em>, puis Succès et/ou Échec) :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Catégorie</th>
+<th>Sous-catégorie</th>
+<th>Succès</th>
+<th>Échec</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Connexion de compte</td>
+<td>Valider les informations d’identification</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr class="even">
+<td>Gestion des comptes</td>
+<td>Gestion des comptes d’utilisateur</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td>Gestion des comptes</td>
+<td>Gestion des groupes de sécurité</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr class="even">
+<td>Ouverture/fermeture de session</td>
+<td>Ouvrir la session</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td>Ouverture/fermeture de session</td>
+<td>Verrouillage du compte</td>
+<td>oui</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Accès aux objets</td>
+<td>Système de fichiers</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td>Changement de stratégie</td>
+<td>Auditer la modification de la stratégie</td>
+<td>oui</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Fermez l’éditeur, tapez <code>gpupdate /force</code> dans l’Invite de commandes du serveur, puis revenez à l’onglet <strong>Paramètres</strong> de la stratégie (F5) : les sous-catégories configurées apparaissent.</p>
+<p>Agrandissez enfin le journal Sécurité : <strong>Observateur d’événements</strong> → Journaux Windows → clic droit sur <strong>Sécurité → Propriétés</strong> → <em>Taille maximale du journal</em> : <code>262144</code> Ko (256 Mo) → OK.</p>
+<h3 id="a.2-auditer-le-dossier-rh">A.2, Auditer le dossier RH</h3>
+<p>Propriétés de <code>C:\Partages\RH</code> → Sécurité → Avancé → onglet <strong>Audit</strong> → Continuer → <strong>Ajouter</strong> :</p>
+<ul>
+<li>principal : <strong>Utilisateurs authentifiés</strong> ; type : <strong>Tout</strong> ; s’applique à : ce dossier, les sous-dossiers et les fichiers ;</li>
+<li>afficher les autorisations avancées, cocher : <strong>Création de fichier/écriture de données</strong>, <strong>Suppression de sous-dossier et fichier</strong>, <strong>Suppression</strong>.</li>
+</ul>
+<h3 id="a.3-linux-auditd">A.3, Linux : auditd</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> auditd</span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/audit/rules.d/hexalog.rules <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="st">-w /etc/passwd -p wa -k comptes</span></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="st">-w /etc/group -p wa -k comptes</span></span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="st">-w /etc/sudoers -p wa -k sudoers</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a><span class="st">-w /etc/sudoers.d/ -p wa -k sudoers</span></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a><span class="st">-w /srv/partages/rh -p wa -k partage-rh</span></span>
+<span id="cb1-8"><a aria-hidden="true" href="#cb1-8" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb1-9"><a aria-hidden="true" href="#cb1-9" tabindex="-1"></a><span class="fu">sudo</span> augenrules <span class="at">--load</span></span>
+<span id="cb1-10"><a aria-hidden="true" href="#cb1-10" tabindex="-1"></a><span class="fu">sudo</span> auditctl <span class="at">-l</span></span></code></pre></div></div>
+<h2 id="partie-b.-traiter-les-demandes-des-rh-1-h">Partie B. Traiter les demandes des RH (1 h)</h2>
+<p>Pour chaque demande, écrivez d’abord la <strong>liste des actions</strong> (Windows et Linux), puis réalisez-les, puis vérifiez. Notez l’heure de chaque action : elle servira à la partie D.</p>
+<h3 id="demande-1.-arrivée">Demande 1. Arrivée</h3>
+<blockquote>
+<p>Léa Fontaine rejoint le service Comptabilité comme assistante comptable, en contrat à durée déterminée de six mois. Elle doit accéder aux dossiers Commun et Comptabilite.</p>
+</blockquote>
+<p>Indications, dans <strong>Utilisateurs et ordinateurs Active Directory</strong> :</p>
+<ol type="1">
+<li>Clic droit sur <code>t.petit</code> (assistant comptable) → <strong>Copier…</strong> → Léa Fontaine, <code>l.fontaine</code>, mot de passe de lab (<em>doit changer le mot de passe</em> coché en entreprise, décoché dans le lab). La copie reprend l’OU et le groupe <code>GG_Comptabilite</code>.</li>
+<li>Propriétés de <code>l.fontaine</code> → onglet <strong>Compte</strong> → <em>Date d’expiration du compte</em> : <strong>Fin de</strong> → la date dans six mois.</li>
+<li>Onglet <strong>Organisation</strong> : fonction <code>Assistante comptable</code>, service <code>Comptabilite</code>.</li>
+<li>Onglet <strong>Membre de</strong> : vérifiez <code>GG_Comptabilite</code>.</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">sudo</span> useradd <span class="at">-m</span> <span class="at">-s</span> /bin/bash <span class="at">-c</span> <span class="st">"Lea Fontaine"</span> <span class="at">-G</span> compta,salaries <span class="at">-e</span> <span class="st">"</span><span class="va">$(</span><span class="fu">date</span> <span class="at">-d</span> <span class="st">'+6 months'</span> +%F<span class="va">)</span><span class="st">"</span> lfontaine</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="fu">sudo</span> passwd lfontaine</span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="fu">sudo</span> chage <span class="at">-l</span> lfontaine          <span class="co"># date d'expiration du compte</span></span></code></pre></div></div>
+<p>Prouvez les accès de Léa : session <code>HEXALOG\l.fontaine</code> sur CLI-WIN-01 (dossiers Commun et Comptabilite ouverts, RH refusé), et <code>sudo -u lfontaine</code> sur SRV-LNX-01.</p>
+<h3 id="demande-2.-mobilité">Demande 2. Mobilité</h3>
+<blockquote>
+<p>Emma Garcia quitte l’Exploitation pour devenir chargée de formation aux Ressources humaines, dès aujourd’hui.</p>
+</blockquote>
+<p>À vous de faire, dans les propriétés d’<code>e.garcia</code> : onglet <strong>Organisation</strong> (service, fonction), onglet <strong>Membre de</strong> (ajouter le nouveau groupe, <strong>retirer l’ancien</strong>) ; sous Linux, <code>gpasswd -d</code> et <code>usermod -aG</code>. Prouvez qu’Emma accède au dossier RH <strong>et n’accède plus</strong> au dossier Exploitation, sur les deux serveurs.</p>
+<h3 id="demande-3.-départ">Demande 3. Départ</h3>
+<blockquote>
+<p>Julien Moreau quitte l’entreprise ce soir. Ses fichiers doivent être conservés pour son successeur.</p>
+</blockquote>
+<p>Procédure attendue, dans <strong>Utilisateurs et ordinateurs Active Directory</strong> :</p>
+<ol type="1">
+<li>Une seule fois : clic droit sur l’OU <strong>HEXALOG → Nouveau → Unité d’organisation</strong> : <code>Desactives</code>.</li>
+<li>Clic droit sur <code>j.moreau</code> → <strong>Désactiver le compte</strong> (une flèche vers le bas apparaît sur son icône).</li>
+<li>Clic droit → <strong>Réinitialiser le mot de passe</strong> : un mot de passe long et aléatoire, que personne ne garde.</li>
+<li>Propriétés → onglet <strong>Membre de</strong> : retirez tous les groupes <code>GG_…</code> (laissez <em>Utilisateurs du domaine</em>, son groupe principal).</li>
+<li>Onglet <strong>Général</strong> → <em>Description</em> : <code>Départ - demande RH n° ... - suppression prévue à J+90</code>.</li>
+<li>Clic droit → <strong>Déplacer…</strong> → <code>HEXALOG → Desactives</code>.</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-L</span> jmoreau                        <span class="co"># verrouiller le mot de passe</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="fu">sudo</span> chage <span class="at">-E</span> 0 jmoreau                        <span class="co"># expirer le compte</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="fu">sudo</span> pkill <span class="at">-u</span> jmoreau <span class="kw">||</span> <span class="fu">true</span>                  <span class="co"># fermer ses éventuelles sessions</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="fu">sudo</span> find /srv/partages /home <span class="at">-user</span> jmoreau    <span class="co"># ses fichiers : à transmettre</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="fu">sudo</span> ls <span class="at">-l</span> /home/jmoreau/.ssh <span class="dv">2</span><span class="op">&gt;</span>/dev/null      <span class="co"># clés à révoquer ?</span></span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="fu">sudo</span> passwd <span class="at">-S</span> jmoreau <span class="kw">;</span> <span class="fu">sudo</span> chage <span class="at">-l</span> jmoreau</span></code></pre></div></div>
+<p>Vérifiez que Julien ne peut plus s’authentifier (session sur CLI-WIN-01 : « Votre compte a été désactivé » ; <code>su - jmoreau</code> : échec).</p>
+<h2 id="partie-c.-revue-daccès-45-min">Partie C. Revue d’accès (45 min)</h2>
+<p>M. CHADEYRON (ou votre binôme) exécute sur vos serveurs un script qui introduit quelques <strong>anomalies</strong>, comme dans une entreprise réelle. Votre revue doit les trouver.</p>
+<h3 id="c.1-revue-windows">C.1, Revue Windows</h3>
+<p>Dans <strong>Utilisateurs et ordinateurs Active Directory</strong> :</p>
+<ol type="1">
+<li><strong>Les groupes à privilèges</strong> : onglet <strong>Membres</strong> de <em>Admins du domaine</em>, <em>Administrateurs de l’entreprise</em> et <em>Administrateurs du schéma</em> (conteneur <code>Users</code>), puis <em>Administrateurs</em>, <em>Opérateurs de serveur</em> et <em>Opérateurs de sauvegarde</em> (conteneur <code>Builtin</code>). Qui ne devrait pas y être ?</li>
+<li><strong>Les comptes qui posent question</strong> : clic droit sur <strong>Requêtes enregistrées → Nouveau → Requête</strong> → nom <code>Revue</code> → <strong>Définir la requête</strong> → <em>Requêtes courantes</em> → cochez <em>Comptes désactivés</em>, puis faites d’autres requêtes avec <em>Mot de passe sans date d’expiration</em> et <em>Nombre de jours depuis la dernière ouverture de session</em> (30). Les résultats s’affichent dans la console.</li>
+<li><strong>Les comptes hors de l’arborescence</strong> : regardez le conteneur <code>Users</code> (seuls les comptes et groupes créés par Windows devraient s’y trouver) et l’OU <code>Utilisateurs</code> (les services et fonctions sont-ils cohérents ? menu <strong>Affichage → Ajouter/Supprimer des colonnes</strong> : ajoutez <em>Description</em>, <em>Service</em>, <em>Fonction</em>).</li>
+<li><strong>Les groupes des services</strong> : onglet <strong>Membres</strong> de chaque groupe <code>GG_…</code> de l’OU <code>Groupes</code>. Chacun est-il dans le groupe de son service, et seulement celui-là ?</li>
+<li><strong>Les groupes de droits</strong> : onglet <strong>Membres</strong> de chaque groupe <code>DL_…</code>. En AGDLP, on n’y trouve que des groupes <code>GG_…</code>, conformes au tableau du TP 7. Une personne directement dans un <code>DL_…</code> est une anomalie.</li>
+</ol>
+<p>Puis, dans l’Explorateur de SRV-WIN-01 : propriétés de chaque dossier de <code>C:\Partages</code> → <strong>Sécurité</strong>. En AGDLP, seuls des groupes <code>DL_…</code> y reçoivent des droits (plus les administrateurs et SYSTEM). Une permission donnée directement à une personne, ou à un groupe <code>GG_…</code>, est une anomalie.</p>
+<h3 id="c.2-extractions-linux">C.2, Extractions Linux</h3>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F:</span> <span class="st">'$3 &gt;= 1000 &amp;&amp; $3 &lt; 60000 {print $1, $3, $7}'</span> /etc/passwd     <span class="co"># comptes humains</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="fu">getent</span> group sudo ssh-users web-ops salaries</span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="fu">sudo</span> cat /etc/sudoers.d/<span class="pp">*</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="cf">for</span> u <span class="kw">in</span> <span class="va">$(</span><span class="fu">awk</span> <span class="at">-F:</span> <span class="st">'$3 &gt;= 1000 &amp;&amp; $3 &lt; 60000 {print $1}'</span> /etc/passwd<span class="va">)</span> <span class="kw">;</span> <span class="cf">do</span> <span class="fu">sudo</span> passwd <span class="at">-S</span> <span class="st">"</span><span class="va">$u</span><span class="st">"</span> <span class="kw">;</span> <span class="cf">done</span>   <span class="co"># P actif, L verrouillé, NP sans mot de passe</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="fu">sudo</span> find /home <span class="at">-name</span> authorized_keys <span class="at">-exec</span> sh <span class="at">-c</span> <span class="st">'echo "== $1" ; cat "$1"'</span> _ {} <span class="dt">\;</span></span>
+<span id="cb4-6"><a aria-hidden="true" href="#cb4-6" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> /srv/partages/<span class="pp">*</span> <span class="kw">;</span> <span class="cf">do</span> <span class="ex">getfacl</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$d</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">'^(# file|user:[a-z]|group:)'</span> <span class="kw">;</span> <span class="cf">done</span></span></code></pre></div></div>
+<h3 id="c.3-rapport-de-revue">C.3, Rapport de revue</h3>
+<p>Pour chaque anomalie : constat (avec la capture ou la commande qui le prouve), risque, action proposée, validation (qui doit décider), action réalisée. Corrigez ce qui relève de l’administration, et listez ce qui doit être validé par un responsable.</p>
+<h2 id="partie-d.-prouver-par-les-journaux-30-min">Partie D. Prouver par les journaux (30 min)</h2>
+<p>Générez un accès audité au dossier RH : ouvrez la session <code>HEXALOG\s.laurent</code> sur CLI-WIN-01, créez un fichier <code>entretien.txt</code> dans <code>\\SRV-WIN-01\Partages\RH</code>, écrivez une ligne, enregistrez, puis supprimez-le.</p>
+<p>Puis retrouvez les événements de toute la séance, sur SRV-WIN-01 : <strong>Observateur d’événements</strong> → Journaux Windows → <strong>Sécurité</strong> → <strong>Filtrer le journal actuel</strong> :</p>
+<ul>
+<li><em>Journalisé</em> : <strong>Dernières 12 heures</strong> ; ID : <code>4720,4722,4724,4725,4728,4729,4732,4733,4738,4740,4767</code> → OK. Triez par date (colonne <em>Date et heure</em>) et ouvrez chaque événement : qui a fait quoi, sur quel compte ;</li>
+<li>puis ID <code>4663</code> : les accès au dossier RH (fichier, compte, type d’accès).</li>
+</ul>
+<p>Pour revenir souvent à ce filtre, enregistrez-le : volet de droite, <strong>Créer une vue personnalisée</strong>.</p>
+<div class="code-block"><div class="code-header"><span class="code-machine">Machine : SRV-LNX-01 (sysadmin)</span><button class="copy" type="button">Copier</button></div><div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-t</span> useradd <span class="at">-t</span> usermod <span class="at">-t</span> userdel <span class="at">-t</span> groupadd <span class="at">-t</span> gpasswd <span class="at">-t</span> passwd <span class="at">-t</span> chage <span class="at">--since</span> today <span class="at">--no-pager</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> ausearch <span class="at">-k</span> comptes <span class="at">-i</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 30</span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class="fu">sudo</span> ausearch <span class="at">-k</span> sudoers <span class="at">-i</span></span></code></pre></div></div>
+<p>Complétez le <strong>journal d’audit</strong> de la séance : pour chaque action de la partie B et chaque anomalie de la partie C, l’heure, le serveur, l’auteur, l’événement ou la ligne de journal qui le prouve.</p>
+<p>Snapshots <code>13-comptes-audit</code>, inventaire et matrice des droits à jour.</p>
+<h2 id="vérifications">Vérifications</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"/>L’onglet Paramètres de la Default Domain Controllers Policy montre les sous-catégories demandées ; le dossier RH a une liste d’audit ; auditd a ses règles.</label></li>
+<li><label><input type="checkbox"/>Léa : compte avec date d’expiration sur les deux serveurs, accès conformes.</label></li>
+<li><label><input type="checkbox"/>Emma : nouveaux droits RH <strong>et</strong> perte des droits Exploitation, prouvées.</label></li>
+<li><label><input type="checkbox"/>Julien : désactivé, hors des groupes, déplacé dans <code>Desactives</code> ; verrouillé et expiré sous Linux ; fichiers recensés.</label></li>
+<li><label><input type="checkbox"/>Rapport de revue d’accès avec toutes les anomalies trouvées.</label></li>
+<li><label><input type="checkbox"/>Journal d’audit reliant chaque action à une trace (4720, 4728/4729, 4732, 4725, 4663, journaux Linux).</label></li>
+</ul>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Pourquoi retirer Julien de ses groupes alors que son compte est déjà désactivé ?</li>
+<li>Quel risque présente un compte avec <code>PasswordNeverExpires</code> membre d’un groupe d’administration ?</li>
+<li>Qui, chez Hexalog, devrait valider la revue d’accès du dossier RH ?</li>
+<li>Un administrateur malveillant pourrait-il effacer ses traces ? Que proposez-vous ?</li>
+</ol>
+<h2 id="dépannage">Dépannage</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Symptôme</th>
+<th>Piste</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Les réglages d’audit ne s’appliquent pas</td>
+<td><code>gpupdate /force</code> ; vérifier que c’est bien la Default Domain Controllers Policy (sous Domain Controllers) qui a été modifiée</td>
+</tr>
+<tr class="even">
+<td>Aucun événement 4663</td>
+<td>sous-catégorie Système de fichiers non activée, ou pas d’entrée dans l’onglet Audit du dossier</td>
+</tr>
+<tr class="odd">
+<td>Déplacer : accès refusé</td>
+<td>vous êtes connecté avec un compte sans droits d’administration du domaine ; la protection contre la suppression accidentelle n’empêche pas de déplacer un objet dans une OU</td>
+</tr>
+<tr class="even">
+<td>Pas d’événement 4663 alors que le fichier a été créé</td>
+<td>la liste d’audit (A.2) manque sur RH, ou la stratégie n’est pas encore appliquée (<code>gpupdate /force</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>augenrules --load</code> ne charge rien</td>
+<td>syntaxe du fichier de règles ; <code>sudo auditctl -l</code> ; le service <code>auditd</code> est-il actif ?</td>
+</tr>
+<tr class="even">
+<td><code>useradd -e</code> refuse la date</td>
+<td>format <code>AAAA-MM-JJ</code> attendu</td>
+</tr>
+</tbody>
+</table></div>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../cours/s13-comptes-audit.html" data-seance="13"><span class="dir">‹ Page précédente</span><span class="titre">Séance 13 : Cycle de vie des comptes et audit</span></a><a class="next" href="../cours/s14-documenter.html" data-seance="14"><span class="dir">Page suivante ›</span><span class="titre">Séance 14 : Documenter et valider une infrastructure</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 14 : Documenter et valider une infrastructure | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="Une infrastructure qui fonctionne mais que personne d'autre ne sait expliquer, reprendre ou vérifier n'est pas terminée. Cette séance donne les méthodes pour documenter (dossier d'exploitation, schéma">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="../tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="../tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="../tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="../tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="../tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="../tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="../tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../tp/tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="../tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="../tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="../tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="../tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="../tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="../tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item active" data-seance="14"><a class="nav-link" href="s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="../tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item" data-seance="15"><a class="nav-link" href="s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module E : Consolidation</span><span class="sep">›</span><span>Séance 14</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 14</span>
+  <h1>Documenter et valider une infrastructure</h1>
+  <p class="lead">Une infrastructure qui fonctionne mais que personne d'autre ne sait expliquer, reprendre ou vérifier n'est pas terminée. Cette séance donne les méthodes pour documenter (dossier d'exploitation, schémas, procédures, journal des modifications) et pour valider (cahier de recette, tests d'accès, preuves). Le TP est une répétition générale avant l'évaluation finale.</p>
+  <table class="fiche-seance"><tbody><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 1 à 13</td></tr><tr><th>Travaux pratiques</th><td><a href="../tp/tp14-documenter.html" data-seance="14">TP 14 : Le dossier d'exploitation Hexalog</a></td></tr></tbody></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#objectifs-de-la-séance">Objectifs de la séance</a></li><li><a href="#pourquoi-documenter">1. Pourquoi documenter</a></li><li><a href="#le-dossier-dexploitation">2. Le dossier d’exploitation</a></li><li><a href="#les-schémas">3. Les schémas</a></li><li><a href="#les-procédures">4. Les procédures</a></li><li><a href="#valider-la-recette">5. Valider : la recette</a></li><li><a href="#le-journal-des-modifications">6. Le journal des modifications</a></li><li><a href="#les-outils">7. Les outils</a></li><li><a href="#préparer-lévaluation-finale">8. Préparer l’évaluation finale</a></li><li><a href="#à-retenir">9. À retenir</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+<article class="content">
+<h2 id="objectifs-de-la-séance">Objectifs de la séance</h2>
+<ul>
+<li>Expliquer l’intérêt et le contenu d’un dossier d’exploitation.</li>
+<li>Réaliser un schéma d’architecture lisible et une matrice des flux.</li>
+<li>Rédiger une procédure d’exploitation reproductible par un tiers.</li>
+<li>Construire un cahier de recette avec des tests positifs et négatifs, et présenter des preuves.</li>
+<li>Tenir un journal des modifications.</li>
+</ul>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>45 min</td>
+<td>Cours</td>
+</tr>
+<tr class="even">
+<td>3 h</td>
+<td><a data-seance="14" href="../tp/tp14-documenter.html">TP 14 : Le dossier d’exploitation Hexalog</a> : mise en conformité du lab et dossier d’exploitation</td>
+</tr>
+<tr class="odd">
+<td>15 min</td>
+<td>Bilan et préparation de l’évaluation</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="pourquoi-documenter">1. Pourquoi documenter</h2>
+<ul>
+<li><strong>Continuité</strong> : l’administrateur est en congé, malade, parti ; quelqu’un d’autre doit pouvoir intervenir.</li>
+<li><strong>Dépannage</strong> : savoir comment c’était configuré, c’est déjà la moitié du diagnostic.</li>
+<li><strong>Sécurité</strong> : on ne protège pas ce qu’on ne connaît pas ; un serveur absent de l’inventaire n’est jamais mis à jour.</li>
+<li><strong>Conformité</strong> : audits, assurance, clients exigent de montrer les règles et leur application.</li>
+<li><strong>Transmission</strong> : un prestataire qui reprend l’infrastructure, un nouvel alternant.</li>
+</ul>
+<h2 id="le-dossier-dexploitation">2. Le dossier d’exploitation</h2>
+<p>Le <strong>dossier d’exploitation</strong> (DEX) rassemble tout ce qu’il faut pour faire fonctionner l’infrastructure au quotidien.</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Partie</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Présentation</td>
+<td>périmètre, services rendus, contacts, niveaux de service attendus</td>
+</tr>
+<tr class="even">
+<td>Architecture</td>
+<td>schémas réseau et applicatif</td>
+</tr>
+<tr class="odd">
+<td>Inventaire</td>
+<td>chaque machine : nom, système et version, rôle, ressources, emplacement, adresses</td>
+</tr>
+<tr class="even">
+<td>Réseau</td>
+<td>plan d’adressage, DNS, redirections, <strong>matrice des flux</strong></td>
+</tr>
+<tr class="odd">
+<td>Identités et droits</td>
+<td>organisation de l’annuaire, groupes, <strong>matrice des droits</strong>, comptes d’administration et de service</td>
+</tr>
+<tr class="even">
+<td>Accès d’administration</td>
+<td>la procédure d’accès (bastion, clés, MFA)</td>
+</tr>
+<tr class="odd">
+<td>Procédures d’exploitation</td>
+<td>arrivée d’un salarié, création d’un partage, redémarrage d’un service, restauration…</td>
+</tr>
+<tr class="even">
+<td>Recette</td>
+<td>cahier de recette et résultats</td>
+</tr>
+<tr class="odd">
+<td>Journal des modifications</td>
+<td>qui a changé quoi, quand, pourquoi</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout danger"><div class="callout-body"><p class="callout-titre"><strong>Pas de mots de passe dans la documentation</strong></p>
+<p>La documentation est lue par beaucoup de monde et copiée partout. Les mots de passe vont dans un <strong>gestionnaire de mots de passe</strong> (KeePassXC, Bitwarden, Vaultwarden…), la documentation indique seulement où les trouver et qui y a accès.</p>
+</div></div>
+<h2 id="les-schémas">3. Les schémas</h2>
+<p>Un bon schéma répond en un coup d’œil à : quelles machines, dans quels réseaux, avec quelles adresses, quels flux entre elles, qu’est-ce qui est exposé.</p>
+<p>Règles :</p>
+<ul>
+<li>un <strong>titre</strong>, une <strong>légende</strong>, la <strong>date de mise à jour</strong> du schéma ;</li>
+<li>les <strong>zones</strong> (réseaux, sous-réseaux) matérialisées par des cadres ;</li>
+<li>chaque machine avec son <strong>nom</strong> et son <strong>adresse</strong> ;</li>
+<li>les <strong>flux</strong> fléchés dans le bon sens, avec le protocole et le port ;</li>
+<li>un schéma par niveau de lecture plutôt qu’un schéma illisible qui montre tout.</li>
+</ul>
+<p>Outils : <strong>diagrams.net</strong> (gratuit, en ligne ou installé), <strong>Mermaid</strong> (le schéma est écrit en texte, il se versionne comme du code, c’est l’outil des schémas de ce cours), Visio.</p>
+<div class="diagram"><div class="mermaid-svg"><svg id="mmd0-731240" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 1091.1640625px;" viewBox="-4.7109375 0 1091.1640625 356.5" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mmd0-731240{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;fill:#1d2530;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mmd0-731240 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mmd0-731240 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mmd0-731240 .error-icon{fill:#f5f6f8;}#mmd0-731240 .error-text{fill:#1d2530;stroke:#1d2530;}#mmd0-731240 .edge-thickness-normal{stroke-width:1px;}#mmd0-731240 .edge-thickness-thick{stroke-width:3.5px;}#mmd0-731240 .edge-pattern-solid{stroke-dasharray:0;}#mmd0-731240 .edge-thickness-invisible{stroke-width:0;fill:none;}#mmd0-731240 .edge-pattern-dashed{stroke-dasharray:3;}#mmd0-731240 .edge-pattern-dotted{stroke-dasharray:2;}#mmd0-731240 .marker{fill:#4a5563;stroke:#4a5563;}#mmd0-731240 .marker.cross{stroke:#4a5563;}#mmd0-731240 svg{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:14px;}#mmd0-731240 p{margin:0;}#mmd0-731240 .label{font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;color:#1d2530;}#mmd0-731240 .cluster-label text{fill:#1f3a5f;}#mmd0-731240 .cluster-label span{color:#1f3a5f;}#mmd0-731240 .cluster-label span p{background-color:transparent;}#mmd0-731240 .label text,#mmd0-731240 span{fill:#1d2530;color:#1d2530;}#mmd0-731240 .node rect,#mmd0-731240 .node circle,#mmd0-731240 .node ellipse,#mmd0-731240 .node polygon,#mmd0-731240 .node path{fill:#e8eef6;stroke:#1f3a5f;stroke-width:1px;}#mmd0-731240 .rough-node .label text,#mmd0-731240 .node .label text,#mmd0-731240 .image-shape .label,#mmd0-731240 .icon-shape .label{text-anchor:middle;}#mmd0-731240 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mmd0-731240 .rough-node .label,#mmd0-731240 .node .label,#mmd0-731240 .image-shape .label,#mmd0-731240 .icon-shape .label{text-align:center;}#mmd0-731240 .node.clickable{cursor:pointer;}#mmd0-731240 .root .anchor path{fill:#4a5563!important;stroke-width:0;stroke:#4a5563;}#mmd0-731240 .arrowheadPath{fill:#000000;}#mmd0-731240 .edgePaths .path{stroke:#4a5563;stroke-width:1px;}#mmd0-731240 .flowchart-link{stroke:#4a5563;fill:none;}#mmd0-731240 .edgeLabel{background-color:#ffffff;text-align:center;}#mmd0-731240 .edgeLabel p{background-color:#ffffff;}#mmd0-731240 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-731240 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mmd0-731240 .cluster rect{fill:#f5f6f8;stroke:#9aa5b4;stroke-width:1px;}#mmd0-731240 .cluster text{fill:#1f3a5f;}#mmd0-731240 .cluster span{color:#1f3a5f;}#mmd0-731240 .node .collapsed-indicator{fill:#9aa5b4;stroke:none;opacity:0.6;}#mmd0-731240 .node .collapsed-separator{stroke:#9aa5b4;stroke-width:0.75px;}#mmd0-731240 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;font-size:12px;background:#f5f6f8;border:1px solid #9aa5b4;border-radius:2px;pointer-events:none;z-index:100;}#mmd0-731240 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#1d2530;}#mmd0-731240 rect.text{fill:none;stroke-width:0;}#mmd0-731240 .icon-shape,#mmd0-731240 .image-shape{background-color:#ffffff;text-align:center;}#mmd0-731240 .icon-shape p,#mmd0-731240 .image-shape p{background-color:#ffffff;padding:2px;}#mmd0-731240 .icon-shape .label rect,#mmd0-731240 .image-shape .label rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mmd0-731240 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mmd0-731240 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mmd0-731240 .node .neo-node{stroke:#1f3a5f;}#mmd0-731240 [data-look="neo"].node rect,#mmd0-731240 [data-look="neo"].cluster rect,#mmd0-731240 [data-look="neo"].node polygon{stroke:url(#mmd0-731240-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-731240 [data-look="neo"].swimlane.cluster rect{filter:none;}#mmd0-731240 [data-look="neo"].node path{stroke:url(#mmd0-731240-gradient);stroke-width:1px;}#mmd0-731240 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-731240 [data-look="neo"].node .neo-line path{stroke:#1f3a5f;filter:none;}#mmd0-731240 [data-look="neo"].node circle{stroke:url(#mmd0-731240-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-731240 [data-look="neo"].node circle .state-start{fill:#000000;}#mmd0-731240 [data-look="neo"].icon-shape .icon{fill:url(#mmd0-731240-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-731240 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#mmd0-731240-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#mmd0-731240 :root{--mermaid-font-family:Arial,'Liberation Sans','DejaVu Sans',sans-serif;}</style><g><marker id="mmd0-731240_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-731240_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-731240_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-731240_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="mmd0-731240_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-731240_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-731240_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-731240_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="mmd0-731240_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-731240_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mmd0-731240_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="mmd0-731240_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"><g class="cluster " id="mmd0-731240-LAB" data-look="classic"><rect style="" x="340.65625" y="8" width="737.796875" height="201.5"></rect><g class="cluster-label " transform="translate(615.3828125, 8)"><foreignObject width="188.34375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>LAB-HEXALOG 10.10.10.0/24</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-731240-EXT" data-look="classic"><rect style="" x="340.65625" y="229.5" width="184.59375" height="119"></rect><g class="cluster-label " transform="translate(404.9375, 229.5)"><foreignObject width="56.03125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Extérieur</p></span></div></foreignObject></g></g><g class="cluster " id="mmd0-731240-ADMN" data-look="classic"><rect style="" x="3.2890625" y="18.5" width="243.828125" height="119"></rect><g class="cluster-label " transform="translate(7.2890625, 18.5)"><foreignObject width="235.828125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel "><p>Partage de connexion, accès par pont</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M217.406,78L242.406,78L291.531,78L340.656,78L361.656,78" id="mmd0-731240-L_ADM_BST_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_ADM_BST_0" data-points="W3sieCI6MjE3LjQwNjI1LCJ5Ijo3OH0seyJ4IjoyNDIuNDA2MjUsInkiOjc4fSx7IngiOjI5MS41MzEyNSwieSI6Nzh9LHsieCI6MzQwLjY1NjI1LCJ5Ijo3OH0seyJ4IjozNjUuNjU2MjUsInkiOjc4fV0=" data-look="classic" marker-end="url(#mmd0-731240_flowchart-v2-pointEnd)"></path><path d="M495.578,289L525.25,289L578.133,159.25L627.072,150.947" id="mmd0-731240-L_USR_SRV_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_USR_SRV_0" data-points="W3sieCI6NDk1LjU3ODEyNSwieSI6Mjg5fSx7IngiOjUyNS4yNSwieSI6Mjg5fSx7IngiOjU3OC4xMzI4MTI1LCJ5IjoxNTkuMjV9LHsieCI6NjMxLjAxNTYyNSwieSI6MTUwLjI3ODM1MDY4MjA5NzM3fV0=" data-look="classic" marker-end="url(#mmd0-731240_flowchart-v2-pointEnd)"></path><path d="M500.25,107.348L525.25,118.25L578.133,118.25L627.072,126.553" id="mmd0-731240-L_BST_SRV_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_BST_SRV_0" data-points="W3sieCI6NTAwLjI1LCJ5IjoxMDcuMzQ3NjgwNzE3NzkyNDZ9LHsieCI6NTI1LjI1LCJ5IjoxMTguMjV9LHsieCI6NTc4LjEzMjgxMjUsInkiOjExOC4yNX0seyJ4Ijo2MzEuMDE1NjI1LCJ5IjoxMjcuMjIxNjQ5MzE3OTAyNjN9XQ==" data-look="classic" marker-end="url(#mmd0-731240_flowchart-v2-pointEnd)"></path><path d="M500.25,63.6L525.25,58.25L578.133,58.25L698.969,58.25L816.438,58.25L862.102,71.079" id="mmd0-731240-L_BST_DC_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_BST_DC_0" data-points="W3sieCI6NTAwLjI1LCJ5Ijo2My41OTk1ODUyMzc4NTM0fSx7IngiOjUyNS4yNSwieSI6NTguMjV9LHsieCI6NTc4LjEzMjgxMjUsInkiOjU4LjI1fSx7IngiOjY5OC45Njg3NSwieSI6NTguMjV9LHsieCI6ODE2LjQzNzUsInkiOjU4LjI1fSx7IngiOjg2NS45NTMxMjUsInkiOjcyLjE2MTI0OTg2MzY3MTA2fV0=" data-look="classic" marker-end="url(#mmd0-731240_flowchart-v2-pointEnd)"></path><path d="M766.922,138.75L816.438,138.75L862.102,125.921" id="mmd0-731240-L_SRV_DC_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_SRV_DC_0" data-points="W3sieCI6NzY2LjkyMTg3NSwieSI6MTM4Ljc1fSx7IngiOjgxNi40Mzc1LCJ5IjoxMzguNzV9LHsieCI6ODY1Ljk1MzEyNSwieSI6MTI0LjgzODc1MDEzNjMyODk0fV0=" data-look="classic" marker-end="url(#mmd0-731240_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(291.53125, 78)"><g class="label" data-id="L_ADM_BST_0" transform="translate(-24.125, -10.5)"><foreignObject width="48.25" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>SSH 22</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(578.1328125, 159.25)"><g class="label" data-id="L_USR_SRV_0" transform="translate(-27.8828125, -10.5)"><foreignObject width="55.765625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>HTTP 80</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(578.1328125, 118.25)"><g class="label" data-id="L_BST_SRV_0" transform="translate(-24.125, -10.5)"><foreignObject width="48.25" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>SSH 22</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(698.96875, 58.25)"><g class="label" data-id="L_BST_DC_0" transform="translate(-32.171875, -10.5)"><foreignObject width="64.34375" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>RDP 3389</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(816.4375, 138.75)"><g class="label" data-id="L_SRV_DC_0" transform="translate(-24.515625, -10.5)"><foreignObject width="49.03125" height="21"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>DNS 53</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="mmd0-731240-flowchart-ADM-0" data-look="classic" transform="translate(125.203125, 78)"><rect class="basic label-container" style="" x="-92.203125" y="-24.5" width="184.40625" height="49"></rect><g class="label" style="" transform="translate(-64.203125, -10.5)"><rect></rect><foreignObject width="128.40625" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Poste administrateur</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-731240-flowchart-USR-1" data-look="classic" transform="translate(432.953125, 289)"><rect class="basic label-container" style="" x="-62.625" y="-24.5" width="125.25" height="49"></rect><g class="label" style="" transform="translate(-34.625, -10.5)"><rect></rect><foreignObject width="69.25" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Utilisateurs</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-731240-flowchart-BST-2" data-look="classic" transform="translate(432.953125, 78)"><rect class="basic label-container" style="" x="-67.296875" y="-35" width="134.59375" height="70"></rect><g class="label" style="" transform="translate(-39.296875, -21)"><rect></rect><foreignObject width="78.59375" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>BST-LNX-01<br>.30 bastion</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-731240-flowchart-SRV-3" data-look="classic" transform="translate(698.96875, 138.75)"><rect class="basic label-container" style="" x="-67.953125" y="-35" width="135.90625" height="70"></rect><g class="label" style="" transform="translate(-39.953125, -21)"><rect></rect><foreignObject width="79.90625" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>SRV-LNX-01<br>.20 intranet</p></span></div></foreignObject></g></g><g class="node default  " id="mmd0-731240-flowchart-DC-4" data-look="classic" transform="translate(959.703125, 98.5)"><rect class="basic label-container" style="" x="-93.75" y="-35" width="187.5" height="70"></rect><g class="label" style="" transform="translate(-65.75, -21)"><rect></rect><foreignObject width="131.5" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>SRV-WIN-01<br>.10 AD, DNS, fichiers</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="mmd0-731240-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="mmd0-731240-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="mmd0-731240-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1f3a5f" stop-opacity="1"></stop><stop offset="100%" stop-color="#2d6a3e" stop-opacity="1"></stop></linearGradient></svg></div></div>
+<h3 id="la-matrice-des-flux">La matrice des flux</h3>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Destination</th>
+<th>Protocole / port</th>
+<th>Usage</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Internet (redirection 8080)</td>
+<td>SRV-LNX-01</td>
+<td>TCP 80</td>
+<td>intranet</td>
+<td>service public</td>
+</tr>
+<tr class="even">
+<td>partage de connexion (PC administrateur)</td>
+<td>BST-LNX-01 (carte en pont)</td>
+<td>TCP 22</td>
+<td>administration</td>
+<td>point d’entrée unique</td>
+</tr>
+<tr class="odd">
+<td>BST-LNX-01</td>
+<td>SRV-LNX-01</td>
+<td>TCP 22</td>
+<td>administration</td>
+<td>rebond</td>
+</tr>
+<tr class="even">
+<td>BST-LNX-01</td>
+<td>SRV-WIN-01</td>
+<td>TCP 3389</td>
+<td>administration</td>
+<td>rebond</td>
+</tr>
+<tr class="odd">
+<td>toutes les VM</td>
+<td>SRV-WIN-01</td>
+<td>UDP/TCP 53</td>
+<td>résolution DNS</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>postes</td>
+<td>SRV-WIN-01</td>
+<td>TCP 445</td>
+<td>partages</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Elle sert à configurer les pare-feu et, à l’inverse, à vérifier qu’aucune règle ouverte n’est injustifiée.</p>
+<h2 id="les-procédures">4. Les procédures</h2>
+<p>Une <strong>procédure</strong> doit pouvoir être suivie par quelqu’un qui ne connaît pas le sujet. Structure type :</p>
+<ol type="1">
+<li><strong>Objet</strong> et <strong>périmètre</strong> : ce que fait la procédure, sur quelles machines.</li>
+<li><strong>Prérequis</strong> : droits nécessaires, informations à réunir, snapshot ou sauvegarde préalable.</li>
+<li><strong>Étapes numérotées</strong>, une action par étape, avec la <strong>commande exacte</strong> et la <strong>machine</strong> où l’exécuter.</li>
+<li><strong>Vérifications</strong> : comment savoir que c’est réussi (commande et résultat attendu).</li>
+<li><strong>Retour arrière</strong> : que faire si ça se passe mal.</li>
+<li><strong>Auteur, date, version</strong>, validation.</li>
+</ol>
+<p>Le meilleur test d’une procédure : la faire exécuter par un collègue, sans aide, et corriger là où il bloque.</p>
+<h2 id="valider-la-recette">5. Valider : la recette</h2>
+<p>La <strong>recette</strong> vérifie que ce qui a été livré correspond à ce qui était demandé. Elle se prépare <strong>à partir des exigences</strong> (la matrice des droits, la procédure d’accès, le cahier des charges), pas à partir de ce qu’on a configuré.</p>
+<div class="table-wrap"><table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Exigence</th>
+<th>Étapes du test</th>
+<th>Résultat attendu</th>
+<th>Résultat obtenu</th>
+<th>Preuve</th>
+<th>Statut</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R-07</td>
+<td>la direction lit la comptabilité</td>
+<td><code>smbclient … -U c.dubois -c 'cd Comptabilite; get bilan.txt'</code></td>
+<td>fichier récupéré</td>
+<td>fichier récupéré</td>
+<td>capture 07</td>
+<td>OK</td>
+</tr>
+<tr class="even">
+<td>R-08</td>
+<td>la direction ne modifie pas la comptabilité</td>
+<td><code>… -c 'cd Comptabilite; put essai.txt'</code></td>
+<td><code>NT_STATUS_ACCESS_DENIED</code></td>
+<td><code>NT_STATUS_ACCESS_DENIED</code></td>
+<td>capture 08</td>
+<td>OK</td>
+</tr>
+<tr class="odd">
+<td>R-15</td>
+<td>SSH direct vers SRV-LNX-01 refusé</td>
+<td><code>nc -zv -w 3 srv-lnx-01 22</code> depuis CLI-LNX-01</td>
+<td>délai dépassé</td>
+<td>succeeded</td>
+<td>capture 15</td>
+<td><strong>KO</strong></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Les tests <strong>négatifs</strong> (ce qui doit être refusé) sont aussi importants que les tests positifs : une règle trop permissive ne se voit que par eux.</li>
+<li>Un test <strong>KO</strong> n’est pas un échec du travail : c’est un écart détecté, à corriger puis à <strong>retester</strong>.</li>
+<li>Après une correction, on relance aussi les tests voisins (<strong>non-régression</strong>).</li>
+</ul>
+<h3 id="présenter-une-preuve">Présenter une preuve</h3>
+<p>Une preuve utilisable indique <strong>la machine, le compte, la date, la commande et le résultat</strong>. Une capture d’écran recadrée sur l’essentiel, ou la sortie texte de la commande, avec le prompt visible (<code>sysadmin@srv-lnx-01:~$</code>). Pour les journaux, la ligne exacte avec son horodatage. On masque les secrets.</p>
+<h2 id="le-journal-des-modifications">6. Le journal des modifications</h2>
+<p>Chaque changement sur l’infrastructure est noté :</p>
+<div class="table-wrap"><table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>Date et heure</th>
+<th>Auteur</th>
+<th>Machine</th>
+<th>Modification</th>
+<th>Raison / demande</th>
+<th>Retour arrière</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>adm.nfournier</td>
+<td>SRV-LNX-01</td>
+<td>UFW : SSH limité à 10.10.10.30</td>
+<td>mise en place du bastion</td>
+<td><code>ufw delete</code> de la règle, réactiver 10.10.10.0/24</td>
+</tr>
+</tbody>
+</table></div>
+<p>En entreprise, les changements importants suivent un processus de <strong>gestion des changements</strong> : demande, évaluation des risques, validation, planification dans une fenêtre de maintenance, réalisation, vérification, clôture.</p>
+<h2 id="les-outils">7. Les outils</h2>
+<ul>
+<li><strong>Markdown</strong> : du texte simple mis en forme (<code>#</code> pour les titres, <code>-</code> pour les listes, tableaux, blocs de code), lisible partout et convertible en HTML ou PDF.</li>
+<li><strong>Git</strong> : versionner la documentation comme du code, avec l’historique de chaque modification (ce site de cours est lui-même publié depuis un dépôt Git).</li>
+<li><strong>Wiki</strong> (BookStack, Wiki.js) : documentation partagée et consultable.</li>
+<li><strong>GLPI</strong> : inventaire du parc et gestion des tickets, très utilisé en France.</li>
+<li><strong>NetBox</strong> : gestion des adresses IP et de l’infrastructure réseau.</li>
+</ul>
+<h2 id="préparer-lévaluation-finale">8. Préparer l’évaluation finale</h2>
+<p>L’évaluation de la séance 15 porte sur les quatre axes du bloc :</p>
+<ol type="1">
+<li>environnement VirtualBox, réseau NAT et <strong>exposition contrôlée</strong> d’un service ;</li>
+<li><strong>droits d’accès</strong> par rôles sous Active Directory et sous Linux, avec tests ;</li>
+<li><strong>accès d’administration durcis</strong> (SSH, RDP, bastion) ;</li>
+<li><strong>preuves</strong> tirées des journaux Windows et Linux.</li>
+</ol>
+<p>Elle comprend une étude de cas écrite et un contrôle pratique sur votre lab. Le TP 14 est l’occasion de vérifier que tout fonctionne et que vous savez retrouver chaque commande. Les documents autorisés seront précisés avant l’évaluation : un dossier d’exploitation et des journaux de bord bien tenus sont vos meilleurs alliés.</p>
+<h2 id="à-retenir">9. À retenir</h2>
+<div class="callout check"><div class="callout-body"><p class="callout-titre"><strong>Points clés</strong></p>
+<ul>
+<li>Documenter = continuité, dépannage, sécurité, conformité, transmission.</li>
+<li>Dossier d’exploitation : architecture, inventaire, réseau et flux, identités et droits, accès admin, procédures, recette, modifications. Jamais de mots de passe.</li>
+<li>Schéma : zones, noms, adresses, flux fléchés avec ports, légende.</li>
+<li>Procédure : objet, prérequis, étapes exactes avec la machine, vérifications, retour arrière.</li>
+<li>Recette à partir des exigences, avec tests positifs et négatifs ; preuve = machine, compte, date, commande, résultat.</li>
+</ul>
+</div></div>
+<h2 id="quiz">Quiz</h2>
+<ol type="1">
+<li>Citez quatre parties d’un dossier d’exploitation.</li>
+<li>Où doivent être rangés les mots de passe d’administration ?</li>
+<li>Qu’apporte Mermaid par rapport à un outil de dessin ?</li>
+<li>À quoi sert la matrice des flux ?</li>
+<li>Quelles sont les six rubriques d’une procédure ?</li>
+<li>Pourquoi faire des tests négatifs ?</li>
+<li>Un test est KO. Que faites-vous ?</li>
+<li>Qu’est-ce qu’une preuve exploitable ?</li>
+<li>Que contient une ligne du journal des modifications ?</li>
+<li>Sur quels quatre axes porte l’évaluation finale ?</li>
+</ol>
+<details>
+<summary>
+Voir la correction
+</summary>
+<ol type="1">
+<li>Architecture, inventaire, réseau et flux, identités et droits, procédure d’accès, procédures d’exploitation, recette, journal des modifications.</li>
+<li>Dans un gestionnaire de mots de passe ; la documentation indique où et qui y a accès.</li>
+<li>Le schéma est du texte : il se versionne, se compare et se met à jour facilement.</li>
+<li>À configurer les pare-feu et à vérifier qu’aucune ouverture n’est injustifiée.</li>
+<li>Objet et périmètre, prérequis, étapes, vérifications, retour arrière, auteur/date/version.</li>
+<li>Pour détecter les droits ou les ouvertures en trop, invisibles avec des tests positifs.</li>
+<li>On analyse l’écart, on corrige, on reteste le cas et les tests voisins (non-régression), et on le note.</li>
+<li>La machine, le compte, la date, la commande exécutée et son résultat, sans secret visible.</li>
+<li>Date, auteur, machine, modification, raison, retour arrière.</li>
+<li>VirtualBox et exposition contrôlée d’un service ; droits par rôles AD et Linux ; accès d’administration durcis ; preuves par les journaux.</li>
+</ol>
+</details>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp13-comptes-audit.html" data-seance="13"><span class="dir">‹ Page précédente</span><span class="titre">TP 13 : Arrivées, mobilités, départs et audit</span></a><a class="next" href="../tp/tp14-documenter.html" data-seance="14"><span class="dir">Page suivante ›</span><span class="titre">TP 14 : Le dossier d'exploitation Hexalog</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+
+
+</body></html>
