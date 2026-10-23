@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bachelor Informatique · Supports de cours</title>
+<meta name="description" content="Bachelor Informatique : accès aux supports de cours des blocs 1, 2 et 3 et à leurs évaluations.">
+<link rel="icon" href="data:,">
+<style>
+:root {
+  --fond: #ffffff;
+  --fond-doux: #f5f6f8;
+  --fond-titre: #e9edf2;
+  --trait: #d3d9e0;
+  --trait-fort: #9aa5b4;
+  --texte: #1d2530;
+  --texte-doux: #4a5563;
+  --texte-pale: #6b7684;
+  --marine: #1f3a5f;
+  --marine-fonce: #16304f;
+  --marine-clair: #e8eef6;
+  --or: #b8912a;
+  --lien: #1a4f8b;
+  --vert: #2d6a3e;
+  --vert-clair: #eef6f0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--fond);
+  color: var(--texte);
+  font-family: "Segoe UI", "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+a { color: var(--lien); }
+
+/* En-tête */
+.entete {
+  background: var(--marine);
+  color: #fff;
+  border-bottom: 3px solid var(--or);
+}
+.entete .interieur {
+  max-width: 1040px;
+  margin: 0 auto;
+  min-height: 56px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.entete .formation { font-weight: 600; font-size: 1rem; }
+.entete .sep { width: 1px; height: 22px; background: rgba(255, 255, 255, 0.35); }
+.entete .annee { font-size: 0.85rem; opacity: 0.85; }
+
+/* Contenu */
+main { max-width: 1040px; margin: 0 auto; padding: 34px 24px 48px; }
+.hero { margin-bottom: 30px; }
+.hero .surtitre {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--texte-doux);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.hero h1 {
+  font-size: 1.9rem;
+  line-height: 1.25;
+  color: var(--marine);
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--marine);
+  margin-bottom: 14px;
+}
+.hero .lead { font-size: 1.02rem; color: var(--texte-doux); max-width: 760px; }
+
+h2 {
+  font-size: 1.25rem;
+  color: var(--marine);
+  margin: 0 0 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--trait);
+}
+section + section { margin-top: 40px; }
+
+/* Blocs */
+.blocs { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; }
+.bloc {
+  border: 1px solid var(--trait);
+  border-top: 4px solid var(--trait-fort);
+  border-radius: 3px;
+  background: var(--fond);
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+}
+.bloc.ouvert { border-top-color: var(--marine); }
+.bloc .numero { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--texte-pale); }
+.bloc.ouvert .numero { color: var(--marine); }
+.bloc h3 { font-size: 1.15rem; line-height: 1.3; margin: 2px 0 4px; color: var(--texte); }
+.bloc .periode { font-size: 0.88rem; color: var(--texte-doux); margin-bottom: 10px; }
+.bloc .resume { font-size: 0.93rem; color: var(--texte-doux); margin-bottom: 16px; flex: 1; }
+
+/* Accès : le lien ou la mention « à venir », selon la classe ouvert */
+.acces .lien, .acces.ouvert .a-venir { display: none; }
+.acces.ouvert .lien { display: inline-block; }
+.acces .a-venir { display: inline-block; font-size: 0.88rem; color: var(--texte-pale); }
+.bouton {
+  display: inline-block;
+  background: var(--marine);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.93rem;
+  padding: 8px 18px;
+  border-radius: 3px;
+  border: 1px solid var(--marine);
+}
+.bouton:hover { background: var(--marine-fonce); }
+.bouton.secondaire { background: var(--fond); color: var(--marine); }
+.bouton.secondaire:hover { background: var(--marine-clair); }
+.a-venir.badge {
+  border: 1px solid var(--trait);
+  background: var(--fond-doux);
+  border-radius: 3px;
+  padding: 7px 14px;
+}
+
+/* Évaluations */
+.defile { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+th, td { border: 1px solid var(--trait); padding: 9px 12px; text-align: left; vertical-align: middle; }
+th { background: var(--fond-titre); font-weight: 600; }
+td.action, td.bloc-nom { white-space: nowrap; }
+td.bloc-nom { font-weight: 600; }
+.note { margin-top: 12px; font-size: 0.88rem; color: var(--texte-doux); max-width: 760px; }
+
+footer {
+  border-top: 1px solid var(--trait);
+  background: var(--fond-doux);
+  color: var(--texte-pale);
+  font-size: 0.85rem;
+}
+footer .interieur { max-width: 1040px; margin: 0 auto; padding: 16px 24px; }
+
+@media (max-width: 600px) {
+  .entete .interieur, main, footer .interieur { padding-left: 16px; padding-right: 16px; }
+  main { padding-top: 24px; }
+  .hero h1 { font-size: 1.5rem; }
+  .entete .sep { display: none; }
+  /* tableau des évaluations en fiches empilées */
+  table, tbody, tr, td { display: block; width: 100%; }
+  thead { display: none; }
+  tr { border: 1px solid var(--trait); border-radius: 3px; padding: 12px 14px; margin-bottom: 10px; }
+  td { border: none; padding: 2px 0; }
+  td.date { font-size: 0.88rem; color: var(--texte-doux); }
+  td.action { padding-top: 8px; }
+}
+</style>
+</head>
+<body>
+
+<header class="entete">
+  <div class="interieur">
+    <span class="formation">Bachelor Informatique</span>
+    <span class="sep"></span>
+    <span class="annee">Année 2026-2027</span>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <span class="surtitre">Lycée Marguerite Bahuet · Brive-la-Gaillarde</span>
+    <h1>Supports de cours du Bachelor</h1>
+    <p class="lead">Cours, TP, aide-mémoire et évaluations, bloc par bloc. Chaque bloc s'ouvre ici au début de ses cours.</p>
+  </div>
+
+  <section aria-labelledby="titre-blocs">
+    <h2 id="titre-blocs">Les blocs</h2>
+    <div class="blocs">
+
+      <article class="bloc ouvert" data-bloc="bloc1">
+        <span class="numero">Bloc 1</span>
+        <h3>Bases des infrastructures</h3>
+        <p class="periode">Septembre – octobre 2026 · 50 heures</p>
+        <p class="resume">On-premise, cloud et hybride, virtualisation avec VirtualBox, Windows Server et Linux, utilisateurs, groupes et permissions, accès et authentification.</p>
+        <div class="acces ouvert" data-verifier="bloc1/">
+          <a class="lien bouton" href="bloc1/">Ouvrir le bloc 1</a>
+          <span class="a-venir badge">Ouverture au début du bloc</span>
+        </div>
+      </article>
+
+      <article class="bloc" data-bloc="bloc2">
+        <span class="numero">Bloc 2</span>
+        <h3>Supervision et maintenance</h3>
+        <p class="periode">Janvier – février 2027 · 50 heures</p>
+        <p class="resume">Supervision d'une infrastructure, journaux, gestion des incidents, sauvegarde et plan de reprise d'activité.</p>
+        <div class="acces" data-verifier="bloc2/">
+          <a class="lien bouton" href="bloc2/">Ouvrir le bloc 2</a>
+          <span class="a-venir badge">Ouverture en janvier 2027</span>
+        </div>
+      </article>
+
+      <article class="bloc" data-bloc="bloc3">
+        <span class="numero">Bloc 3</span>
+        <h3>À venir</h3>
+        <p class="periode">Dates communiquées plus tard</p>
+        <p class="resume">Programme et calendrier à venir.</p>
+        <div class="acces" data-verifier="bloc3/">
+          <a class="lien bouton" href="bloc3/">Ouvrir le bloc 3</a>
+          <span class="a-venir badge">Ouverture au début du bloc</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section aria-labelledby="titre-evaluations">
+    <h2 id="titre-evaluations">Les évaluations</h2>
+    <div class="defile">
+      <table>
+        <thead>
+          <tr><th>Bloc</th><th>Évaluation</th><th>Date</th><th>Accès</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bloc-nom">Bloc 1</td>
+            <td>Évaluation finale : questionnaire en ligne, puis compte rendu du contrôle pratique</td>
+            <td class="date">Vendredi 23 octobre 2026</td>
+            <td class="action"><div class="acces ouvert" data-verifier="bloc1/evaluation/">
+              <a class="lien bouton secondaire" href="bloc1/evaluation/">Ouvrir l'évaluation</a>
+              <span class="a-venir">À venir</span>
+            </div></td>
+          </tr>
+          <tr>
+            <td class="bloc-nom">Bloc 2</td>
+            <td>Évaluation finale : étude de cas et mise en situation</td>
+            <td class="date">Février 2027</td>
+            <td class="action"><div class="acces" data-verifier="bloc2/evaluation/">
+              <a class="lien bouton secondaire" href="bloc2/evaluation/">Ouvrir l'évaluation</a>
+              <span class="a-venir">À venir</span>
+            </div></td>
+          </tr>
+          <tr>
+            <td class="bloc-nom">Bloc 3</td>
+            <td>Évaluation finale</td>
+            <td class="date">Date à venir</td>
+            <td class="action"><div class="acces" data-verifier="bloc3/evaluation/">
+              <a class="lien bouton secondaire" href="bloc3/evaluation/">Ouvrir l'évaluation</a>
+              <span class="a-venir">À venir</span>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Une évaluation en ligne ne s'ouvre qu'avec le code de l'épreuve, donné en salle au début de l'épreuve.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="interieur">Bachelor Informatique, lycée Marguerite Bahuet (Brive-la-Gaillarde) · Cours de M. CHADEYRON</div>
+</footer>
+
+<script>
+/* Chaque accès s'affiche selon que la page existe ou non sur le site :
+   un bloc ou une évaluation déposé sur GitHub apparaît ici tout seul,
+   un bloc retiré repasse « à venir ». Sans réseau, l'état écrit dans la page est gardé. */
+(function () {
+  if (!window.fetch || location.protocol === "file:") return;
+  document.querySelectorAll(".acces[data-verifier]").forEach(function (zone) {
+    fetch(zone.getAttribute("data-verifier"), { method: "HEAD", cache: "no-store" })
+      .then(function (r) {
+        if (r.status !== 200 && r.status !== 404) return;
+        var ouvert = r.status === 200;
+        zone.classList.toggle("ouvert", ouvert);
+        var bloc = zone.closest(".bloc");
+        if (bloc) bloc.classList.toggle("ouvert", ouvert);
+      })
+      .catch(function () { /* état écrit dans la page conservé */ });
+  });
+})();
+</script>
+</body>
+</html>
