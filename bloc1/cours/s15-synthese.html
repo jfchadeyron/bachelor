@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séance 15 : Synthèse et évaluation finale | BLOC 1 Bases des infrastructures</title>
+<meta name="description" content="La dernière séance commence par une revue rapide de tout le bloc, se poursuit par l&#x27;évaluation finale (un questionnaire en ligne, puis un contrôle pratique sur votre lab) et se termine par un bilan et">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="kind-cours">
+<header class="entete">
+  <button class="menu-btn" type="button">Menu</button>
+  <a class="formation" href="../index.html">Bachelor Informatique</a>
+  <span class="sep"></span>
+  <a class="bloc" href="../index.html">BLOC 1 : Bases des infrastructures</a>
+  <nav class="raccourcis">
+    <a href="../lab.html">Le lab</a>
+    <a href="../memo.html">Aide-mémoire</a>
+    <a href="../glossaire.html">Glossaire</a>
+  </nav>
+</header>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-title">Le bloc</div><div class="nav-item"><a class="nav-link" href="../index.html"><span>Accueil et progression</span></a></div><div class="nav-item"><a class="nav-link" href="../lab.html"><span>Le lab Hexalog</span></a></div><div class="nav-section-title">A. Environnements et lab</div><div class="nav-item" data-seance="1"><a class="nav-link" href="s01-environnements.html" data-seance="1"><span class="num">1.</span><span>Environnements et premier lab</span></a><a class="nav-tp" href="../tp/tp01-environnements.html" title="Travaux pratiques" data-seance="1">TP</a></div><div class="nav-item" data-seance="2"><a class="nav-link" href="s02-virtualbox.html" data-seance="2"><span class="num">2.</span><span>VirtualBox : snapshots, clones, réseaux</span></a><a class="nav-tp" href="../tp/tp02-virtualbox.html" title="Travaux pratiques" data-seance="2">TP</a></div><div class="nav-item" data-seance="3"><a class="nav-link" href="s03-reseau.html" data-seance="3"><span class="num">3.</span><span>Réseau IP, NAT, DNS et DHCP</span></a><a class="nav-tp" href="../tp/tp03-reseau.html" title="Travaux pratiques" data-seance="3">TP</a></div><div class="nav-item" data-seance="4"><a class="nav-link" href="s04-cloud.html" data-seance="4"><span class="num">4.</span><span>Cloud : lire une architecture IaaS/PaaS</span></a><a class="nav-tp" href="../tp/tp04-cloud.html" title="Travaux pratiques" data-seance="4">TP</a></div><div class="nav-section-title">B. Windows Server</div><div class="nav-item" data-seance="5"><a class="nav-link" href="s05-windows-server.html" data-seance="5"><span class="num">5.</span><span>Windows Server : les fondamentaux</span></a><a class="nav-tp" href="../tp/tp05-windows-server.html" title="Travaux pratiques" data-seance="5">TP</a></div><div class="nav-item" data-seance="6"><a class="nav-link" href="s06-active-directory.html" data-seance="6"><span class="num">6.</span><span>Active Directory : utilisateurs, groupes, OU</span></a><a class="nav-tp" href="../tp/tp06-active-directory.html" title="Travaux pratiques" data-seance="6">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="s07-ntfs-partages.html" data-seance="7"><span class="num">7.</span><span>Permissions NTFS et partages</span></a><a class="nav-tp" href="../tp/tp07-ntfs-partages.html" title="Travaux pratiques" data-seance="7">TP</a></div><div class="nav-item" data-seance="7"><a class="nav-link" href="../tp/tp07-bis-autorisations-avancees.html" data-seance="7"><span class="num">7 bis</span><span>TP complémentaire : autorisations avancées</span></a></div><div class="nav-section-title">C. Linux</div><div class="nav-item" data-seance="8"><a class="nav-link" href="s08-linux-admin.html" data-seance="8"><span class="num">8.</span><span>Linux : distributions et administration</span></a><a class="nav-tp" href="../tp/tp08-linux-admin.html" title="Travaux pratiques" data-seance="8">TP</a></div><div class="nav-item" data-seance="9"><a class="nav-link" href="s09-linux-droits.html" data-seance="9"><span class="num">9.</span><span>Linux : comptes, droits, ACL et sudo</span></a><a class="nav-tp" href="../tp/tp09-linux-droits.html" title="Travaux pratiques" data-seance="9">TP</a></div><div class="nav-item" data-seance="10"><a class="nav-link" href="s10-ssh.html" data-seance="10"><span class="num">10.</span><span>SSH : accès sécurisé par clés</span></a><a class="nav-tp" href="../tp/tp10-ssh.html" title="Travaux pratiques" data-seance="10">TP</a></div><div class="nav-section-title">D. Accès et authentification</div><div class="nav-item" data-seance="11"><a class="nav-link" href="s11-authentification.html" data-seance="11"><span class="num">11.</span><span>Authentification : concepts et politiques</span></a><a class="nav-tp" href="../tp/tp11-authentification.html" title="Travaux pratiques" data-seance="11">TP</a></div><div class="nav-item" data-seance="12"><a class="nav-link" href="s12-acces-distants.html" data-seance="12"><span class="num">12.</span><span>Accès distants : RDP, SSH, bastion, VPN</span></a><a class="nav-tp" href="../tp/tp12-acces-distants.html" title="Travaux pratiques" data-seance="12">TP</a></div><div class="nav-item" data-seance="13"><a class="nav-link" href="s13-comptes-audit.html" data-seance="13"><span class="num">13.</span><span>Cycle de vie des comptes et audit</span></a><a class="nav-tp" href="../tp/tp13-comptes-audit.html" title="Travaux pratiques" data-seance="13">TP</a></div><div class="nav-section-title">E. Consolidation</div><div class="nav-item" data-seance="14"><a class="nav-link" href="s14-documenter.html" data-seance="14"><span class="num">14.</span><span>Documenter et valider une infrastructure</span></a><a class="nav-tp" href="../tp/tp14-documenter.html" title="Travaux pratiques" data-seance="14">TP</a></div><div class="nav-item active" data-seance="15"><a class="nav-link" href="s15-synthese.html" data-seance="15"><span class="num">15.</span><span>Synthèse et évaluation finale</span></a></div><div class="nav-section-title">Ressources</div><div class="nav-item"><a class="nav-link" href="../memo.html"><span>Aide-mémoire des commandes</span></a></div><div class="nav-item"><a class="nav-link" href="../glossaire.html"><span>Glossaire</span></a></div><div class="nav-item"><a class="nav-link" href="../modeles.html"><span>Modèles de livrables</span></a></div>
+  </nav>
+</aside>
+<main class="main">
+<div class="fil"><a href="../index.html">Accueil</a><span class="sep">›</span><span>Module E : Consolidation</span><span class="sep">›</span><span>Séance 15</span></div>
+<header class="hero">
+  <span class="surtitre">Cours de la séance 15</span>
+  <h1>Synthèse du bloc et évaluation finale</h1>
+  <p class="lead">La dernière séance commence par une revue rapide de tout le bloc, se poursuit par l'évaluation finale (un questionnaire en ligne, puis un contrôle pratique sur votre lab) et se termine par un bilan et l'ouverture vers le bloc suivant, Supervision et maintenance.</p>
+  <table class="fiche-seance"><tr><th>Durée</th><td>4 h</td></tr><tr><th>Prérequis</th><td>séances 1 à 14</td></tr></table>
+</header>
+<nav class="page-toc"><div class="toc-title">Sommaire</div><ul><li><a href="#déroulement">Déroulement</a></li><li><a href="#ce-qui-est-évalué">Ce qui est évalué</a></li><li><a href="#fiche-de-révision">Fiche de révision</a></li><li><a href="#et-après-le-bloc-supervision-et-maintenance">Et après : le bloc Supervision et maintenance</a></li></ul></nav>
+<article class="content">
+<h2 id="déroulement">Déroulement</h2>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Temps</th>
+<th>Activité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>30 min</td>
+<td>Revue du bloc, questions, vérification que chaque lab démarre</td>
+</tr>
+<tr class="even">
+<td>1 h 15</td>
+<td>Évaluation finale, partie 1 : questionnaire en ligne (14 points)</td>
+</tr>
+<tr class="odd">
+<td>1 h 45</td>
+<td>Évaluation finale, partie 2 : contrôle pratique sur votre lab (6 points)</td>
+</tr>
+<tr class="even">
+<td>30 min</td>
+<td>Bilan, retours sur le bloc, transition vers Supervision et maintenance</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="ce-qui-est-évalué">Ce qui est évalué</h2>
+<p>L’évaluation finale porte sur quatre thèmes :</p>
+<div class="table-wrap"><table>
+
+<thead>
+<tr class="header">
+<th>Thème</th>
+<th>Vous devez savoir</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Environnement et exposition</td>
+<td>justifier un modèle de déploiement et de service ; configurer VirtualBox, le réseau NAT et une redirection de ports limitée au nécessaire ; lire les ports en écoute et les règles du pare-feu</td>
+</tr>
+<tr class="even">
+<td>2. Publication de services</td>
+<td>une adresse publique, une redirection de ports sur le routeur, un reverse proxy qui aiguille selon le nom demandé ; DNS externe et DNS interne ; enregistrements des sous-domaines</td>
+</tr>
+<tr class="odd">
+<td>3. Droits d’accès par rôles</td>
+<td>appliquer AGDLP dans Active Directory ; poser des permissions NTFS et Linux (groupes, setgid, ACL) ; prouver par des tests positifs et négatifs</td>
+</tr>
+<tr class="even">
+<td>4. Accès d’administration</td>
+<td>SSH par clé et durci ; RDP filtré ; passage par le bastion ; comptes d’administration séparés</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les preuves par les journaux (séance 13) ne sont pas évaluées.</p>
+<h3 id="partie-1-questionnaire-en-ligne-1-h-15-14-points">Partie 1 : questionnaire en ligne (1 h 15, 14 points)</h3>
+<p>Il comprend trois parties : une <strong>étude de cas</strong> sur une autre entreprise (8 points), l’<strong>exposition contrôlée d’un service</strong> (thème 1, 3 points) et la <strong>publication de services</strong> avec le DNS et un reverse proxy (thème 2, 3 points). Il mêle des questions fermées et des questions rédigées.</p>
+<ul>
+<li>Adresse : <a class="uri" href="https://jfchadeyron.github.io/bachelor/bloc1/evaluation/" rel="noopener" target="_blank">https://jfchadeyron.github.io/bachelor/bloc1/evaluation/</a>. La page ne s’ouvre qu’avec le <strong>code de l’épreuve</strong>, donné en salle au début de l’épreuve.</li>
+<li>Vous saisissez votre nom, votre prénom et le code : votre minuteur de 1 h 15 démarre. Vos réponses sont enregistrées au fur et à mesure dans le navigateur.</li>
+<li>À la fin, votre copie est envoyée automatiquement et la page confirme sa réception. Si l’envoi est impossible, la page enregistre un fichier de réponses dans votre dossier Téléchargements, qui sert alors de copie.</li>
+</ul>
+<h3 id="partie-2-contrôle-pratique-1-h-45-6-points">Partie 2 : contrôle pratique (1 h 45, 6 points)</h3>
+<p>Sur votre lab, à partir des snapshots <code>14-lab-final</code> : droits d’accès par rôles sous AD et Linux (thème 3), accès d’administration par le bastion (thème 4). Le compte rendu se remplit en ligne, dans la même page que le questionnaire (bouton « Commencer le compte rendu » après la partie 1) : pour chaque étape, les commandes et leurs résultats, ou des captures d’écran (<code>Win + Maj + S</code> puis <code>Ctrl + V</code>), avec vos explications. Il est envoyé avec « Envoyer mon compte rendu ».</p>
+<p>Les documents autorisés et le barème détaillé sont indiqués sur le sujet papier, distribué au début de l’évaluation.</p>
+<h2 id="fiche-de-révision">Fiche de révision</h2>
+<h3 id="environnements-et-virtualisation">Environnements et virtualisation</h3>
+<ul>
+<li>On-premise, cloud public, cloud privé, hybride ; CAPEX, OPEX, TCO ; IaaS, PaaS, SaaS et responsabilité partagée.</li>
+<li>Hyperviseur type 1 et type 2 ; snapshot ≠ sauvegarde ; clone intégral et lié ; généralisation d’un clone.</li>
+<li>Modes réseau VirtualBox : NAT, Réseau NAT, pont, interne, privé hôte ; pourquoi une VM en pont n’a pas Internet au lycée (portail captif).</li>
+</ul>
+<h3 id="réseau">Réseau</h3>
+<ul>
+<li>Adresse, masque, passerelle, DNS ; ports usuels (22, 53, 80, 443, 445, 3389, 88, 389).</li>
+<li>NAT sortant et redirection de ports ; DHCP (DORA) ; DNS (A, CNAME, PTR, SRV).</li>
+<li>Diagnostic : carte, réseau local, passerelle, Internet, DNS, port, service.</li>
+</ul>
+<h3 id="windows-server">Windows Server</h3>
+<ul>
+<li>Rôles, fonctionnalités, services ; Observateur d’événements ; pare-feu et profils ; disques.</li>
+<li>Active Directory : domaine, DC, OU, groupes globaux et de domaine local, AGDLP, RBAC.</li>
+<li>Partages et NTFS : le plus restrictif des deux, héritage, matrice des droits, droits donnés aux groupes, tests compte par compte.</li>
+</ul>
+<h3 id="linux">Linux</h3>
+<ul>
+<li>Distributions et cycles de support ; <code>apt</code>, <code>systemctl</code>, <code>journalctl</code> ; montage par UUID.</li>
+<li><code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code> ; <code>rwx</code>, octal, umask, setgid, sticky, ACL et ACL par défaut ; <code>sudo</code> par groupe et <code>visudo</code>.</li>
+<li>SSH : clés, <code>known_hosts</code>, <code>authorized_keys</code>, <code>~/.ssh/config</code>, durcissement dans <code>sshd_config.d</code>, journaux.</li>
+</ul>
+<h3 id="accès-et-authentification">Accès et authentification</h3>
+<ul>
+<li>Identification, authentification, autorisation, traçabilité ; MFA et facteurs ; LDAP, Kerberos, SSO.</li>
+<li>Politiques de mots de passe (GPO, FGPP, <code>chage</code>, PAM) ; verrouillage ; 4625, 4740, 4767.</li>
+<li>Bastion, <code>ProxyJump</code>, tunnel <code>-L</code> ; VPN ; comptes d’administration séparés ; niveaux.</li>
+<li>Cycle de vie JML ; revue d’accès ; audit (4720, 4725, 4728/4729, 4663, 1102) ; auditd.</li>
+</ul>
+<h3 id="méthode">Méthode</h3>
+<ul>
+<li>Toujours : snapshot avant, une modification à la fois, test de configuration, vérification, trace dans le journal de bord.</li>
+<li>Documenter : schéma, inventaire, matrices, procédures, recette, journal des modifications.</li>
+</ul>
+<h2 id="et-après-le-bloc-supervision-et-maintenance">Et après : le bloc Supervision et maintenance</h2>
+<p>Tout ce que vous avez mis en place devra être <strong>surveillé</strong> et <strong>maintenu</strong> :</p>
+<ul>
+<li>les services tournent-ils ? les disques se remplissent-ils ? les mises à jour sont-elles passées ? C’est la <strong>supervision</strong> (métriques, alertes, tableaux de bord) ;</li>
+<li>les journaux que vous avez appris à lire sur chaque machine seront <strong>centralisés</strong> et analysés automatiquement ;</li>
+<li>les snapshots ne sont pas des sauvegardes : vous mettrez en place de vraies <strong>sauvegardes</strong>, et vous testerez une <strong>restauration</strong> ;</li>
+<li>les incidents seront traités avec une méthode, des indicateurs de disponibilité et des comptes rendus.</li>
+</ul>
+<p>Gardez votre lab : il servira de base.</p>
+
+</article>
+<nav class="prevnext"><a class="prev" href="../tp/tp14-documenter.html" data-seance="14"><span class="dir">‹ Page précédente</span><span class="titre">TP 14 : Le dossier d&#x27;exploitation Hexalog</span></a><a class="next" href="../memo.html"><span class="dir">Page suivante ›</span><span class="titre">Aide-mémoire des commandes</span></a></nav>
+<footer class="course-footer"><p>Bachelor Informatique, BLOC 1 : Bases des infrastructures</p></footer>
+</main>
+<script src="../assets/app.js"></script>
+</body>
+</html>
